@@ -11,7 +11,8 @@ import android.media.MediaFormat
  *
  * Android's encoder hands back raw access units, which is what AUDIO_AAC_LC expects. For
  * AUDIO_AAC_LC_ADTS each unit gets the 7-byte ADTS header in front, so the car can find the
- * frame edges itself. The encoder's first output is its configuration, not audio, and is skipped.
+ * frame edges itself. The encoder's first output is its configuration, not audio, and is skipped:
+ * [AudioLink] sends the car the same thing, built by [audioSpecificConfig], right after Start.
  */
 internal class AacEncoder(private val sampleRate: Int, private val channels: Int, private val adts: Boolean) {
 
@@ -87,8 +88,17 @@ internal class AacEncoder(private val sampleRate: Int, private val channels: Int
         runCatching { codec.release() }
     }
 
-    private companion object {
-        const val INPUT_WAIT_US = 10_000L
-        val FREQUENCIES = listOf(96000, 88200, 64000, 48000, 44100, 32000, 24000, 22050, 16000, 12000, 11025, 8000, 7350)
+    companion object {
+        private const val INPUT_WAIT_US = 10_000L
+        private val FREQUENCIES = listOf(96000, 88200, 64000, 48000, 44100, 32000, 24000, 22050, 16000, 12000, 11025, 8000, 7350)
+
+        /** The two-byte AudioSpecificConfig for AAC-LC: object type 2, rate index, channel count. */
+        fun audioSpecificConfig(sampleRate: Int, channels: Int): ByteArray {
+            val freq = FREQUENCIES.indexOf(sampleRate).let { if (it < 0) 3 else it }
+            return byteArrayOf(
+                ((2 shl 3) or (freq shr 1)).toByte(),
+                (((freq and 1) shl 7) or (channels shl 3)).toByte(),
+            )
+        }
     }
 }
