@@ -12,6 +12,7 @@ import app.seb3thehacker.gearslip.Wire
  *   -> Setup { PCM }          <- Config { status, max_unacked, configuration_indices }
  *   -> AudioFocusRequest      <- AudioFocusResponse           (control channel)
  *   -> Start { session_id, configuration_index }
+ *   -> CodecConfig { AudioSpecificConfig }                     (raw AAC-LC sinks only)
  *   -> Data { 8-byte timestamp, PCM }...   <- Ack { session_id, ack }
  *   -> Stop
  *
@@ -36,6 +37,8 @@ class AudioLink(
     private var configIndex = 0
     @Volatile private var ready = false
     @Volatile private var started = false
+    /** Between claiming the stream and [started]: Start is on its way and the encoder is being built. */
+    @Volatile private var starting = false
     @Volatile private var focusGranted = false
     @Volatile private var focusRequested = false
     @Volatile private var inFlight = 0
@@ -182,21 +185,38 @@ class AudioLink(
     }
 
     private fun startStream() {
-        if (!ready || started) return
-        sendOnChannel(
-            MSG_START,
-            Protobuf.varintField(1, sessionId.toLong()) + Protobuf.varintField(2, configIndex.toLong()),
-        )
-        inFlight = 0
-        lastAckAt = System.currentTimeMillis()
-        if (aacSink && aac == null) {
-            aac = runCatching { AacEncoder(sampleRate, channels, adts = service.codecType == ServiceDiscovery.CODEC_AAC_LC_ADTS) }
-                .onSuccess { GearslipLog.i("$tag: the car takes ${service.codecName} only - encoding to AAC") }
-                .onFailure { GearslipLog.e("$tag: couldn't start the AAC encoder", it) }
-                .getOrNull()
+        // start() on the capture thread and the focus answer on the receive thread arrive together.
+        // Both used to get past the check while the encoder was being built, and the AHU
+        // (GalReceiver 2014) got Start twice. Whichever claims the stream first sends the one Start.
+        synchronized(this) {
+            if (!ready || started || starting) return
+            starting = true
         }
-        started = true
-        GearslipLog.i("$tag: -> Start(session=$sessionId, config=$configIndex) - streaming ${sampleRate}Hz x$channels")
+        try {
+            sendOnChannel(
+                MSG_START,
+                Protobuf.varintField(1, sessionId.toLong()) + Protobuf.varintField(2, configIndex.toLong()),
+            )
+            // Raw AAC-LC has no header of its own: like video's SPS/PPS, the decoder is set up from a
+            // codec config sent before the first frame. ADTS frames describe themselves.
+            if (service.codecType == ServiceDiscovery.CODEC_AAC_LC) {
+                val asc = AacEncoder.audioSpecificConfig(sampleRate, channels)
+                sendOnChannel(MSG_CODEC_CONFIG, asc)
+                GearslipLog.hex("$tag: -> CodecConfig (AudioSpecificConfig)", asc)
+            }
+            inFlight = 0
+            lastAckAt = System.currentTimeMillis()
+            if (aacSink && aac == null) {
+                aac = runCatching { AacEncoder(sampleRate, channels, adts = service.codecType == ServiceDiscovery.CODEC_AAC_LC_ADTS) }
+                    .onSuccess { GearslipLog.i("$tag: the car takes ${service.codecName} only - encoding to AAC") }
+                    .onFailure { GearslipLog.e("$tag: couldn't start the AAC encoder", it) }
+                    .getOrNull()
+            }
+            started = true
+            GearslipLog.i("$tag: -> Start(session=$sessionId, config=$configIndex) - streaming ${sampleRate}Hz x$channels")
+        } finally {
+            starting = false
+        }
     }
 
     override fun stop() {
@@ -295,6 +315,7 @@ class AudioLink(
         const val MSG_FOCUS_RESPONSE = 19
         private const val MSG_CHANNEL_OPEN_RESPONSE = 8
         private const val MSG_DATA = 0
+        private const val MSG_CODEC_CONFIG = 1
         private const val MSG_SETUP = 32768
         private const val MSG_START = 32769
         private const val MSG_STOP = 32770
