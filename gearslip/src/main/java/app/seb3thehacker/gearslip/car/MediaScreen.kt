@@ -6,6 +6,8 @@ import app.seb3thehacker.gearslip.car.theme.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Arrangement
 import android.provider.Settings
@@ -13,13 +15,13 @@ import android.content.Intent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -64,6 +66,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.seb3thehacker.gearslip.media.CarMedia
 import app.seb3thehacker.gearslip.media.MediaApp
@@ -162,47 +165,56 @@ fun MediaScreen(app: MediaApp, onExit: () -> Unit) {
             return@Surface
         }
 
-        // Two columns, split the same way on every tab so nothing jumps when switching: the app
-        // and the art (or, beside a list, the compact player) on the left; the tabs across the
-        // top of the right column, over whatever the tab shows.
-        Row(
-            Modifier.fillMaxSize().padding(start = 16.dp, end = 16.dp, top = 10.dp, bottom = 8.dp),
-            horizontalArrangement = Arrangement.spacedBy(24.dp),
+        Column(
+            Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            Column(Modifier.weight(0.8f).fillMaxHeight()) {
-                AppIdentity(app, onExit)
-                Spacer(Modifier.height(12.dp))
-                if (tab == Tab.NOW_PLAYING) {
-                    CoverArt(art, Modifier.weight(1f).fillMaxWidth())
-                } else {
-                    CompactPlayer(now, media, art, Modifier.weight(1f).fillMaxWidth())
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                AppIdentity(app, onExit, Modifier.widthIn(max = 180.dp))
+                Row(
+                    Modifier.weight(1f).horizontalScroll(rememberScrollState()),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End),
+                ) {
+                    MediaTab("Now playing", tab == Tab.NOW_PLAYING) { tab = Tab.NOW_PLAYING }
+                    MediaTab("Up next", tab == Tab.QUEUE) { tab = Tab.QUEUE }
+                    MediaTab("Browse", tab == Tab.BROWSE) { tab = Tab.BROWSE }
+                    MediaTab("Lyrics", tab == Tab.LYRICS) { tab = Tab.LYRICS }
+                }
+                if (now.canSearch || media.canSearchLibrary) {
+                    GsIconButton(
+                        Icons.Filled.Search,
+                        "Search ${app.label}",
+                        { searching = true },
+                        colors = GsColors(MaterialTheme.colorScheme.surfaceContainerHigh, MaterialTheme.colorScheme.onSurface),
+                        size = 44.dp,
+                        shape = MaterialTheme.shapes.large,
+                    )
                 }
             }
-            Column(Modifier.weight(1.2f).fillMaxHeight()) {
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    MediaTab("Now playing", tab == Tab.NOW_PLAYING, Modifier.weight(1f)) { tab = Tab.NOW_PLAYING }
-                    MediaTab("Up next", tab == Tab.QUEUE, Modifier.weight(1f)) { tab = Tab.QUEUE }
-                    MediaTab("Browse", tab == Tab.BROWSE, Modifier.weight(1f)) { tab = Tab.BROWSE }
-                    MediaTab("Lyrics", tab == Tab.LYRICS, Modifier.weight(1f)) { tab = Tab.LYRICS }
-                    if (now.canSearch || media.canSearchLibrary) {
-                        GsIconButton(
-                            Icons.Filled.Search,
-                            "Search ${app.label}",
-                            { searching = true },
-                            colors = GsColors(MaterialTheme.colorScheme.surfaceContainerHigh, MaterialTheme.colorScheme.onSurface),
-                            size = 44.dp,
-                            shape = MaterialTheme.shapes.large,
-                        )
-                    }
-                }
-                search?.let { SearchStatus(it, app.label, media::dismissSearch) }
-                Spacer(Modifier.height(12.dp))
-                Box(Modifier.weight(1f).fillMaxWidth()) {
-                    when (tab) {
-                        Tab.NOW_PLAYING -> StageControls(now, media, Modifier.fillMaxSize())
-                        Tab.BROWSE -> BrowsePanel(browse, media, app.label, Modifier.fillMaxSize())
-                        Tab.QUEUE -> QueuePanel(queue, now, media, Modifier.fillMaxSize())
-                        Tab.LYRICS -> LyricsPanel(now, Modifier.fillMaxSize())
+            search?.let { SearchStatus(it, app.label, media::dismissSearch) }
+            BoxWithConstraints(Modifier.weight(1f).fillMaxWidth()) {
+                val showSidePlayer = maxWidth >= 520.dp && maxHeight >= 300.dp
+                val sidePlayerWidth = maxOf(208.dp, maxWidth * 0.32f)
+                if (tab == Tab.NOW_PLAYING) {
+                    NowPlayingPage(now, media, Modifier.fillMaxSize())
+                } else {
+                    Row(Modifier.fillMaxSize(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                        // Narrow displays keep the list usable; transport remains in the nav bar.
+                        if (showSidePlayer) {
+                            CompactPlayer(now, media, art, Modifier.width(sidePlayerWidth).fillMaxHeight())
+                        }
+                        Box(Modifier.weight(1f).fillMaxHeight()) {
+                            when (tab) {
+                                Tab.BROWSE -> BrowsePanel(browse, media, app.label, Modifier.fillMaxSize())
+                                Tab.QUEUE -> QueuePanel(queue, now, media, Modifier.fillMaxSize())
+                                Tab.LYRICS -> LyricsPanel(now, Modifier.fillMaxSize())
+                                Tab.NOW_PLAYING -> Unit
+                            }
+                        }
                     }
                 }
             }
@@ -367,10 +379,10 @@ private fun SearchStatus(search: CarMedia.Search, appLabel: String, onDismiss: (
 
 /** A bigger, easier-to-hit tab than a plain [TextButton] - this row is the only navigation on the screen. */
 @Composable
-private fun MediaTab(label: String, selected: Boolean, modifier: Modifier, onClick: () -> Unit) {
+private fun MediaTab(label: String, selected: Boolean, onClick: () -> Unit) {
     GsIconBox(
         onClick = onClick,
-        modifier = modifier.height(44.dp),
+        modifier = Modifier.height(44.dp),
         colors = if (selected) GsColors(MaterialTheme.colorScheme.primaryContainer, MaterialTheme.colorScheme.onPrimaryContainer)
         else GsColors(MaterialTheme.colorScheme.surfaceContainerHigh, MaterialTheme.colorScheme.onSurface),
         shape = MaterialTheme.shapes.large,
@@ -382,6 +394,7 @@ private fun MediaTab(label: String, selected: Boolean, modifier: Modifier, onCli
             fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.padding(horizontal = 12.dp),
         )
     }
 }
@@ -588,16 +601,30 @@ internal fun Notice(title: String, detail: String?, action: Pair<String, () -> U
 
 /**
  * The now-playing view on its own, for places with no tabs around it (an app's own
- * now-playing template): the cover on the left, [NowPlayingControls] on the right.
+ * now-playing template). Landscape art uses the original 40/60 split with the controls;
+ * narrow screens put it above the controls when there is enough height.
  */
 @Composable
 internal fun NowPlayingPage(now: NowPlaying, media: CarMedia, modifier: Modifier) {
-    Row(
-        modifier.padding(horizontal = 24.dp, vertical = 8.dp),
-        horizontalArrangement = Arrangement.spacedBy(24.dp),
-    ) {
-        CoverArt(rememberArt(now), Modifier.weight(0.8f).fillMaxHeight())
-        NowPlayingControls(now, media, Modifier.weight(1.2f).fillMaxHeight())
+    BoxWithConstraints(modifier) {
+        val art = rememberArt(now)
+        if (maxWidth >= 520.dp && maxHeight >= 260.dp) {
+            // Keep the original artwork width; the shared header leaves more height than before.
+            val artWidth = minOf(maxHeight, (maxWidth - 24.dp) * 0.4f)
+            Row(Modifier.fillMaxSize(), horizontalArrangement = Arrangement.spacedBy(24.dp)) {
+                CoverArt(art, Modifier.width(artWidth).fillMaxHeight())
+                NowPlayingControls(now, media, Modifier.weight(1f).fillMaxHeight())
+            }
+        } else {
+            val artHeight = if (maxHeight >= 400.dp) minOf(maxHeight * 0.25f, 160.dp) else 0.dp
+            Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                // Only spend vertical space on art when the controls have room below it.
+                if (artHeight > 0.dp) {
+                    CoverArt(art, Modifier.fillMaxWidth().height(artHeight))
+                }
+                NowPlayingControls(now, media, Modifier.weight(1f).fillMaxWidth())
+            }
+        }
     }
 }
 
@@ -624,30 +651,39 @@ private fun CoverArt(art: android.graphics.Bitmap?, modifier: Modifier, alignmen
 }
 
 /**
- * Now playing beside the big cover: the title in large type, then the seek bar and every control,
- * all settled at the bottom. On a wide screen the transport and like, shuffle and repeat share
- * one row; narrower, they take a row each.
+ * Everything about the track and every control for it, read top to bottom: title and artist,
+ * the seek bar, the transport, then like, shuffle and repeat as big icon-only buttons.
  */
 @Composable
-private fun StageControls(now: NowPlaying, media: CarMedia, modifier: Modifier) {
+private fun NowPlayingControls(now: NowPlaying, media: CarMedia, modifier: Modifier) {
     BoxWithConstraints(modifier) {
-        val oneRow = maxWidth >= 820.dp
+        val compact = maxHeight < 360.dp || maxWidth < 420.dp
+        val showTimes = maxHeight >= 260.dp
+        val inlineControls = (maxHeight < 260.dp && maxWidth >= 420.dp) || maxWidth >= 820.dp
+        val buttonWidth = if (inlineControls) (maxWidth - 16.dp) / 2 else maxWidth
+        val spacing = if (compact) 8.dp else 14.dp
         Column(
-            // At least as tall as the space, so the controls sit at its bottom; scrolls if they don't fit.
-            Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).heightIn(min = maxHeight).padding(start = 4.dp, end = 4.dp, bottom = 4.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.Bottom),
+            Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
         ) {
-            Column {
+            // Metadata yields height first: the playback buttons stay above the navigation bar.
+            Column(Modifier.weight(1f, fill = false).verticalScroll(rememberScrollState())) {
                 Text(
                     now.title.ifEmpty { "Nothing playing" },
-                    style = MaterialTheme.typography.displaySmall, fontWeight = FontWeight.Bold,
-                    maxLines = 2, overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.headlineMedium,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    autoSize = TextAutoSize.StepBased(
+                        minFontSize = 22.sp,
+                        maxFontSize = MaterialTheme.typography.headlineMedium.fontSize,
+                        stepSize = 1.sp,
+                    ),
                 )
                 Text(
                     listOf(now.artist, now.album).filter { it.isNotEmpty() }.joinToString(" · "),
-                    style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1, overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.padding(top = 4.dp),
                 )
                 now.error?.let { Text(it, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.error, maxLines = 2) }
                 if (now.title.isEmpty() && now.error == null) {
@@ -657,52 +693,25 @@ private fun StageControls(now: NowPlaying, media: CarMedia, modifier: Modifier) 
                     )
                 }
             }
-            PlayerProgress(now, media, Modifier.fillMaxWidth())
-            if (oneRow) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    TransportRow(now, media, skip = 66.dp, modifier = Modifier.weight(1f))
-                    PlayModeRow(now, media, size = 54.dp, modifier = Modifier.weight(1f), maxOther = 2)
-                }
-            } else {
-                TransportRow(now, media, skip = 64.dp, modifier = Modifier.fillMaxWidth())
-                PlayModeRow(now, media, size = 54.dp, modifier = Modifier.fillMaxWidth(), maxOther = 2)
-            }
-        }
-    }
-}
-
-/**
- * Everything about the track and every control for it, read top to bottom: title and artist,
- * the seek bar, the transport, then like, shuffle and repeat as big icon-only buttons.
- */
-@Composable
-private fun NowPlayingControls(now: NowPlaying, media: CarMedia, modifier: Modifier) {
-    Column(
-        modifier.verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.spacedBy(14.dp, Alignment.CenterVertically),
-    ) {
-        Column {
-            Text(
-                now.title.ifEmpty { "Nothing playing" },
-                style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold,
-                maxLines = 2, overflow = TextOverflow.Ellipsis,
-            )
-            Text(
-                listOf(now.artist, now.album).filter { it.isNotEmpty() }.joinToString(" - "),
-                style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
-                maxLines = 1, overflow = TextOverflow.Ellipsis,
-            )
-            now.error?.let { Text(it, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.error, maxLines = 2) }
-            if (now.title.isEmpty() && now.error == null) {
-                Text(
-                    "Press play to pick up where you left off, or find something in Browse.",
-                    style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
+            Spacer(Modifier.height(spacing - 4.dp))
+            PlayerProgress(now, media, Modifier.fillMaxWidth(), showTimes = showTimes)
+            Spacer(Modifier.height(spacing))
+            // A single button band leaves room for the title even at Extra large UI size.
+            FlowRow(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                verticalArrangement = Arrangement.spacedBy(spacing + 4.dp),
+                maxItemsInEachRow = if (inlineControls) 2 else 1,
+            ) {
+                TransportRow(now, media, skip = if (compact) 48.dp else 60.dp, modifier = Modifier.width(buttonWidth))
+                PlayModeRow(
+                    now, media,
+                    size = if (compact) 48.dp else 56.dp,
+                    modifier = Modifier.width(buttonWidth).horizontalScroll(rememberScrollState()).widthIn(min = buttonWidth),
+                    maxOther = 2,
                 )
             }
         }
-        PlayerProgress(now, media, Modifier.fillMaxWidth())
-        TransportRow(now, media, skip = 60.dp, modifier = Modifier.fillMaxWidth())
-        PlayModeRow(now, media, size = 56.dp, modifier = Modifier.fillMaxWidth(), maxOther = 2)
     }
 }
 
