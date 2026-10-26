@@ -666,4 +666,24 @@
     <string name="recommended_title">Aplicaciones recomendadas</string>
     <string name="back">Atrás</string>
     <string name="recommended_installed">Instalado</string>
+    <string name="carset_version">Versión</string>
+    <string name="carset_build">Build</string>
+    <string name="carset_whats_new_after">Lo nuevo después de las actualizaciones</string>
+    <string name="carset_whats_new_after_sub">Mostrar la lista de cambios una vez, la primera vez que el coche se conecta después de una actualización.</string>
+    <string name="carset_web_default">DuckDuckGo (default) - pulsar para configurar una página diferente</string>
+    <string name="carset_web_note">Mostrada por la aplicación Browser en el lanzador. Se aplica en la siguiente conexión.</string>
+    <string name="carset_screen_fit">Ajuste de la pantalla</string>
+    <string name="carset_top">Top</string>
+    <string name="carset_bottom">Bottom</string>
+    <string name="carset_save_vehicle">Guardar para este vehículo</string>
+    <string name="carset_no_profile">No hay perfil del vehículo igualado</string>
+    <string name="carset_audio_note">USB envía el sonido del teléfono a través de Gearslip. Android pide compartir su pantalla cada unidad, y algunas aplicaciones lo bloquean. Bluetooth juega como el teléfono normalmente lo haría, y Android nunca pregunta.</string>
+    <string name="carset_directions_note">Gearslip lee cada vuelta en voz alta a través de los altavoces del coche, y la música dips mientras habla. Apágalo si la propia voz de su aplicación de mapa ya juega en el coche.</string>
+    <string name="carset_phone_speech_note">Escucha el propio servicio de habla del teléfono en lugar de Gearslip. En la mayoría de los teléfonos que son de Google, que puede enviar su voz a Google. GrapheneOS no tiene ninguno, así que Gearslip sigue usando su propio.</string>
+    <string name="carset_vehicle_data_note">Añade una ficha de datos del vehículo: un vertedero en vivo y crudo del canal de sensores de la unidad de cabeza. Las etiquetas de campo (velocidad, RPM, combustible...) se llevan de otros proyectos de ingeniería inversa y se unverifican contra este coche - tratarlas como una conjetura, no un hecho, hasta que hayas visto un cambio para ti mismo.</string>
+    <string name="carset_adaptive_note">Reduce la calidad de la imagen cuando el coche, o su Wi-Fi, no puede mantenerse al día, y la levanta de nuevo una vez que pueda. Efectúa la próxima conexión.</string>
+    <string name="carset_usable_height">Altura usable %1$dpx de 480</string>
+    <string name="carset_saved_to">Ahorrado a %1$s</string>
+    <string name="carset_save_failed">No podía salvar</string>
+    <string name="carset_px">%1$dpx</string>
 </resources>
