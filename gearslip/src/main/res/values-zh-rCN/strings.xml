@@ -222,7 +222,7 @@
     <string name="help_aa_off">替换安乐公司.</string>
     <string name="help_aa_off_detail">丢弃或 un弃安乐器,因此,汽车会谈冲破了手套.</string>
     <string name="help_cert">签发证书.</string>
-    <string name="help_cert_detail">在环境中,下载或进口.</string>
+    <string name="help_cert_detail">在环境中,下载了大部分汽车都接受的Aasdk证书。 如果你的汽车拒绝,则进口你自己的汽车.</string>
     <string name="help_mic">允许使用麦克风.</string>
     <string name="help_mic_detail">安乐胜不许向汽车投影。 只有在你利用 mi或把 talk子压在你的轮椅上时,才会听动.</string>
     <string name="help_plug_in">无线管道或连接.</string>
@@ -235,7 +235,7 @@
     <string name="help_prompt_detail">将电话与一台计算机连接起来,由USB公司进行,并操作一次。 每当你离开时,就开始使用天空.</string>
     <string name="help_readable">通知可读.</string>
     <string name="help_readable_detail">暗中隐藏了通知在分享音频时所说的话。 播音也是这样,只有音乐进入汽车时,才会动动手.</string>
-    <string name="help_which_cars_body">大多数汽车都在工作。 从2020年左右开始,一些汽车增加了新的安保标准,拒绝佩戴头盔的证明,而动工单无法在这些汽车中运行.</string>
+    <string name="help_which_cars_body">大部分汽车都接受Aasdk证书。 从2020年左右开始,一些汽车增加了新的安全检查,拒绝检查,在这些汽车上,旧车需要你自己的证明.</string>
     <string name="update_downloaded_ask">下载。 氯乙烯在安装之前就提出质询.</string>
     <string name="update_install">Install</string>
     <string name="update_download_now">现在下载。 氯乙烯在安装之前就提出质询.</string>
@@ -278,11 +278,11 @@
     <string name="certsetup_continue">继续</string>
     <string name="certsetup_failed">下载失败</string>
     <string name="certsetup_retry">学历</string>
-    <string name="certsetup_import_sub">A.p12从你选择的任何地方用私人钥匙存档.</string>
+    <string name="certsetup_import_sub">A .p12 载有其私人钥匙。 当您的汽车拒收 a证书时,使用你自己.</string>
     <string name="certsetup_skip">2. 空普车连接装置</string>
     <string name="certsetup_loaded">卡尔斯只接受谷歌颁发的证书,你有一份.</string>
     <string name="certsetup_choose">卡尔斯只接受谷歌发行的证书。 只字不提一,就选择由你来.</string>
-    <string name="certsetup_aasdk_sub">开放源源的 a子项目以github.com/opencardev/aasdk公布这一证书。 大部分汽车都接受,有些从2020年左右开始.</string>
+    <string name="certsetup_aasdk_sub">开放源源的 a子项目以github.com/opencardev/aasdk公布这一证书。 大多数汽车都接受。 有些人从2020年左右开始反对,然后需要进口你自己.</string>
     <string name="storage_title">报废装置</string>
     <string name="storage_measuring">衡量..…</string>
     <string name="storage_lyrics">服饰</string>
@@ -338,7 +338,7 @@
     <string name="audio_keep_asking">保持要求</string>
     <string name="audio_mic_title">听力需要麦克风许可</string>
     <string name="audio_open_settings">开放式备战环境</string>
-    <string name="audio_bt_body">安德列处理寄往Um的音乐,像分享你的屏幕一样,这样它就要求每个运动。 它从未问过过过。 你们可以在以后的环境下改变这种状况.</string>
+    <string name="audio_bt_body">安德列处理乐器短片向汽车发送,如分享你的屏幕,因此,它要求每辆汽车上有电缆或无线。 它从未问过过过。 你们可以在以后的环境下改变这种状况.</string>
     <string name="audio_keep_usb">或者保持USB,并为了求得好而停止:将电话放入一个计算机,由USB debugging接,并操作一次.</string>
     <string name="audio_mic_body">只有在有麦克风许可的情况下,才允许电灯将其他电灯送给汽车。 它用手提机倒闭,所以音乐在电话上演。 转介于Permissions下,然后是麦克风.</string>
     <string name="typing_close">靠近车主板</string>
@@ -653,9 +653,9 @@
     <string name="cert_download">Aasdk的下载</string>
     <string name="cert_downloaded">证书下载.</string>
     <string name="cert_download_failed">下载失败:%1$s</string>
-    <string name="cert_download_sub">开放源星项目证书在Gite Hub公布。 只字不提</string>
+    <string name="cert_download_sub">开放源星项目证书在Gite Hub公布。 大部分汽车都接受这一规定,但从2020年左右开始,有些汽车拒绝接受</string>
     <string name="cert_import">进口我自己的档案</string>
-    <string name="cert_import_sub">A.p12 载有其私人钥匙的档案,从何处选择</string>
+    <string name="cert_import_sub">A .p12 载有其私人钥匙。 您的汽车拒签证书时使用你自己</string>
     <string name="cert_remove_imported">移除进口证书</string>
     <string name="cert_remove_downloaded">摘录的证书</string>
     <string name="msg_quick">快速反应</string>
@@ -678,4 +678,8 @@
     <string name="stage_car_app">Car</string>
     <string name="stage_close">关闭%1$s</string>
     <string name="stage_close_app">接近尾声</string>
+    <string name="certsetup_installed_hint">如果您的汽车赢得连接,它可以拒绝这一证明。 根据证书进口你自己在环境中的物品.</string>
+    <string name="cert_downloaded_footer">卡纳克人没有联系? 大约在2020年左右,一些汽车拒绝加油卡证书,因此自己进口。 变动对下一个联系产生影响.</string>
+    <string name="car_cluster_video">分组屏幕上的周转卡</string>
+    <string name="car_cluster_video_note">在仪器组群中有两个屏幕的一辆汽车:手法片显示下一个路程。 适用下一个联系.</string>
 </resources>
