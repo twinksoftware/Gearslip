@@ -38,7 +38,7 @@
     <string name="cert_download_failed">Descarga fallido: %1$s</string>
     <string name="cert_download_sub">El certificado que publica el proyecto de código abierto en GitHub. Gearslip no incluye uno</string>
     <string name="cert_import">Importar mi propio archivo</string>
-    <string name="cert_import_sub">Un archivo .p12 con su llave privada, desde donde usted elija</string>
+    <string name="cert_import_sub">Un archivo .p12 con su llave privada. Utilice su propio cuando su coche rechaza el certificado de aasdk</string>
     <string name="cert_remove_imported">Eliminar el certificado importado</string>
     <string name="cert_remove_downloaded">Eliminar el certificado descargado</string>
     <string name="cert_removed_imported">Quitó el certificado importado.</string>
@@ -219,7 +219,7 @@
     <string name="certsetup_continue">Continuar</string>
     <string name="certsetup_failed">Descarga fallido</string>
     <string name="certsetup_retry">Retry</string>
-    <string name="certsetup_import_sub">Un archivo .p12 con su llave privada, desde donde usted elija.</string>
+    <string name="certsetup_import_sub">Un archivo .p12 con su llave privada. Use el suyo cuando su coche rechaza el certificado de aasdk.</string>
     <string name="certsetup_skip">Skip car connection setup</string>
     <string name="certsetup_loaded">Los coches sólo aceptan certificados emitidos por Google, y tiene uno cargado.</string>
     <string name="certsetup_choose">Los coches sólo aceptan certificados emitidos por Google. Gearslip no incluye uno, así que elige de dónde viene el tuyo.</string>
