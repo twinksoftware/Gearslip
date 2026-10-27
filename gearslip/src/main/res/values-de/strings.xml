@@ -564,7 +564,7 @@
     <string name="help_aa_off">Schalten Sie Android Auto aus.</string>
     <string name="help_aa_off_detail">Deaktivieren oder deinstallieren Sie die Android Auto-App, so spricht das Auto mit Gearslip statt.</string>
     <string name="help_cert">Geben Sie ein Zertifikat.</string>
-    <string name="help_cert_detail">In Einstellungen, laden Sie ein oder importieren Sie Ihre eigenen.</string>
+    <string name="help_cert_detail">In Settings laden Sie das aasdk-Zertifikat herunter, das die meisten Autos akzeptieren. Wenn Ihr Auto es ablehnt, importieren Sie stattdessen Ihr eigenes.</string>
     <string name="help_mic">Lassen Sie das Mikrofon.</string>
     <string name="help_mic_detail">Android lässt keine App ohne es Musik an das Auto weitergeben. Gearslip hört nur auf, wenn Sie das Mikrofon tippen oder die Sprechtaste auf Ihrem Rad drücken.</string>
     <string name="help_plug_in">Stecken oder drahtlos verbinden.</string>
@@ -577,7 +577,7 @@
     <string name="help_prompt_detail">Schließen Sie das Telefon an einen Computer mit USB-Debugging an und führen Sie dieses einmal aus. Überspringen Sie es und tippen Sie auf Start jedes Mal, wenn Sie ausgeschaltet.</string>
     <string name="help_readable">Halten Sie Benachrichtigungen lesbar.</string>
     <string name="help_readable_detail">Android versteckt, was Benachrichtigungen sagen, während es Audio teilt. Führen Sie das auch, und Gearslip hebt das nur, wenn Musik zum Auto geht.</string>
-    <string name="help_which_cars_body">Die meisten Autos arbeiten. Ab etwa 2020 haben einige Autos neue Sicherheitsstandards hinzugefügt, die Gearslips Zertifikat ablehnen, und Gearslip kann nicht in diesen Autos laufen.</string>
+    <string name="help_which_cars_body">Die meisten Autos akzeptieren das aasdk-Zertifikat. Ab etwa 2020 haben einige Autos neue Sicherheitskontrollen hinzugefügt, die sie ablehnen, und in diesen Autos braucht Gearslip ein eigenes Zertifikat.</string>
     <string name="update_downloaded_ask">Download. Android fragt, bevor es installiert.</string>
     <string name="update_install">Installieren</string>
     <string name="update_download_now">Laden Sie es jetzt herunter. Android fragt, bevor es installiert.</string>
@@ -624,7 +624,7 @@
     <string name="certsetup_skip">Automatischer Anschluss</string>
     <string name="certsetup_loaded">Autos akzeptieren nur Google-ausgestellte Zertifikate, und Sie haben eine geladen.</string>
     <string name="certsetup_choose">Autos akzeptieren nur Google-ausgestellte Zertifikate. Gearslip enthält keine, also wählen Sie, woher Sie kommen.</string>
-    <string name="certsetup_aasdk_sub">Das Open-Source-Aasdk-Projekt veröffentlicht dieses Zertifikat bei github.com/opencardev/aasdk. Die meisten Autos akzeptieren es; einige ab etwa 2020 nicht.</string>
+    <string name="certsetup_aasdk_sub">Das Open-Source-Aasdk-Projekt veröffentlicht dieses Zertifikat bei github.com/opencardev/aasdk. Die meisten Autos akzeptieren es. Einige von rund 2020 ablehnen es, und dann müssen Sie Ihre eigenen importieren.</string>
     <string name="storage_title">Gearslip Aufbewahrung</string>
     <string name="storage_measuring">Messen..</string>
     <string name="storage_lyrics">- Ja</string>
@@ -677,7 +677,7 @@
     <string name="audio_keep_asking">Fragen Sie weiter</string>
     <string name="audio_mic_title">Auto Audio braucht die Mikrofonberechtigung</string>
     <string name="audio_open_settings">App-Einstellungen öffnen</string>
-    <string name="audio_bt_body">Android behandelt Musik über USB gesendet wie teilen Sie Ihren Bildschirm, so fragt es jedes Laufwerk. Über Bluetooth fragt es nie. Sie können dies später in Einstellungen ändern.</string>
+    <string name="audio_bt_body">Android behandelt die Musik Gearslip sendet an das Auto wie das Teilen Ihres Bildschirms, so fragt es jedes Laufwerk, über ein Kabel oder Wireless. Über Bluetooth fragt es nie. Sie können dies später in Einstellungen ändern.</string>
     <string name="audio_keep_usb">Oder halten Sie USB und stoppen Sie die Frage für gut: Stecken Sie das Telefon in einen Computer mit USB-Debugging auf, und führen Sie dieses einmal.</string>
     <string name="audio_mic_body">Android lässt eine App den Sound anderer Apps nur an das Auto senden, wenn sie die Mikrofonberechtigung hat. Es ist für Gearslip ausgeschaltet, also spielt Musik am Telefon. Schalten Sie es unter Berechtigungen ein, dann Mikrofon.</string>
     <string name="typing_close">Schließen Sie die Autotastatur</string>
@@ -686,4 +686,8 @@
     <string name="command_tap_copy">Tippen Sie auf Kopieren</string>
     <string name="command_copied">Befehl kopiert</string>
     <string name="whats_new_this_version">%1$s (diese Version)</string>
+    <string name="certsetup_installed_hint">Wenn Ihr Auto nicht angeschlossen wird, kann es dieses Zertifikat ablehnen. Importieren Sie eigene in Einstellungen, unter Zertifikat.</string>
+    <string name="cert_downloaded_footer">Auto wird nicht verbinden? Einige Autos ab etwa 2020 ablehnen das Aasdk-Zertifikat, also importieren Sie Ihre eigenen statt. Änderungen wirken auf die nächste Verbindung.</string>
+    <string name="car_cluster_video">Karte auf dem Cluster-Bildschirm drehen</string>
+    <string name="car_cluster_video_note">Für ein Auto mit einem zweiten Bildschirm im Instrumenten-Cluster: Gearslip zeigt dort die nächste Drehung. Gilt für die nächste Verbindung.</string>
 </resources>
