@@ -115,7 +115,7 @@
     <string name="cert_download">Ke stažení z aasdk</string>
     <string name="cert_downloaded">Certifikát stažený.</string>
     <string name="cert_download_failed">Ke stažení selhal: %1$s</string>
-    <string name="cert_download_sub">Certifikát projektu open-source aasdk vydává na GitHubu. Gearslip neobsahuje jeden</string>
+    <string name="cert_download_sub">Certifikát projektu open-source aasdk vydává na GitHubu. Většina vozů to akceptuje, ale někteří z celého roku 2020 jej odmítnout</string>
     <string name="cert_import">Importovat svůj vlastní soubor</string>
     <string name="cert_import_sub">A .p12 soubor s vlastním klíčem, ať už si vyberete</string>
     <string name="cert_remove_imported">Odebrat importovaný certifikát</string>
