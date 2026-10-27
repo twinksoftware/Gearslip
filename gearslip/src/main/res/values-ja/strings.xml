@@ -202,7 +202,7 @@
     <string name="cert_download_failed">ダウンロードが失敗しました: %1$s</string>
     <string name="cert_download_sub">GitHubでオープンソースのaasdkプロジェクトを公開する証明書。 Gearslip は 1 つが含まれていません</string>
     <string name="cert_import">自分のファイルをインポートする</string>
-    <string name="cert_import_sub">.p12 ファイルが秘密鍵で、どこからでも選択できます</string>
+    <string name="cert_import_sub">.p12 ファイルが秘密鍵付きです。 車がasdkの証明書を拒否するとき、自分で使用してください</string>
     <string name="cert_remove_imported">インポートされた証明書を削除します</string>
     <string name="cert_remove_downloaded">ダウンロードした証明書を削除します</string>
     <string name="cert_removed_imported">インポートされた証明書を削除します.</string>
