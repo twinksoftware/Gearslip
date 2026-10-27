@@ -200,7 +200,7 @@
     <string name="cert_download">Aasdkからダウンロード</string>
     <string name="cert_downloaded">ダウンロードした証明書.</string>
     <string name="cert_download_failed">ダウンロードが失敗しました: %1$s</string>
-    <string name="cert_download_sub">GitHubでオープンソースのaasdkプロジェクトを公開する証明書。 Gearslip は 1 つが含まれていません</string>
+    <string name="cert_download_sub">GitHubでオープンソースのaasdkプロジェクトを公開する証明書。 ほとんどの車はそれを受け入れますが、それを拒否して2020年頃から一部</string>
     <string name="cert_import">自分のファイルをインポートする</string>
     <string name="cert_import_sub">.p12 ファイルが秘密鍵付きです。 車がasdkの証明書を拒否するとき、自分で使用してください</string>
     <string name="cert_remove_imported">インポートされた証明書を削除します</string>
@@ -327,7 +327,7 @@
     <string name="help_aa_off">Android Autoをオフにします.</string>
     <string name="help_aa_off_detail">Android Autoアプリを無効またはアンインストールするので、代わりに車はGearslipに話します.</string>
     <string name="help_cert">証明書をロードします.</string>
-    <string name="help_cert_detail">[設定] で 1 つをダウンロードしたり、自分でインポートしたりできます.</string>
+    <string name="help_cert_detail">設定では、ほとんどの車が受け入れるasdkの証明書をダウンロードします。 車を拒絶すると、代わりに自分の車をインポートします.</string>
     <string name="help_mic">マイクを許可します.</string>
     <string name="help_mic_detail">Androidは、アプリがそれなしで車に音楽を渡すことができません。 Gearslip は、マイクをタップするか、ホイールのトークボタンを押したときにのみリスニングします.</string>
     <string name="help_plug_in">プラグイン、またはワイヤレス接続.</string>
@@ -340,7 +340,7 @@
     <string name="help_prompt_detail">携帯電話をコンピュータに接続し、USB デバッグをオンにして実行します。 スキップして、設定するたびに [スタート] をタップします.</string>
     <string name="help_readable">読みやすい通知を保持します.</string>
     <string name="help_readable_detail">Androidは、オーディオを共有するときに通知を隠します。 これも実行し、Gearslip リフトは、音楽が車に行きます.</string>
-    <string name="help_which_cars_body">ほとんどの車の仕事。 2020年以降、一部の車は、Gearslipの証明書を拒否するより新しいセキュリティ基準を追加し、Gearslipはそれらの車内で実行できません.</string>
+    <string name="help_which_cars_body">ほとんどの車は aasdk の証明書を受け入れます。 2020年以降、一部の車は、それを拒否する新しいセキュリティチェックを追加し、それらの車の中で、Gearslipはあなた自身の証明書を必要とします.</string>
     <string name="update_downloaded_ask">ダウンロード アンドロイドはインストールする前に尋ねます.</string>
     <string name="update_install">インストール</string>
     <string name="update_download_now">今すぐダウンロード アンドロイドはインストールする前に尋ねます.</string>
@@ -383,11 +383,11 @@
     <string name="certsetup_continue">お問い合わせ</string>
     <string name="certsetup_failed">ダウンロード失敗</string>
     <string name="certsetup_retry">リトリート</string>
-    <string name="certsetup_import_sub">.p12 ファイルには、その秘密鍵がどこからでも選択できます.</string>
+    <string name="certsetup_import_sub">.p12 ファイルが秘密鍵付きです。 お使いの車が aasdk の証明書を拒否した場合、自分で使用してください.</string>
     <string name="certsetup_skip">車の接続設定をスキップ</string>
     <string name="certsetup_loaded">車両は、Google 発行の証明書のみを受け付けており、1 枚の読み込みがあります.</string>
     <string name="certsetup_choose">車は、Google発行の証明書のみを受け入れます。 Gearslip には 1 つが含まれていません.</string>
-    <string name="certsetup_aasdk_sub">オープンソースのaasdkプロジェクトでは、github.com/opencardev/aasdkでこの証明書を公開しています。 ほとんどの車はそれを受け入れます; 一部 から 2020 に しないで.</string>
+    <string name="certsetup_aasdk_sub">オープンソースのaasdkプロジェクトでは、github.com/opencardev/aasdkでこの証明書を公開しています。 ほとんどの車はそれを受け入れます。 2020年頃から一部を拒絶し、自分でインポートする必要があります.</string>
     <string name="storage_title">ギアスリップストレージ</string>
     <string name="storage_measuring">測定..</string>
     <string name="storage_lyrics">リリック</string>
@@ -443,7 +443,7 @@
     <string name="audio_keep_asking">お問い合わせ</string>
     <string name="audio_mic_title">車の音声はマイクの許可を必要とします</string>
     <string name="audio_open_settings">アプリの設定を開く</string>
-    <string name="audio_bt_body">Androidは、画面を共有するようなUSB経由で送信された音楽を扱います。そのため、すべてのドライブを尋ねます。 Bluetooth 経由では、決して尋ねません。 後で設定を変更できます.</string>
+    <string name="audio_bt_body">Androidは、Gearslipが画面を共有するような車に送信する音楽を扱います。そのため、ケーブルやワイヤレスですべてのドライブを要求します。 Bluetooth 経由では、決して尋ねません。 後で設定を変更できます.</string>
     <string name="audio_keep_usb">またはUSBを保ち、質問をうまく止めて下さい:電話をUSBのダバッギングが付いているコンピュータに差し込み、これを一度動かして下さい.</string>
     <string name="audio_mic_body">Androidは、アプリがマイクの許可がある場合にのみ、他のアプリの音を車に送ることができます。 Gearslip がオフになっているので、携帯電話で音楽を再生します。 パーミッションの下、マイクをオンにします.</string>
     <string name="typing_close">車のキーボードを閉じる</string>
@@ -678,4 +678,8 @@
     <string name="whatsnew_title">%1$s の新機能</string>
     <string name="keyboard_space">スペース</string>
     <string name="keyboard_hide">キーボードを隠す</string>
+    <string name="certsetup_installed_hint">車が接続しない場合は、この証明書を拒否することができます。 証明書の下に、設定で自分自身をインポートします.</string>
+    <string name="cert_downloaded_footer">車は接続しませんか? Aasdkの証明書を拒否すると、2020年頃から車がいるので、代わりに自分の車をインポートしてください。 変更は、次の接続に有効になります.</string>
+    <string name="car_cluster_video">クラスター画面でカードをオンにする</string>
+    <string name="car_cluster_video_note">楽器クラスターの2番目の画面を持つ車の場合: ギアスリップは、そこに次のターンを示しています。 次の接続に適用されます.</string>
 </resources>
