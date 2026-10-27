@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="touch_relay_description">Позволяет Gearslip повторять на телефоне касания экрана автомобиля во время трансляции экрана. Gearslip не читает содержимое экрана.</string>
-
     <!-- Setup guide -->
     <string name="guide_usage_title">Помогите другим водителям.</string>
     <string name="guide_safety_title">Будьте осторожны за рулём.</string>
@@ -44,7 +43,7 @@
     <string name="guide_voice_downloading">Загрузка, %1$d%%. Можно продолжать, загрузка идёт дальше.</string>
     <string name="guide_voice_ready">Голос готов.</string>
     <string name="guide_voice_failed">Загрузка не завершилась. Нажмите «Скачать голос», чтобы попробовать снова.</string>
-    <string name="guide_audio_bluetooth">Bluetooth</string>
+    <string name="guide_audio_bluetooth">Bluetooth вкл.</string>
     <string name="guide_recommended">Рекомендуется</string>
     <string name="guide_audio_bluetooth_body">Никаких запросов в каждой поездке, а голос навигатора звучит в машине.</string>
     <string name="guide_audio_usb">Через Gearslip</string>
@@ -57,8 +56,7 @@
     <string name="guide_open">Открыть</string>
     <string name="guide_next">Далее</string>
     <string name="guide_done">Готово</string>
-    <string name="guide_back">Назад</string>
-
+    <string name="guide_back">Чёрный</string>
     <!-- Usage notes -->
     <string name="usage_intro">Включите это, и Gearslip будет отправлять короткую заметку при открытии и после каждой поездки. &lt;b&gt;В заметке нет имени, аккаунта или местоположения. Случайное число учитывает ваш телефон один раз, а сервер не хранит IP-адрес.&lt;/b&gt; Заметки показывают, какие машины работают и где другие дают сбой.</string>
     <string name="usage_send">Отправлять заметки об использовании</string>
@@ -79,12 +77,11 @@
     <string name="worked_body">Поделиться, чтобы следующий водитель знал, что это работает? Без имени, аккаунта и местоположения.</string>
     <string name="worked_not_now">Не сейчас</string>
     <string name="worked_share">Поделиться</string>
-
     <!-- Recommended apps -->
     <string name="recommended_intro">Эти бесплатные приложения работают на автомобильном экране Gearslip. Каждая кнопка открывает страницу приложения на GitHub.</string>
     <string name="recommended_title">Рекомендуемые приложения</string>
-    <string name="back">Назад</string>
-    <string name="recommended_installed">Установлено</string>
+    <string name="back">Чёрный</string>
+    <string name="recommended_installed">Установить</string>
     <string name="recommended_maps">Карты</string>
     <string name="recommended_music">Музыка</string>
     <string name="recommended_podcasts">Подкасты</string>
@@ -94,7 +91,6 @@
     <string name="recommended_about_ytm">Плеер для YouTube Music.</string>
     <string name="recommended_about_antennapod">Подкасты, с главами и всем прочим.</string>
     <string name="recommended_about_rfsentinel">Находит трекеры и камеры поблизости.</string>
-
     <!-- Settings -->
     <string name="settings_title">Настройки</string>
     <string name="settings_whats_new">Что нового</string>
@@ -102,7 +98,7 @@
     <string name="settings_support">Поддержать Gearslip</string>
     <string name="settings_support_footer">Gearslip бесплатный, без рекламы и слежки. Ваша поддержка помогает ему жить.</string>
     <string name="settings_usage_notes">Заметки об использовании</string>
-    <string name="settings_updates">Обновления</string>
+    <string name="settings_updates">Обновить</string>
     <string name="settings_about">О приложении</string>
     <string name="settings_replay">Пройти мастер настройки заново</string>
     <string name="settings_replay_sub">Повторить шаги первого запуска</string>
@@ -136,7 +132,6 @@
     <string name="cert_password">Пароль</string>
     <string name="cert_password_hint">Оставьте пустым, если у файла нет пароля.</string>
     <string name="cert_import_button">Импортировать</string>
-
     <!-- Certificate summary -->
     <string name="cancel">Отмена</string>
     <string name="cert_none">Не загружен (самоподписанный; машины его отклоняют)</string>
@@ -144,7 +139,6 @@
     <string name="cert_kind_downloaded">Скачан: %1$s</string>
     <string name="cert_kind_adb">Загружен через adb: %1$s</string>
     <string name="cert_kind_self">Самоподписанный: %1$s</string>
-
     <!-- Car settings on the phone -->
     <string name="car_group_screen">Экран</string>
     <string name="car_group_nav_bar">Панель навигации и плеер</string>
@@ -220,7 +214,6 @@
     <string name="car_audio_usb_sub">Чище звук и никакой задержки. В каждой поездке Android просит разрешить трансляцию экрана, и это позволяет Gearslip передавать звук</string>
     <string name="car_audio_usb_footer">Один раз выполните команду из Справки, и Android перестанет спрашивать.</string>
     <string name="car_audio_bt_footer">Звонки в любом случае идут через Bluetooth.</string>
-
     <!-- Car screen size -->
     <string name="screen_car_size">Размер экрана машины</string>
     <string name="screen_use_cars">Как у машины</string>
@@ -245,10 +238,8 @@
     <string name="screen_width">Ширина</string>
     <string name="screen_height">Высота</string>
     <string name="save">Сохранить</string>
-
     <string name="screen_car_size_note">Используйте это, если картинка в машине выглядит растянутой. Введите реальный размер экрана, например 1280x480. Он применится при следующем подключении.</string>
     <string name="screen_set_by_you">%1$s, задано вами</string>
-
     <!-- Help -->
     <string name="help_title">Как подключиться</string>
     <string name="help_which_cars">Какие машины работают</string>
@@ -256,7 +247,6 @@
     <string name="help_first_drive">Перед первой поездкой</string>
     <string name="help_in_car">В машине</string>
     <string name="help_usb_audio">Звук через Gearslip</string>
-
     <string name="help_aa_off">Отключите Android Auto.</string>
     <string name="help_aa_off_detail">Отключите или удалите приложение Android Auto, чтобы машина общалась с Gearslip.</string>
     <string name="help_cert">Загрузите сертификат.</string>
@@ -274,7 +264,6 @@
     <string name="help_readable">Сохраните уведомления читаемыми.</string>
     <string name="help_readable_detail">Android скрывает текст уведомлений, пока передаёт звук. Выполните и это, и Gearslip снимет ограничение только на время, пока музыка идёт в машину.</string>
     <string name="help_which_cars_body">Большинство машин принимает сертификат aasdk. Примерно с 2020 года в некоторых машинах появились новые проверки безопасности, которые его отклоняют, и в них Gearslip нужен ваш собственный сертификат.</string>
-
     <!-- Updates -->
     <string name="update_downloaded_ask">Скачано. Android спросит перед установкой.</string>
     <string name="update_install">Установить</string>
@@ -287,7 +276,6 @@
     <string name="update_check_now">Проверить сейчас</string>
     <string name="update_check_auto">Проверять автоматически</string>
     <string name="update_once_a_day">Раз в день</string>
-
     <string name="update_unplug_first">Отключитесь от машины, чтобы установить. Установка закроет Gearslip.</string>
     <string name="update_card_title">Вышел Gearslip %1$s</string>
     <string name="update_downloading">Загрузка… %1$d%%</string>
@@ -296,7 +284,6 @@
     <string name="update_version_out">Вышла версия %1$s</string>
     <string name="update_version_ready">Версия %1$s готова к установке</string>
     <string name="update_dialog_status">Версия %1$s. %2$s.</string>
-
     <!-- About and support -->
     <string name="about_give_regularly">Поддерживать еженедельно или ежемесячно</string>
     <string name="about_bmac_sub" formatted="false">Разово или ежемесячно, картой. Buy Me a Coffee берёт 5%</string>
@@ -315,24 +302,20 @@
     <string name="about_source">Исходный код</string>
     <string name="about_source_sub">Читайте или меняйте код Gearslip по лицензии AGPL</string>
     <string name="about_voice_credits">Благодарности за голос</string>
-
     <string name="about_no_wallet">Кошелёк Monero не найден. Скопируйте адрес.</string>
     <string name="about_monero_copied">Адрес Monero скопирован</string>
     <string name="about_voice_credits_sub">Распознавание речи: sherpa-onnx (Apache 2.0), с Kroko ASR от Banafo (CC BY-SA 4.0), а также Parakeet и Canary от NVIDIA (CC BY 4.0)</string>
-
     <!-- Certificate setup -->
     <string name="certsetup_title">Настройка сертификата</string>
     <string name="certsetup_installed">Сертификат установлен.</string>
-    <string name="certsetup_continue">Продолжить</string>
+    <string name="certsetup_continue">Продолжайте движение</string>
     <string name="certsetup_failed">Не удалось скачать</string>
     <string name="certsetup_retry">Повторить</string>
     <string name="certsetup_import_sub">Файл .p12 с закрытым ключом. Используйте свой, если машина отклоняет сертификат aasdk.</string>
     <string name="certsetup_skip">Пропустить настройку подключения к машине</string>
-
     <string name="certsetup_loaded">Машины принимают только сертификаты, выданные Google, и у вас один загружен.</string>
     <string name="certsetup_choose">Машины принимают только сертификаты, выданные Google. В Gearslip его нет, так что выберите, откуда взять свой.</string>
     <string name="certsetup_aasdk_sub">Открытый проект aasdk публикует этот сертификат на github.com/opencardev/aasdk. Большинство машин его принимает. Некоторые примерно с 2020 года отклоняют, и тогда нужно импортировать свой.</string>
-
     <!-- Storage -->
     <string name="storage_title">Хранилище Gearslip</string>
     <string name="storage_measuring">Подсчёт…</string>
@@ -343,7 +326,6 @@
     <string name="storage_logs">Старые журналы</string>
     <string name="storage_other">Другие временные файлы</string>
     <string name="storage_delete_all">Удалить все данные Gearslip</string>
-
     <string name="storage_total">Данные Gearslip занимают %1$s памяти телефона.</string>
     <plurals name="storage_lyrics_detail">
         <item quantity="one">%1$d песня · %2$s. Очищенные тексты скачаются снова, когда вы их откроете.</item>
@@ -356,17 +338,14 @@
     <string name="storage_other_detail">%1$s. Скачанные обновления и другие файлы, которые Gearslip может создать заново.</string>
     <string name="storage_delete_armed">Нажмите «Удалить» ещё раз, чтобы стереть настройки, сертификаты, голосовые модели и журналы. Gearslip закроется и в следующий раз начнёт с настройки.</string>
     <string name="storage_delete_sub">Настройки, сертификаты, голосовые модели, тексты и журналы.</string>
-    <string name="storage_delete">Удалить</string>
+    <string name="storage_delete">Удалить…</string>
     <string name="storage_delete_ellipsis">Удалить…</string>
-
     <!-- Donate prompt -->
     <string name="donate_title">Рад, что поездка удалась</string>
     <string name="donate_liberapay">Поддержать на Liberapay</string>
     <string name="donate_bmac">Угостите меня кофе</string>
     <string name="donate_card">Поддержать разово картой</string>
-
     <string name="donate_body">Gearslip бесплатный, без рекламы и слежки. Если он помогает вам в дороге, ваша поддержка помогает ему жить.</string>
-
     <!-- Wireless -->
     <string name="wireless_needs_permission">Для этого Gearslip нужен доступ к Bluetooth и Wi-Fi поблизости.</string>
     <string name="wireless_enable_permission">Включить разрешение «Устройства поблизости»</string>
@@ -375,30 +354,25 @@
     <string name="wireless_none_paired">Телефон пока ни с чем не связан. Сначала свяжите его с машиной.</string>
     <string name="wireless_not_listed">Машины нет в списке? Сначала свяжите её с телефоном.</string>
     <string name="bluetooth_settings">Настройки Bluetooth</string>
-
     <!-- Voice models -->
     <string name="voice_live_title">Голос: слова на лету</string>
     <string name="voice_final_title">Голос: итоговые слова</string>
     <string name="voice_none">Нет</string>
     <string name="voice_none_sub">Оставить слова на лету. Быстрее всего, наименее точно</string>
-
     <string name="voice_live_body">Голосовой помощник превращает речь в текст на этом телефоне, и ничего из сказанного его не покидает. Ему нужны две модели, вместе около 270 МБ, скачиваются один раз. Эта записывает ваши слова, пока вы говорите.</string>
     <string name="voice_final_body">Когда вы замолкаете, эта модель перечитывает всю фразу. Она ловит имена и места, которые упускает модель на лету.</string>
     <string name="voice_model_size">%1$s · %2$d МБ</string>
     <string name="voice_downloaded">Скачано. %1$s</string>
     <string name="voice_downloading">Загрузка, %1$d%%</string>
-
     <!-- Home -->
     <string name="home_help">Справка</string>
     <string name="home_preview">Предпросмотр</string>
     <string name="home_logs">Журналы</string>
     <string name="home_disconnect">Отключиться</string>
     <string name="home_bt_title">Bluetooth не подключён</string>
-
     <string name="home_debug_build">%1$s · отладочная сборка</string>
     <string name="home_bt_body">Музыка играет через Bluetooth, но телефон не подключён к машине. Подключите его здесь или в меню Bluetooth машины.</string>
     <string name="home_voice_downloading">Загрузка голоса, %1$d%%</string>
-
     <!-- Car audio dialogs -->
     <string name="audio_bt_title">Выводить звук в машине через Bluetooth?</string>
     <string name="audio_never_ask">Не спрашивать никогда, с помощью компьютера</string>
@@ -406,21 +380,17 @@
     <string name="audio_keep_asking">Продолжать спрашивать</string>
     <string name="audio_mic_title">Для звука в машине нужно разрешение на микрофон</string>
     <string name="audio_open_settings">Открыть настройки приложения</string>
-
     <string name="audio_bt_body">Android считает музыку, которую Gearslip отправляет в машину, трансляцией экрана, поэтому спрашивает в каждой поездке, по кабелю или без проводов. Через Bluetooth он никогда не спрашивает. Это можно изменить позже в Настройках.</string>
     <string name="audio_keep_usb">Или оставьте звук через Gearslip и уберите вопрос навсегда: подключите телефон к компьютеру с включённой отладкой по USB и один раз выполните это.</string>
     <string name="audio_mic_body">Android позволяет приложению отправлять звук других приложений в машину, только если у него есть разрешение на микрофон. Для Gearslip оно выключено, поэтому музыка играет на телефоне. Включите его в разделе «Разрешения», затем «Микрофон».</string>
-
     <!-- Phone keyboard -->
     <string name="typing_close">Закрыть клавиатуру машины</string>
     <string name="typing_label">Ввод для экрана машины</string>
     <string name="typing_search">Поиск на экране машины</string>
-
     <!-- Copyable command -->
     <string name="command_tap_copy">Нажмите, чтобы скопировать</string>
     <string name="command_copied">Команда скопирована</string>
     <string name="whats_new_this_version">%1$s (эта версия)</string>
-
     <!-- Car settings screen -->
     <string name="carset_theme">Тема</string>
     <string name="carset_imperial">Имперские (mi, ft, °F)</string>
@@ -447,7 +417,6 @@
     <string name="carset_bottom">Снизу</string>
     <string name="carset_save_vehicle">Сохранить для этого автомобиля</string>
     <string name="carset_no_profile">Подходящий профиль автомобиля не найден</string>
-
     <string name="carset_audio_note">«Через Gearslip» передаёт звук телефона по подключению к машине, кабелем или без проводов. Android в каждой поездке просит разрешить трансляцию экрана, а некоторые приложения это блокируют. Bluetooth играет так, как телефон играл бы обычно, и Android ничего не спрашивает.</string>
     <string name="carset_directions_note">Gearslip зачитывает каждый поворот через динамики машины, а музыка в это время стихает. Выключите, если голос вашего навигатора уже звучит в машине.</string>
     <string name="carset_phone_speech_note">Слушает через речевой сервис телефона вместо сервиса Gearslip. На большинстве телефонов это сервис Google, который может отправлять ваш голос в Google. В GrapheneOS его нет, поэтому Gearslip продолжает использовать свой.</string>
@@ -457,7 +426,6 @@
     <string name="carset_saved_to">Сохранено в %1$s</string>
     <string name="carset_save_failed">Не удалось сохранить</string>
     <string name="carset_px">%1$dpx</string>
-
     <!-- Car media app -->
     <string name="media_open_on_phone">Открыть на телефоне</string>
     <string name="media_now_playing">Сейчас играет</string>
@@ -467,7 +435,6 @@
     <string name="media_looking_lyrics">Ищем текст…</string>
     <string name="media_nothing_playing">Ничего не играет</string>
     <string name="media_press_play">Нажмите воспроизведение, чтобы продолжить с того места, где остановились, или найдите что-нибудь в «Обзоре».</string>
-
     <string name="media_keeps_library">%1$s не открывает свою библиотеку.</string>
     <string name="media_needs_access">Gearslip всё равно может им управлять, если получит доступ к уведомлениям на телефоне. Разрешите его в Настройки &gt; Уведомления &gt; Доступ к уведомлениям.</string>
     <string name="media_not_running">%1$s не запущено.</string>
@@ -485,7 +452,6 @@
     <string name="media_searching_for">Ищем «%2$s» в %1$s…</string>
     <string name="media_nothing_playing_dot">Ничего не играет.</string>
     <string name="media_no_lyrics">Текст для этого трека не найден.</string>
-
     <!-- Car media browsing -->
     <string name="media_up">Наверх</string>
     <string name="media_loading">Загрузка…</string>
@@ -494,20 +460,17 @@
     <string name="media_nothing_here">Здесь пусто.</string>
     <string name="media_nothing_queued">Очередь пуста.</string>
     <string name="media_play">Играть</string>
-
     <string name="media_queue_empty_idle">Ничего не играет - не каждое приложение сообщает Gearslip, что будет дальше.</string>
     <string name="media_queue_empty_playing">Только то, что уже играет - не каждое приложение сообщает Gearslip, что будет дальше.</string>
-
     <!-- Player controls -->
     <string name="player_previous">Предыдущий</string>
-    <string name="player_next">Следующий</string>
+    <string name="player_next">Далее</string>
     <string name="player_repeat">Повтор</string>
     <string name="player_pause">Пауза</string>
     <string name="player_unlike">Убрать лайк</string>
     <string name="player_like">Нравится</string>
     <string name="player_shuffle_off">Перемешивание выкл.</string>
     <string name="player_shuffle_on">Перемешивание вкл.</string>
-
     <!-- Car home -->
     <string name="home_choose_app">Выбрать другое приложение</string>
     <string name="home_no_maps">Приложения с картами не найдены.</string>
@@ -515,16 +478,14 @@
     <string name="home_map_stopped">Карта остановлена</string>
     <string name="home_map_stopped_body">Она останется закрытой, пока вы не откроете её снова.</string>
     <string name="home_reopen_map">Открыть карту снова</string>
-    <string name="home_car_apps">Автомобильные приложения</string>
+    <string name="home_car_apps">Автоприложение</string>
     <string name="home_back_nav">Назад к панели навигации</string>
     <string name="home_show_player">Показать плеер</string>
     <string name="home_hide_lyrics">Скрыть текст</string>
-
     <string name="home_starting">Запуск %1$s…</string>
     <string name="home_starting_map">Запуск карты…</string>
     <string name="home_failed">%1$s не запустилось.</string>
     <string name="home_failed_map">Приложение с картами не запустилось.</string>
-
     <!-- Breadcrumbs -->
     <string name="crumb_home">Главная</string>
     <string name="crumb_media">Медиа</string>
@@ -532,9 +493,8 @@
     <string name="crumb_dashboard">Панель</string>
     <string name="crumb_weather">Погода</string>
     <string name="crumb_reply">Ответ</string>
-
     <!-- Built-in apps -->
-    <string name="app_browser">Браузер</string>
+    <string name="app_browser">Обзор</string>
     <string name="app_screen_sharing">Трансляция экрана</string>
     <string name="app_exit">Выход</string>
     <string name="navapps_unpin">Открепить от панели навигации</string>
@@ -544,7 +504,6 @@
     <string name="navapps_move_left">Сдвинуть влево</string>
     <string name="navapps_move_right">Сдвинуть вправо</string>
     <string name="navapps_reset">Сбросить порядок приложений</string>
-
     <!-- Message popup -->
     <string name="msg_dismiss">Закрыть</string>
     <string name="msg_read">Прочитать</string>
@@ -552,7 +511,6 @@
     <string name="msg_no">Нет</string>
     <string name="msg_send_now">Отправить сейчас</string>
     <string name="msg_type">Набрать</string>
-
     <plurals name="msg_burst">
         <item quantity="one">%1$s · %2$d новое</item>
         <item quantity="few">%1$s · %2$d новых</item>
@@ -564,12 +522,10 @@
     <string name="msg_sending_to">Отправка: %1$s</string>
     <string name="msg_sent_to">Отправлено: %1$s</string>
     <string name="msg_reply_failed">Не удалось ответить</string>
-
     <!-- Bluetooth pairing -->
     <string name="bt_pair_unfinished">Связывание не завершилось. Свяжите через меню Bluetooth машины.</string>
     <string name="bt_pair_not_started">Связывание не началось. Свяжите через меню Bluetooth машины.</string>
     <string name="bt_paired">Связано. Теперь звонки идут через машину.</string>
-
     <!-- Car overlays -->
     <string name="overlay_dont_show">Больше не показывать</string>
     <string name="overlay_ok">ОК</string>
@@ -578,12 +534,10 @@
     <string name="overlay_pair">Связать</string>
     <string name="overlay_confirm_title">Подтвердите на телефоне</string>
     <string name="overlay_confirm_body">Проверьте код на телефоне и нажмите «Связать». Машина тоже может спросить.</string>
-
     <string name="overlay_bt_body">Музыка играет через Bluetooth, но телефон не подключён к машине. Подключите его в меню Bluetooth машины или телефона.</string>
     <string name="overlay_location_body">Приложения с картами не могут показать, где вы, и проложить маршрут. Включите местоположение в быстрых настройках телефона, когда припаркуетесь.</string>
     <string name="overlay_pair_body_music">Звонки и музыка идут через динамики машины, когда телефон и машина связаны. Затем телефон попросит подтвердить код.</string>
     <string name="overlay_pair_body">Звонки идут через динамики машины, когда телефон и машина связаны. Затем телефон попросит подтвердить код.</string>
-
     <!-- Weather -->
     <string name="weather_waiting_fix">Определяем местоположение.</string>
     <string name="weather_allow_location">Разрешите Gearslip доступ к местоположению на телефоне, чтобы видеть погоду.</string>
@@ -599,18 +553,15 @@
     <string name="weather_rain_showers">Ливни</string>
     <string name="weather_snow_showers">Снегопады</string>
     <string name="weather_thunderstorm">Гроза</string>
-
     <!-- Weather screen -->
     <string name="weather_getting">Получаем погоду…</string>
     <string name="weather_next_hours">Ближайшие часы</string>
     <string name="weather_this_week">На этой неделе</string>
     <string name="weather_today">Сегодня</string>
     <string name="weather_credit">Данные о погоде: Open-Meteo.com (CC BY 4.0)</string>
-
     <string name="weather_feels_like">Ощущается как %1$s</string>
     <string name="weather_humidity">Влажность %1$d%%</string>
     <string name="weather_wind">Ветер %1$s</string>
-
     <!-- Dashboard -->
     <string name="dash_today">Сегодня</string>
     <string name="dash_getting_weather">Получаем погоду…</string>
@@ -618,7 +569,6 @@
     <string name="dash_loading_calendar">Загрузка календаря…</string>
     <string name="dash_nothing_week">На ближайшей неделе ничего.</string>
     <string name="dash_all_day">Весь день</string>
-
     <!-- Phone dialer -->
     <string name="dialer_contacts">Контакты</string>
     <string name="dialer_keypad">Клавиатура</string>
@@ -627,22 +577,18 @@
     <string name="dialer_call">Позвонить</string>
     <string name="dialer_no_contacts">Контакты с номером телефона не найдены.</string>
     <string name="dialer_search">Поиск контактов</string>
-
     <string name="dialer_needs_permission">Gearslip нужны разрешения «Телефон» и «Контакты», чтобы звонить отсюда. Разрешите их на телефоне, когда припаркуетесь.</string>
     <string name="dialer_no_match">Нет контактов по запросу «%1$s».</string>
     <string name="dialer_call_who">Позвонить: %1$s?</string>
-
     <!-- Car screen -->
     <string name="carui_exit_fullscreen">Выйти из полноэкранного режима</string>
     <string name="carui_drive_safely">Будьте осторожны за рулём</string>
     <string name="carui_understand">Понятно</string>
-
     <string name="carui_unofficial">Gearslip - неофициальная программа: её не создавал и не проверял ни один автопроизводитель, и она может отказать без предупреждения.</string>
     <string name="carui_never_interact">Никогда не трогайте этот экран за рулём. Задайте маршрут или песню до поездки, а потом следите за дорогой.</string>
     <string name="carui_this_app">Это приложение</string>
     <string name="carui_app_unsupported">%1$s пока не работает с Gearslip.</string>
     <string name="carui_app_unsupported_body">Оно не запустилось. Некоторые приложения работают только в Android Auto от Google.</string>
-
     <!-- Nav bar -->
     <string name="navbar_on_call">Идёт звонок</string>
     <string name="navbar_end_call">Завершить звонок</string>
@@ -650,21 +596,18 @@
     <string name="navbar_mute">Выключить микрофон</string>
     <string name="navbar_close_panel">Закрыть боковую панель</string>
     <string name="navbar_dock_player">Переместить плеер к карте</string>
-
     <!-- Browser -->
     <string name="web_search">Поиск или адрес</string>
     <string name="web_forward">Вперёд</string>
     <string name="web_reload">Обновить</string>
     <string name="web_start_page">Стартовая страница</string>
     <string name="web_fullscreen">Во весь экран</string>
-
     <!-- Notifications -->
     <string name="notif_title">Уведомления</string>
     <string name="notif_clear_all">Очистить все</string>
     <string name="notif_empty">Пока ничего. Новые уведомления с телефона появятся здесь.</string>
     <string name="notif_off">Уведомления выключены. Разрешите Gearslip в Настройки &gt; Уведомления &gt; Доступ к уведомлениям на телефоне.</string>
     <string name="notif_replied">Отвечено</string>
-
     <!-- Messages -->
     <string name="msg_mark_read">Отметить прочитанным</string>
     <string name="msg_messages">Сообщения</string>
@@ -679,7 +622,6 @@
     <string name="msg_quick">Быстрый ответ</string>
     <string name="msg_you">Вы: </string>
     <string name="msg_sender">%1$s: </string>
-
     <!-- Car app navigation -->
     <string name="nav_finding_route">Поиск маршрута…</string>
     <string name="nav_then">Затем</string>
@@ -688,39 +630,31 @@
     <string name="nav_lane_recommended">Рекомендуемая полоса</string>
     <string name="nav_lane">Полоса</string>
     <string name="nav_arrive">Прибытие %1$s</string>
-
     <!-- Car app screens -->
     <string name="template_nothing_playing">Пока ничего не играет.</string>
     <string name="template_search">Поиск</string>
     <string name="template_start">Начать</string>
-
     <!-- Calls -->
     <string name="call_incoming">Входящий звонок</string>
     <string name="call_decline">Отклонить</string>
     <string name="call_answer">Ответить</string>
     <string name="call_ringing">Уже звонит вслух - ответьте здесь или дайте позвонить.</string>
-
     <!-- Screen sharing -->
     <string name="phoneapps_touch_off">Касания выключены. Включите Gearslip в Настройки &gt; Спецвозможности на телефоне.</string>
-
     <!-- What's new in the car -->
     <string name="whatsnew_show_after">Показывать после обновлений</string>
     <string name="whatsnew_got_it">Понятно</string>
     <string name="whatsnew_title">Что нового в версии %1$s</string>
-
     <!-- Car keyboard -->
     <string name="keyboard_space">пробел</string>
     <string name="keyboard_hide">Скрыть клавиатуру</string>
     <string name="keyboard_submit">Готово</string>
-
     <!-- Launcher -->
     <string name="launcher_broken">Не работает с Gearslip</string>
-
     <!-- Car app stage -->
     <string name="stage_car_app">Автоприложение</string>
     <string name="stage_close">Закрыть %1$s</string>
     <string name="stage_close_app">Закрыть приложение</string>
-
     <!-- Spoken directions -->
     <string name="dir_slight_left">Плавно поверните налево</string>
     <string name="dir_slight_left_onto">Плавно поверните налево на %1$s</string>
@@ -817,14 +751,11 @@
         <item quantity="many">%1$d метров</item>
         <item quantity="other">%1$d метра</item>
     </plurals>
-
     <string name="certsetup_installed_hint">Если машина не подключается, возможно, она отклоняет этот сертификат. Импортируйте свой в Настройках, в разделе «Сертификат».</string>
     <string name="cert_downloaded_footer">Машина не подключается? Некоторые машины примерно с 2020 года отклоняют сертификат aasdk, так что импортируйте свой. Изменения вступят в силу при следующем подключении.</string>
-
     <!-- Cluster screen -->
     <string name="car_cluster_video">Карточка поворота на приборной панели</string>
     <string name="car_cluster_video_note">Для машины со вторым экраном в приборной панели: Gearslip показывает на нём следующий поворот. Действует со следующего подключения.</string>
-
     <!-- Connection status on Home -->
     <string name="status_idle">Не подключено</string>
     <string name="status_idle_detail">Подключите телефон к USB-порту машины или соединитесь без проводов. Gearslip откроется сам, когда машина ответит.</string>
