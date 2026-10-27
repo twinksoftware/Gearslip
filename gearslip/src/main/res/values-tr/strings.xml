@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="touch_relay_description">Ekran paylaşımı sırasında Gearslip’in araç ekranındaki dokunuşları telefonda tekrarlamasını sağlar. Gearslip ekran içeriğini okumaz.</string>
-
     <!-- Setup guide -->
     <string name="guide_usage_title">Diğer sürücülere yardım edin.</string>
     <string name="guide_safety_title">Güvenli sürün.</string>
@@ -44,7 +43,7 @@
     <string name="guide_voice_downloading">İndiriliyor, %%%1$d. Devam edebilirsiniz, indirme sürer.</string>
     <string name="guide_voice_ready">Ses hazır.</string>
     <string name="guide_voice_failed">İndirme tamamlanmadı. Yeniden denemek için Sesi indir’e dokunun.</string>
-    <string name="guide_audio_bluetooth">Bluetooth</string>
+    <string name="guide_audio_bluetooth">Bluetooth açık</string>
     <string name="guide_recommended">Önerilen</string>
     <string name="guide_audio_bluetooth_body">Her yolculukta soru yok ve harita uygulamanızın sesi araca ulaşır.</string>
     <string name="guide_audio_usb">Gearslip üzerinden</string>
@@ -58,7 +57,6 @@
     <string name="guide_next">İleri</string>
     <string name="guide_done">Bitti</string>
     <string name="guide_back">Geri</string>
-
     <!-- Usage notes -->
     <string name="usage_intro">Bunu açın, Gearslip onu açtığınızda ve her yolculuktan sonra kısa bir not göndersin. &lt;b&gt;Not ad, hesap veya konum içermez. Rastgele bir sayı telefonunuzu bir kez sayar ve sunucu hiçbir IP adresi saklamaz.&lt;/b&gt; Notlar hangi araçların çalıştığını ve diğerlerinin nerede takıldığını gösterir.</string>
     <string name="usage_send">Kullanım notları gönder</string>
@@ -79,7 +77,6 @@
     <string name="worked_body">Sonraki sürücü çalıştığını bilsin diye paylaşılsın mı? Ad, hesap veya konum yok.</string>
     <string name="worked_not_now">Şimdi değil</string>
     <string name="worked_share">Paylaş</string>
-
     <!-- Recommended apps -->
     <string name="recommended_intro">Bu ücretsiz uygulamalar Gearslip’in araç ekranında çalışır. Her düğme uygulamanın GitHub sayfasını açar.</string>
     <string name="recommended_title">Önerilen uygulamalar</string>
@@ -94,7 +91,6 @@
     <string name="recommended_about_ytm">Bir YouTube Music oynatıcısı.</string>
     <string name="recommended_about_antennapod">Podcast’ler, bölümleriyle birlikte.</string>
     <string name="recommended_about_rfsentinel">Yakındaki takip cihazlarını ve kameraları bulur.</string>
-
     <!-- Settings -->
     <string name="settings_title">Ayarlar</string>
     <string name="settings_whats_new">Yenilikler</string>
@@ -136,7 +132,6 @@
     <string name="cert_password">Parola</string>
     <string name="cert_password_hint">Dosyanın parolası yoksa boş bırakın.</string>
     <string name="cert_import_button">İçe aktar</string>
-
     <!-- Certificate summary -->
     <string name="cancel">İptal</string>
     <string name="cert_none">Yüklü değil (kendinden imzalı; araçlar reddeder)</string>
@@ -144,7 +139,6 @@
     <string name="cert_kind_downloaded">İndirildi: %1$s</string>
     <string name="cert_kind_adb">adb ile yerleştirildi: %1$s</string>
     <string name="cert_kind_self">Kendinden imzalı: %1$s</string>
-
     <!-- Car settings on the phone -->
     <string name="car_group_screen">Ekran</string>
     <string name="car_group_nav_bar">Gezinme çubuğu ve oynatıcı</string>
@@ -182,7 +176,7 @@
     <string name="summary_location_off">Konum kapalı</string>
     <string name="web_page">Web sayfası</string>
     <string name="summary_experimental_shown">Deneysel özellikler gösteriliyor</string>
-    <string name="summary_experimental_hidden">Deneysel özellikler gizli</string>
+    <string name="summary_experimental_hidden">Deneysel özellikler gösteriliyor</string>
     <string name="home_car">Araç</string>
     <string name="car_group_same">Bunlar araçtaki Ayarlar ile aynı ayarlardır. Burada yapılan değişiklik orada da görünür.</string>
     <string name="car_open_on_connect">Bağlanınca aç</string>
@@ -208,7 +202,7 @@
     <string name="car_phone_speech_note">Çoğu telefonda bu Google’ınkidir ve sesinizi Google’a gönderebilir.</string>
     <string name="car_warn_bluetooth">Bluetooth bağlı değilken uyar</string>
     <string name="car_warn_location">Konum kapalıyken uyar</string>
-    <string name="car_experimental">Deneysel özellikler</string>
+    <string name="car_experimental">Deneysel özellikler gösteriliyor</string>
     <string name="car_vehicle_data">Araç verileri</string>
     <string name="car_vehicle_data_note">Araç verileri kutucuğu ekler: aracın sensörlerinin canlı dökümü. Birinin değiştiğini görene kadar alan adları tahmindir.</string>
     <string name="car_adaptive_video">Uyarlanabilir video kalitesi</string>
@@ -220,7 +214,6 @@
     <string name="car_audio_usb_sub">Gecikmesiz, daha net ses. Her yolculukta Android ekranınızı paylaşmanızı ister; bu da Gearslip’in sesi göndermesini sağlar</string>
     <string name="car_audio_usb_footer">Yardım’daki komutu bir kez çalıştırın, Android sormayı bırakır.</string>
     <string name="car_audio_bt_footer">Aramalar her durumda Bluetooth üzerinden gider.</string>
-
     <!-- Car screen size -->
     <string name="screen_car_size">Araç ekranı boyutu</string>
     <string name="screen_use_cars">Aracınkini kullan</string>
@@ -245,10 +238,8 @@
     <string name="screen_width">Genişlik</string>
     <string name="screen_height">Yükseklik</string>
     <string name="save">Kaydet</string>
-
     <string name="screen_car_size_note">Araçtaki görüntü gerilmiş görünüyorsa bunu kullanın. Ekranın gerçek boyutunu girin, örneğin 1280x480. Bir sonraki bağlanışınızda geçerli olur.</string>
     <string name="screen_set_by_you">%1$s, sizin ayarınız</string>
-
     <!-- Help -->
     <string name="help_title">Nasıl bağlanılır</string>
     <string name="help_which_cars">Hangi araçlar çalışır</string>
@@ -256,7 +247,6 @@
     <string name="help_first_drive">İlk yolculuğunuzdan önce</string>
     <string name="help_in_car">Araçta</string>
     <string name="help_usb_audio">Ses Gearslip üzerinden</string>
-
     <string name="help_aa_off">Android Auto’yu kapatın.</string>
     <string name="help_aa_off_detail">Aracın Gearslip ile konuşması için Android Auto uygulamasını devre dışı bırakın veya kaldırın.</string>
     <string name="help_cert">Bir sertifika yükleyin.</string>
@@ -274,7 +264,6 @@
     <string name="help_readable">Bildirimleri okunabilir tutun.</string>
     <string name="help_readable_detail">Android ses paylaşırken bildirimlerin içeriğini gizler. Bunu da çalıştırın, Gearslip bu gizlemeyi yalnızca müzik araca giderken kaldırsın.</string>
     <string name="help_which_cars_body">Çoğu araç aasdk sertifikasını kabul eder. 2020 civarından itibaren bazı araçlar onu reddeden daha yeni güvenlik denetimleri ekledi ve bu araçlarda Gearslip’in size ait bir sertifikaya ihtiyacı var.</string>
-
     <!-- Updates -->
     <string name="update_downloaded_ask">İndirildi. Android yüklemeden önce sorar.</string>
     <string name="update_install">Yükle</string>
@@ -287,7 +276,6 @@
     <string name="update_check_now">Şimdi denetle</string>
     <string name="update_check_auto">Otomatik denetle</string>
     <string name="update_once_a_day">Günde bir kez</string>
-
     <string name="update_unplug_first">Yüklemek için araçtan çıkarın. Yükleme Gearslip’i kapatır.</string>
     <string name="update_card_title">Gearslip %1$s çıktı</string>
     <string name="update_downloading">İndiriliyor… %%%1$d</string>
@@ -296,7 +284,6 @@
     <string name="update_version_out">%1$s sürümü çıktı</string>
     <string name="update_version_ready">%1$s sürümü yüklenmeye hazır</string>
     <string name="update_dialog_status">Sürüm %1$s. %2$s.</string>
-
     <!-- About and support -->
     <string name="about_give_regularly">Haftalık veya aylık bağış yapın</string>
     <string name="about_bmac_sub" formatted="false">Kartla bir kez veya aylık bağış yapın. Buy Me a Coffee %5 alır</string>
@@ -315,11 +302,9 @@
     <string name="about_source">Kaynak kodu</string>
     <string name="about_source_sub">Gearslip’in kodunu AGPL kapsamında okuyun veya değiştirin</string>
     <string name="about_voice_credits">Ses teşekkürleri</string>
-
     <string name="about_no_wallet">Monero cüzdan uygulaması bulunamadı. Bunun yerine adresi kopyalayın.</string>
     <string name="about_monero_copied">Monero adresi kopyalandı</string>
     <string name="about_voice_credits_sub">Konuşma tanıma: sherpa-onnx (Apache 2.0), Banafo’dan Kroko ASR (CC BY-SA 4.0) ve NVIDIA’dan Parakeet ile Canary (CC BY 4.0)</string>
-
     <!-- Certificate setup -->
     <string name="certsetup_title">Sertifika kurulumu</string>
     <string name="certsetup_installed">Sertifika yüklendi.</string>
@@ -328,11 +313,9 @@
     <string name="certsetup_retry">Yeniden dene</string>
     <string name="certsetup_import_sub">Özel anahtarıyla birlikte bir .p12 dosyası. Aracınız aasdk sertifikasını reddederse kendinizinkini kullanın.</string>
     <string name="certsetup_skip">Araç bağlantısı kurulumunu atla</string>
-
     <string name="certsetup_loaded">Araçlar yalnızca Google’ın verdiği sertifikaları kabul eder ve sizde yüklü bir tane var.</string>
     <string name="certsetup_choose">Araçlar yalnızca Google’ın verdiği sertifikaları kabul eder. Gearslip bir tane içermez, bu yüzden sizinkinin nereden geleceğini seçin.</string>
     <string name="certsetup_aasdk_sub">Açık kaynaklı aasdk projesi bu sertifikayı github.com/opencardev/aasdk adresinde yayımlar. Çoğu araç kabul eder. 2020 civarından sonraki bazıları reddeder ve o zaman kendinizinkini içe aktarmanız gerekir.</string>
-
     <!-- Storage -->
     <string name="storage_title">Gearslip depolama alanı</string>
     <string name="storage_measuring">Ölçülüyor…</string>
@@ -343,7 +326,6 @@
     <string name="storage_logs">Eski günlükler</string>
     <string name="storage_other">Diğer geçici dosyalar</string>
     <string name="storage_delete_all">Tüm Gearslip verilerini sil</string>
-
     <string name="storage_total">Gearslip verileri telefon depolama alanının %1$s kadarını kullanıyor.</string>
     <plurals name="storage_lyrics_detail">
         <item quantity="one">%1$d şarkı · %2$s. Temizlenen sözler, açtığınızda yeniden indirilir.</item>
@@ -356,15 +338,12 @@
     <string name="storage_delete_sub">Ayarlar, sertifikalar, ses modelleri, şarkı sözleri ve günlükler.</string>
     <string name="storage_delete">Sil</string>
     <string name="storage_delete_ellipsis">Sil…</string>
-
     <!-- Donate prompt -->
     <string name="donate_title">Yolculuğun iyi geçmesine sevindim</string>
     <string name="donate_liberapay">Liberapay’de destekle</string>
     <string name="donate_bmac">Bana bir kahve ısmarla</string>
     <string name="donate_card">Kartla bir kez bağış yap</string>
-
     <string name="donate_body">Gearslip ücretsizdir, reklamsız ve takipsizdir. Sizi yola çıkarıyorsa desteğiniz onu ayakta tutar.</string>
-
     <!-- Wireless -->
     <string name="wireless_needs_permission">Gearslip’in bunun için Bluetooth ve yakındaki Wi-Fi erişimine ihtiyacı var.</string>
     <string name="wireless_enable_permission">Yakındaki cihazlar iznini etkinleştir</string>
@@ -373,30 +352,25 @@
     <string name="wireless_none_paired">Telefonunuz henüz hiçbir şeyle eşlenmedi. Önce araçla eşleyin.</string>
     <string name="wireless_not_listed">Araç listede yok mu? Önce telefonunuzla eşleyin.</string>
     <string name="bluetooth_settings">Bluetooth ayarları</string>
-
     <!-- Voice models -->
     <string name="voice_live_title">Ses: canlı sözcükler</string>
     <string name="voice_final_title">Ses: son sözcükler</string>
     <string name="voice_none">Yok</string>
     <string name="voice_none_sub">Canlı sözcükleri koru. En hızlı, en az doğru</string>
-
     <string name="voice_live_body">Sesli asistan konuşmayı bu telefonda metne çevirir ve söylediğiniz hiçbir şey telefondan çıkmaz. Bir kez indirilen, toplamda yaklaşık 270 MB iki model gerekir. Bu model siz konuşurken sözcüklerinizi yazar.</string>
     <string name="voice_final_body">Konuşmayı bitirdiğinizde bu model tüm cümleyi yeniden okur. Canlı modelin kaçırdığı adları ve yerleri yakalar.</string>
     <string name="voice_model_size">%1$s · %2$d MB</string>
     <string name="voice_downloaded">İndirildi. %1$s</string>
     <string name="voice_downloading">İndiriliyor, %%%1$d</string>
-
     <!-- Home -->
     <string name="home_help">Yardım</string>
     <string name="home_preview">Önizleme</string>
     <string name="home_logs">Günlükler</string>
     <string name="home_disconnect">Bağlantıyı kes</string>
     <string name="home_bt_title">Bluetooth bağlı değil</string>
-
     <string name="home_debug_build">%1$s · hata ayıklama sürümü</string>
     <string name="home_bt_body">Müzik Bluetooth üzerinden çalıyor ama telefonunuz araca bağlı değil. Buradan veya aracın Bluetooth menüsünden bağlayın.</string>
     <string name="home_voice_downloading">Ses indiriliyor, %%%1$d</string>
-
     <!-- Car audio dialogs -->
     <string name="audio_bt_title">Araç sesi Bluetooth üzerinden çalınsın mı?</string>
     <string name="audio_never_ask">Asla sorma, bilgisayarla</string>
@@ -404,21 +378,17 @@
     <string name="audio_keep_asking">Sormaya devam et</string>
     <string name="audio_mic_title">Araç sesi mikrofon izni gerektirir</string>
     <string name="audio_open_settings">Uygulama ayarlarını aç</string>
-
     <string name="audio_bt_body">Android, Gearslip’in araca gönderdiği müziği ekran paylaşımı gibi görür; bu yüzden kabloyla da kablosuz da her yolculukta sorar. Bluetooth üzerinden asla sormaz. Bunu daha sonra Ayarlar’dan değiştirebilirsiniz.</string>
     <string name="audio_keep_usb">Ya da sesi Gearslip üzerinden sürdürün ve soruyu kalıcı olarak kaldırın: telefonu USB hata ayıklaması açık bir bilgisayara bağlayın ve bunu bir kez çalıştırın.</string>
     <string name="audio_mic_body">Android, bir uygulamanın diğer uygulamaların sesini araca göndermesine yalnızca mikrofon izni varsa izin verir. Bu izin Gearslip için kapalı, bu yüzden müzik telefonda çalıyor. İzinler’de, ardından Mikrofon’da açın.</string>
-
     <!-- Phone keyboard -->
     <string name="typing_close">Araç klavyesini kapat</string>
     <string name="typing_label">Araç ekranı için yazın</string>
     <string name="typing_search">Araç ekranında ara</string>
-
     <!-- Copyable command -->
     <string name="command_tap_copy">Kopyalamak için dokunun</string>
     <string name="command_copied">Komut kopyalandı</string>
     <string name="whats_new_this_version">%1$s (bu sürüm)</string>
-
     <!-- Car settings screen -->
     <string name="carset_theme">Tema</string>
     <string name="carset_imperial">İngiliz (mi, ft, °F)</string>
@@ -445,7 +415,6 @@
     <string name="carset_bottom">Alt</string>
     <string name="carset_save_vehicle">Bu araç için kaydet</string>
     <string name="carset_no_profile">Eşleşen araç profili yok</string>
-
     <string name="carset_audio_note">Gearslip üzerinden, telefonun sesini kabloyla veya kablosuz araç bağlantısı üzerinden gönderir. Android her yolculukta ekranınızı paylaşmanızı ister ve birkaç uygulama bunu engeller. Bluetooth, telefonun normalde çaldığı gibi çalar ve Android hiçbir şey sormaz.</string>
     <string name="carset_directions_note">Gearslip her dönüşü aracın hoparlörlerinden sesli okur ve konuşurken müziğin sesi kısılır. Harita uygulamanızın kendi sesi araçta zaten çalıyorsa kapatın.</string>
     <string name="carset_phone_speech_note">Gearslip’inki yerine telefonun kendi konuşma hizmetiyle dinler. Çoğu telefonda bu Google’ınkidir ve sesinizi Google’a gönderebilir. GrapheneOS’ta böyle bir hizmet yok, bu yüzden Gearslip kendisininkini kullanmaya devam eder.</string>
@@ -455,7 +424,6 @@
     <string name="carset_saved_to">%1$s konumuna kaydedildi</string>
     <string name="carset_save_failed">Kaydedilemedi</string>
     <string name="carset_px">%1$dpx</string>
-
     <!-- Car media app -->
     <string name="media_open_on_phone">Telefonda aç</string>
     <string name="media_now_playing">Şimdi çalıyor</string>
@@ -465,7 +433,6 @@
     <string name="media_looking_lyrics">Şarkı sözleri aranıyor…</string>
     <string name="media_nothing_playing">Hiçbir şey çalmıyor</string>
     <string name="media_press_play">Kaldığınız yerden devam etmek için oynat’a basın veya Göz at’ta bir şey bulun.</string>
-
     <string name="media_keeps_library">%1$s kitaplığını paylaşmıyor.</string>
     <string name="media_needs_access">Gearslip, telefonda bildirim erişimi olduğunda yine de onu kontrol edebilir. Ayarlar &gt; Bildirimler &gt; Bildirim erişimi altında izin verin.</string>
     <string name="media_not_running">%1$s çalışmıyor.</string>
@@ -483,7 +450,6 @@
     <string name="media_searching_for">%1$s içinde “%2$s” aranıyor…</string>
     <string name="media_nothing_playing_dot">Hiçbir şey çalmıyor.</string>
     <string name="media_no_lyrics">Bu parça için şarkı sözü bulunamadı.</string>
-
     <!-- Car media browsing -->
     <string name="media_up">Yukarı</string>
     <string name="media_loading">Yükleniyor…</string>
@@ -492,20 +458,17 @@
     <string name="media_nothing_here">Burada hiçbir şey yok.</string>
     <string name="media_nothing_queued">Sırada hiçbir şey yok.</string>
     <string name="media_play">Oynat</string>
-
     <string name="media_queue_empty_idle">Hiçbir şey çalmıyor - her uygulama Gearslip’e sırada ne olduğunu söylemez.</string>
     <string name="media_queue_empty_playing">Yalnızca şu an çalan - her uygulama Gearslip’e sırada ne olduğunu söylemez.</string>
-
     <!-- Player controls -->
     <string name="player_previous">Önceki</string>
-    <string name="player_next">Sonraki</string>
+    <string name="player_next">İleri</string>
     <string name="player_repeat">Tekrarla</string>
     <string name="player_pause">Duraklat</string>
     <string name="player_unlike">Beğenmekten vazgeç</string>
     <string name="player_like">Beğen</string>
     <string name="player_shuffle_off">Karıştırma kapalı</string>
     <string name="player_shuffle_on">Karıştırma açık</string>
-
     <!-- Car home -->
     <string name="home_choose_app">Başka uygulama seç</string>
     <string name="home_no_maps">Harita uygulaması bulunamadı.</string>
@@ -517,12 +480,10 @@
     <string name="home_back_nav">Gezinme çubuğuna dön</string>
     <string name="home_show_player">Oynatıcıyı göster</string>
     <string name="home_hide_lyrics">Sözleri gizle</string>
-
     <string name="home_starting">%1$s başlatılıyor…</string>
     <string name="home_starting_map">Harita başlatılıyor…</string>
     <string name="home_failed">%1$s başlamadı.</string>
     <string name="home_failed_map">Harita uygulaması başlamadı.</string>
-
     <!-- Breadcrumbs -->
     <string name="crumb_home">Ana ekran</string>
     <string name="crumb_media">Medya</string>
@@ -530,7 +491,6 @@
     <string name="crumb_dashboard">Gösterge paneli</string>
     <string name="crumb_weather">Hava durumu</string>
     <string name="crumb_reply">Yanıtla</string>
-
     <!-- Built-in apps -->
     <string name="app_browser">Tarayıcı</string>
     <string name="app_screen_sharing">Ekran paylaşımı</string>
@@ -542,7 +502,6 @@
     <string name="navapps_move_left">Sola taşı</string>
     <string name="navapps_move_right">Sağa taşı</string>
     <string name="navapps_reset">Uygulama sırasını sıfırla</string>
-
     <!-- Message popup -->
     <string name="msg_dismiss">Kapat</string>
     <string name="msg_read">Oku</string>
@@ -550,7 +509,6 @@
     <string name="msg_no">Hayır</string>
     <string name="msg_send_now">Şimdi gönder</string>
     <string name="msg_type">Yaz</string>
-
     <plurals name="msg_burst">
         <item quantity="one">%1$s · %2$d yeni</item>
         <item quantity="other">%1$s · %2$d yeni</item>
@@ -560,12 +518,10 @@
     <string name="msg_sending_to">%1$s kişisine gönderiliyor</string>
     <string name="msg_sent_to">%1$s kişisine gönderildi</string>
     <string name="msg_reply_failed">Yanıt verilemedi</string>
-
     <!-- Bluetooth pairing -->
     <string name="bt_pair_unfinished">Eşleme tamamlanmadı. Bunun yerine aracın Bluetooth menüsünden eşleyin.</string>
     <string name="bt_pair_not_started">Eşleme başlamadı. Bunun yerine aracın Bluetooth menüsünden eşleyin.</string>
     <string name="bt_paired">Eşlendi. Aramalar artık araçtan duyulur.</string>
-
     <!-- Car overlays -->
     <string name="overlay_dont_show">Bir daha gösterme</string>
     <string name="overlay_ok">Tamam</string>
@@ -574,12 +530,10 @@
     <string name="overlay_pair">Eşle</string>
     <string name="overlay_confirm_title">Telefonunuzda onaylayın</string>
     <string name="overlay_confirm_body">Telefonunuzdaki kodu kontrol edip Eşle’ye dokunun. Araç da sorabilir.</string>
-
     <string name="overlay_bt_body">Müzik Bluetooth üzerinden çalıyor ama telefonunuz araca bağlı değil. Aracın veya telefonunuzun Bluetooth menüsünden bağlayın.</string>
     <string name="overlay_location_body">Harita uygulamaları nerede olduğunuzu gösteremez ve yol tarifi veremez. Park ettiğinizde telefonunuzun hızlı ayarlarından konumu açın.</string>
     <string name="overlay_pair_body_music">Telefon ve araç eşlendikten sonra aramalar ve müzik aracın hoparlörlerinden duyulur. Ardından telefonunuz bir kodu onaylamanızı ister.</string>
     <string name="overlay_pair_body">Telefon ve araç eşlendikten sonra aramalar aracın hoparlörlerinden duyulur. Ardından telefonunuz bir kodu onaylamanızı ister.</string>
-
     <!-- Weather -->
     <string name="weather_waiting_fix">Konum bekleniyor.</string>
     <string name="weather_allow_location">Hava durumunu görmek için telefonda Gearslip’e konum izni verin.</string>
@@ -595,18 +549,15 @@
     <string name="weather_rain_showers">Sağanak yağmur</string>
     <string name="weather_snow_showers">Kar sağanağı</string>
     <string name="weather_thunderstorm">Gök gürültülü fırtına</string>
-
     <!-- Weather screen -->
     <string name="weather_getting">Hava durumu alınıyor…</string>
     <string name="weather_next_hours">Önümüzdeki saatler</string>
     <string name="weather_this_week">Bu hafta</string>
     <string name="weather_today">Bugün</string>
     <string name="weather_credit">Hava durumu verileri: Open-Meteo.com (CC BY 4.0)</string>
-
     <string name="weather_feels_like">Hissedilen %1$s</string>
     <string name="weather_humidity">Nem %%%1$d</string>
     <string name="weather_wind">Rüzgâr %1$s</string>
-
     <!-- Dashboard -->
     <string name="dash_today">Bugün</string>
     <string name="dash_getting_weather">Hava durumu alınıyor…</string>
@@ -614,7 +565,6 @@
     <string name="dash_loading_calendar">Takvim yükleniyor…</string>
     <string name="dash_nothing_week">Önümüzdeki hafta hiçbir şey yok.</string>
     <string name="dash_all_day">Tüm gün</string>
-
     <!-- Phone dialer -->
     <string name="dialer_contacts">Kişiler</string>
     <string name="dialer_keypad">Tuş takımı</string>
@@ -623,22 +573,18 @@
     <string name="dialer_call">Ara</string>
     <string name="dialer_no_contacts">Telefon numarası olan kişi bulunamadı.</string>
     <string name="dialer_search">Kişilerde ara</string>
-
     <string name="dialer_needs_permission">Gearslip’in buradan arama yapmak için Telefon ve Kişiler izinlerine ihtiyacı var. Park ettiğinizde telefonda izin verin.</string>
     <string name="dialer_no_match">“%1$s” ile eşleşen kişi yok.</string>
     <string name="dialer_call_who">%1$s aransın mı?</string>
-
     <!-- Car screen -->
     <string name="carui_exit_fullscreen">Tam ekrandan çık</string>
     <string name="carui_drive_safely">Güvenli sürün</string>
     <string name="carui_understand">Anladım</string>
-
     <string name="carui_unofficial">Gearslip resmi olmayan bir yazılımdır: hiçbir otomobil üreticisi tarafından yapılmamış veya incelenmemiştir ve uyarı vermeden çalışmayı bırakabilir.</string>
     <string name="carui_never_interact">Sürerken bu ekranla asla etkileşime girmeyin. Rotayı veya şarkıyı yola çıkmadan önce ayarlayın, sonra dikkatinizi yolda tutun.</string>
     <string name="carui_this_app">Bu uygulama</string>
     <string name="carui_app_unsupported">%1$s henüz Gearslip ile çalışmıyor.</string>
     <string name="carui_app_unsupported_body">Başlamadı. Bazı uygulamalar yalnızca Google’ın Android Auto’sunda çalışır.</string>
-
     <!-- Nav bar -->
     <string name="navbar_on_call">Görüşmede</string>
     <string name="navbar_end_call">Görüşmeyi bitir</string>
@@ -646,21 +592,18 @@
     <string name="navbar_mute">Sesi kapat</string>
     <string name="navbar_close_panel">Yan paneli kapat</string>
     <string name="navbar_dock_player">Oynatıcıyı haritanın yanına taşı</string>
-
     <!-- Browser -->
     <string name="web_search">Arayın veya bir adres yazın</string>
     <string name="web_forward">İleri</string>
     <string name="web_reload">Yeniden yükle</string>
     <string name="web_start_page">Başlangıç sayfası</string>
     <string name="web_fullscreen">Tam ekran</string>
-
     <!-- Notifications -->
     <string name="notif_title">Bildirimler</string>
     <string name="notif_clear_all">Tümünü temizle</string>
     <string name="notif_empty">Henüz bir şey yok. Telefondan gelen yeni bildirimler burada görünür.</string>
     <string name="notif_off">Bildirimler kapalı. Telefonda Ayarlar &gt; Bildirimler &gt; Bildirim erişimi altında Gearslip’e izin verin.</string>
     <string name="notif_replied">Yanıtlandı</string>
-
     <!-- Messages -->
     <string name="msg_mark_read">Okundu olarak işaretle</string>
     <string name="msg_messages">Mesajlar</string>
@@ -673,7 +616,6 @@
     <string name="msg_quick">Hızlı yanıt</string>
     <string name="msg_you">Siz: </string>
     <string name="msg_sender">%1$s: </string>
-
     <!-- Car app navigation -->
     <string name="nav_finding_route">Rota bulunuyor…</string>
     <string name="nav_then">Sonra</string>
@@ -682,39 +624,31 @@
     <string name="nav_lane_recommended">Önerilen şerit</string>
     <string name="nav_lane">Şerit</string>
     <string name="nav_arrive">Varış %1$s</string>
-
     <!-- Car app screens -->
     <string name="template_nothing_playing">Henüz hiçbir şey çalmıyor.</string>
     <string name="template_search">Ara</string>
     <string name="template_start">Başlat</string>
-
     <!-- Calls -->
     <string name="call_incoming">Gelen arama</string>
     <string name="call_decline">Reddet</string>
     <string name="call_answer">Yanıtla</string>
     <string name="call_ringing">Zaten yüksek sesle çalıyor - buradan yanıtlayın veya çalmaya bırakın.</string>
-
     <!-- Screen sharing -->
     <string name="phoneapps_touch_off">Dokunma kapalı. Telefonda Ayarlar &gt; Erişilebilirlik altında Gearslip’i etkinleştirin.</string>
-
     <!-- What's new in the car -->
     <string name="whatsnew_show_after">Güncellemelerden sonra göster</string>
     <string name="whatsnew_got_it">Anladım</string>
     <string name="whatsnew_title">%1$s sürümündeki yenilikler</string>
-
     <!-- Car keyboard -->
     <string name="keyboard_space">boşluk</string>
     <string name="keyboard_hide">Klavyeyi gizle</string>
     <string name="keyboard_submit">Gönder</string>
-
     <!-- Launcher -->
     <string name="launcher_broken">Gearslip ile çalışmıyor</string>
-
     <!-- Car app stage -->
     <string name="stage_car_app">Araç uygulaması</string>
     <string name="stage_close">%1$s uygulamasını kapat</string>
     <string name="stage_close_app">Uygulamayı kapat</string>
-
     <!-- Spoken directions -->
     <string name="dir_slight_left">Hafif sola dönün</string>
     <string name="dir_slight_left_onto">Hafif sola dönerek %1$s üzerine çıkın</string>
@@ -801,14 +735,11 @@
         <item quantity="one">%1$d metre</item>
         <item quantity="other">%1$d metre</item>
     </plurals>
-
     <string name="certsetup_installed_hint">Aracınız bağlanmıyorsa bu sertifikayı reddediyor olabilir. Kendinizinkini Ayarlar’da Sertifika altından içe aktarın.</string>
     <string name="cert_downloaded_footer">Araç bağlanmıyor mu? 2020 civarından sonraki bazı araçlar aasdk sertifikasını reddeder, bu durumda kendinizinkini içe aktarın. Değişiklikler bir sonraki bağlantıda geçerli olur.</string>
-
     <!-- Cluster screen -->
     <string name="car_cluster_video">Gösterge ekranında dönüş kartı</string>
     <string name="car_cluster_video_note">Gösterge panelinde ikinci bir ekranı olan araçlar için: Gearslip bir sonraki dönüşü orada gösterir. Bir sonraki bağlantıda geçerli olur.</string>
-
     <!-- Connection status on Home -->
     <string name="status_idle">Bağlı değil</string>
     <string name="status_idle_detail">Aracın USB bağlantı noktasına takın veya kablosuz bağlanın. Araç yanıt verdiğinde Gearslip kendiliğinden açılır.</string>
