@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="touch_relay_description">让 Gearslip 在投屏时把车机屏幕上的触摸转到手机上。Gearslip 不读取屏幕内容。</string>
-
     <!-- Setup guide -->
     <string name="guide_usage_title">帮助其他司机。</string>
     <string name="guide_safety_title">安全驾驶。</string>
@@ -55,10 +54,9 @@
     <string name="guide_allow">允许</string>
     <string name="guide_skip">暂时跳过</string>
     <string name="guide_open">打开</string>
-    <string name="guide_next">下一步</string>
+    <string name="guide_next">下一首</string>
     <string name="guide_done">完成</string>
     <string name="guide_back">返回</string>
-
     <!-- Usage notes -->
     <string name="usage_intro">开启后，Gearslip 会在您打开它时以及每次行车后发送一条简短记录。&lt;b&gt;记录不含姓名、账号或位置。一个随机数只把您的手机计数一次，服务器不保存 IP 地址。&lt;/b&gt;这些记录能显示哪些车可以用，以及其他车在哪里出了问题。</string>
     <string name="usage_send">发送使用记录</string>
@@ -79,7 +77,6 @@
     <string name="worked_body">分享一下，让下一位司机知道可以用？不含姓名、账号或位置。</string>
     <string name="worked_not_now">暂不</string>
     <string name="worked_share">分享</string>
-
     <!-- Recommended apps -->
     <string name="recommended_intro">这些免费应用可以在 Gearslip 的车机屏幕上运行。每个按钮都会打开该应用的 GitHub 页面。</string>
     <string name="recommended_title">推荐应用</string>
@@ -94,7 +91,6 @@
     <string name="recommended_about_ytm">一款 YouTube Music 播放器。</string>
     <string name="recommended_about_antennapod">播客，章节等一应俱全。</string>
     <string name="recommended_about_rfsentinel">发现附近的追踪器和摄像头。</string>
-
     <!-- Settings -->
     <string name="settings_title">设置</string>
     <string name="settings_whats_new">新功能</string>
@@ -106,7 +102,7 @@
     <string name="settings_about">关于</string>
     <string name="settings_replay">重新查看设置向导</string>
     <string name="settings_replay_sub">重新进行首次启动的步骤</string>
-    <string name="settings_connection">连接</string>
+    <string name="settings_connection">正在连接</string>
     <string name="settings_use_in_car">在车上使用 Gearslip</string>
     <string name="settings_use_in_car_on">连接到车辆时 Gearslip 会响应</string>
     <string name="settings_use_in_car_off">关闭：Android Auto 可以接管连接</string>
@@ -136,7 +132,6 @@
     <string name="cert_password">密码</string>
     <string name="cert_password_hint">如果文件没有密码，请留空。</string>
     <string name="cert_import_button">导入</string>
-
     <!-- Certificate summary -->
     <string name="cancel">取消</string>
     <string name="cert_none">未加载（自签名；车辆会拒绝）</string>
@@ -144,7 +139,6 @@
     <string name="cert_kind_downloaded">已下载：%1$s</string>
     <string name="cert_kind_adb">通过 adb 放置：%1$s</string>
     <string name="cert_kind_self">自签名：%1$s</string>
-
     <!-- Car settings on the phone -->
     <string name="car_group_screen">屏幕</string>
     <string name="car_group_nav_bar">导航栏和播放器</string>
@@ -220,7 +214,6 @@
     <string name="car_audio_usb_sub">音质更清晰，没有延迟。每次开车 Android 都会请您共享屏幕，这样 Gearslip 才能传送声音</string>
     <string name="car_audio_usb_footer">运行一次“帮助”中的命令，Android 就不会再询问。</string>
     <string name="car_audio_bt_footer">无论哪种方式，通话都走蓝牙。</string>
-
     <!-- Car screen size -->
     <string name="screen_car_size">车机屏幕尺寸</string>
     <string name="screen_use_cars">使用车机的尺寸</string>
@@ -245,10 +238,8 @@
     <string name="screen_width">宽度</string>
     <string name="screen_height">高度</string>
     <string name="save">保存</string>
-
     <string name="screen_car_size_note">如果车上的画面看起来被拉伸了，请使用此项。输入屏幕的实际尺寸，例如 1280x480。下次连接时生效。</string>
     <string name="screen_set_by_you">%1$s，由您设置</string>
-
     <!-- Help -->
     <string name="help_title">如何连接</string>
     <string name="help_which_cars">哪些车可以用</string>
@@ -256,7 +247,6 @@
     <string name="help_first_drive">第一次开车前</string>
     <string name="help_in_car">在车上</string>
     <string name="help_usb_audio">音频通过 Gearslip</string>
-
     <string name="help_aa_off">关闭 Android Auto。</string>
     <string name="help_aa_off_detail">停用或卸载 Android Auto 应用，让车与 Gearslip 通信。</string>
     <string name="help_cert">加载证书。</string>
@@ -274,7 +264,6 @@
     <string name="help_readable">让通知保持可读。</string>
     <string name="help_readable_detail">Android 在共享音频时会隐藏通知内容。也运行这条命令，Gearslip 只会在音乐传到车上时解除隐藏。</string>
     <string name="help_which_cars_body">大多数车接受 aasdk 证书。大约从 2020 年起，部分车辆加入了更新的安全检查，会拒绝它，这些车需要您自己的证书。</string>
-
     <!-- Updates -->
     <string name="update_downloaded_ask">已下载。安装前 Android 会询问您。</string>
     <string name="update_install">安装</string>
@@ -287,7 +276,6 @@
     <string name="update_check_now">立即检查</string>
     <string name="update_check_auto">自动检查</string>
     <string name="update_once_a_day">每天一次</string>
-
     <string name="update_unplug_first">请先断开与车的连接再安装。安装会关闭 Gearslip。</string>
     <string name="update_card_title">Gearslip %1$s 已发布</string>
     <string name="update_downloading">正在下载… %1$d%%</string>
@@ -296,7 +284,6 @@
     <string name="update_version_out">版本 %1$s 已发布</string>
     <string name="update_version_ready">版本 %1$s 可以安装了</string>
     <string name="update_dialog_status">版本 %1$s。%2$s。</string>
-
     <!-- About and support -->
     <string name="about_give_regularly">每周或每月捐助</string>
     <string name="about_bmac_sub" formatted="false">用银行卡捐助一次或每月捐助。Buy Me a Coffee 收取 5%</string>
@@ -315,24 +302,20 @@
     <string name="about_source">源代码</string>
     <string name="about_source_sub">在 AGPL 许可下阅读或修改 Gearslip 的代码</string>
     <string name="about_voice_credits">语音致谢</string>
-
     <string name="about_no_wallet">未找到 Monero 钱包应用。请改为复制地址。</string>
     <string name="about_monero_copied">已复制 Monero 地址</string>
     <string name="about_voice_credits_sub">语音识别使用 sherpa-onnx（Apache 2.0），以及 Banafo 的 Kroko ASR（CC BY-SA 4.0）和 NVIDIA 的 Parakeet、Canary（CC BY 4.0）</string>
-
     <!-- Certificate setup -->
     <string name="certsetup_title">证书设置</string>
     <string name="certsetup_installed">证书已安装。</string>
-    <string name="certsetup_continue">继续</string>
+    <string name="certsetup_continue">继续行驶</string>
     <string name="certsetup_failed">下载失败</string>
     <string name="certsetup_retry">重试</string>
     <string name="certsetup_import_sub">带私钥的 .p12 文件。如果您的车拒绝 aasdk 证书，请使用自己的证书。</string>
     <string name="certsetup_skip">跳过车辆连接设置</string>
-
     <string name="certsetup_loaded">车辆只接受 Google 颁发的证书，您已加载一个。</string>
     <string name="certsetup_choose">车辆只接受 Google 颁发的证书。Gearslip 不自带证书，请选择证书来源。</string>
     <string name="certsetup_aasdk_sub">开源项目 aasdk 在 github.com/opencardev/aasdk 上发布了这个证书。大多数车辆都接受。大约 2020 年以后的部分车辆会拒绝，这时您需要导入自己的证书。</string>
-
     <!-- Storage -->
     <string name="storage_title">Gearslip 存储空间</string>
     <string name="storage_measuring">正在计算…</string>
@@ -343,7 +326,6 @@
     <string name="storage_logs">旧日志</string>
     <string name="storage_other">其他临时文件</string>
     <string name="storage_delete_all">删除 Gearslip 的所有数据</string>
-
     <string name="storage_total">Gearslip 的数据占用了手机 %1$s 的存储空间。</string>
     <plurals name="storage_lyrics_detail">
         <item quantity="other">%1$d 首歌曲 · %2$s。清除的歌词会在您打开时重新下载。</item>
@@ -353,17 +335,14 @@
     <string name="storage_other_detail">%1$s。已下载的更新和其他 Gearslip 可以重新生成的文件。</string>
     <string name="storage_delete_armed">再点按一次“删除”即可清除设置、证书、语音模型和日志。Gearslip 会关闭，下次从设置向导开始。</string>
     <string name="storage_delete_sub">设置、证书、语音模型、歌词和日志。</string>
-    <string name="storage_delete">删除</string>
+    <string name="storage_delete">删除…</string>
     <string name="storage_delete_ellipsis">删除…</string>
-
     <!-- Donate prompt -->
     <string name="donate_title">很高兴这趟顺利</string>
     <string name="donate_liberapay">在 Liberapay 上支持</string>
     <string name="donate_bmac">请我喝杯咖啡</string>
     <string name="donate_card">用银行卡捐助一次</string>
-
     <string name="donate_body">Gearslip 免费，没有广告，也不追踪您。如果它帮您上了路，您的支持能让它继续下去。</string>
-
     <!-- Wireless -->
     <string name="wireless_needs_permission">此功能需要蓝牙和附近 Wi-Fi 的访问权限。</string>
     <string name="wireless_enable_permission">开启“附近的设备”权限</string>
@@ -372,30 +351,25 @@
     <string name="wireless_none_paired">您的手机还没有与任何设备配对。请先与车配对。</string>
     <string name="wireless_not_listed">没有看到您的车？请先将它与手机配对。</string>
     <string name="bluetooth_settings">蓝牙设置</string>
-
     <!-- Voice models -->
     <string name="voice_live_title">语音：实时识别</string>
     <string name="voice_final_title">语音：最终识别</string>
     <string name="voice_none">无</string>
     <string name="voice_none_sub">保留实时识别结果。最快，但最不准确</string>
-
     <string name="voice_live_body">语音助手在这部手机上把语音转成文字，您说的任何内容都不会离开手机。需要两个模型，合计约 270 MB，只需下载一次。这个模型会在您说话时把话写下来。</string>
     <string name="voice_final_body">您说完后，这个模型会把整句话重新识别一遍，补上实时模型漏掉的人名和地名。</string>
     <string name="voice_model_size">%1$s · %2$d MB</string>
     <string name="voice_downloaded">已下载。%1$s</string>
     <string name="voice_downloading">正在下载，%1$d%%</string>
-
     <!-- Home -->
     <string name="home_help">帮助</string>
     <string name="home_preview">预览</string>
     <string name="home_logs">日志</string>
     <string name="home_disconnect">断开连接</string>
     <string name="home_bt_title">蓝牙未连接</string>
-
     <string name="home_debug_build">%1$s · 调试版本</string>
     <string name="home_bt_body">音乐通过蓝牙播放，但手机没有连接到车。请在这里连接，或在车机的蓝牙菜单中连接。</string>
     <string name="home_voice_downloading">正在下载语音，%1$d%%</string>
-
     <!-- Car audio dialogs -->
     <string name="audio_bt_title">通过蓝牙播放车载音频？</string>
     <string name="audio_never_ask">借助电脑，不再询问</string>
@@ -403,21 +377,17 @@
     <string name="audio_keep_asking">继续询问</string>
     <string name="audio_mic_title">车载音频需要麦克风权限</string>
     <string name="audio_open_settings">打开应用设置</string>
-
     <string name="audio_bt_body">Android 把 Gearslip 传到车上的音乐当作共享屏幕处理，所以无论有线还是无线，每次开车都会询问。通过蓝牙则从不询问。您以后可以在“设置”中更改。</string>
     <string name="audio_keep_usb">或者继续通过 Gearslip 播放声音，并彻底取消这个询问：把手机连接到开启了 USB 调试的电脑，运行一次这条命令。</string>
     <string name="audio_mic_body">Android 只允许拥有麦克风权限的应用把其他应用的声音传到车上。Gearslip 的这项权限已关闭，所以音乐在手机上播放。请在“权限”中打开“麦克风”。</string>
-
     <!-- Phone keyboard -->
     <string name="typing_close">关闭车机键盘</string>
     <string name="typing_label">为车机屏幕输入</string>
     <string name="typing_search">在车机屏幕上搜索</string>
-
     <!-- Copyable command -->
     <string name="command_tap_copy">点按即可复制</string>
     <string name="command_copied">已复制命令</string>
     <string name="whats_new_this_version">%1$s（当前版本）</string>
-
     <!-- Car settings screen -->
     <string name="carset_theme">主题</string>
     <string name="carset_imperial">英制（mi、ft、°F）</string>
@@ -444,7 +414,6 @@
     <string name="carset_bottom">底部</string>
     <string name="carset_save_vehicle">为这辆车保存</string>
     <string name="carset_no_profile">没有匹配的车辆配置</string>
-
     <string name="carset_audio_note">“通过 Gearslip”会经由车辆连接（有线或无线）传送手机的声音。每次开车 Android 都会请您共享屏幕，少数应用会阻止这样做。蓝牙按手机平常的方式播放，Android 从不询问。</string>
     <string name="carset_directions_note">Gearslip 会通过车上的扬声器播报每个转弯，播报时音乐会调低。如果地图应用自己的语音已经在车上播放，请关闭此项。</string>
     <string name="carset_phone_speech_note">使用手机自带的语音服务代替 Gearslip 的语音识别。大多数手机上是 Google 的，可能会把您的声音发送给 Google。GrapheneOS 没有语音服务，因此 Gearslip 会继续使用自己的。</string>
@@ -454,7 +423,6 @@
     <string name="carset_saved_to">已保存到 %1$s</string>
     <string name="carset_save_failed">无法保存</string>
     <string name="carset_px">%1$dpx</string>
-
     <!-- Car media app -->
     <string name="media_open_on_phone">在手机上打开</string>
     <string name="media_now_playing">正在播放</string>
@@ -464,7 +432,6 @@
     <string name="media_looking_lyrics">正在查找歌词…</string>
     <string name="media_nothing_playing">没有在播放</string>
     <string name="media_press_play">按播放键从上次停下的地方继续，或者在“浏览”中找点别的。</string>
-
     <string name="media_keeps_library">%1$s 不对外开放媒体库。</string>
     <string name="media_needs_access">只要在手机上获得通知使用权，Gearslip 仍然可以控制它。请在“设置”&gt;“通知”&gt;“通知使用权”中允许。</string>
     <string name="media_not_running">%1$s 没有运行。</string>
@@ -482,7 +449,6 @@
     <string name="media_searching_for">正在 %1$s 中搜索“%2$s”…</string>
     <string name="media_nothing_playing_dot">没有在播放。</string>
     <string name="media_no_lyrics">没有找到这首歌的歌词。</string>
-
     <!-- Car media browsing -->
     <string name="media_up">上一级</string>
     <string name="media_loading">正在加载…</string>
@@ -491,10 +457,8 @@
     <string name="media_nothing_here">这里什么都没有。</string>
     <string name="media_nothing_queued">播放队列为空。</string>
     <string name="media_play">播放</string>
-
     <string name="media_queue_empty_idle">没有在播放 - 并非所有应用都会告诉 Gearslip 接下来播放什么。</string>
     <string name="media_queue_empty_playing">只有正在播放的内容 - 并非所有应用都会告诉 Gearslip 接下来播放什么。</string>
-
     <!-- Player controls -->
     <string name="player_previous">上一首</string>
     <string name="player_next">下一首</string>
@@ -504,7 +468,6 @@
     <string name="player_like">喜欢</string>
     <string name="player_shuffle_off">随机播放已关闭</string>
     <string name="player_shuffle_on">随机播放已开启</string>
-
     <!-- Car home -->
     <string name="home_choose_app">选择其他应用</string>
     <string name="home_no_maps">未找到地图应用。</string>
@@ -516,12 +479,10 @@
     <string name="home_back_nav">返回导航栏</string>
     <string name="home_show_player">显示播放器</string>
     <string name="home_hide_lyrics">隐藏歌词</string>
-
     <string name="home_starting">正在启动 %1$s…</string>
     <string name="home_starting_map">正在启动地图…</string>
     <string name="home_failed">%1$s 无法启动。</string>
     <string name="home_failed_map">地图应用无法启动。</string>
-
     <!-- Breadcrumbs -->
     <string name="crumb_home">主屏幕</string>
     <string name="crumb_media">媒体</string>
@@ -529,7 +490,6 @@
     <string name="crumb_dashboard">仪表板</string>
     <string name="crumb_weather">天气</string>
     <string name="crumb_reply">回复</string>
-
     <!-- Built-in apps -->
     <string name="app_browser">浏览器</string>
     <string name="app_screen_sharing">屏幕共享</string>
@@ -541,7 +501,6 @@
     <string name="navapps_move_left">左移</string>
     <string name="navapps_move_right">右移</string>
     <string name="navapps_reset">重置应用顺序</string>
-
     <!-- Message popup -->
     <string name="msg_dismiss">忽略</string>
     <string name="msg_read">朗读</string>
@@ -549,7 +508,6 @@
     <string name="msg_no">不</string>
     <string name="msg_send_now">立即发送</string>
     <string name="msg_type">输入</string>
-
     <plurals name="msg_burst">
         <item quantity="other">%1$s · %2$d 条新消息</item>
     </plurals>
@@ -558,12 +516,10 @@
     <string name="msg_sending_to">正在发送给 %1$s</string>
     <string name="msg_sent_to">已发送给 %1$s</string>
     <string name="msg_reply_failed">无法回复</string>
-
     <!-- Bluetooth pairing -->
     <string name="bt_pair_unfinished">配对没有完成。请改从车机的蓝牙菜单配对。</string>
     <string name="bt_pair_not_started">配对没有开始。请改从车机的蓝牙菜单配对。</string>
     <string name="bt_paired">已配对。通话现在会从车上播放。</string>
-
     <!-- Car overlays -->
     <string name="overlay_dont_show">不再显示</string>
     <string name="overlay_ok">确定</string>
@@ -572,12 +528,10 @@
     <string name="overlay_pair">配对</string>
     <string name="overlay_confirm_title">在手机上确认</string>
     <string name="overlay_confirm_body">核对手机上的配对码，然后点按“配对”。车机也可能会询问。</string>
-
     <string name="overlay_bt_body">音乐通过蓝牙播放，但手机没有连接到车。请从车机或手机的蓝牙菜单连接。</string>
     <string name="overlay_location_body">地图应用无法显示您的位置，也无法导航。停车后请在手机的快捷设置中打开位置信息。</string>
     <string name="overlay_pair_body_music">手机与车配对后，通话和音乐会从车上的扬声器播放。随后手机会请您确认配对码。</string>
     <string name="overlay_pair_body">手机与车配对后，通话会从车上的扬声器播放。随后手机会请您确认配对码。</string>
-
     <!-- Weather -->
     <string name="weather_waiting_fix">正在等待定位。</string>
     <string name="weather_allow_location">请在手机上允许 Gearslip 使用位置信息，以查看天气。</string>
@@ -593,18 +547,15 @@
     <string name="weather_rain_showers">阵雨</string>
     <string name="weather_snow_showers">阵雪</string>
     <string name="weather_thunderstorm">雷暴</string>
-
     <!-- Weather screen -->
     <string name="weather_getting">正在获取天气…</string>
     <string name="weather_next_hours">未来几小时</string>
     <string name="weather_this_week">本周</string>
     <string name="weather_today">今天</string>
     <string name="weather_credit">天气数据来自 Open-Meteo.com（CC BY 4.0）</string>
-
     <string name="weather_feels_like">体感 %1$s</string>
     <string name="weather_humidity">湿度 %1$d%%</string>
     <string name="weather_wind">风 %1$s</string>
-
     <!-- Dashboard -->
     <string name="dash_today">今天</string>
     <string name="dash_getting_weather">正在获取天气…</string>
@@ -612,7 +563,6 @@
     <string name="dash_loading_calendar">正在加载日历…</string>
     <string name="dash_nothing_week">未来一周没有日程。</string>
     <string name="dash_all_day">全天</string>
-
     <!-- Phone dialer -->
     <string name="dialer_contacts">联系人</string>
     <string name="dialer_keypad">拨号键盘</string>
@@ -621,22 +571,18 @@
     <string name="dialer_call">呼叫</string>
     <string name="dialer_no_contacts">未找到有电话号码的联系人。</string>
     <string name="dialer_search">搜索联系人</string>
-
     <string name="dialer_needs_permission">要从这里拨号，Gearslip 需要电话和通讯录权限。停车后请在手机上允许。</string>
     <string name="dialer_no_match">没有与“%1$s”匹配的联系人。</string>
     <string name="dialer_call_who">呼叫 %1$s？</string>
-
     <!-- Car screen -->
     <string name="carui_exit_fullscreen">退出全屏</string>
     <string name="carui_drive_safely">安全驾驶</string>
     <string name="carui_understand">我知道了</string>
-
     <string name="carui_unofficial">Gearslip 是非官方软件：没有任何汽车厂商制作或审核过它，它可能随时失灵。</string>
     <string name="carui_never_interact">开车时切勿操作此屏幕。请在出发前设置好路线或歌曲，然后专心看路。</string>
     <string name="carui_this_app">此应用</string>
     <string name="carui_app_unsupported">%1$s 暂时无法在 Gearslip 上运行。</string>
     <string name="carui_app_unsupported_body">它没有启动。部分应用只能在 Google 的 Android Auto 上运行。</string>
-
     <!-- Nav bar -->
     <string name="navbar_on_call">通话中</string>
     <string name="navbar_end_call">挂断</string>
@@ -644,21 +590,18 @@
     <string name="navbar_mute">静音</string>
     <string name="navbar_close_panel">关闭侧边面板</string>
     <string name="navbar_dock_player">把播放器移到地图旁边</string>
-
     <!-- Browser -->
     <string name="web_search">搜索或输入网址</string>
     <string name="web_forward">前进</string>
     <string name="web_reload">刷新</string>
     <string name="web_start_page">起始页</string>
     <string name="web_fullscreen">全屏</string>
-
     <!-- Notifications -->
-    <string name="notif_title">通知</string>
+    <string name="notif_title">通知。</string>
     <string name="notif_clear_all">全部清除</string>
     <string name="notif_empty">暂时没有内容。手机上的新通知会显示在这里。</string>
     <string name="notif_off">通知已关闭。请在手机的“设置”&gt;“通知”&gt;“通知使用权”中允许 Gearslip。</string>
     <string name="notif_replied">已回复</string>
-
     <!-- Messages -->
     <string name="msg_mark_read">标记为已读</string>
     <string name="msg_messages">消息</string>
@@ -670,7 +613,6 @@
     <string name="msg_quick">快捷回复</string>
     <string name="msg_you">我：</string>
     <string name="msg_sender">%1$s：</string>
-
     <!-- Car app navigation -->
     <string name="nav_finding_route">正在查找路线…</string>
     <string name="nav_then">然后</string>
@@ -679,39 +621,31 @@
     <string name="nav_lane_recommended">推荐车道</string>
     <string name="nav_lane">车道</string>
     <string name="nav_arrive">%1$s 到达</string>
-
     <!-- Car app screens -->
     <string name="template_nothing_playing">还没有在播放。</string>
     <string name="template_search">搜索</string>
     <string name="template_start">开始</string>
-
     <!-- Calls -->
     <string name="call_incoming">来电</string>
     <string name="call_decline">拒接</string>
     <string name="call_answer">接听</string>
     <string name="call_ringing">铃声已经在响 - 在这里接听，或让它继续响。</string>
-
     <!-- Screen sharing -->
     <string name="phoneapps_touch_off">触控已关闭。请在手机的“设置”&gt;“无障碍”中启用 Gearslip。</string>
-
     <!-- What's new in the car -->
     <string name="whatsnew_show_after">更新后显示</string>
     <string name="whatsnew_got_it">知道了</string>
     <string name="whatsnew_title">版本 %1$s 新功能</string>
-
     <!-- Car keyboard -->
     <string name="keyboard_space">空格</string>
     <string name="keyboard_hide">隐藏键盘</string>
     <string name="keyboard_submit">提交</string>
-
     <!-- Launcher -->
     <string name="launcher_broken">无法在 Gearslip 上运行</string>
-
     <!-- Car app stage -->
     <string name="stage_car_app">车载应用</string>
     <string name="stage_close">关闭 %1$s</string>
     <string name="stage_close_app">关闭应用</string>
-
     <!-- Spoken directions -->
     <string name="dir_slight_left">向左前方行驶</string>
     <string name="dir_slight_left_onto">向左前方行驶，进入 %1$s</string>
@@ -793,14 +727,11 @@
     <plurals name="dir_meters">
         <item quantity="other">%1$d 米</item>
     </plurals>
-
     <string name="certsetup_installed_hint">如果车连不上，可能是它拒绝了这个证书。请在“设置”的“证书”中导入您自己的证书。</string>
     <string name="cert_downloaded_footer">车连不上？大约 2020 年以后的部分车辆会拒绝 aasdk 证书，请改为导入您自己的证书。更改将在下次连接时生效。</string>
-
     <!-- Cluster screen -->
     <string name="car_cluster_video">仪表屏上的转弯卡片</string>
     <string name="car_cluster_video_note">适用于仪表盘中有第二块屏幕的车：Gearslip 会在那里显示下一个转弯。下次连接时生效。</string>
-
     <!-- Connection status on Home -->
     <string name="status_idle">未连接</string>
     <string name="status_idle_detail">插入车上的 USB 接口，或无线连接。车机响应后 Gearslip 会自动打开。</string>
