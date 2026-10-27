@@ -19,7 +19,7 @@
     <string name="settings_about">Acerca de</string>
     <string name="settings_replay">Replay la guía de configuración</string>
     <string name="settings_replay_sub">Ir a través de los primeros pasos de nuevo</string>
-    <string name="settings_connection">Conexión</string>
+    <string name="settings_connection">Conectando</string>
     <string name="settings_use_in_car">Use Gearslip en el coche</string>
     <string name="settings_use_in_car_on">Gearslip responde cuando se conecta a un coche</string>
     <string name="settings_use_in_car_off">Off: Android Auto puede tomar la conexión en su lugar</string>
@@ -78,7 +78,7 @@
     <string name="choice_nav_show">Mostrar siempre</string>
     <string name="choice_nav_hide_navigating">Esconder mientras navega</string>
     <string name="choice_nav_hide">Escóndete hasta que te toquen</string>
-    <string name="choice_open_home">Home</string>
+    <string name="choice_open_home">Casa</string>
     <string name="summary_player_left">Reproductor a la izquierda</string>
     <string name="summary_player_right">Reproductor a la derecha</string>
     <string name="summary_usb_audio">Audio a través de Gearslip</string>
@@ -86,7 +86,7 @@
     <string name="summary_directions_on">Instrucciones sobre</string>
     <string name="summary_directions_off">Instrucciones apagadas</string>
     <string name="summary_bluetooth_on">Bluetooth activado</string>
-    <string name="summary_bluetooth_off">Bluetooth apagado</string>
+    <string name="summary_bluetooth_off">Bluetooth activado</string>
     <string name="summary_location_on">Ubicación</string>
     <string name="summary_location_off">Ubicación fuera</string>
     <string name="web_page">Página</string>
@@ -229,7 +229,7 @@
     <string name="storage_title">Almacenamiento de Gearslip</string>
     <string name="storage_measuring">Measuring..</string>
     <string name="storage_lyrics">Letras</string>
-    <string name="storage_clear">Despejado</string>
+    <string name="storage_clear">Borrar</string>
     <string name="storage_voice">Modelos de voz</string>
     <string name="storage_remove">Retirar</string>
     <string name="storage_logs">Antiguos registros</string>
@@ -267,7 +267,7 @@
     <string name="home_help">Ayuda</string>
     <string name="home_preview">Vista previa</string>
     <string name="home_logs">Logs</string>
-    <string name="home_disconnect">Desconexión</string>
+    <string name="home_disconnect">Desconectado</string>
     <string name="home_bt_title">Bluetooth no está conectado</string>
     <string name="home_debug_build">%1$s · construcción de depuración</string>
     <string name="home_bt_body">La música juega por Bluetooth, pero su teléfono no está conectado al coche. Conéctelo aquí o desde el menú Bluetooth del coche.</string>
@@ -361,7 +361,7 @@
     <string name="home_starting_map">Empezando el mapa..</string>
     <string name="home_failed">%1$s no se pudo iniciar.</string>
     <string name="home_failed_map">La aplicación del mapa no comenzaría.</string>
-    <string name="crumb_home">Home</string>
+    <string name="crumb_home">Casa</string>
     <string name="crumb_media">Media</string>
     <string name="crumb_apps">Aplicaciones</string>
     <string name="crumb_dashboard">Dashboard</string>
@@ -409,7 +409,7 @@
     <string name="weather_waiting_fix">Esperando una solución de ubicación.</string>
     <string name="weather_allow_location">Permitir la ubicación para Gearslip en el teléfono para ver el tiempo.</string>
     <string name="weather_unreachable">No podía llegar al servicio meteorológico.</string>
-    <string name="weather_clear">Despejado</string>
+    <string name="weather_clear">Borrar</string>
     <string name="weather_mostly_clear">Mayormente claro</string>
     <string name="weather_partly_cloudy">Parte nublada</string>
     <string name="weather_overcast">Overcast</string>
@@ -631,7 +631,7 @@
     <string name="guide_voice_downloading">Descargar, %1$d%%. Puedes continuar; sigue adelante.</string>
     <string name="guide_voice_ready">La voz está lista.</string>
     <string name="guide_voice_failed">La descarga no terminó. Pulsa Descargar voz para probar de nuevo.</string>
-    <string name="guide_audio_bluetooth">Bluetooth</string>
+    <string name="guide_audio_bluetooth">Bluetooth activado</string>
     <string name="guide_recommended">Recomendado</string>
     <string name="guide_audio_bluetooth_body">No hay aviso en cada viaje, y la voz de su aplicación del mapa llega al coche.</string>
     <string name="guide_audio_usb">A través de Gearslip</string>
