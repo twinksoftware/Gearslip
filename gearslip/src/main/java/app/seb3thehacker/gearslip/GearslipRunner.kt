@@ -48,6 +48,8 @@ class GearslipRunner(
     private val vehicleProfileFor: (ServiceDiscovery.HeadUnitInfo) -> VehicleProfile? = { null },
     /** Over Wi-Fi rather than USB: the video is sent smaller so the link keeps up. */
     private val wireless: Boolean = false,
+    /** Gearslip's icon as 32, 64 and 128 px PNGs, for the car's phone tile. See [PhoneIcons]. */
+    private val phoneIcons: () -> List<ByteArray> = { emptyList() },
 ) {
     private val log = GearslipLog.tagged("PROTO")
 
@@ -446,11 +448,20 @@ class GearslipRunner(
         if (authenticationFailed) running = false
     }
 
+    /**
+     * What a real phone sends here: its icon at three sizes (fields 1 to 3), a label, its model,
+     * and a session ID that's new each connection (field 6). A 2017 Hyundai on protocol 1.0
+     * never answered the request when it had only the label and model (issue #47).
+     */
     private fun sendServiceDiscoveryRequest() {
-        val body = Protobuf.stringField(4, "Gearslip") + // label_text
-            Protobuf.stringField(5, Build.MODEL)        // device_name
+        val icons = runCatching(phoneIcons).getOrDefault(emptyList())
+        var body = ByteArray(0)
+        icons.take(3).forEachIndexed { i, png -> body += Protobuf.bytesField(i + 1, png) } // small, medium, large icon
+        body += Protobuf.stringField(4, "Gearslip") + // label_text
+            Protobuf.stringField(5, Build.MODEL) + // device_name
+            Protobuf.bytesField(6, Protobuf.stringField(1, java.util.UUID.randomUUID().toString())) // session ID
         send(MSG_SERVICE_DISCOVERY_REQUEST, body, encrypted = true)
-        log.i("-> ServiceDiscoveryRequest (encrypted)")
+        log.i("-> ServiceDiscoveryRequest (encrypted, ${icons.size} icons, ${body.size} bytes)")
     }
 
     private fun onServiceDiscoveryResponse(body: ByteArray) {

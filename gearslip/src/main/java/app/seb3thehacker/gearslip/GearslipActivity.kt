@@ -401,6 +401,7 @@ class GearslipActivity : ComponentActivity(), Projection {
             identityProvider = { CertProvider.load(this) },
             projection = this,
             vehicleProfileFor = { info -> VehicleProfiles.find(VehicleProfiles.load(this), info) },
+            phoneIcons = { PhoneIcons.pngs(this) },
         )
         this.runner = runner
         worker = Thread { runner.run() }.apply { name = "gearslip"; start() }
@@ -423,6 +424,7 @@ class GearslipActivity : ComponentActivity(), Projection {
             projection = this,
             vehicleProfileFor = { info -> VehicleProfiles.find(VehicleProfiles.load(this), info) },
             wireless = true,
+            phoneIcons = { PhoneIcons.pngs(this) },
         )
         this.runner = runner
         worker = Thread { runner.run() }.apply { name = "gearslip"; start() }
