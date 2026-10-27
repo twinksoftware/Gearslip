@@ -425,7 +425,7 @@
     <string name="settings_use_in_car_on">Gearslip antwortet, wenn Sie in ein Auto stecken</string>
     <string name="settings_use_in_car_off">Off: Android Auto kann die Verbindung statt nehmen</string>
     <string name="settings_apps">Apps</string>
-    <string name="settings_certificate">Bescheinigung</string>
+    <string name="settings_certificate">Zertifikat</string>
     <string name="cert_next_connection">Änderungen wirken auf die nächste Verbindung.</string>
     <string name="cert_checking">Sieh..</string>
     <string name="cert_valid_until">Gültigkeit bis %1$s</string>
@@ -707,4 +707,8 @@
     <string name="places_finding">Suche Standort…</string>
     <string name="places_not_found">Gearslip konnte deinen Standort nicht finden. Ist die Standortermittlung an?</string>
     <string name="places_clear">Löschen</string>
+    <string name="certsetup_installed_hint">Wenn sich Ihr Auto nicht verbindet, lehnt es dieses Zertifikat vielleicht ab. Importieren Sie Ihr eigenes in den Einstellungen unter Zertifikat.</string>
+    <string name="cert_downloaded_footer">Auto verbindet sich nicht? Manche Autos ab etwa 2020 lehnen das aasdk-Zertifikat ab, dann importieren Sie Ihr eigenes. Änderungen gelten ab der nächsten Verbindung.</string>
+    <string name="car_cluster_video">Abbiegekarte im Kombiinstrument</string>
+    <string name="car_cluster_video_note">Für Autos mit einem zweiten Bildschirm im Kombiinstrument: Gearslip zeigt dort das nächste Abbiegen. Gilt ab der nächsten Verbindung.</string>
 </resources>
