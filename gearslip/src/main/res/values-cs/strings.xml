@@ -117,7 +117,7 @@
     <string name="cert_download_failed">Ke stažení selhal: %1$s</string>
     <string name="cert_download_sub">Certifikát projektu open-source aasdk vydává na GitHubu. Většina vozů to akceptuje, ale někteří z celého roku 2020 jej odmítnout</string>
     <string name="cert_import">Importovat svůj vlastní soubor</string>
-    <string name="cert_import_sub">A .p12 soubor s vlastním klíčem, ať už si vyberete</string>
+    <string name="cert_import_sub">A .p12 soubor s vlastním klíčem. Používejte vlastní, když váš vůz odmítne certifikát aasdk</string>
     <string name="cert_remove_imported">Odebrat importovaný certifikát</string>
     <string name="cert_remove_downloaded">Odebrat stažený certifikát</string>
     <string name="cert_removed_imported">Odebrat importovaný certifikát.</string>
@@ -242,7 +242,7 @@
     <string name="help_aa_off">Vypněte Android Auto.</string>
     <string name="help_aa_off_detail">Zakázat nebo odinstalovat aplikaci Android Auto, takže auto hovoří o Gearslip místo.</string>
     <string name="help_cert">Vložte certifikát.</string>
-    <string name="help_cert_detail">V Nastavení, stáhnout jeden nebo importovat vlastní.</string>
+    <string name="help_cert_detail">V nastavení stáhněte certifikát aasdk, který většina vozů přijímá. Pokud vaše auto odmítne, importujte vlastní místo.</string>
     <string name="help_mic">Nechte mikrofon.</string>
     <string name="help_mic_detail">Android nebude nechat aplikaci projít hudbu do auta bez něj. Gearslip naslouchá pouze tehdy, když klepnete na mikrofon nebo stiskněte tlačítko pro hovor na kole.</string>
     <string name="help_plug_in">Připojte se nebo připojte bezdrátově.</string>
@@ -255,7 +255,7 @@
     <string name="help_prompt_detail">Připojte telefon k počítači pomocí USB ladění a spusťte jej jednou. Přeskočit a vy klepněte na tlačítko Start pokaždé, když jste odložili.</string>
     <string name="help_readable">Uchovávejte oznámení čitelné.</string>
     <string name="help_readable_detail">Android skrývá, co oznámení říkají, když sdílí zvuk. Spusťte to taky, a Gearslip výtahy, které jde pouze do auta.</string>
-    <string name="help_which_cars_body">Většina vozů práce. Od roku 2020, některé vozy přidaly nové bezpečnostní standardy, které odmítnou certifikát Gearslip a Gearslip nemůže běžet v těchto automobilech.</string>
+    <string name="help_which_cars_body">Většina vozů přijímá aasdk certifikát. Počínaje kolem roku 2020, některé vozy přidaly nové bezpečnostní kontroly, které jej odmítají, a v těchto vozidlech Gearslip potřebuje certifikát vašeho vlastního.</string>
     <string name="update_downloaded_ask">Ke stažení. Android se ptá před instalací.</string>
     <string name="update_install">Instalace</string>
     <string name="update_download_now">Stáhněte si ji nyní. Android se ptá před instalací.</string>
@@ -298,11 +298,11 @@
     <string name="certsetup_continue">Pokračovat</string>
     <string name="certsetup_failed">Ke stažení selhalo</string>
     <string name="certsetup_retry">Hledat</string>
-    <string name="certsetup_import_sub">Soubor .p12 s vlastním klíčem, ať už si vyberete.</string>
+    <string name="certsetup_import_sub">A .p12 soubor s vlastním klíčem. Používejte vlastní, když váš vůz odmítne certifikát aasdk.</string>
     <string name="certsetup_skip">Přeskočit nastavení připojení vozu</string>
     <string name="certsetup_loaded">Auta přijímá pouze certifikáty Google-issued a máte jeden nabitý.</string>
     <string name="certsetup_choose">Auta přijímá pouze certifikáty Google-issued. Gearslip neobsahuje jeden, takže si zvolte, kde se nachází vaše.</string>
-    <string name="certsetup_aasdk_sub">Projekt open-source aasdk vydává tento certifikát na github.com/opencardev/aasdk. Většina vozů je přijímán; někteří z nich 2020 na ne.</string>
+    <string name="certsetup_aasdk_sub">Projekt open-source aasdk vydává tento certifikát na github.com/opencardev/aasdk. Většina vozů přijímá. Některé z celého roku 2020 odmítněte jej a poté je třeba importovat.</string>
     <string name="storage_title">Skladování ozubených kol</string>
     <string name="storage_measuring">Měření..</string>
     <string name="storage_lyrics">Čeština</string>
@@ -361,7 +361,7 @@
     <string name="audio_keep_asking">Udržet dotaz</string>
     <string name="audio_mic_title">Zvuk auta potřebuje povolení mikrofonu</string>
     <string name="audio_open_settings">Otevřete nastavení aplikace</string>
-    <string name="audio_bt_body">Android léčí hudbu odeslaný přes USB jako sdílení obrazovky, takže se ptá každý disk. Přes Bluetooth se nikdy ptá. Tuto později můžete změnit v Nastavení.</string>
+    <string name="audio_bt_body">Android léčí hudbu Gearslip odesílá do auta, jako je sdílení obrazovky, takže se ptá každý disk, přes kabel nebo bezdrátový. Přes Bluetooth se nikdy ptá. Tuto později můžete změnit v Nastavení.</string>
     <string name="audio_keep_usb">Nebo zachovat USB a zastavit otázku pro dobré: Připojte telefon do počítače pomocí USB ladění, a spustit tento jednou.</string>
     <string name="audio_mic_body">Android umožňuje aplikaci odeslat zvuk jiných aplikací do auta, pouze pokud má povolení mikrofonu. To je vypnuto pro Gearslip, takže hudba hraje na telefonu. Zapněte jej pod oprávněním, mikrofonem.</string>
     <string name="typing_close">Zavřít auto klávesnice</string>
@@ -702,4 +702,8 @@
         <item quantity="many">%1$d metry</item>
         <item quantity="other">%1$d metry</item>
     </plurals>
+    <string name="certsetup_installed_hint">Pokud se váš vůz nebude připojit, může tento certifikát odmítnout. Importovat vlastní nastavení podle certifikátu.</string>
+    <string name="cert_downloaded_footer">Auto není připojen? Některé automobily z celého roku 2020 odmítněte aasdk certifikát, takže importujte vlastní místo. Změny mají vliv na další připojení.</string>
+    <string name="car_cluster_video">Otočná karta na obrazovce clusteru</string>
+    <string name="car_cluster_video_note">Pro auto s druhou obrazovkou v clusteru nástrojů: Gearslip ukazuje další otočení. Platí na další připojení.</string>
 </resources>
