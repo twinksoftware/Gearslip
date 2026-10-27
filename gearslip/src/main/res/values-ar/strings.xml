@@ -95,9 +95,9 @@
     <string name="cert_download">حمولة من الأسد</string>
     <string name="cert_downloaded">شهادة تحميل.</string>
     <string name="cert_download_failed">إخفاق الحمولة: %1$s</string>
-    <string name="cert_download_sub">وتنشر شهادة مشروع الأسد المفتوح المصدر على جيت هوب. (جيروسليب) لا يتضمن واحدة</string>
+    <string name="cert_download_sub">وتنشر شهادة مشروع الأسد المفتوح المصدر على جيت هوب. معظم السيارات تقبل ذلك، لكن البعض من حوالي عام 2020 يرفضه</string>
     <string name="cert_import">استيراد ملفي الخاص</string>
-    <string name="cert_import_sub">ملف \"بي 12\" مع مفتاحه الخاص من أي مكان تختاره</string>
+    <string name="cert_import_sub">ملف رقم 12 مع مفتاحه الخاص إستعملْ خاصتَكَ عندما سيّارتكَ تَرْفضُ شهادةَ الحمارَ</string>
     <string name="cert_remove_imported">Remove imported certificate</string>
     <string name="cert_remove_downloaded">إلغاء شهادة التنزيل</string>
     <string name="cert_removed_imported">نقل الشهادة المستوردة.</string>
@@ -222,7 +222,7 @@
     <string name="help_aa_off">أطفأ (أندرويد أوتو).</string>
     <string name="help_aa_off_detail">غير قابل للتعطيل أو عدم تركيب جهاز (أندرويد أوتو) لذا فإن السيارة تتحدث إلى (جيروسليب) بدلاً من ذلك.</string>
     <string name="help_cert">احمل شهادة.</string>
-    <string name="help_cert_detail">في \"ستينغز\"، تحميل واحد أو استيراد الخاص بك.</string>
+    <string name="help_cert_detail">في (ستينغز)، تحميل شهادة الحزام التي تقبلها معظم السيارات إن رفضت سيّارتكِ ذلك، فاستوردي عوضًا عن ذلك.</string>
     <string name="help_mic">إسمح للميكروفون.</string>
     <string name="help_mic_detail">(أندرويد) لن يسمح لـ (توب) بنقل الموسيقى إلى السيارة بدونها يستمع (جليسليب) فقط عندما تضغط على المايك أو تضغط على زر الكلام على عجلتك.</string>
     <string name="help_plug_in">اركبي أو اربطي اللاسلكي.</string>
@@ -235,7 +235,7 @@
     <string name="help_prompt_detail">اتصلي بالهاتف إلى كمبيوتر مع (يو إس بي) يغلق ويدير هذا مرة اضربها و ابدأ في كل مرة تنفجر.</string>
     <string name="help_readable">أبقي الإخطارات قابلة للقراءة.</string>
     <string name="help_readable_detail">(أندرويد) يخفي ما تقوله الإخطارات بينما يتقاسم الصوت أديري هذا أيضاً، و (جليزليب) يصعد ذلك فقط بينما الموسيقى تذهب إلى السيارة.</string>
-    <string name="help_which_cars_body">معظم السيارات تعمل بدءاً من عام 2020، أضافت بعض السيارات معايير أمنية جديدة (ترفض شهادة (جيروسليب و (جيروسليب لا يستطيع تشغيل تلك السيارات.</string>
+    <string name="help_which_cars_body">معظم السيارات تقبل شهادة الأسد بدءاً من عام 2020، أضافت بعض السيارات فحصاً أمنياً جديداً يرفضه، وفي تلك السيارات يحتاج (جيروسليب) إلى شهادة خاصة بك.</string>
     <string name="update_downloaded_ask">تحميل. (أندرويد) يسأل قبل أن يستقر.</string>
     <string name="update_install">Install</string>
     <string name="update_download_now">تحميله الآن. (أندرويد) يسأل قبل أن يستقر.</string>
@@ -278,11 +278,11 @@
     <string name="certsetup_continue">استمر</string>
     <string name="certsetup_failed">تفريغ</string>
     <string name="certsetup_retry">Retry</string>
-    <string name="certsetup_import_sub">ملف رقم 12 مع مفتاحه الخاص من أينما تختار.</string>
+    <string name="certsetup_import_sub">ملف رقم 12 مع مفتاحه الخاص إستعملْ خاصتَكَ عندما سيّارتكَ تَرْفضُ شهادةَ الحمارَ.</string>
     <string name="certsetup_skip">إقامة وصلات لسيارات التزلج</string>
     <string name="certsetup_loaded">السيارات تقبل فقط شهادات (غوغل) المُصدرة ولديك واحدة مُحمّلة.</string>
     <string name="certsetup_choose">السيارات تقبل فقط شهادات صادرة عن جوجل (جيروسليب) لا يتضمن واحداً لذا اختاري من أين تأتي.</string>
-    <string name="certsetup_aasdk_sub">The open-source aasdk project publishes this certificate at github.com/opencardev/aasdk. معظم السيارات تقبلها، بعضها من حوالي عام 2020.</string>
+    <string name="certsetup_aasdk_sub">The open-source aasdk project publishes this certificate at github.com/opencardev/aasdk. معظم السيارات تقبل ذلك البعض من حوالي عام 2020 على رفضه، وبعد ذلك تحتاج إلى استيراد الخاص بك.</string>
     <string name="storage_title">مخزن غلافات</string>
     <string name="storage_measuring">قياس..</string>
     <string name="storage_lyrics">Lirics</string>
@@ -342,7 +342,7 @@
     <string name="audio_keep_asking">استمر بالسؤال</string>
     <string name="audio_mic_title">السيّارة تحتاج إلى إذن من الميكروفون</string>
     <string name="audio_open_settings">أطر التطبيق المفتوحة</string>
-    <string name="audio_bt_body">(أندرويد) يُعالج الموسيقى المُرسلة من (يو إس بي) كمشاركة الشاشة، لذا يطلب كل قرص. على (بلوتوث) لا تسأل أبداً يمكنك تغيير هذا لاحقا في ستينغز.</string>
+    <string name="audio_bt_body">(أندرويد) يُعالج الموسيقى التي يرسلها (جيروسليب) إلى السيارة كمشاركة الشاشة، لذا يطلب كل قرص، على كابل أو سلك. على (بلوتوث) لا تسأل أبداً يمكنك تغيير هذا لاحقا في ستينغز.</string>
     <string name="audio_keep_usb">أو أبقوا (يو إس بي) وتوقفوا عن السؤال للخير، ضعوا الهاتف في كمبيوتر.</string>
     <string name="audio_mic_body">(أندرويد) يدع تطبيقاً يرسل صوت تطبيقات أخرى للسيارة فقط إذا كان لديه تصريح للميكروفون لقد انطفأت لـ (جليزليب) لذا الموسيقى تعزف على الهاتف شغله تحت الأذن، ثم الميكروفون.</string>
     <string name="typing_close">أغلق لوحة مفاتيح السيارة</string>
@@ -710,4 +710,8 @@
     <string name="guide_download_voice">تحميل الصوت</string>
     <string name="guide_set_up">جهز</string>
     <string name="guide_voice_downloading">Downloading, %1$d%%. يمكنك الاستمرار في ذلك.</string>
+    <string name="certsetup_installed_hint">إن لم تتواصل سيارتك فربما ترفض هذه الشهادة استورد نفسك في ستينغز تحت الشهادة.</string>
+    <string name="cert_downloaded_footer">السيارة لن تتصل؟ بعض السيارات من حوالي عام 2020 على رفض شهادة الأسد، لذلك استيراد الخاص بك بدلا من ذلك. وتصبح التغييرات نافذة على الصلة التالية.</string>
+    <string name="car_cluster_video">بطاقة تشغيل على شاشة المجموعة</string>
+    <string name="car_cluster_video_note">لسيارة بشاشة ثانية في مجموعة الأدوات (جيروسليب) يظهر الدور التالي هناك يعتمد على الاتصال التالي.</string>
 </resources>
