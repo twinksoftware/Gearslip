@@ -36,7 +36,7 @@
     <string name="cert_download">Descarga desde aasdk</string>
     <string name="cert_downloaded">Certificado descargado.</string>
     <string name="cert_download_failed">Descarga fallido: %1$s</string>
-    <string name="cert_download_sub">El certificado que publica el proyecto de código abierto en GitHub. Gearslip no incluye uno</string>
+    <string name="cert_download_sub">El certificado que publica el proyecto de código abierto en GitHub. La mayoría de los coches lo aceptan, pero algunos de alrededor de 2020 en rechazarlo</string>
     <string name="cert_import">Importar mi propio archivo</string>
     <string name="cert_import_sub">Un archivo .p12 con su llave privada. Utilice su propio cuando su coche rechaza el certificado de aasdk</string>
     <string name="cert_remove_imported">Eliminar el certificado importado</string>
@@ -163,7 +163,7 @@
     <string name="help_aa_off">Apaga Android Auto.</string>
     <string name="help_aa_off_detail">Desactivar o desinstalar la aplicación Android Auto, por lo que el coche habla con Gearslip en su lugar.</string>
     <string name="help_cert">Carguen un certificado.</string>
-    <string name="help_cert_detail">En Ajustes, descargar uno o importar el suyo.</string>
+    <string name="help_cert_detail">En Ajustes, descargue el certificado aasdk, que la mayoría de los coches aceptan. Si tu coche lo rechaza, importa tu propio lugar.</string>
     <string name="help_mic">Permite el micrófono.</string>
     <string name="help_mic_detail">Android no permitirá que una aplicación pase música al coche sin ella. Gearslip solo escucha cuando pulsa el micrófono o pulsa el botón de conversación en la rueda.</string>
     <string name="help_plug_in">Enchufe, o conecte inalámbricamente.</string>
@@ -176,7 +176,7 @@
     <string name="help_prompt_detail">Conecta el teléfono a un ordenador con USB depurando y ejecuta esto una vez. Skip it and you tap Start each time you set off.</string>
     <string name="help_readable">Mantenga las notificaciones legibles.</string>
     <string name="help_readable_detail">Android oculta lo que las notificaciones dicen mientras comparte audio. Ejecute esto también, y Gearslip levanta eso sólo mientras la música va al coche.</string>
-    <string name="help_which_cars_body">La mayoría de los coches funcionan. A partir de 2020, algunos coches agregaron nuevos estándares de seguridad que rechazan el certificado de Gearslip, y Gearslip no puede correr en esos coches.</string>
+    <string name="help_which_cars_body">La mayoría de los coches aceptan el certificado de aasdk. A partir de 2020, algunos coches agregaron nuevos controles de seguridad que lo rechazan, y en esos coches Gearslip necesita un certificado propio.</string>
     <string name="update_downloaded_ask">Descargado. Android pregunta antes de instalar.</string>
     <string name="update_install">Instala</string>
     <string name="update_download_now">Descárguelo ahora. Android pregunta antes de instalar.</string>
@@ -223,7 +223,7 @@
     <string name="certsetup_skip">Skip car connection setup</string>
     <string name="certsetup_loaded">Los coches sólo aceptan certificados emitidos por Google, y tiene uno cargado.</string>
     <string name="certsetup_choose">Los coches sólo aceptan certificados emitidos por Google. Gearslip no incluye uno, así que elige de dónde viene el tuyo.</string>
-    <string name="certsetup_aasdk_sub">El proyecto aasdk de código abierto publica este certificado en github.com/opencardev/aasdk. La mayoría de los coches lo aceptan; algunos de alrededor de 2020 en no.</string>
+    <string name="certsetup_aasdk_sub">El proyecto aasdk de código abierto publica este certificado en github.com/opencardev/aasdk. La mayoría de los autos lo aceptan. Algunos de alrededor de 2020 en rechazarlo, y entonces usted necesita importar su propio.</string>
     <string name="storage_title">Almacenamiento de Gearslip</string>
     <string name="storage_measuring">Measuring..</string>
     <string name="storage_lyrics">Letras</string>
@@ -276,7 +276,7 @@
     <string name="audio_keep_asking">Sigue preguntando</string>
     <string name="audio_mic_title">El audio del coche necesita el permiso del micrófono</string>
     <string name="audio_open_settings">Configuración de aplicaciones abiertas</string>
-    <string name="audio_bt_body">Android trata la música enviada a través de USB como compartir su pantalla, por lo que pide cada unidad. Sobre Bluetooth nunca se pregunta. Puedes cambiar esto más tarde en Ajustes.</string>
+    <string name="audio_bt_body">Android trata la música Gearslip envía al coche como compartir su pantalla, por lo que pide cada unidad, sobre un cable o inalámbrico. Sobre Bluetooth nunca se pregunta. Puedes cambiar esto más tarde en Ajustes.</string>
     <string name="audio_keep_usb">O mantener USB y detener la pregunta para siempre: enchufar el teléfono en un ordenador con depuración USB, y ejecutar esta vez.</string>
     <string name="audio_mic_body">Android permite que una aplicación envíe el sonido de otras aplicaciones al coche sólo si tiene el permiso del micrófono. Se ha apagado para Gearslip, así que la música juega por teléfono. Enciende bajo permisos, luego micrófono.</string>
     <string name="typing_close">Cerrar el teclado del coche</string>
@@ -686,4 +686,8 @@
     <string name="carset_saved_to">Ahorrado a %1$s</string>
     <string name="carset_save_failed">No podía salvar</string>
     <string name="carset_px">%1$dpx</string>
+    <string name="certsetup_installed_hint">Si su coche no se conecta, puede rechazar este certificado. Importe su propio en Ajustes, bajo Certificado.</string>
+    <string name="cert_downloaded_footer">¿El auto no se conectará? Algunos coches de alrededor de 2020 en rechazar el certificado de aasdk, así que importa su propio lugar. Los cambios tienen efecto en la próxima conexión.</string>
+    <string name="car_cluster_video">Enciende la tarjeta en la pantalla de racimo</string>
+    <string name="car_cluster_video_note">Para un coche con una segunda pantalla en el grupo de instrumentos: Gearslip muestra la siguiente vuelta allí. Se aplica en la siguiente conexión.</string>
 </resources>
