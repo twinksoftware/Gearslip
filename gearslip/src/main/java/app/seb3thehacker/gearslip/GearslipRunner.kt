@@ -1006,9 +1006,11 @@ class GearslipRunner(
                     "${videoConfigs.getOrNull(selectedConfigIndex ?: -1)?.resolutionName ?: "?"} " +
                         "(head unit offered ${offered.size}), max_unacked=$maxUnacked",
                 )
-                // VideoFocusRequestNotification { mode = 2; reason = 3 }
+                // VideoFocusRequestNotification { mode = 2; reason = 3 }. Reason 1 means "the phone's
+                // screen is off", which a 2020 Civic may have taken as a reason to keep its own
+                // screen (issue #43); 0 is UNKNOWN.
                 val focus = Protobuf.varintField(2, VIDEO_FOCUS_PROJECTED.toLong()) +
-                    Protobuf.varintField(3, 1L)
+                    Protobuf.varintField(3, 0L)
                 send(MSG_VIDEO_FOCUS_REQUEST, focus, encrypted = true, channel = videoChannelId)
                 log.i("-> VideoFocusRequest(mode=PROJECTED)")
             }
