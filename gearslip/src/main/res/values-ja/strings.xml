@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="touch_relay_description">画面共有中に、車の画面でのタップを Gearslip がスマートフォンで再現できるようにします。Gearslip は画面の内容を読み取りません。</string>
-
     <!-- Setup guide -->
     <string name="guide_usage_title">ほかのドライバーの役に立ちましょう。</string>
     <string name="guide_safety_title">安全運転を。</string>
@@ -58,7 +57,6 @@
     <string name="guide_next">次へ</string>
     <string name="guide_done">完了</string>
     <string name="guide_back">戻る</string>
-
     <!-- Usage notes -->
     <string name="usage_intro">オンにすると、Gearslip を開いたときと運転のたびに短いメモを送ります。&lt;b&gt;メモに名前、アカウント、位置情報は含まれません。ランダムな番号でスマートフォンを一度だけ数え、サーバーは IP アドレスを保存しません。&lt;/b&gt;メモから、どの車で動き、ほかの車ではどこで失敗するかがわかります。</string>
     <string name="usage_send">利用メモを送信</string>
@@ -79,7 +77,6 @@
     <string name="worked_body">次のドライバーのために、動いたことを共有しますか？ 名前、アカウント、位置情報は含まれません。</string>
     <string name="worked_not_now">今はしない</string>
     <string name="worked_share">共有</string>
-
     <!-- Recommended apps -->
     <string name="recommended_intro">これらの無料アプリは Gearslip の車の画面で動きます。各ボタンで GitHub のアプリページが開きます。</string>
     <string name="recommended_title">おすすめアプリ</string>
@@ -94,7 +91,6 @@
     <string name="recommended_about_ytm">YouTube Music プレーヤー。</string>
     <string name="recommended_about_antennapod">チャプターにも対応したポッドキャスト。</string>
     <string name="recommended_about_rfsentinel">近くのトラッカーやカメラを見つけます。</string>
-
     <!-- Settings -->
     <string name="settings_title">設定</string>
     <string name="settings_whats_new">新機能</string>
@@ -136,7 +132,6 @@
     <string name="cert_password">パスワード</string>
     <string name="cert_password_hint">パスワードがない場合は空欄のままにしてください。</string>
     <string name="cert_import_button">インポート</string>
-
     <!-- Certificate summary -->
     <string name="cancel">キャンセル</string>
     <string name="cert_none">未読み込み（自己署名。車に拒否されます）</string>
@@ -144,7 +139,6 @@
     <string name="cert_kind_downloaded">ダウンロード済み：%1$s</string>
     <string name="cert_kind_adb">adb で配置：%1$s</string>
     <string name="cert_kind_self">自己署名：%1$s</string>
-
     <!-- Car settings on the phone -->
     <string name="car_group_screen">画面</string>
     <string name="car_group_nav_bar">ナビバーとプレーヤー</string>
@@ -157,7 +151,7 @@
     <string name="choice_theme_phone">スマートフォンに合わせる</string>
     <string name="choice_theme_light">ライト</string>
     <string name="choice_theme_dark">ダーク</string>
-    <string name="choice_dark_black">ブラック</string>
+    <string name="choice_dark_black">戻る</string>
     <string name="choice_dark_black_colour">ブラックとカラー</string>
     <string name="choice_dark_deep_colour">ディープカラー</string>
     <string name="choice_dark_grey">グレー</string>
@@ -176,7 +170,7 @@
     <string name="summary_bluetooth_audio">Bluetooth オーディオ</string>
     <string name="summary_directions_on">音声案内オン</string>
     <string name="summary_directions_off">音声案内オフ</string>
-    <string name="summary_bluetooth_on">Bluetooth オン</string>
+    <string name="summary_bluetooth_on">Bluetooth オフ</string>
     <string name="summary_bluetooth_off">Bluetooth オフ</string>
     <string name="summary_location_on">位置情報オン</string>
     <string name="summary_location_off">位置情報オフ</string>
@@ -220,7 +214,6 @@
     <string name="car_audio_usb_sub">遅延がなく音がよりクリアです。運転のたびに Android が画面共有の許可を求め、それによって Gearslip が音を送れるようになります</string>
     <string name="car_audio_usb_footer">ヘルプのコマンドを一度実行すれば、Android は確認しなくなります。</string>
     <string name="car_audio_bt_footer">通話はどちらの場合も Bluetooth を使います。</string>
-
     <!-- Car screen size -->
     <string name="screen_car_size">車の画面サイズ</string>
     <string name="screen_use_cars">車の値を使う</string>
@@ -245,10 +238,8 @@
     <string name="screen_width">幅</string>
     <string name="screen_height">高さ</string>
     <string name="save">保存</string>
-
     <string name="screen_car_size_note">車の映像が引き伸ばされて見える場合に使います。画面の実際のサイズ（例：1280x480）を入力してください。次回の接続から有効です。</string>
     <string name="screen_set_by_you">%1$s（手動設定）</string>
-
     <!-- Help -->
     <string name="help_title">接続のしかた</string>
     <string name="help_which_cars">対応している車</string>
@@ -256,7 +247,6 @@
     <string name="help_first_drive">初めて運転する前に</string>
     <string name="help_in_car">車の中で</string>
     <string name="help_usb_audio">Gearslip 経由の音声</string>
-
     <string name="help_aa_off">Android Auto をオフにする。</string>
     <string name="help_aa_off_detail">Android Auto アプリを無効にするかアンインストールして、車が Gearslip とやり取りするようにします。</string>
     <string name="help_cert">証明書を読み込む。</string>
@@ -274,7 +264,6 @@
     <string name="help_readable">通知を読めるようにする。</string>
     <string name="help_readable_detail">音声を共有している間、Android は通知の内容を隠します。これも実行すると、音楽を車に送っている間だけ Gearslip がその制限を外します。</string>
     <string name="help_which_cars_body">ほとんどの車は aasdk の証明書を受け入れます。2020 年ごろから、一部の車にはこれを拒否する新しいセキュリティチェックが加わり、そうした車では自分の証明書が必要です。</string>
-
     <!-- Updates -->
     <string name="update_downloaded_ask">ダウンロードしました。インストール前に Android が確認します。</string>
     <string name="update_install">インストール</string>
@@ -287,7 +276,6 @@
     <string name="update_check_now">今すぐ確認</string>
     <string name="update_check_auto">自動で確認</string>
     <string name="update_once_a_day">1 日 1 回</string>
-
     <string name="update_unplug_first">インストールするには車から外してください。インストールすると Gearslip が閉じます。</string>
     <string name="update_card_title">Gearslip %1$s が公開されました</string>
     <string name="update_downloading">ダウンロード中… %1$d%%</string>
@@ -296,7 +284,6 @@
     <string name="update_version_out">バージョン %1$s が公開されました</string>
     <string name="update_version_ready">バージョン %1$s をインストールできます</string>
     <string name="update_dialog_status">バージョン %1$s。%2$s。</string>
-
     <!-- About and support -->
     <string name="about_give_regularly">毎週または毎月支援する</string>
     <string name="about_bmac_sub" formatted="false">カードで 1 回または毎月。Buy Me a Coffee の手数料は 5%</string>
@@ -315,11 +302,9 @@
     <string name="about_source">ソースコード</string>
     <string name="about_source_sub">AGPL のもとで Gearslip のコードを読んだり変更したりできます</string>
     <string name="about_voice_credits">音声のクレジット</string>
-
     <string name="about_no_wallet">Monero ウォレットアプリが見つかりません。代わりにアドレスをコピーしてください。</string>
     <string name="about_monero_copied">Monero のアドレスをコピーしました</string>
     <string name="about_voice_credits_sub">音声認識：sherpa-onnx（Apache 2.0）、Banafo の Kroko ASR（CC BY-SA 4.0）、NVIDIA の Parakeet と Canary（CC BY 4.0）</string>
-
     <!-- Certificate setup -->
     <string name="certsetup_title">証明書の設定</string>
     <string name="certsetup_installed">証明書をインストールしました。</string>
@@ -328,11 +313,9 @@
     <string name="certsetup_retry">再試行</string>
     <string name="certsetup_import_sub">秘密鍵を含む .p12 ファイルです。車が aasdk の証明書を拒否する場合に使います。</string>
     <string name="certsetup_skip">車との接続設定をスキップ</string>
-
     <string name="certsetup_loaded">車は Google が発行した証明書しか受け入れません。証明書はすでに読み込まれています。</string>
     <string name="certsetup_choose">車は Google が発行した証明書しか受け入れません。Gearslip には含まれていないので、入手方法を選んでください。</string>
     <string name="certsetup_aasdk_sub">オープンソースの aasdk プロジェクトが github.com/opencardev/aasdk でこの証明書を公開しています。ほとんどの車で使えます。2020 年ごろ以降の一部の車では拒否されるため、その場合は自分の証明書をインポートしてください。</string>
-
     <!-- Storage -->
     <string name="storage_title">Gearslip のストレージ</string>
     <string name="storage_measuring">計算中…</string>
@@ -343,7 +326,6 @@
     <string name="storage_logs">古いログ</string>
     <string name="storage_other">その他の一時ファイル</string>
     <string name="storage_delete_all">Gearslip のデータをすべて削除</string>
-
     <string name="storage_total">Gearslip のデータがスマートフォンのストレージを %1$s 使っています。</string>
     <plurals name="storage_lyrics_detail">
         <item quantity="other">%1$d 曲 · %2$s。消去した歌詞は、開いたときに再びダウンロードされます。</item>
@@ -353,17 +335,14 @@
     <string name="storage_other_detail">%1$s。ダウンロードしたアップデートなど、Gearslip が作り直せるファイルです。</string>
     <string name="storage_delete_armed">もう一度［削除］をタップすると、設定、証明書、音声モデル、ログを消去します。Gearslip は閉じ、次回はセットアップから始まります。</string>
     <string name="storage_delete_sub">設定、証明書、音声モデル、歌詞、ログ。</string>
-    <string name="storage_delete">削除</string>
+    <string name="storage_delete">削除…</string>
     <string name="storage_delete_ellipsis">削除…</string>
-
     <!-- Donate prompt -->
     <string name="donate_title">無事に運転できてよかった</string>
     <string name="donate_liberapay">Liberapay で支援</string>
     <string name="donate_bmac">コーヒーをおごる</string>
     <string name="donate_card">カードで 1 回支援</string>
-
     <string name="donate_body">Gearslip は無料で、広告もトラッキングもありません。ドライブの役に立っていたら、支援をお願いします。</string>
-
     <!-- Wireless -->
     <string name="wireless_needs_permission">これには Bluetooth と付近の Wi-Fi へのアクセスが必要です。</string>
     <string name="wireless_enable_permission">「付近のデバイス」の権限を有効にする</string>
@@ -372,30 +351,25 @@
     <string name="wireless_none_paired">スマートフォンはまだ何ともペア設定されていません。先に車とペア設定してください。</string>
     <string name="wireless_not_listed">車が表示されない場合は、先にスマートフォンとペア設定してください。</string>
     <string name="bluetooth_settings">Bluetooth の設定</string>
-
     <!-- Voice models -->
     <string name="voice_live_title">音声：リアルタイム</string>
     <string name="voice_final_title">音声：最終確認</string>
     <string name="voice_none">なし</string>
     <string name="voice_none_sub">リアルタイムの結果をそのまま使う。最速、精度は最低</string>
-
     <string name="voice_live_body">音声アシスタントはこのスマートフォンの中で声を文字に変え、話した内容は外に出ません。合計約 270 MB のモデルが 2 つ必要で、ダウンロードは一度だけです。こちらは話している間に言葉を書き起こします。</string>
     <string name="voice_final_body">話し終えると、このモデルがフレーズ全体を読み直し、リアルタイムのモデルが聞き逃した名前や地名を拾います。</string>
     <string name="voice_model_size">%1$s · %2$d MB</string>
     <string name="voice_downloaded">ダウンロード済み。%1$s</string>
     <string name="voice_downloading">ダウンロード中（%1$d%%）</string>
-
     <!-- Home -->
     <string name="home_help">ヘルプ</string>
     <string name="home_preview">プレビュー</string>
     <string name="home_logs">ログ</string>
     <string name="home_disconnect">切断</string>
     <string name="home_bt_title">Bluetooth が接続されていません</string>
-
     <string name="home_debug_build">%1$s · デバッグビルド</string>
     <string name="home_bt_body">音楽は Bluetooth で流れますが、スマートフォンが車に接続されていません。ここか、車の Bluetooth メニューから接続してください。</string>
     <string name="home_voice_downloading">音声をダウンロード中（%1$d%%）</string>
-
     <!-- Car audio dialogs -->
     <string name="audio_bt_title">車のオーディオを Bluetooth で再生しますか？</string>
     <string name="audio_never_ask">パソコンを使って今後確認しない</string>
@@ -403,21 +377,17 @@
     <string name="audio_keep_asking">今後も確認する</string>
     <string name="audio_mic_title">車のオーディオにはマイクの権限が必要です</string>
     <string name="audio_open_settings">アプリの設定を開く</string>
-
     <string name="audio_bt_body">Android は Gearslip が車に送る音楽を画面共有と同じように扱うため、ケーブルでもワイヤレスでも運転のたびに確認します。Bluetooth なら確認はありません。あとで設定から変更できます。</string>
     <string name="audio_keep_usb">または、音声は Gearslip 経由のまま確認をなくすこともできます。USB デバッグをオンにしたパソコンにスマートフォンをつなぎ、これを一度実行してください。</string>
     <string name="audio_mic_body">Android では、マイクの権限があるアプリしかほかのアプリの音を車に送れません。Gearslip の権限がオフになっているため、音楽はスマートフォンで流れています。［権限］→［マイク］でオンにしてください。</string>
-
     <!-- Phone keyboard -->
     <string name="typing_close">車のキーボードを閉じる</string>
     <string name="typing_label">車の画面に入力</string>
     <string name="typing_search">車の画面で検索</string>
-
     <!-- Copyable command -->
     <string name="command_tap_copy">タップしてコピー</string>
     <string name="command_copied">コマンドをコピーしました</string>
     <string name="whats_new_this_version">%1$s（このバージョン）</string>
-
     <!-- Car settings screen -->
     <string name="carset_theme">テーマ</string>
     <string name="carset_imperial">ヤード・ポンド法（mi、ft、°F）</string>
@@ -444,7 +414,6 @@
     <string name="carset_bottom">下</string>
     <string name="carset_save_vehicle">この車両に保存</string>
     <string name="carset_no_profile">一致する車両プロファイルがありません</string>
-
     <string name="carset_audio_note">「Gearslip 経由」は、ケーブルでもワイヤレスでも、スマートフォンの音を車との接続で送ります。運転のたびに Android が画面共有の許可を求め、一部のアプリはこれをブロックします。Bluetooth はスマートフォン本来の再生方法で、Android の確認もありません。</string>
     <string name="carset_directions_note">Gearslip が曲がり角ごとに車のスピーカーで読み上げ、その間は音楽の音量を下げます。地図アプリ自身の音声がすでに車で流れている場合はオフにしてください。</string>
     <string name="carset_phone_speech_note">Gearslip の音声認識の代わりに、スマートフォン本体の音声サービスで聞き取ります。ほとんどのスマートフォンでは Google のもので、声が Google に送られることがあります。GrapheneOS には音声サービスがないため、Gearslip は自分の認識を使い続けます。</string>
@@ -454,7 +423,6 @@
     <string name="carset_saved_to">%1$s に保存しました</string>
     <string name="carset_save_failed">保存できませんでした</string>
     <string name="carset_px">%1$dpx</string>
-
     <!-- Car media app -->
     <string name="media_open_on_phone">スマートフォンで開く</string>
     <string name="media_now_playing">再生中</string>
@@ -464,7 +432,6 @@
     <string name="media_looking_lyrics">歌詞を探しています…</string>
     <string name="media_nothing_playing">再生していません</string>
     <string name="media_press_play">再生を押すと続きから再生します。ブラウズから探すこともできます。</string>
-
     <string name="media_keeps_library">%1$s はライブラリを公開していません。</string>
     <string name="media_needs_access">スマートフォンで通知へのアクセスを許可すれば、Gearslip で操作できます。［設定］&gt;［通知］&gt;［通知へのアクセス］で許可してください。</string>
     <string name="media_not_running">%1$s が起動していません。</string>
@@ -482,7 +449,6 @@
     <string name="media_searching_for">%1$s で「%2$s」を検索中…</string>
     <string name="media_nothing_playing_dot">再生していません。</string>
     <string name="media_no_lyrics">この曲の歌詞は見つかりませんでした。</string>
-
     <!-- Car media browsing -->
     <string name="media_up">上へ</string>
     <string name="media_loading">読み込み中…</string>
@@ -491,10 +457,8 @@
     <string name="media_nothing_here">何もありません。</string>
     <string name="media_nothing_queued">キューは空です。</string>
     <string name="media_play">再生</string>
-
     <string name="media_queue_empty_idle">再生していません - 次の曲を Gearslip に伝えないアプリもあります。</string>
     <string name="media_queue_empty_playing">再生中の曲のみ - 次の曲を Gearslip に伝えないアプリもあります。</string>
-
     <!-- Player controls -->
     <string name="player_previous">前へ</string>
     <string name="player_next">次へ</string>
@@ -504,7 +468,6 @@
     <string name="player_like">高評価</string>
     <string name="player_shuffle_off">シャッフルオフ</string>
     <string name="player_shuffle_on">シャッフルオン</string>
-
     <!-- Car home -->
     <string name="home_choose_app">別のアプリを選ぶ</string>
     <string name="home_no_maps">地図アプリが見つかりません。</string>
@@ -516,12 +479,10 @@
     <string name="home_back_nav">ナビバーに戻る</string>
     <string name="home_show_player">プレーヤーを表示</string>
     <string name="home_hide_lyrics">歌詞を隠す</string>
-
     <string name="home_starting">%1$s を起動中…</string>
     <string name="home_starting_map">地図を起動中…</string>
     <string name="home_failed">%1$s を起動できませんでした。</string>
     <string name="home_failed_map">地図アプリを起動できませんでした。</string>
-
     <!-- Breadcrumbs -->
     <string name="crumb_home">ホーム</string>
     <string name="crumb_media">メディア</string>
@@ -529,9 +490,8 @@
     <string name="crumb_dashboard">ダッシュボード</string>
     <string name="crumb_weather">天気</string>
     <string name="crumb_reply">返信</string>
-
     <!-- Built-in apps -->
-    <string name="app_browser">ブラウザ</string>
+    <string name="app_browser">ブラウズ</string>
     <string name="app_screen_sharing">画面共有</string>
     <string name="app_exit">終了</string>
     <string name="navapps_unpin">ナビバーから外す</string>
@@ -541,7 +501,6 @@
     <string name="navapps_move_left">左へ移動</string>
     <string name="navapps_move_right">右へ移動</string>
     <string name="navapps_reset">アプリの並び順をリセット</string>
-
     <!-- Message popup -->
     <string name="msg_dismiss">閉じる</string>
     <string name="msg_read">読み上げ</string>
@@ -549,7 +508,6 @@
     <string name="msg_no">いいえ</string>
     <string name="msg_send_now">今すぐ送信</string>
     <string name="msg_type">入力</string>
-
     <plurals name="msg_burst">
         <item quantity="other">%1$s · 新着 %2$d 件</item>
     </plurals>
@@ -558,12 +516,10 @@
     <string name="msg_sending_to">%1$s に送信中</string>
     <string name="msg_sent_to">%1$s に送信しました</string>
     <string name="msg_reply_failed">返信できませんでした</string>
-
     <!-- Bluetooth pairing -->
     <string name="bt_pair_unfinished">ペア設定が完了しませんでした。車の Bluetooth メニューからペア設定してください。</string>
     <string name="bt_pair_not_started">ペア設定が始まりませんでした。車の Bluetooth メニューからペア設定してください。</string>
     <string name="bt_paired">ペア設定しました。通話が車から聞こえるようになりました。</string>
-
     <!-- Car overlays -->
     <string name="overlay_dont_show">今後表示しない</string>
     <string name="overlay_ok">OK</string>
@@ -572,12 +528,10 @@
     <string name="overlay_pair">ペア設定</string>
     <string name="overlay_confirm_title">スマートフォンで確認してください</string>
     <string name="overlay_confirm_body">スマートフォンでコードを確認し、［ペア設定］をタップしてください。車でも確認を求められることがあります。</string>
-
     <string name="overlay_bt_body">音楽は Bluetooth で流れますが、スマートフォンが車に接続されていません。車かスマートフォンの Bluetooth メニューから接続してください。</string>
     <string name="overlay_location_body">地図アプリが現在地を表示できず、道案内もできません。駐車中に、スマートフォンのクイック設定で位置情報をオンにしてください。</string>
     <string name="overlay_pair_body_music">スマートフォンと車をペア設定すると、通話と音楽が車のスピーカーから聞こえます。その後、スマートフォンでコードの確認を求められます。</string>
     <string name="overlay_pair_body">スマートフォンと車をペア設定すると、通話が車のスピーカーから聞こえます。その後、スマートフォンでコードの確認を求められます。</string>
-
     <!-- Weather -->
     <string name="weather_waiting_fix">現在地を取得しています。</string>
     <string name="weather_allow_location">天気を見るには、スマートフォンで Gearslip に位置情報を許可してください。</string>
@@ -593,18 +547,15 @@
     <string name="weather_rain_showers">にわか雨</string>
     <string name="weather_snow_showers">にわか雪</string>
     <string name="weather_thunderstorm">雷雨</string>
-
     <!-- Weather screen -->
     <string name="weather_getting">天気を取得中…</string>
     <string name="weather_next_hours">この先数時間</string>
     <string name="weather_this_week">今週</string>
     <string name="weather_today">今日</string>
     <string name="weather_credit">天気データ：Open-Meteo.com（CC BY 4.0）</string>
-
     <string name="weather_feels_like">体感 %1$s</string>
     <string name="weather_humidity">湿度 %1$d%%</string>
     <string name="weather_wind">風 %1$s</string>
-
     <!-- Dashboard -->
     <string name="dash_today">今日</string>
     <string name="dash_getting_weather">天気を取得中…</string>
@@ -612,7 +563,6 @@
     <string name="dash_loading_calendar">カレンダーを読み込み中…</string>
     <string name="dash_nothing_week">今後 1 週間の予定はありません。</string>
     <string name="dash_all_day">終日</string>
-
     <!-- Phone dialer -->
     <string name="dialer_contacts">連絡先</string>
     <string name="dialer_keypad">キーパッド</string>
@@ -621,22 +571,18 @@
     <string name="dialer_call">発信</string>
     <string name="dialer_no_contacts">電話番号のある連絡先が見つかりません。</string>
     <string name="dialer_search">連絡先を検索</string>
-
     <string name="dialer_needs_permission">ここから発信するには、電話と連絡先の権限が必要です。駐車中にスマートフォンで許可してください。</string>
     <string name="dialer_no_match">「%1$s」に一致する連絡先はありません。</string>
     <string name="dialer_call_who">%1$s に発信しますか？</string>
-
     <!-- Car screen -->
     <string name="carui_exit_fullscreen">全画面表示を終了</string>
     <string name="carui_drive_safely">安全運転を</string>
     <string name="carui_understand">了解しました</string>
-
     <string name="carui_unofficial">Gearslip は非公式のソフトウェアです。自動車メーカーが作ったものでも確認したものでもなく、予告なく動かなくなることがあります。</string>
     <string name="carui_never_interact">運転中はこの画面を絶対に操作しないでください。ルートや曲は出発前に設定し、運転中は道路に集中してください。</string>
     <string name="carui_this_app">このアプリ</string>
     <string name="carui_app_unsupported">%1$s はまだ Gearslip で動きません。</string>
     <string name="carui_app_unsupported_body">起動しませんでした。Google の Android Auto でしか動かないアプリもあります。</string>
-
     <!-- Nav bar -->
     <string name="navbar_on_call">通話中</string>
     <string name="navbar_end_call">通話を終了</string>
@@ -644,21 +590,18 @@
     <string name="navbar_mute">ミュート</string>
     <string name="navbar_close_panel">サイドパネルを閉じる</string>
     <string name="navbar_dock_player">プレーヤーを地図の横に移動</string>
-
     <!-- Browser -->
     <string name="web_search">検索またはアドレスを入力</string>
     <string name="web_forward">進む</string>
     <string name="web_reload">再読み込み</string>
     <string name="web_start_page">スタートページ</string>
     <string name="web_fullscreen">全画面表示</string>
-
     <!-- Notifications -->
     <string name="notif_title">通知</string>
     <string name="notif_clear_all">すべて消去</string>
     <string name="notif_empty">まだ何もありません。スマートフォンの新しい通知がここに表示されます。</string>
     <string name="notif_off">通知がオフです。スマートフォンの［設定］&gt;［通知］&gt;［通知へのアクセス］で Gearslip を許可してください。</string>
     <string name="notif_replied">返信済み</string>
-
     <!-- Messages -->
     <string name="msg_mark_read">既読にする</string>
     <string name="msg_messages">メッセージ</string>
@@ -670,7 +613,6 @@
     <string name="msg_quick">クイック返信</string>
     <string name="msg_you">自分：</string>
     <string name="msg_sender">%1$s：</string>
-
     <!-- Car app navigation -->
     <string name="nav_finding_route">ルートを検索中…</string>
     <string name="nav_then">その後</string>
@@ -679,39 +621,31 @@
     <string name="nav_lane_recommended">推奨車線</string>
     <string name="nav_lane">車線</string>
     <string name="nav_arrive">%1$s 到着</string>
-
     <!-- Car app screens -->
     <string name="template_nothing_playing">まだ何も再生していません。</string>
     <string name="template_search">検索</string>
     <string name="template_start">開始</string>
-
     <!-- Calls -->
     <string name="call_incoming">着信</string>
     <string name="call_decline">拒否</string>
     <string name="call_answer">応答</string>
     <string name="call_ringing">すでに着信音が鳴っています - ここで応答するか、そのまま鳴らしておいてください。</string>
-
     <!-- Screen sharing -->
     <string name="phoneapps_touch_off">タッチ操作がオフです。スマートフォンの［設定］&gt;［ユーザー補助］で Gearslip を有効にしてください。</string>
-
     <!-- What's new in the car -->
     <string name="whatsnew_show_after">アップデート後に表示</string>
     <string name="whatsnew_got_it">OK</string>
     <string name="whatsnew_title">バージョン %1$s の新機能</string>
-
     <!-- Car keyboard -->
     <string name="keyboard_space">スペース</string>
     <string name="keyboard_hide">キーボードを隠す</string>
     <string name="keyboard_submit">確定</string>
-
     <!-- Launcher -->
     <string name="launcher_broken">Gearslip では動きません</string>
-
     <!-- Car app stage -->
     <string name="stage_car_app">車のアプリ</string>
     <string name="stage_close">%1$s を閉じる</string>
     <string name="stage_close_app">アプリを閉じる</string>
-
     <!-- Spoken directions -->
     <string name="dir_slight_left">緩やかに左方向です</string>
     <string name="dir_slight_left_onto">緩やかに左方向、%1$s に入ります</string>
@@ -793,14 +727,11 @@
     <plurals name="dir_meters">
         <item quantity="other">%1$d メートル</item>
     </plurals>
-
     <string name="certsetup_installed_hint">車が接続しない場合は、この証明書が拒否されているのかもしれません。設定の［証明書］から自分の証明書をインポートしてください。</string>
     <string name="cert_downloaded_footer">車が接続しませんか？ 2020 年ごろ以降の一部の車は aasdk の証明書を拒否するため、自分の証明書をインポートしてください。変更は次回の接続から有効になります。</string>
-
     <!-- Cluster screen -->
     <string name="car_cluster_video">メーター画面に曲がり角カード</string>
     <string name="car_cluster_video_note">メーターパネルに 2 つ目の画面がある車向け：Gearslip が次の曲がり角をそこに表示します。次回の接続から有効です。</string>
-
     <!-- Connection status on Home -->
     <string name="status_idle">未接続</string>
     <string name="status_idle_detail">車の USB ポートにつなぐか、ワイヤレスで接続してください。車が応答すると Gearslip が自動で開きます。</string>
