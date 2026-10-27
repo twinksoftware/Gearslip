@@ -95,9 +95,9 @@
     <string name="cert_download">Скачать с aasdk</string>
     <string name="cert_downloaded">Загрузили сертификат.</string>
     <string name="cert_download_failed">Скачать не удалось: %1$s</string>
-    <string name="cert_download_sub">Сертификат проекта open-source aasdk публикует на GitHub. Gearslip не включает один</string>
+    <string name="cert_download_sub">Сертификат проекта open-source aasdk публикует на GitHub. Большинство автомобилей принимают его, но некоторые из них примерно с 2020 года отвергают его</string>
     <string name="cert_import">Импортировать свой файл</string>
-    <string name="cert_import_sub">Файл .p12 с его частным ключом, откуда вы выберете</string>
+    <string name="cert_import_sub">Файл .p12 с собственным ключом. Используйте свой собственный, когда ваш автомобиль отвергает сертификат aasdk</string>
     <string name="cert_remove_imported">Удалить импортный сертификат</string>
     <string name="cert_remove_downloaded">Удалить загруженный сертификат</string>
     <string name="guide_voice_ready">Голос готов.</string>
@@ -242,7 +242,7 @@
     <string name="help_aa_off">Выключите Android Auto.</string>
     <string name="help_aa_off_detail">Отключить или удалить приложение Android Auto, поэтому автомобиль вместо этого говорит с Gearslip.</string>
     <string name="help_cert">Загрузите сертификат.</string>
-    <string name="help_cert_detail">В Настройках скачать один или импортировать свой собственный.</string>
+    <string name="help_cert_detail">В Настройках загрузите сертификат aasdk, который большинство автомобилей принимают. Если ваш автомобиль отвергает его, импортируйте свой собственный.</string>
     <string name="help_mic">Разрешите микрофон.</string>
     <string name="help_mic_detail">Android не позволит приложению передавать музыку автомобилю без нее. Gearslip слушается только тогда, когда вы нажимаете микрофон или нажимаете кнопку разговора на колесе.</string>
     <string name="help_plug_in">Включите или подключите беспроводную связь.</string>
@@ -255,7 +255,7 @@
     <string name="help_prompt_detail">Подключите телефон к компьютеру с отладкой USB и запустите его один раз. Снимите его, и вы запускаете его каждый раз, когда вы запускаете.</string>
     <string name="help_readable">Держите уведомления читаемыми.</string>
     <string name="help_readable_detail">Android скрывает то, что говорят уведомления, пока он делится аудио. Запустите это тоже, и Gearslip поднимает это только тогда, когда музыка идет к машине.</string>
-    <string name="help_which_cars_body">Большинство автомобилей работают. Начиная с 2020 года, некоторые автомобили добавили новые стандарты безопасности, которые отвергают сертификат Gearslip, и Gearslip не может работать в этих автомобилях.</string>
+    <string name="help_which_cars_body">Большинство автомобилей принимают сертификат aasdk. Начиная с 2020 года, некоторые автомобили добавили новые проверки безопасности, которые отвергают его, и в этих автомобилях Gearslip нужен собственный сертификат.</string>
     <string name="update_downloaded_ask">Загрузили. Android спрашивает перед установкой.</string>
     <string name="update_install">Установка</string>
     <string name="update_download_now">Загрузи сейчас. Android спрашивает перед установкой.</string>
@@ -298,11 +298,11 @@
     <string name="certsetup_continue">Продолжить</string>
     <string name="certsetup_failed">Скачать не удалось</string>
     <string name="certsetup_retry">Retry</string>
-    <string name="certsetup_import_sub">Файл .p12 с его частным ключом, откуда вы выберете.</string>
+    <string name="certsetup_import_sub">Файл .p12 с собственным ключом. Используйте свой собственный, когда ваш автомобиль отклоняет сертификат aasdk.</string>
     <string name="certsetup_skip">Установка соединения автомобиля</string>
     <string name="certsetup_loaded">Автомобили принимают только сертификаты, выданные Google, и у вас есть один загруженный.</string>
     <string name="certsetup_choose">Автомобили принимают только сертификаты, выданные Google. Gearslip не включает в себя один, поэтому выберите, откуда вы пришли.</string>
-    <string name="certsetup_aasdk_sub">Проект open-source aasdk публикует этот сертификат на github.com/opencardev/aasdk. Большинство автомобилей принимают это; некоторые из них с 2020 года не принимают.</string>
+    <string name="certsetup_aasdk_sub">Проект open-source aasdk публикует этот сертификат на github.com/opencardev/aasdk. Большинство автомобилей принимают это. Некоторые из 2020 года отказываются от него, а затем нужно импортировать свои собственные.</string>
     <string name="storage_title">Хранение ремня</string>
     <string name="storage_measuring">Измерение..</string>
     <string name="storage_lyrics">Лирики</string>
@@ -360,7 +360,7 @@
     <string name="audio_keep_asking">Спросить</string>
     <string name="audio_mic_title">Автомобильный звук нуждается в разрешении микрофона</string>
     <string name="audio_open_settings">Параметры открытого приложения</string>
-    <string name="audio_bt_body">Android рассматривает музыку, отправленную через USB, как обмен вашим экраном, поэтому он спрашивает каждый диск. По Bluetooth он никогда не спрашивает. Вы можете изменить это позже в Настройках.</string>
+    <string name="audio_bt_body">Android обрабатывает музыку, которую Gearslip посылает в автомобиль, как разделяя ваш экран, поэтому он спрашивает каждый диск, через кабель или беспроводную связь. По Bluetooth он никогда не спрашивает. Вы можете изменить это позже в Настройках.</string>
     <string name="audio_keep_usb">Или сохранить USB и остановить вопрос навсегда: подключите телефон к компьютеру с USB-отладкой и запустите его один раз.</string>
     <string name="audio_mic_body">Android позволяет приложению отправлять звук других приложений в автомобиль, только если у него есть разрешение микрофона. Он выключен для Gearslip, так что музыка играет по телефону. Включите его под разрешениями, затем Microphone.</string>
     <string name="typing_close">Закройте клавиатуру автомобиля</string>
@@ -694,4 +694,8 @@
         <item quantity="many">%1$d метров</item>
         <item quantity="other">%1$d метров</item>
     </plurals>
+    <string name="certsetup_installed_hint">Если ваш автомобиль не подключится, он может отклонить этот сертификат. Импортируйте свои собственные в Настройках, по Сертификату.</string>
+    <string name="cert_downloaded_footer">Машина не подключится? Некоторые автомобили примерно с 2020 года отвергают сертификат aasdk, поэтому импортируйте свой собственный. Изменения вступают в силу на следующем подключении.</string>
+    <string name="car_cluster_video">Включите карту на экран кластера</string>
+    <string name="car_cluster_video_note">Для автомобиля со вторым экраном в кластере инструментов: Gearslip показывает следующий поворот. Применяется к следующему подключению.</string>
 </resources>
