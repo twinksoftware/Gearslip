@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="touch_relay_description">Låter Gearslip upprepa tryck från bilens skärm på telefonen under skärmdelning. Gearslip läser inte skärmens innehåll.</string>
-
     <!-- Setup guide -->
     <string name="guide_usage_title">Hjälp andra förare.</string>
     <string name="guide_safety_title">Kör säkert.</string>
@@ -57,8 +56,7 @@
     <string name="guide_open">Öppna</string>
     <string name="guide_next">Nästa</string>
     <string name="guide_done">Klar</string>
-    <string name="guide_back">Tillbaka</string>
-
+    <string name="guide_back">Svart</string>
     <!-- Usage notes -->
     <string name="usage_intro">Slå på detta, så skickar Gearslip en kort anteckning när du öppnar appen och efter varje resa. &lt;b&gt;Anteckningen innehåller inget namn, konto eller plats. Ett slumptal räknar din telefon en gång, och servern sparar ingen IP-adress.&lt;/b&gt; Anteckningarna visar vilka bilar som fungerar och var de andra fallerar.</string>
     <string name="usage_send">Skicka användningsanteckningar</string>
@@ -79,11 +77,10 @@
     <string name="worked_body">Dela det så att nästa förare vet att det fungerar? Inget namn, konto eller plats.</string>
     <string name="worked_not_now">Inte nu</string>
     <string name="worked_share">Dela</string>
-
     <!-- Recommended apps -->
     <string name="recommended_intro">De här gratisapparna körs på Gearslips bilskärm. Varje knapp öppnar appens sida på GitHub.</string>
     <string name="recommended_title">Rekommenderade appar</string>
-    <string name="back">Tillbaka</string>
+    <string name="back">Svart</string>
     <string name="recommended_installed">Installerad</string>
     <string name="recommended_maps">Kartor</string>
     <string name="recommended_music">Musik</string>
@@ -94,7 +91,6 @@
     <string name="recommended_about_ytm">En spelare för YouTube Music.</string>
     <string name="recommended_about_antennapod">Poddar, med kapitel och allt.</string>
     <string name="recommended_about_rfsentinel">Hittar spårare och kameror i närheten.</string>
-
     <!-- Settings -->
     <string name="settings_title">Inställningar</string>
     <string name="settings_whats_new">Nyheter</string>
@@ -102,11 +98,11 @@
     <string name="settings_support">Stöd Gearslip</string>
     <string name="settings_support_footer">Gearslip är gratis, utan reklam och utan spårning. Ditt stöd håller det igång.</string>
     <string name="settings_usage_notes">Användningsanteckningar</string>
-    <string name="settings_updates">Uppdateringar</string>
+    <string name="settings_updates">Uppdatera</string>
     <string name="settings_about">Om</string>
     <string name="settings_replay">Visa installationsguiden igen</string>
     <string name="settings_replay_sub">Gå igenom stegen från första start igen</string>
-    <string name="settings_connection">Anslutning</string>
+    <string name="settings_connection">Ansluter</string>
     <string name="settings_use_in_car">Använd Gearslip i bilen</string>
     <string name="settings_use_in_car_on">Gearslip svarar när du ansluter till en bil</string>
     <string name="settings_use_in_car_off">Av: Android Auto kan ta anslutningen i stället</string>
@@ -126,8 +122,8 @@
     <string name="cert_download_sub">Certifikatet som projektet aasdk, med öppen källkod, publicerar på GitHub. De flesta bilar godtar det, men vissa från omkring 2020 och framåt avvisar det</string>
     <string name="cert_import">Importera min egen fil</string>
     <string name="cert_import_sub">En .p12-fil med sin privata nyckel. Använd din egen när bilen avvisar aasdk-certifikatet</string>
-    <string name="cert_remove_imported">Ta bort importerat certifikat</string>
-    <string name="cert_remove_downloaded">Ta bort nedladdat certifikat</string>
+    <string name="cert_remove_imported">Det importerade certifikatet har tagits bort.</string>
+    <string name="cert_remove_downloaded">Det nedladdade certifikatet har tagits bort.</string>
     <string name="cert_removed_imported">Det importerade certifikatet har tagits bort.</string>
     <string name="cert_removed_downloaded">Det nedladdade certifikatet har tagits bort.</string>
     <string name="cert_imported">Certifikatet har importerats.</string>
@@ -136,7 +132,6 @@
     <string name="cert_password">Lösenord</string>
     <string name="cert_password_hint">Lämna tomt om filen inte har något.</string>
     <string name="cert_import_button">Importera</string>
-
     <!-- Certificate summary -->
     <string name="cancel">Avbryt</string>
     <string name="cert_none">Inget inläst (självsignerat; bilar avvisar det)</string>
@@ -144,7 +139,6 @@
     <string name="cert_kind_downloaded">Nedladdat: %1$s</string>
     <string name="cert_kind_adb">Placerat via adb: %1$s</string>
     <string name="cert_kind_self">Självsignerat: %1$s</string>
-
     <!-- Car settings on the phone -->
     <string name="car_group_screen">Skärm</string>
     <string name="car_group_nav_bar">Navigeringsfält och spelare</string>
@@ -176,13 +170,13 @@
     <string name="summary_bluetooth_audio">Bluetooth-ljud</string>
     <string name="summary_directions_on">Röstvägledning på</string>
     <string name="summary_directions_off">Röstvägledning av</string>
-    <string name="summary_bluetooth_on">Bluetooth på</string>
+    <string name="summary_bluetooth_on">Bluetooth av</string>
     <string name="summary_bluetooth_off">Bluetooth av</string>
-    <string name="summary_location_on">Plats på</string>
+    <string name="summary_location_on">Plats av</string>
     <string name="summary_location_off">Plats av</string>
     <string name="web_page">Webbsida</string>
     <string name="summary_experimental_shown">Experimentella funktioner visas</string>
-    <string name="summary_experimental_hidden">Experimentella funktioner dolda</string>
+    <string name="summary_experimental_hidden">Experimentella funktioner visas</string>
     <string name="home_car">Bil</string>
     <string name="car_group_same">Det här är samma inställningar som Inställningar i bilen. En ändring här syns där också.</string>
     <string name="car_open_on_connect">Öppna vid anslutning</string>
@@ -208,7 +202,7 @@
     <string name="car_phone_speech_note">På de flesta telefoner är det Googles, som kan skicka din röst till Google.</string>
     <string name="car_warn_bluetooth">Varna när Bluetooth inte är anslutet</string>
     <string name="car_warn_location">Varna när platsen är av</string>
-    <string name="car_experimental">Experimentella funktioner</string>
+    <string name="car_experimental">Experimentella funktioner visas</string>
     <string name="car_vehicle_data">Fordonsdata</string>
     <string name="car_vehicle_data_note">Lägger till en ruta Fordonsdata: en live-dump av bilens sensorer. Fältnamnen är gissningar tills du har sett ett av dem ändras.</string>
     <string name="car_adaptive_video">Anpassad videokvalitet</string>
@@ -220,7 +214,6 @@
     <string name="car_audio_usb_sub">Klarare ljud utan fördröjning. Varje resa ber Android dig dela skärmen, vilket låter Gearslip skicka ljudet</string>
     <string name="car_audio_usb_footer">Kör kommandot i Hjälp en gång, så slutar Android fråga.</string>
     <string name="car_audio_bt_footer">Samtal går via Bluetooth i båda fallen.</string>
-
     <!-- Car screen size -->
     <string name="screen_car_size">Bilskärmens storlek</string>
     <string name="screen_use_cars">Använd bilens</string>
@@ -245,10 +238,8 @@
     <string name="screen_width">Bredd</string>
     <string name="screen_height">Höjd</string>
     <string name="save">Spara</string>
-
     <string name="screen_car_size_note">Använd detta om bilden i bilen ser utdragen ut. Ange skärmens riktiga storlek, till exempel 1280x480. Den gäller nästa gång du ansluter.</string>
     <string name="screen_set_by_you">%1$s, inställd av dig</string>
-
     <!-- Help -->
     <string name="help_title">Så ansluter du</string>
     <string name="help_which_cars">Vilka bilar fungerar</string>
@@ -256,7 +247,6 @@
     <string name="help_first_drive">Före din första resa</string>
     <string name="help_in_car">I bilen</string>
     <string name="help_usb_audio">Ljud via Gearslip</string>
-
     <string name="help_aa_off">Stäng av Android Auto.</string>
     <string name="help_aa_off_detail">Inaktivera eller avinstallera Android Auto-appen, så att bilen pratar med Gearslip i stället.</string>
     <string name="help_cert">Läs in ett certifikat.</string>
@@ -274,7 +264,6 @@
     <string name="help_readable">Håll aviseringarna läsbara.</string>
     <string name="help_readable_detail">Android döljer vad aviseringarna säger medan ljud delas. Kör detta också, så häver Gearslip det bara medan musiken går till bilen.</string>
     <string name="help_which_cars_body">De flesta bilar godtar aasdk-certifikatet. Från omkring 2020 lade vissa bilar till nyare säkerhetskontroller som avvisar det, och i de bilarna behöver Gearslip ett eget certifikat från dig.</string>
-
     <!-- Updates -->
     <string name="update_downloaded_ask">Nedladdad. Android frågar innan installationen.</string>
     <string name="update_install">Installera</string>
@@ -287,7 +276,6 @@
     <string name="update_check_now">Kontrollera nu</string>
     <string name="update_check_auto">Kontrollera automatiskt</string>
     <string name="update_once_a_day">En gång om dagen</string>
-
     <string name="update_unplug_first">Koppla från bilen för att installera. Installationen stänger Gearslip.</string>
     <string name="update_card_title">Gearslip %1$s har släppts</string>
     <string name="update_downloading">Laddar ner… %1$d %%</string>
@@ -296,7 +284,6 @@
     <string name="update_version_out">Version %1$s har släppts</string>
     <string name="update_version_ready">Version %1$s är klar att installera</string>
     <string name="update_dialog_status">Version %1$s. %2$s.</string>
-
     <!-- About and support -->
     <string name="about_give_regularly">Ge varje vecka eller månad</string>
     <string name="about_bmac_sub" formatted="false">Ge en gång eller varje månad, med kort. Buy Me a Coffee behåller 5 %</string>
@@ -315,11 +302,9 @@
     <string name="about_source">Källkod</string>
     <string name="about_source_sub">Läs eller ändra Gearslips kod under AGPL</string>
     <string name="about_voice_credits">Tack för rösten</string>
-
     <string name="about_no_wallet">Ingen Monero-plånboksapp hittades. Kopiera adressen i stället.</string>
     <string name="about_monero_copied">Monero-adressen har kopierats</string>
     <string name="about_voice_credits_sub">Taligenkänning med sherpa-onnx (Apache 2.0), med Kroko ASR från Banafo (CC BY-SA 4.0), samt Parakeet och Canary från NVIDIA (CC BY 4.0)</string>
-
     <!-- Certificate setup -->
     <string name="certsetup_title">Certifikatinställning</string>
     <string name="certsetup_installed">Certifikatet är installerat.</string>
@@ -328,11 +313,9 @@
     <string name="certsetup_retry">Försök igen</string>
     <string name="certsetup_import_sub">En .p12-fil med sin privata nyckel. Använd din egen när bilen avvisar aasdk-certifikatet.</string>
     <string name="certsetup_skip">Hoppa över inställning av bilanslutning</string>
-
     <string name="certsetup_loaded">Bilar godtar bara certifikat utfärdade av Google, och du har ett inläst.</string>
     <string name="certsetup_choose">Bilar godtar bara certifikat utfärdade av Google. Gearslip har inget inbyggt, så välj var ditt kommer ifrån.</string>
     <string name="certsetup_aasdk_sub">Projektet aasdk, med öppen källkod, publicerar det här certifikatet på github.com/opencardev/aasdk. De flesta bilar godtar det. Vissa från omkring 2020 och framåt avvisar det, och då behöver du importera ditt eget.</string>
-
     <!-- Storage -->
     <string name="storage_title">Gearslips lagring</string>
     <string name="storage_measuring">Mäter…</string>
@@ -343,7 +326,6 @@
     <string name="storage_logs">Gamla loggar</string>
     <string name="storage_other">Andra tillfälliga filer</string>
     <string name="storage_delete_all">Radera all Gearslip-data</string>
-
     <string name="storage_total">Gearslips data tar %1$s av telefonens lagring.</string>
     <plurals name="storage_lyrics_detail">
         <item quantity="one">%1$d låt · %2$s. Rensade låttexter laddas ner igen när du öppnar dem.</item>
@@ -356,15 +338,12 @@
     <string name="storage_delete_sub">Inställningar, certifikat, röstmodeller, låttexter och loggar.</string>
     <string name="storage_delete">Radera</string>
     <string name="storage_delete_ellipsis">Radera…</string>
-
     <!-- Donate prompt -->
     <string name="donate_title">Kul att resan fungerade</string>
     <string name="donate_liberapay">Stöd på Liberapay</string>
     <string name="donate_bmac">Bjud mig på en kaffe</string>
     <string name="donate_card">Ge en gång med kort</string>
-
     <string name="donate_body">Gearslip är gratis, utan reklam och utan spårning. Om det tar dig ut på vägen håller ditt stöd det igång.</string>
-
     <!-- Wireless -->
     <string name="wireless_needs_permission">Gearslip behöver åtkomst till Bluetooth och wifi i närheten för detta.</string>
     <string name="wireless_enable_permission">Aktivera behörigheten Enheter i närheten</string>
@@ -373,30 +352,25 @@
     <string name="wireless_none_paired">Telefonen är inte parkopplad med något än. Parkoppla den med bilen först.</string>
     <string name="wireless_not_listed">Finns inte bilen med? Parkoppla den med telefonen först.</string>
     <string name="bluetooth_settings">Bluetooth-inställningar</string>
-
     <!-- Voice models -->
     <string name="voice_live_title">Röst: ord i realtid</string>
     <string name="voice_final_title">Röst: slutliga ord</string>
     <string name="voice_none">Ingen</string>
     <string name="voice_none_sub">Behåll orden i realtid. Snabbast, minst exakt</string>
-
     <string name="voice_live_body">Röstassistenten gör om tal till text på den här telefonen, och inget du säger lämnar den. Den behöver två modeller, cirka 270 MB tillsammans, som laddas ner en gång. Den här skriver dina ord medan du pratar.</string>
     <string name="voice_final_body">När du slutar prata läser den här modellen hela frasen igen. Den fångar namn och platser som realtidsmodellen missar.</string>
     <string name="voice_model_size">%1$s · %2$d MB</string>
-    <string name="voice_downloaded">Nedladdad. %1$s</string>
+    <string name="voice_downloaded">Nedladdat: %1$s</string>
     <string name="voice_downloading">Laddar ner, %1$d %%</string>
-
     <!-- Home -->
     <string name="home_help">Hjälp</string>
     <string name="home_preview">Förhandsvisning</string>
     <string name="home_logs">Loggar</string>
     <string name="home_disconnect">Koppla från</string>
     <string name="home_bt_title">Bluetooth är inte anslutet</string>
-
     <string name="home_debug_build">%1$s · felsökningsversion</string>
     <string name="home_bt_body">Musiken spelas via Bluetooth, men telefonen är inte ansluten till bilen. Anslut den här eller från bilens Bluetooth-meny.</string>
     <string name="home_voice_downloading">Laddar ner röst, %1$d %%</string>
-
     <!-- Car audio dialogs -->
     <string name="audio_bt_title">Spela bilens ljud via Bluetooth?</string>
     <string name="audio_never_ask">Fråga aldrig, med en dator</string>
@@ -404,21 +378,17 @@
     <string name="audio_keep_asking">Fortsätt fråga</string>
     <string name="audio_mic_title">Bilens ljud behöver mikrofonbehörigheten</string>
     <string name="audio_open_settings">Öppna appinställningar</string>
-
     <string name="audio_bt_body">Android behandlar musiken som Gearslip skickar till bilen som skärmdelning, så den frågar varje resa, via kabel eller trådlöst. Via Bluetooth frågar den aldrig. Du kan ändra detta senare i Inställningar.</string>
     <string name="audio_keep_usb">Eller låt ljudet gå via Gearslip och slipp frågan för gott: anslut telefonen till en dator med USB-felsökning på och kör detta en gång.</string>
     <string name="audio_mic_body">Android låter en app skicka andra appars ljud till bilen bara om den har mikrofonbehörighet. Den är avstängd för Gearslip, så musiken spelas på telefonen. Slå på den under Behörigheter och sedan Mikrofon.</string>
-
     <!-- Phone keyboard -->
     <string name="typing_close">Stäng bilens tangentbord</string>
     <string name="typing_label">Skriv för bilens skärm</string>
     <string name="typing_search">Sök på bilens skärm</string>
-
     <!-- Copyable command -->
     <string name="command_tap_copy">Tryck för att kopiera</string>
     <string name="command_copied">Kommandot har kopierats</string>
     <string name="whats_new_this_version">%1$s (den här versionen)</string>
-
     <!-- Car settings screen -->
     <string name="carset_theme">Tema</string>
     <string name="carset_imperial">Brittiska (mi, ft, °F)</string>
@@ -445,7 +415,6 @@
     <string name="carset_bottom">Nederst</string>
     <string name="carset_save_vehicle">Spara för det här fordonet</string>
     <string name="carset_no_profile">Ingen fordonsprofil matchade</string>
-
     <string name="carset_audio_note">Via Gearslip skickar telefonens ljud över bilanslutningen, via kabel eller trådlöst. Android ber dig dela skärmen varje resa, och några appar blockerar det. Bluetooth spelar som telefonen normalt gör, och Android frågar aldrig.</string>
     <string name="carset_directions_note">Gearslip läser upp varje sväng i bilens högtalare, och musiken sänks medan den pratar. Stäng av den om kartappens egen röst redan hörs i bilen.</string>
     <string name="carset_phone_speech_note">Lyssnar via telefonens egen taltjänst i stället för Gearslips. På de flesta telefoner är det Googles, som kan skicka din röst till Google. GrapheneOS har ingen, så Gearslip fortsätter med sin egen.</string>
@@ -455,7 +424,6 @@
     <string name="carset_saved_to">Sparat i %1$s</string>
     <string name="carset_save_failed">Kunde inte spara</string>
     <string name="carset_px">%1$dpx</string>
-
     <!-- Car media app -->
     <string name="media_open_on_phone">Öppna på telefonen</string>
     <string name="media_now_playing">Spelas nu</string>
@@ -465,7 +433,6 @@
     <string name="media_looking_lyrics">Letar efter låttext…</string>
     <string name="media_nothing_playing">Inget spelas</string>
     <string name="media_press_play">Tryck på spela för att fortsätta där du slutade, eller hitta något i Bläddra.</string>
-
     <string name="media_keeps_library">%1$s håller sitt bibliotek för sig själv.</string>
     <string name="media_needs_access">Gearslip kan ändå styra den när den har aviseringsåtkomst på telefonen. Tillåt det under Inställningar &gt; Aviseringar &gt; Aviseringsåtkomst.</string>
     <string name="media_not_running">%1$s körs inte.</string>
@@ -483,7 +450,6 @@
     <string name="media_searching_for">Söker efter ”%2$s” i %1$s…</string>
     <string name="media_nothing_playing_dot">Inget spelas.</string>
     <string name="media_no_lyrics">Ingen låttext hittades för det här spåret.</string>
-
     <!-- Car media browsing -->
     <string name="media_up">Upp</string>
     <string name="media_loading">Läser in…</string>
@@ -492,10 +458,8 @@
     <string name="media_nothing_here">Inget här.</string>
     <string name="media_nothing_queued">Inget i kön.</string>
     <string name="media_play">Spela</string>
-
     <string name="media_queue_empty_idle">Inget spelas - alla appar berättar inte för Gearslip vad som kommer härnäst.</string>
     <string name="media_queue_empty_playing">Bara det som redan spelas - alla appar berättar inte för Gearslip vad som kommer härnäst.</string>
-
     <!-- Player controls -->
     <string name="player_previous">Föregående</string>
     <string name="player_next">Nästa</string>
@@ -505,7 +469,6 @@
     <string name="player_like">Gilla</string>
     <string name="player_shuffle_off">Blanda av</string>
     <string name="player_shuffle_on">Blanda på</string>
-
     <!-- Car home -->
     <string name="home_choose_app">Välj en annan app</string>
     <string name="home_no_maps">Inga kartappar hittades.</string>
@@ -513,16 +476,14 @@
     <string name="home_map_stopped">Kartan stoppad</string>
     <string name="home_map_stopped_body">Den förblir stängd tills du öppnar den igen.</string>
     <string name="home_reopen_map">Öppna kartan igen</string>
-    <string name="home_car_apps">Bilappar</string>
+    <string name="home_car_apps">Bilapp</string>
     <string name="home_back_nav">Tillbaka till navigeringsfältet</string>
     <string name="home_show_player">Visa spelaren</string>
     <string name="home_hide_lyrics">Dölj låttext</string>
-
     <string name="home_starting">Startar %1$s…</string>
     <string name="home_starting_map">Startar kartan…</string>
     <string name="home_failed">%1$s ville inte starta.</string>
     <string name="home_failed_map">Kartappen ville inte starta.</string>
-
     <!-- Breadcrumbs -->
     <string name="crumb_home">Hem</string>
     <string name="crumb_media">Media</string>
@@ -530,7 +491,6 @@
     <string name="crumb_dashboard">Instrumentpanel</string>
     <string name="crumb_weather">Väder</string>
     <string name="crumb_reply">Svara</string>
-
     <!-- Built-in apps -->
     <string name="app_browser">Webbläsare</string>
     <string name="app_screen_sharing">Skärmdelning</string>
@@ -542,7 +502,6 @@
     <string name="navapps_move_left">Flytta åt vänster</string>
     <string name="navapps_move_right">Flytta åt höger</string>
     <string name="navapps_reset">Återställ appordningen</string>
-
     <!-- Message popup -->
     <string name="msg_dismiss">Stäng</string>
     <string name="msg_read">Läs upp</string>
@@ -550,7 +509,6 @@
     <string name="msg_no">Nej</string>
     <string name="msg_send_now">Skicka nu</string>
     <string name="msg_type">Skriv</string>
-
     <plurals name="msg_burst">
         <item quantity="one">%1$s · %2$d nytt</item>
         <item quantity="other">%1$s · %2$d nya</item>
@@ -560,12 +518,10 @@
     <string name="msg_sending_to">Skickar till %1$s</string>
     <string name="msg_sent_to">Skickat till %1$s</string>
     <string name="msg_reply_failed">Kunde inte svara</string>
-
     <!-- Bluetooth pairing -->
     <string name="bt_pair_unfinished">Parkopplingen blev inte klar. Parkoppla från bilens Bluetooth-meny i stället.</string>
     <string name="bt_pair_not_started">Parkopplingen startade inte. Parkoppla från bilens Bluetooth-meny i stället.</string>
     <string name="bt_paired">Parkopplad. Samtal hörs nu i bilen.</string>
-
     <!-- Car overlays -->
     <string name="overlay_dont_show">Visa inte igen</string>
     <string name="overlay_ok">OK</string>
@@ -574,12 +530,10 @@
     <string name="overlay_pair">Parkoppla</string>
     <string name="overlay_confirm_title">Bekräfta på telefonen</string>
     <string name="overlay_confirm_body">Kontrollera koden på telefonen och tryck på Parkoppla. Bilen kan också fråga.</string>
-
     <string name="overlay_bt_body">Musiken spelas via Bluetooth, men telefonen är inte ansluten till bilen. Anslut den från bilens eller telefonens Bluetooth-meny.</string>
     <string name="overlay_location_body">Kartappar kan inte visa var du är eller ge vägbeskrivningar. Slå på platsen i telefonens snabbinställningar när du har parkerat.</string>
     <string name="overlay_pair_body_music">Samtal och musik hörs i bilens högtalare när telefonen och bilen är parkopplade. Telefonen ber dig sedan bekräfta en kod.</string>
     <string name="overlay_pair_body">Samtal hörs i bilens högtalare när telefonen och bilen är parkopplade. Telefonen ber dig sedan bekräfta en kod.</string>
-
     <!-- Weather -->
     <string name="weather_waiting_fix">Väntar på platsbestämning.</string>
     <string name="weather_allow_location">Tillåt plats för Gearslip på telefonen för att se vädret.</string>
@@ -595,18 +549,15 @@
     <string name="weather_rain_showers">Regnskurar</string>
     <string name="weather_snow_showers">Snöbyar</string>
     <string name="weather_thunderstorm">Åska</string>
-
     <!-- Weather screen -->
     <string name="weather_getting">Hämtar vädret…</string>
     <string name="weather_next_hours">Kommande timmar</string>
     <string name="weather_this_week">Den här veckan</string>
     <string name="weather_today">I dag</string>
     <string name="weather_credit">Väderdata från Open-Meteo.com (CC BY 4.0)</string>
-
     <string name="weather_feels_like">Känns som %1$s</string>
     <string name="weather_humidity">Luftfuktighet %1$d %%</string>
     <string name="weather_wind">Vind %1$s</string>
-
     <!-- Dashboard -->
     <string name="dash_today">I dag</string>
     <string name="dash_getting_weather">Hämtar väder…</string>
@@ -614,7 +565,6 @@
     <string name="dash_loading_calendar">Läser in kalendern…</string>
     <string name="dash_nothing_week">Inget den kommande veckan.</string>
     <string name="dash_all_day">Heldag</string>
-
     <!-- Phone dialer -->
     <string name="dialer_contacts">Kontakter</string>
     <string name="dialer_keypad">Knappsats</string>
@@ -623,22 +573,18 @@
     <string name="dialer_call">Ring</string>
     <string name="dialer_no_contacts">Inga kontakter med telefonnummer hittades.</string>
     <string name="dialer_search">Sök kontakter</string>
-
     <string name="dialer_needs_permission">Gearslip behöver behörigheterna Telefon och Kontakter för att ringa härifrån. Tillåt dem på telefonen när du har parkerat.</string>
     <string name="dialer_no_match">Inga kontakter matchar ”%1$s”.</string>
     <string name="dialer_call_who">Ringa %1$s?</string>
-
     <!-- Car screen -->
     <string name="carui_exit_fullscreen">Avsluta helskärm</string>
     <string name="carui_drive_safely">Kör säkert</string>
     <string name="carui_understand">Jag förstår</string>
-
     <string name="carui_unofficial">Gearslip är inofficiell programvara: den är inte gjord eller granskad av någon biltillverkare, och den kan sluta fungera utan förvarning.</string>
     <string name="carui_never_interact">Använd aldrig den här skärmen medan du kör. Ställ in rutten eller låten innan du åker och håll sedan uppmärksamheten på vägen.</string>
     <string name="carui_this_app">Den här appen</string>
     <string name="carui_app_unsupported">%1$s fungerar inte med Gearslip än.</string>
     <string name="carui_app_unsupported_body">Den startade inte. Vissa appar körs bara i Googles Android Auto.</string>
-
     <!-- Nav bar -->
     <string name="navbar_on_call">I samtal</string>
     <string name="navbar_end_call">Avsluta samtal</string>
@@ -646,21 +592,18 @@
     <string name="navbar_mute">Stäng av ljudet</string>
     <string name="navbar_close_panel">Stäng sidopanelen</string>
     <string name="navbar_dock_player">Flytta spelaren bredvid kartan</string>
-
     <!-- Browser -->
     <string name="web_search">Sök eller skriv en adress</string>
     <string name="web_forward">Framåt</string>
     <string name="web_reload">Läs in igen</string>
     <string name="web_start_page">Startsida</string>
     <string name="web_fullscreen">Helskärm</string>
-
     <!-- Notifications -->
     <string name="notif_title">Aviseringar</string>
     <string name="notif_clear_all">Rensa alla</string>
     <string name="notif_empty">Inget än. Nya aviseringar från telefonen visas här.</string>
     <string name="notif_off">Aviseringar är av. Tillåt Gearslip under Inställningar &gt; Aviseringar &gt; Aviseringsåtkomst på telefonen.</string>
     <string name="notif_replied">Besvarad</string>
-
     <!-- Messages -->
     <string name="msg_mark_read">Markera som läst</string>
     <string name="msg_messages">Meddelanden</string>
@@ -673,7 +616,6 @@
     <string name="msg_quick">Snabbsvar</string>
     <string name="msg_you">Du: </string>
     <string name="msg_sender">%1$s: </string>
-
     <!-- Car app navigation -->
     <string name="nav_finding_route">Söker rutt…</string>
     <string name="nav_then">Sedan</string>
@@ -682,39 +624,31 @@
     <string name="nav_lane_recommended">Rekommenderat körfält</string>
     <string name="nav_lane">Körfält</string>
     <string name="nav_arrive">Ankomst %1$s</string>
-
     <!-- Car app screens -->
     <string name="template_nothing_playing">Inget spelas än.</string>
     <string name="template_search">Sök</string>
     <string name="template_start">Starta</string>
-
     <!-- Calls -->
     <string name="call_incoming">Inkommande samtal</string>
     <string name="call_decline">Avvisa</string>
     <string name="call_answer">Svara</string>
     <string name="call_ringing">Ringer redan högt - svara här, eller låt det ringa.</string>
-
     <!-- Screen sharing -->
     <string name="phoneapps_touch_off">Tryck är av. Aktivera Gearslip under Inställningar &gt; Tillgänglighet på telefonen.</string>
-
     <!-- What's new in the car -->
     <string name="whatsnew_show_after">Visa efter uppdateringar</string>
     <string name="whatsnew_got_it">Uppfattat</string>
     <string name="whatsnew_title">Nyheter i version %1$s</string>
-
     <!-- Car keyboard -->
     <string name="keyboard_space">mellanslag</string>
     <string name="keyboard_hide">Dölj tangentbordet</string>
     <string name="keyboard_submit">Skicka</string>
-
     <!-- Launcher -->
     <string name="launcher_broken">Fungerar inte med Gearslip</string>
-
     <!-- Car app stage -->
     <string name="stage_car_app">Bilapp</string>
     <string name="stage_close">Stäng %1$s</string>
     <string name="stage_close_app">Stäng appen</string>
-
     <!-- Spoken directions -->
     <string name="dir_slight_left">Sväng svagt vänster</string>
     <string name="dir_slight_left_onto">Sväng svagt vänster in på %1$s</string>
@@ -741,7 +675,7 @@
     <string name="dir_ramp_left_onto">Ta påfarten till vänster in på %1$s</string>
     <string name="dir_ramp_right">Ta påfarten till höger</string>
     <string name="dir_ramp_right_onto">Ta påfarten till höger in på %1$s</string>
-    <string name="dir_exit_left">Ta avfarten till vänster</string>
+    <string name="dir_exit_left">Ta avfarten till höger</string>
     <string name="dir_exit_left_toward">Ta avfarten till vänster mot %1$s</string>
     <string name="dir_exit_right">Ta avfarten till höger</string>
     <string name="dir_exit_right_toward">Ta avfarten till höger mot %1$s</string>
@@ -801,14 +735,11 @@
         <item quantity="one">%1$d meter</item>
         <item quantity="other">%1$d meter</item>
     </plurals>
-
     <string name="certsetup_installed_hint">Om bilen inte ansluter kanske den avvisar det här certifikatet. Importera ditt eget i Inställningar, under Certifikat.</string>
     <string name="cert_downloaded_footer">Ansluter inte bilen? Vissa bilar från omkring 2020 och framåt avvisar aasdk-certifikatet, så importera ditt eget i stället. Ändringar gäller från nästa anslutning.</string>
-
     <!-- Cluster screen -->
     <string name="car_cluster_video">Svängkort på instrumentskärmen</string>
     <string name="car_cluster_video_note">För en bil med en andra skärm i instrumentklustret: Gearslip visar nästa sväng där. Gäller från nästa anslutning.</string>
-
     <!-- Connection status on Home -->
     <string name="status_idle">Inte ansluten</string>
     <string name="status_idle_detail">Anslut till bilens USB-port, eller anslut trådlöst. Gearslip öppnas av sig självt när bilen svarar.</string>
