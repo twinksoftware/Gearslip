@@ -94,7 +94,7 @@
     <string name="home_starting_map">Beginn der Karte..</string>
     <string name="home_failed">%1$s würde nicht starten.</string>
     <string name="home_failed_map">Die Karten-App würde nicht starten.</string>
-    <string name="crumb_home">Home</string>
+    <string name="crumb_home">Zuhause</string>
     <string name="crumb_media">Medien</string>
     <string name="crumb_apps">Apps</string>
     <string name="crumb_dashboard">Das ist das</string>
@@ -142,7 +142,7 @@
     <string name="weather_waiting_fix">Warten auf einen Standort-Reparatur.</string>
     <string name="weather_allow_location">Erlauben Sie Ort für Gearslip am Telefon, um das Wetter zu sehen.</string>
     <string name="weather_unreachable">Könnte nicht den Wetterservice erreichen.</string>
-    <string name="weather_clear">Klar</string>
+    <string name="weather_clear">Löschen</string>
     <string name="weather_mostly_clear">Meist klar</string>
     <string name="weather_partly_cloudy">Teilweise bewölkt</string>
     <string name="weather_overcast">Overcast</string>
@@ -334,7 +334,7 @@
     <string name="guide_calendar_body">Der Auto-Bildschirm zeigt Ihre nächste Veranstaltung. Gearslip liest nur Ihren Kalender.</string>
     <string name="guide_calls_title">Anrufe und Kontakte.</string>
     <string name="guide_calls_body">Das Auto zeigt, wer mit dem Namen anruft, und seine Telefon-App kann eine Nummer wählen oder einen Ihrer Kontakte anrufen. Gearslip liest sie nur.</string>
-    <string name="guide_bluetooth_title">Bluetooth.</string>
+    <string name="guide_bluetooth_title">Bluetooth</string>
     <string name="guide_bluetooth_body">Das erste Mal, wenn Sie einstecken, bietet Gearslip, um Ihr Telefon mit dem Auto zu paaren, so Anrufe spielen durch seine Lautsprecher.</string>
     <string name="guide_notifications_title">Mitteilungen.</string>
     <string name="guide_notifications_body">Während Gearslip angeschlossen ist, zeigt es eine Benachrichtigung mit einer Taste zu stoppen. Ohne diese, Android versteckt es.</string>
@@ -420,7 +420,7 @@
     <string name="settings_about">Über uns</string>
     <string name="settings_replay">Replay der Setupanleitung</string>
     <string name="settings_replay_sub">Durch die ersten Schritte wieder gehen</string>
-    <string name="settings_connection">Verbindung</string>
+    <string name="settings_connection">Verbinden</string>
     <string name="settings_use_in_car">Verwenden Sie Gearslip im Auto</string>
     <string name="settings_use_in_car_on">Gearslip antwortet, wenn Sie in ein Auto stecken</string>
     <string name="settings_use_in_car_off">Off: Android Auto kann die Verbindung statt nehmen</string>
@@ -479,17 +479,17 @@
     <string name="choice_nav_show">Immer anzeigen</string>
     <string name="choice_nav_hide_navigating">Verstecken beim Navigieren</string>
     <string name="choice_nav_hide">Verstecken bis gezapft</string>
-    <string name="choice_open_home">Home</string>
+    <string name="choice_open_home">Zuhause</string>
     <string name="summary_player_left">Player links</string>
     <string name="summary_player_right">Player rechts</string>
     <string name="summary_usb_audio">Audio über Gearslip</string>
     <string name="summary_bluetooth_audio">Bluetooth Audio</string>
-    <string name="summary_directions_on">Anfahrt</string>
+    <string name="summary_directions_on">Ansagen aus</string>
     <string name="summary_directions_off">Ansagen aus</string>
     <string name="summary_bluetooth_on">Bluetooth an</string>
-    <string name="summary_bluetooth_off">Bluetooth ab</string>
+    <string name="summary_bluetooth_off">Bluetooth an</string>
     <string name="summary_location_on">Standort an</string>
-    <string name="summary_location_off">Standort</string>
+    <string name="summary_location_off">Standort an</string>
     <string name="web_page">Seite</string>
     <string name="summary_experimental_shown">Experimentelle Merkmale gezeigt</string>
     <string name="summary_experimental_hidden">Experimentelle Features versteckt</string>
@@ -630,7 +630,7 @@
     <string name="storage_title">Gearslip Aufbewahrung</string>
     <string name="storage_measuring">Messen..</string>
     <string name="storage_lyrics">- Ja</string>
-    <string name="storage_clear">Klar</string>
+    <string name="storage_clear">Löschen</string>
     <string name="storage_voice">Sprachmodelle</string>
     <string name="storage_remove">Entfernen</string>
     <string name="storage_logs">Alte Stämme</string>
@@ -668,7 +668,7 @@
     <string name="home_help">Hilfe</string>
     <string name="home_preview">Voransicht</string>
     <string name="home_logs">Logs</string>
-    <string name="home_disconnect">Trennen</string>
+    <string name="home_disconnect">Getrennt</string>
     <string name="home_bt_title">Bluetooth ist nicht angeschlossen</string>
     <string name="home_debug_build">%1$s · Debug-Build</string>
     <string name="home_bt_body">Musik spielt über Bluetooth, aber Ihr Telefon ist nicht mit dem Auto verbunden. Schließen Sie es hier oder im Bluetooth-Menü des Autos an.</string>
