@@ -115,7 +115,7 @@
     <string name="cert_download">다운로드 aasdk</string>
     <string name="cert_downloaded">인증서 다운로드.</string>
     <string name="cert_download_failed">다운로드 실패: %1$s</string>
-    <string name="cert_download_sub">오픈 소스 aasdk 프로젝트는 GitHub에서 발행합니다. Gearslip는 포함하지 않습니다</string>
+    <string name="cert_download_sub">오픈 소스 aasdk 프로젝트는 GitHub에서 발행합니다. 대부분의 자동차는 그것을 받아 들일 수 있지만 2020 년 주위에는 거부합니다</string>
     <string name="cert_import">내 자신의 파일을 가져 오기</string>
     <string name="cert_import_sub">A .p12 파일과 함께 개인 키, 당신이 선택하는 곳</string>
     <string name="cert_remove_imported">수입된 인증서 제거</string>
