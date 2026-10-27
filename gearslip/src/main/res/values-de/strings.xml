@@ -437,9 +437,9 @@
     <string name="cert_download">Download von aasdk</string>
     <string name="cert_downloaded">Zertifikat heruntergeladen.</string>
     <string name="cert_download_failed">Download versagt: %1$s</string>
-    <string name="cert_download_sub">Das Zertifikat des Open-Source-Aasdk-Projekts veröffentlicht auf GitHub. Gearslip enthält keine</string>
+    <string name="cert_download_sub">Das Zertifikat des Open-Source-Aasdk-Projekts veröffentlicht auf GitHub. Die meisten Autos akzeptieren es, aber einige von etwa 2020, um es abzulehnen</string>
     <string name="cert_import">Importieren Sie meine eigene Datei</string>
-    <string name="cert_import_sub">Eine .p12-Datei mit ihrem privaten Schlüssel, von wo aus Sie wählen</string>
+    <string name="cert_import_sub">Eine .p12-Datei mit ihrem privaten Schlüssel. Nutzen Sie Ihre eigenen, wenn Ihr Auto das aasdk-Zertifikat ablehnt</string>
     <string name="cert_remove_imported">Importiertes Zertifikat entfernen</string>
     <string name="cert_remove_downloaded">Entfernen Sie das heruntergeladene Zertifikat</string>
     <string name="cert_removed_imported">Das importierte Zertifikat wurde entfernt.</string>
@@ -620,7 +620,7 @@
     <string name="certsetup_continue">Fortsetzung</string>
     <string name="certsetup_failed">Fehlersuche herunterladen</string>
     <string name="certsetup_retry">Wiederkehr</string>
-    <string name="certsetup_import_sub">Eine .p12-Datei mit ihrem privaten Schlüssel, von wo aus Sie wählen.</string>
+    <string name="certsetup_import_sub">Eine .p12-Datei mit ihrem privaten Schlüssel. Nutzen Sie Ihre eigenen, wenn Ihr Auto das Aasdk-Zertifikat ablehnt.</string>
     <string name="certsetup_skip">Automatischer Anschluss</string>
     <string name="certsetup_loaded">Autos akzeptieren nur Google-ausgestellte Zertifikate, und Sie haben eine geladen.</string>
     <string name="certsetup_choose">Autos akzeptieren nur Google-ausgestellte Zertifikate. Gearslip enthält keine, also wählen Sie, woher Sie kommen.</string>
