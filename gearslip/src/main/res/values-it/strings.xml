@@ -115,7 +115,7 @@
     <string name="cert_download">Scarica da aasdk</string>
     <string name="cert_downloaded">Certificato scaricato.</string>
     <string name="cert_download_failed">Scarica fallito: %1$s</string>
-    <string name="cert_download_sub">Il certificato del progetto aasdk open source pubblica su GitHub. Gearslip non include uno</string>
+    <string name="cert_download_sub">Il certificato del progetto aasdk open source pubblica su GitHub. La maggior parte delle auto lo accettano, ma alcune da circa il 2020 su rifiutarlo</string>
     <string name="cert_import">Importa il mio file</string>
     <string name="cert_import_sub">Un file .p12 con la sua chiave privata, da dove si sceglie</string>
     <string name="cert_remove_imported">Rimuovere il certificato importato</string>
