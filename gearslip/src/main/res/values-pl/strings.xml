@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="touch_relay_description">Pozwala Gearslip przenosić dotknięcia z ekranu samochodu na telefon podczas udostępniania ekranu. Gearslip nie odczytuje zawartości ekranu.</string>
-
     <!-- Setup guide -->
     <string name="guide_usage_title">Pomóż innym kierowcom.</string>
     <string name="guide_safety_title">Jedź bezpiecznie.</string>
@@ -44,7 +43,7 @@
     <string name="guide_voice_downloading">Pobieranie, %1$d%%. Możesz iść dalej, pobieranie trwa.</string>
     <string name="guide_voice_ready">Głos jest gotowy.</string>
     <string name="guide_voice_failed">Pobieranie się nie zakończyło. Kliknij Pobierz głos, by spróbować ponownie.</string>
-    <string name="guide_audio_bluetooth">Bluetooth</string>
+    <string name="guide_audio_bluetooth">Bluetooth włączony</string>
     <string name="guide_recommended">Zalecane</string>
     <string name="guide_audio_bluetooth_body">Bez pytania przy każdej jeździe, a głos aplikacji z mapami trafia do samochodu.</string>
     <string name="guide_audio_usb">Przez Gearslip</string>
@@ -58,7 +57,6 @@
     <string name="guide_next">Dalej</string>
     <string name="guide_done">Gotowe</string>
     <string name="guide_back">Wstecz</string>
-
     <!-- Usage notes -->
     <string name="usage_intro">Włącz to, a Gearslip wyśle krótką notatkę, gdy go otworzysz, i po każdej jeździe. &lt;b&gt;Notatka nie zawiera imienia, konta ani lokalizacji. Losowa liczba liczy twój telefon raz, a serwer nie przechowuje adresu IP.&lt;/b&gt; Notatki pokazują, które samochody działają, a gdzie inne zawodzą.</string>
     <string name="usage_send">Wysyłaj notatki o użyciu</string>
@@ -79,7 +77,6 @@
     <string name="worked_body">Udostępnić to, żeby następny kierowca wiedział, że działa? Bez imienia, konta i lokalizacji.</string>
     <string name="worked_not_now">Nie teraz</string>
     <string name="worked_share">Udostępnij</string>
-
     <!-- Recommended apps -->
     <string name="recommended_intro">Te darmowe aplikacje działają na ekranie samochodowym Gearslip. Każdy przycisk otwiera stronę aplikacji na GitHubie.</string>
     <string name="recommended_title">Polecane aplikacje</string>
@@ -94,7 +91,6 @@
     <string name="recommended_about_ytm">Odtwarzacz YouTube Music.</string>
     <string name="recommended_about_antennapod">Podcasty, razem z rozdziałami.</string>
     <string name="recommended_about_rfsentinel">Wykrywa lokalizatory i kamery w pobliżu.</string>
-
     <!-- Settings -->
     <string name="settings_title">Ustawienia</string>
     <string name="settings_whats_new">Co nowego</string>
@@ -136,7 +132,6 @@
     <string name="cert_password">Hasło</string>
     <string name="cert_password_hint">Zostaw puste, jeśli plik nie ma hasła.</string>
     <string name="cert_import_button">Importuj</string>
-
     <!-- Certificate summary -->
     <string name="cancel">Anuluj</string>
     <string name="cert_none">Brak (samopodpisany; samochody go odrzucają)</string>
@@ -144,7 +139,6 @@
     <string name="cert_kind_downloaded">Pobrany: %1$s</string>
     <string name="cert_kind_adb">Wgrany przez adb: %1$s</string>
     <string name="cert_kind_self">Samopodpisany: %1$s</string>
-
     <!-- Car settings on the phone -->
     <string name="car_group_screen">Ekran</string>
     <string name="car_group_nav_bar">Pasek nawigacji i odtwarzacz</string>
@@ -157,7 +151,7 @@
     <string name="choice_theme_phone">Jak w telefonie</string>
     <string name="choice_theme_light">Jasny</string>
     <string name="choice_theme_dark">Ciemny</string>
-    <string name="choice_dark_black">Czarny</string>
+    <string name="choice_dark_black">Wstecz</string>
     <string name="choice_dark_black_colour">Czarny z kolorem</string>
     <string name="choice_dark_deep_colour">Głęboki kolor</string>
     <string name="choice_dark_grey">Szary</string>
@@ -220,7 +214,6 @@
     <string name="car_audio_usb_sub">Czystszy dźwięk bez opóźnień. Przy każdej jeździe Android prosi o udostępnienie ekranu, co pozwala Gearslip wysyłać dźwięk</string>
     <string name="car_audio_usb_footer">Uruchom raz polecenie z Pomocy, a Android przestanie pytać.</string>
     <string name="car_audio_bt_footer">Rozmowy i tak idą przez Bluetooth.</string>
-
     <!-- Car screen size -->
     <string name="screen_car_size">Rozmiar ekranu samochodu</string>
     <string name="screen_use_cars">Taki jak w samochodzie</string>
@@ -245,10 +238,8 @@
     <string name="screen_width">Szerokość</string>
     <string name="screen_height">Wysokość</string>
     <string name="save">Zapisz</string>
-
     <string name="screen_car_size_note">Użyj tego, jeśli obraz w samochodzie wygląda na rozciągnięty. Podaj prawdziwy rozmiar ekranu, np. 1280x480. Zadziała przy następnym połączeniu.</string>
     <string name="screen_set_by_you">%1$s, ustawiony przez ciebie</string>
-
     <!-- Help -->
     <string name="help_title">Jak się połączyć</string>
     <string name="help_which_cars">Które samochody działają</string>
@@ -256,7 +247,6 @@
     <string name="help_first_drive">Przed pierwszą jazdą</string>
     <string name="help_in_car">W samochodzie</string>
     <string name="help_usb_audio">Dźwięk przez Gearslip</string>
-
     <string name="help_aa_off">Wyłącz Android Auto.</string>
     <string name="help_aa_off_detail">Wyłącz lub odinstaluj aplikację Android Auto, żeby samochód rozmawiał z Gearslip.</string>
     <string name="help_cert">Wczytaj certyfikat.</string>
@@ -274,7 +264,6 @@
     <string name="help_readable">Zachowaj czytelne powiadomienia.</string>
     <string name="help_readable_detail">Android ukrywa treść powiadomień, gdy udostępnia dźwięk. Uruchom też to, a Gearslip zdejmie tę blokadę tylko wtedy, gdy muzyka idzie do samochodu.</string>
     <string name="help_which_cars_body">Większość samochodów akceptuje certyfikat aasdk. Od około 2020 roku niektóre samochody dostały nowsze zabezpieczenia, które go odrzucają, i w nich Gearslip potrzebuje twojego własnego certyfikatu.</string>
-
     <!-- Updates -->
     <string name="update_downloaded_ask">Pobrano. Android zapyta przed instalacją.</string>
     <string name="update_install">Zainstaluj</string>
@@ -287,7 +276,6 @@
     <string name="update_check_now">Sprawdź teraz</string>
     <string name="update_check_auto">Sprawdzaj automatycznie</string>
     <string name="update_once_a_day">Raz dziennie</string>
-
     <string name="update_unplug_first">Odłącz od samochodu, by zainstalować. Instalacja zamyka Gearslip.</string>
     <string name="update_card_title">Wyszedł Gearslip %1$s</string>
     <string name="update_downloading">Pobieranie… %1$d%%</string>
@@ -296,7 +284,6 @@
     <string name="update_version_out">Wyszła wersja %1$s</string>
     <string name="update_version_ready">Wersja %1$s jest gotowa do instalacji</string>
     <string name="update_dialog_status">Wersja %1$s. %2$s.</string>
-
     <!-- About and support -->
     <string name="about_give_regularly">Wpłacaj co tydzień lub co miesiąc</string>
     <string name="about_bmac_sub" formatted="false">Wpłać raz lub co miesiąc, kartą. Buy Me a Coffee zatrzymuje 5%</string>
@@ -315,11 +302,9 @@
     <string name="about_source">Kod źródłowy</string>
     <string name="about_source_sub">Czytaj lub zmieniaj kod Gearslip na licencji AGPL</string>
     <string name="about_voice_credits">Twórcy rozpoznawania mowy</string>
-
     <string name="about_no_wallet">Nie znaleziono portfela Monero. Skopiuj adres.</string>
     <string name="about_monero_copied">Skopiowano adres Monero</string>
     <string name="about_voice_credits_sub">Rozpoznawanie mowy: sherpa-onnx (Apache 2.0), z Kroko ASR od Banafo (CC BY-SA 4.0) oraz Parakeet i Canary od NVIDIA (CC BY 4.0)</string>
-
     <!-- Certificate setup -->
     <string name="certsetup_title">Konfiguracja certyfikatu</string>
     <string name="certsetup_installed">Certyfikat zainstalowany.</string>
@@ -328,11 +313,9 @@
     <string name="certsetup_retry">Ponów</string>
     <string name="certsetup_import_sub">Plik .p12 z kluczem prywatnym. Użyj własnego, gdy samochód odrzuca certyfikat aasdk.</string>
     <string name="certsetup_skip">Pomiń konfigurację połączenia z samochodem</string>
-
     <string name="certsetup_loaded">Samochody akceptują tylko certyfikaty wydane przez Google, a ty masz jeden wczytany.</string>
     <string name="certsetup_choose">Samochody akceptują tylko certyfikaty wydane przez Google. Gearslip żadnego nie zawiera, więc wybierz, skąd weźmiesz swój.</string>
     <string name="certsetup_aasdk_sub">Otwarty projekt aasdk publikuje ten certyfikat na github.com/opencardev/aasdk. Większość samochodów go akceptuje. Niektóre od około 2020 roku go odrzucają i wtedy trzeba zaimportować własny.</string>
-
     <!-- Storage -->
     <string name="storage_title">Pamięć Gearslip</string>
     <string name="storage_measuring">Mierzenie…</string>
@@ -343,7 +326,6 @@
     <string name="storage_logs">Stare logi</string>
     <string name="storage_other">Inne pliki tymczasowe</string>
     <string name="storage_delete_all">Usuń wszystkie dane Gearslip</string>
-
     <string name="storage_total">Dane Gearslip zajmują %1$s pamięci telefonu.</string>
     <plurals name="storage_lyrics_detail">
         <item quantity="one">%1$d utwór · %2$s. Wyczyszczone teksty pobiorą się ponownie, gdy je otworzysz.</item>
@@ -358,15 +340,12 @@
     <string name="storage_delete_sub">Ustawienia, certyfikaty, modele głosowe, teksty i logi.</string>
     <string name="storage_delete">Usuń</string>
     <string name="storage_delete_ellipsis">Usuń…</string>
-
     <!-- Donate prompt -->
     <string name="donate_title">Cieszę się, że jazda się udała</string>
     <string name="donate_liberapay">Wesprzyj na Liberapay</string>
     <string name="donate_bmac">Postaw mi kawę</string>
     <string name="donate_card">Wpłać raz kartą</string>
-
     <string name="donate_body">Gearslip jest darmowy, bez reklam i bez śledzenia. Jeśli pomaga ci w drodze, twoje wsparcie pozwala mu działać.</string>
-
     <!-- Wireless -->
     <string name="wireless_needs_permission">Do tego Gearslip potrzebuje dostępu do Bluetootha i Wi-Fi w pobliżu.</string>
     <string name="wireless_enable_permission">Włącz uprawnienie Urządzenia w pobliżu</string>
@@ -375,30 +354,25 @@
     <string name="wireless_none_paired">Telefon nie jest jeszcze z niczym sparowany. Najpierw sparuj go z samochodem.</string>
     <string name="wireless_not_listed">Nie ma samochodu na liście? Najpierw sparuj go z telefonem.</string>
     <string name="bluetooth_settings">Ustawienia Bluetooth</string>
-
     <!-- Voice models -->
     <string name="voice_live_title">Głos: słowa na żywo</string>
     <string name="voice_final_title">Głos: słowa końcowe</string>
     <string name="voice_none">Brak</string>
     <string name="voice_none_sub">Zostaw słowa na żywo. Najszybciej, najmniej dokładnie</string>
-
     <string name="voice_live_body">Asystent głosowy zamienia mowę na tekst w tym telefonie i nic, co mówisz, go nie opuszcza. Potrzebuje dwóch modeli, razem około 270 MB, pobranych raz. Ten zapisuje twoje słowa, gdy mówisz.</string>
     <string name="voice_final_body">Gdy przestaniesz mówić, ten model czyta całe zdanie jeszcze raz. Wyłapuje nazwy i miejsca, które gubi model na żywo.</string>
     <string name="voice_model_size">%1$s · %2$d MB</string>
     <string name="voice_downloaded">Pobrano. %1$s</string>
     <string name="voice_downloading">Pobieranie, %1$d%%</string>
-
     <!-- Home -->
     <string name="home_help">Pomoc</string>
     <string name="home_preview">Podgląd</string>
     <string name="home_logs">Logi</string>
     <string name="home_disconnect">Rozłącz</string>
     <string name="home_bt_title">Bluetooth nie jest połączony</string>
-
     <string name="home_debug_build">%1$s · wersja debugowa</string>
     <string name="home_bt_body">Muzyka gra przez Bluetooth, ale telefon nie jest połączony z samochodem. Połącz go tutaj lub w menu Bluetooth samochodu.</string>
     <string name="home_voice_downloading">Pobieranie głosu, %1$d%%</string>
-
     <!-- Car audio dialogs -->
     <string name="audio_bt_title">Odtwarzać dźwięk w samochodzie przez Bluetooth?</string>
     <string name="audio_never_ask">Nigdy nie pytaj, z pomocą komputera</string>
@@ -406,21 +380,17 @@
     <string name="audio_keep_asking">Pytaj dalej</string>
     <string name="audio_mic_title">Dźwięk w samochodzie wymaga uprawnienia do mikrofonu</string>
     <string name="audio_open_settings">Otwórz ustawienia aplikacji</string>
-
     <string name="audio_bt_body">Android traktuje muzykę, którą Gearslip wysyła do samochodu, jak udostępnianie ekranu, więc pyta przy każdej jeździe, przez kabel lub bezprzewodowo. Przez Bluetooth nigdy nie pyta. Możesz to później zmienić w Ustawieniach.</string>
     <string name="audio_keep_usb">Albo zostaw dźwięk przez Gearslip i pozbądź się pytania na dobre: podłącz telefon do komputera z włączonym debugowaniem USB i uruchom to raz.</string>
     <string name="audio_mic_body">Android pozwala aplikacji wysyłać dźwięk innych aplikacji do samochodu tylko wtedy, gdy ma uprawnienie do mikrofonu. Dla Gearslip jest wyłączone, więc muzyka gra w telefonie. Włącz je w Uprawnieniach, potem Mikrofon.</string>
-
     <!-- Phone keyboard -->
     <string name="typing_close">Zamknij klawiaturę samochodu</string>
     <string name="typing_label">Pisz na ekran samochodu</string>
     <string name="typing_search">Szukaj na ekranie samochodu</string>
-
     <!-- Copyable command -->
     <string name="command_tap_copy">Kliknij, by skopiować</string>
     <string name="command_copied">Skopiowano polecenie</string>
     <string name="whats_new_this_version">%1$s (ta wersja)</string>
-
     <!-- Car settings screen -->
     <string name="carset_theme">Motyw</string>
     <string name="carset_imperial">Imperialne (mi, ft, °F)</string>
@@ -447,7 +417,6 @@
     <string name="carset_bottom">Dół</string>
     <string name="carset_save_vehicle">Zapisz dla tego pojazdu</string>
     <string name="carset_no_profile">Brak pasującego profilu pojazdu</string>
-
     <string name="carset_audio_note">Przez Gearslip wysyła dźwięk telefonu przez połączenie z samochodem, kablem lub bezprzewodowo. Android prosi o udostępnienie ekranu przy każdej jeździe, a kilka aplikacji to blokuje. Bluetooth gra tak, jak zwykle gra telefon, a Android nigdy nie pyta.</string>
     <string name="carset_directions_note">Gearslip odczytuje każdy manewr przez głośniki samochodu, a muzyka cichnie, gdy mówi. Wyłącz, jeśli głos twojej aplikacji z mapami już gra w samochodzie.</string>
     <string name="carset_phone_speech_note">Słucha przez usługę mowy telefonu zamiast Gearslip. W większości telefonów to usługa Google, która może wysyłać twój głos do Google. GrapheneOS jej nie ma, więc Gearslip dalej używa własnej.</string>
@@ -457,7 +426,6 @@
     <string name="carset_saved_to">Zapisano w %1$s</string>
     <string name="carset_save_failed">Nie udało się zapisać</string>
     <string name="carset_px">%1$dpx</string>
-
     <!-- Car media app -->
     <string name="media_open_on_phone">Otwórz w telefonie</string>
     <string name="media_now_playing">Teraz gra</string>
@@ -467,7 +435,6 @@
     <string name="media_looking_lyrics">Szukanie tekstu…</string>
     <string name="media_nothing_playing">Nic nie gra</string>
     <string name="media_press_play">Naciśnij odtwarzanie, by wrócić tam, gdzie skończyłeś, albo znajdź coś w Przeglądaj.</string>
-
     <string name="media_keeps_library">%1$s nie udostępnia swojej biblioteki.</string>
     <string name="media_needs_access">Gearslip może nią sterować, gdy ma dostęp do powiadomień w telefonie. Zezwól w Ustawienia &gt; Powiadomienia &gt; Dostęp do powiadomień.</string>
     <string name="media_not_running">%1$s nie jest uruchomiona.</string>
@@ -485,7 +452,6 @@
     <string name="media_searching_for">Szukanie „%2$s” w %1$s…</string>
     <string name="media_nothing_playing_dot">Nic nie gra.</string>
     <string name="media_no_lyrics">Nie znaleziono tekstu tego utworu.</string>
-
     <!-- Car media browsing -->
     <string name="media_up">W górę</string>
     <string name="media_loading">Wczytywanie…</string>
@@ -494,10 +460,8 @@
     <string name="media_nothing_here">Nic tu nie ma.</string>
     <string name="media_nothing_queued">Kolejka jest pusta.</string>
     <string name="media_play">Odtwórz</string>
-
     <string name="media_queue_empty_idle">Nic nie gra - nie każda aplikacja mówi Gearslip, co będzie dalej.</string>
     <string name="media_queue_empty_playing">Tylko to, co już gra - nie każda aplikacja mówi Gearslip, co będzie dalej.</string>
-
     <!-- Player controls -->
     <string name="player_previous">Poprzedni</string>
     <string name="player_next">Następny</string>
@@ -507,7 +471,6 @@
     <string name="player_like">Lubię</string>
     <string name="player_shuffle_off">Losowo wyłączone</string>
     <string name="player_shuffle_on">Losowo włączone</string>
-
     <!-- Car home -->
     <string name="home_choose_app">Wybierz inną aplikację</string>
     <string name="home_no_maps">Nie znaleziono aplikacji z mapami.</string>
@@ -519,12 +482,10 @@
     <string name="home_back_nav">Wróć do paska nawigacji</string>
     <string name="home_show_player">Pokaż odtwarzacz</string>
     <string name="home_hide_lyrics">Ukryj tekst</string>
-
     <string name="home_starting">Uruchamianie %1$s…</string>
     <string name="home_starting_map">Uruchamianie mapy…</string>
     <string name="home_failed">Nie udało się uruchomić %1$s.</string>
     <string name="home_failed_map">Nie udało się uruchomić aplikacji z mapami.</string>
-
     <!-- Breadcrumbs -->
     <string name="crumb_home">Start</string>
     <string name="crumb_media">Multimedia</string>
@@ -532,7 +493,6 @@
     <string name="crumb_dashboard">Pulpit</string>
     <string name="crumb_weather">Pogoda</string>
     <string name="crumb_reply">Odpowiedz</string>
-
     <!-- Built-in apps -->
     <string name="app_browser">Przeglądarka</string>
     <string name="app_screen_sharing">Udostępnianie ekranu</string>
@@ -544,7 +504,6 @@
     <string name="navapps_move_left">Przesuń w lewo</string>
     <string name="navapps_move_right">Przesuń w prawo</string>
     <string name="navapps_reset">Przywróć kolejność aplikacji</string>
-
     <!-- Message popup -->
     <string name="msg_dismiss">Odrzuć</string>
     <string name="msg_read">Przeczytaj</string>
@@ -552,7 +511,6 @@
     <string name="msg_no">Nie</string>
     <string name="msg_send_now">Wyślij teraz</string>
     <string name="msg_type">Napisz</string>
-
     <plurals name="msg_burst">
         <item quantity="one">%1$s · %2$d nowa</item>
         <item quantity="few">%1$s · %2$d nowe</item>
@@ -564,12 +522,10 @@
     <string name="msg_sending_to">Wysyłanie do: %1$s</string>
     <string name="msg_sent_to">Wysłano do: %1$s</string>
     <string name="msg_reply_failed">Nie udało się odpowiedzieć</string>
-
     <!-- Bluetooth pairing -->
     <string name="bt_pair_unfinished">Parowanie się nie zakończyło. Sparuj w menu Bluetooth samochodu.</string>
     <string name="bt_pair_not_started">Parowanie się nie rozpoczęło. Sparuj w menu Bluetooth samochodu.</string>
     <string name="bt_paired">Sparowano. Rozmowy grają teraz w samochodzie.</string>
-
     <!-- Car overlays -->
     <string name="overlay_dont_show">Nie pokazuj ponownie</string>
     <string name="overlay_ok">OK</string>
@@ -578,12 +534,10 @@
     <string name="overlay_pair">Sparuj</string>
     <string name="overlay_confirm_title">Potwierdź w telefonie</string>
     <string name="overlay_confirm_body">Sprawdź kod w telefonie i kliknij Sparuj. Samochód też może zapytać.</string>
-
     <string name="overlay_bt_body">Muzyka gra przez Bluetooth, ale telefon nie jest połączony z samochodem. Połącz go w menu Bluetooth samochodu lub telefonu.</string>
     <string name="overlay_location_body">Aplikacje z mapami nie pokażą, gdzie jesteś, ani nie poprowadzą. Włącz lokalizację w szybkich ustawieniach telefonu, gdy zaparkujesz.</string>
     <string name="overlay_pair_body_music">Rozmowy i muzyka grają z głośników samochodu, gdy telefon i samochód są sparowane. Telefon poprosi wtedy o potwierdzenie kodu.</string>
     <string name="overlay_pair_body">Rozmowy grają z głośników samochodu, gdy telefon i samochód są sparowane. Telefon poprosi wtedy o potwierdzenie kodu.</string>
-
     <!-- Weather -->
     <string name="weather_waiting_fix">Czekanie na ustalenie lokalizacji.</string>
     <string name="weather_allow_location">Zezwól Gearslip na lokalizację w telefonie, by zobaczyć pogodę.</string>
@@ -599,18 +553,15 @@
     <string name="weather_rain_showers">Przelotny deszcz</string>
     <string name="weather_snow_showers">Przelotny śnieg</string>
     <string name="weather_thunderstorm">Burza</string>
-
     <!-- Weather screen -->
     <string name="weather_getting">Pobieranie pogody…</string>
     <string name="weather_next_hours">Najbliższe godziny</string>
     <string name="weather_this_week">Ten tydzień</string>
     <string name="weather_today">Dziś</string>
     <string name="weather_credit">Dane pogodowe z Open-Meteo.com (CC BY 4.0)</string>
-
     <string name="weather_feels_like">Odczuwalna %1$s</string>
     <string name="weather_humidity">Wilgotność %1$d%%</string>
     <string name="weather_wind">Wiatr %1$s</string>
-
     <!-- Dashboard -->
     <string name="dash_today">Dziś</string>
     <string name="dash_getting_weather">Pobieranie pogody…</string>
@@ -618,7 +569,6 @@
     <string name="dash_loading_calendar">Wczytywanie kalendarza…</string>
     <string name="dash_nothing_week">Nic w najbliższym tygodniu.</string>
     <string name="dash_all_day">Cały dzień</string>
-
     <!-- Phone dialer -->
     <string name="dialer_contacts">Kontakty</string>
     <string name="dialer_keypad">Klawiatura</string>
@@ -627,22 +577,18 @@
     <string name="dialer_call">Zadzwoń</string>
     <string name="dialer_no_contacts">Nie znaleziono kontaktów z numerem telefonu.</string>
     <string name="dialer_search">Szukaj kontaktów</string>
-
     <string name="dialer_needs_permission">Gearslip potrzebuje uprawnień Telefon i Kontakty, by dzwonić stąd. Zezwól na nie w telefonie, gdy zaparkujesz.</string>
     <string name="dialer_no_match">Żaden kontakt nie pasuje do „%1$s”.</string>
     <string name="dialer_call_who">Zadzwonić do: %1$s?</string>
-
     <!-- Car screen -->
     <string name="carui_exit_fullscreen">Wyjdź z pełnego ekranu</string>
     <string name="carui_drive_safely">Jedź bezpiecznie</string>
     <string name="carui_understand">Rozumiem</string>
-
     <string name="carui_unofficial">Gearslip to nieoficjalne oprogramowanie: nie stworzył ani nie sprawdził go żaden producent samochodów, a może przestać działać bez ostrzeżenia.</string>
     <string name="carui_never_interact">Nigdy nie obsługuj tego ekranu w czasie jazdy. Ustaw trasę lub utwór przed wyjazdem, a potem skup się na drodze.</string>
     <string name="carui_this_app">Ta aplikacja</string>
     <string name="carui_app_unsupported">%1$s jeszcze nie działa z Gearslip.</string>
     <string name="carui_app_unsupported_body">Nie uruchomiła się. Niektóre aplikacje działają tylko w Android Auto od Google.</string>
-
     <!-- Nav bar -->
     <string name="navbar_on_call">W trakcie rozmowy</string>
     <string name="navbar_end_call">Zakończ rozmowę</string>
@@ -650,21 +596,18 @@
     <string name="navbar_mute">Wycisz</string>
     <string name="navbar_close_panel">Zamknij panel boczny</string>
     <string name="navbar_dock_player">Przenieś odtwarzacz obok mapy</string>
-
     <!-- Browser -->
     <string name="web_search">Szukaj lub wpisz adres</string>
     <string name="web_forward">Dalej</string>
     <string name="web_reload">Odśwież</string>
     <string name="web_start_page">Strona startowa</string>
     <string name="web_fullscreen">Pełny ekran</string>
-
     <!-- Notifications -->
     <string name="notif_title">Powiadomienia</string>
     <string name="notif_clear_all">Wyczyść wszystko</string>
     <string name="notif_empty">Na razie nic. Nowe powiadomienia z telefonu pojawią się tutaj.</string>
     <string name="notif_off">Powiadomienia są wyłączone. Zezwól Gearslip w Ustawienia &gt; Powiadomienia &gt; Dostęp do powiadomień w telefonie.</string>
     <string name="notif_replied">Odpowiedziano</string>
-
     <!-- Messages -->
     <string name="msg_mark_read">Oznacz jako przeczytane</string>
     <string name="msg_messages">Wiadomości</string>
@@ -679,7 +622,6 @@
     <string name="msg_quick">Szybka odpowiedź</string>
     <string name="msg_you">Ty: </string>
     <string name="msg_sender">%1$s: </string>
-
     <!-- Car app navigation -->
     <string name="nav_finding_route">Szukanie trasy…</string>
     <string name="nav_then">Potem</string>
@@ -688,39 +630,31 @@
     <string name="nav_lane_recommended">Zalecany pas</string>
     <string name="nav_lane">Pas</string>
     <string name="nav_arrive">Przyjazd %1$s</string>
-
     <!-- Car app screens -->
     <string name="template_nothing_playing">Jeszcze nic nie gra.</string>
     <string name="template_search">Szukaj</string>
     <string name="template_start">Start</string>
-
     <!-- Calls -->
     <string name="call_incoming">Połączenie przychodzące</string>
     <string name="call_decline">Odrzuć</string>
     <string name="call_answer">Odbierz</string>
     <string name="call_ringing">Już dzwoni na głos - odbierz tutaj albo pozwól dzwonić.</string>
-
     <!-- Screen sharing -->
     <string name="phoneapps_touch_off">Dotyk jest wyłączony. Włącz Gearslip w Ustawienia &gt; Ułatwienia dostępu w telefonie.</string>
-
     <!-- What's new in the car -->
     <string name="whatsnew_show_after">Pokazuj po aktualizacjach</string>
     <string name="whatsnew_got_it">Jasne</string>
     <string name="whatsnew_title">Co nowego w wersji %1$s</string>
-
     <!-- Car keyboard -->
     <string name="keyboard_space">spacja</string>
     <string name="keyboard_hide">Ukryj klawiaturę</string>
     <string name="keyboard_submit">Zatwierdź</string>
-
     <!-- Launcher -->
     <string name="launcher_broken">Nie działa z Gearslip</string>
-
     <!-- Car app stage -->
     <string name="stage_car_app">Aplikacja samochodowa</string>
     <string name="stage_close">Zamknij %1$s</string>
     <string name="stage_close_app">Zamknij aplikację</string>
-
     <!-- Spoken directions -->
     <string name="dir_slight_left">Skręć lekko w lewo</string>
     <string name="dir_slight_left_onto">Skręć lekko w lewo w %1$s</string>
@@ -817,14 +751,11 @@
         <item quantity="many">%1$d metrów</item>
         <item quantity="other">%1$d metra</item>
     </plurals>
-
     <string name="certsetup_installed_hint">Jeśli samochód się nie łączy, może odrzucać ten certyfikat. Zaimportuj własny w Ustawieniach, w sekcji Certyfikat.</string>
     <string name="cert_downloaded_footer">Samochód się nie łączy? Niektóre samochody od około 2020 roku odrzucają certyfikat aasdk, więc zaimportuj własny. Zmiany zadziałają przy następnym połączeniu.</string>
-
     <!-- Cluster screen -->
     <string name="car_cluster_video">Karta manewru na ekranie zegarów</string>
     <string name="car_cluster_video_note">Dla samochodu z drugim ekranem w zestawie wskaźników: Gearslip pokazuje tam następny manewr. Działa od następnego połączenia.</string>
-
     <!-- Connection status on Home -->
     <string name="status_idle">Nie połączono</string>
     <string name="status_idle_detail">Podłącz telefon do portu USB samochodu lub połącz się bezprzewodowo. Gearslip otworzy się sam, gdy samochód odpowie.</string>
