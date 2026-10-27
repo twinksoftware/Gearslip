@@ -95,7 +95,7 @@
     <string name="cert_download">Download</string>
     <string name="cert_downloaded">Certificaat gedownload.</string>
     <string name="cert_download_failed">Download faalde:</string>
-    <string name="cert_download_sub">Het certificaat van het open-source aasdk project publiceert op GitHub. Gearslip bevat geen enkele</string>
+    <string name="cert_download_sub">Het certificaat van het open-source aasdk project publiceert op GitHub. De meeste auto\'s accepteren het, maar sommigen van rond 2020 om het af te wijzen</string>
     <string name="cert_import">Importeer mijn eigen dossier</string>
     <string name="cert_import_sub">Een .p12 dossier met zijn privésleutel, van waar je ook kiest</string>
     <string name="cert_remove_imported">Verwijder de certificaat</string>
