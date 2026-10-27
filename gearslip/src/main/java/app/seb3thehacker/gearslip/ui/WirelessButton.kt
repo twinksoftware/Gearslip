@@ -116,6 +116,21 @@ internal fun WirelessButton() {
                                 }
                                 .padding(vertical = 14.dp),
                         )
+                        // A car the driver once said no to never asks again, so offer the way back here.
+                        if (app.seb3thehacker.gearslip.wireless.WirelessAuto.declinedEarlier(context, device)) {
+                            Text(
+                                stringResource(R.string.wireless_auto_off),
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                            TextButton(
+                                onClick = {
+                                    devices = null
+                                    app.seb3thehacker.gearslip.wireless.WirelessAuto.askAgain(context, device)
+                                },
+                                modifier = Modifier.padding(bottom = 4.dp),
+                            ) { Text(stringResource(R.string.wireless_auto_turn_on)) }
+                        }
                     }
                     // The car has to be paired before it shows up here, and pairing happens in Android's settings.
                     if (list.isNotEmpty()) {

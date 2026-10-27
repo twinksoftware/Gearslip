@@ -371,6 +371,8 @@
     <string name="wireless_which_car">哪辆车？</string>
     <string name="wireless_none_paired">您的手机还没有与任何设备配对。请先与车配对。</string>
     <string name="wireless_not_listed">没有看到您的车？请先将它与手机配对。</string>
+    <string name="wireless_auto_off">不会自动连接</string>
+    <string name="wireless_auto_turn_on">允许自动连接</string>
     <string name="bluetooth_settings">蓝牙设置</string>
 
     <!-- Voice models -->

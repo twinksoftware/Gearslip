@@ -374,6 +374,8 @@
     <string name="wireless_which_car">Który samochód?</string>
     <string name="wireless_none_paired">Telefon nie jest jeszcze z niczym sparowany. Najpierw sparuj go z samochodem.</string>
     <string name="wireless_not_listed">Nie ma samochodu na liście? Najpierw sparuj go z telefonem.</string>
+    <string name="wireless_auto_off">Nie łączy się samo</string>
+    <string name="wireless_auto_turn_on">Pozwól łączyć się samodzielnie</string>
     <string name="bluetooth_settings">Ustawienia Bluetooth</string>
 
     <!-- Voice models -->

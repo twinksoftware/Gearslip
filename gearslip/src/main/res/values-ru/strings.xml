@@ -374,6 +374,8 @@
     <string name="wireless_which_car">Какая машина?</string>
     <string name="wireless_none_paired">Телефон пока ни с чем не связан. Сначала свяжите его с машиной.</string>
     <string name="wireless_not_listed">Машины нет в списке? Сначала свяжите её с телефоном.</string>
+    <string name="wireless_auto_off">Не подключается сам</string>
+    <string name="wireless_auto_turn_on">Разрешить подключаться самому</string>
     <string name="bluetooth_settings">Настройки Bluetooth</string>
 
     <!-- Voice models -->

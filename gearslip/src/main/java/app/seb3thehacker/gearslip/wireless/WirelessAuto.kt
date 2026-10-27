@@ -72,6 +72,20 @@ object WirelessAuto {
         }, Handler(Looper.getMainLooper()))
     }
 
+    /** True when the driver said no to this car connecting by itself, and it still can't. */
+    fun declinedEarlier(context: Context, device: BluetoothDevice): Boolean {
+        val manager = context.getSystemService(CompanionDeviceManager::class.java) ?: return false
+        return !isCompanion(manager, device.address) &&
+            context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getBoolean(device.address, false)
+    }
+
+    /** Forgets the earlier no and shows Android's dialog for [device] again. */
+    fun askAgain(context: Context, device: BluetoothDevice) {
+        log.i("auto-connect: asking again about ${WirelessLink.name(device)}")
+        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().remove(device.address).apply()
+        connectedByHand(context, device)
+    }
+
     /** The driver allowed it in Android's dialog. */
     fun approved(context: Context, address: String) {
         log.i("auto-connect: allowed")

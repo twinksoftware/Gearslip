@@ -372,6 +372,8 @@
     <string name="wireless_which_car">Welke auto?</string>
     <string name="wireless_none_paired">Je telefoon is nog met niets gekoppeld. Koppel hem eerst met de auto.</string>
     <string name="wireless_not_listed">Auto staat er niet bij? Koppel hem eerst met je telefoon.</string>
+    <string name="wireless_auto_off">Maakt niet vanzelf verbinding</string>
+    <string name="wireless_auto_turn_on">Vanzelf verbinding laten maken</string>
     <string name="bluetooth_settings">Bluetooth-instellingen</string>
 
     <!-- Voice models -->

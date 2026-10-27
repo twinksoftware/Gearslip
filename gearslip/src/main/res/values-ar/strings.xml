@@ -376,6 +376,8 @@
     <string name="wireless_which_car">أي سيارة؟</string>
     <string name="wireless_none_paired">هاتفك غير مقترن بأي جهاز بعد. أقرنه بالسيارة أولًا.</string>
     <string name="wireless_not_listed">السيارة غير موجودة في القائمة؟ أقرنها بهاتفك أولًا.</string>
+    <string name="wireless_auto_off">لا يتصل تلقائيًا</string>
+    <string name="wireless_auto_turn_on">اسمح له بالاتصال تلقائيًا</string>
     <string name="bluetooth_settings">إعدادات البلوتوث</string>
 
     <!-- Voice models -->

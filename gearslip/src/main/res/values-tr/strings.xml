@@ -372,6 +372,8 @@
     <string name="wireless_which_car">Hangi araç?</string>
     <string name="wireless_none_paired">Telefonunuz henüz hiçbir şeyle eşlenmedi. Önce araçla eşleyin.</string>
     <string name="wireless_not_listed">Araç listede yok mu? Önce telefonunuzla eşleyin.</string>
+    <string name="wireless_auto_off">Kendiliğinden bağlanmıyor</string>
+    <string name="wireless_auto_turn_on">Kendiliğinden bağlanmasına izin ver</string>
     <string name="bluetooth_settings">Bluetooth ayarları</string>
 
     <!-- Voice models -->

@@ -254,6 +254,8 @@
     <string name="wireless_which_car">¿Qué coche?</string>
     <string name="wireless_none_paired">Tu teléfono no está emparejado con nada todavía. Encima con el coche primero.</string>
     <string name="wireless_not_listed">¿El auto no aparece? Pásala primero con tu teléfono.</string>
+    <string name="wireless_auto_off">No se conecta solo</string>
+    <string name="wireless_auto_turn_on">Dejar que se conecte solo</string>
     <string name="bluetooth_settings">Ajustes Bluetooth</string>
     <string name="voice_live_title">Voz: palabras en vivo</string>
     <string name="voice_final_title">Voz: palabras finales</string>

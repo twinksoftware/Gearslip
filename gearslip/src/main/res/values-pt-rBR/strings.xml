@@ -373,6 +373,8 @@
     <string name="wireless_which_car">Qual carro?</string>
     <string name="wireless_none_paired">Seu celular ainda não está pareado com nada. Pareie com o carro primeiro.</string>
     <string name="wireless_not_listed">O carro não aparece? Pareie com o celular primeiro.</string>
+    <string name="wireless_auto_off">Não se conecta sozinho</string>
+    <string name="wireless_auto_turn_on">Deixar conectar sozinho</string>
     <string name="bluetooth_settings">Configurações de Bluetooth</string>
 
     <!-- Voice models -->

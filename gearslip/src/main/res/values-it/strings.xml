@@ -373,6 +373,8 @@
     <string name="wireless_which_car">Quale auto?</string>
     <string name="wireless_none_paired">Il telefono non è ancora associato a nulla. Associalo prima all’auto.</string>
     <string name="wireless_not_listed">L’auto non è in elenco? Associala prima al telefono.</string>
+    <string name="wireless_auto_off">Non si collega da solo</string>
+    <string name="wireless_auto_turn_on">Lascia che si colleghi da solo</string>
     <string name="bluetooth_settings">Impostazioni Bluetooth</string>
 
     <!-- Voice models -->

@@ -372,6 +372,8 @@
     <string name="wireless_which_car">Vilken bil?</string>
     <string name="wireless_none_paired">Telefonen är inte parkopplad med något än. Parkoppla den med bilen först.</string>
     <string name="wireless_not_listed">Finns inte bilen med? Parkoppla den med telefonen först.</string>
+    <string name="wireless_auto_off">Ansluter inte av sig själv</string>
+    <string name="wireless_auto_turn_on">Låt den ansluta av sig själv</string>
     <string name="bluetooth_settings">Bluetooth-inställningar</string>
 
     <!-- Voice models -->

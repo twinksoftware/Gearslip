@@ -381,6 +381,8 @@
     <string name="wireless_which_car">Which car?</string>
     <string name="wireless_none_paired">Your phone isn\'t paired with anything yet. Pair it with the car first.</string>
     <string name="wireless_not_listed">Car not listed? Pair it with your phone first.</string>
+    <string name="wireless_auto_off">Doesn\'t connect on its own</string>
+    <string name="wireless_auto_turn_on">Let it connect on its own</string>
     <string name="bluetooth_settings">Bluetooth settings</string>
 
     <!-- Voice models -->

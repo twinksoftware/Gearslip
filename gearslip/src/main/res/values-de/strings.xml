@@ -655,6 +655,8 @@
     <string name="wireless_which_car">Welches Auto?</string>
     <string name="wireless_none_paired">Ihr Telefon ist noch nicht mit etwas gepaart. Zuerst mit dem Auto.</string>
     <string name="wireless_not_listed">Auto nicht aufgeführt? Zuerst mit deinem Handy.</string>
+    <string name="wireless_auto_off">Verbindet sich nicht von selbst</string>
+    <string name="wireless_auto_turn_on">Automatisch verbinden lassen</string>
     <string name="bluetooth_settings">Bluetooth-Einstellungen</string>
     <string name="voice_live_title">Sprache: live Wörter</string>
     <string name="voice_final_title">Stimme: letzte Worte</string>

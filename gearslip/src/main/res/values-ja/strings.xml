@@ -371,6 +371,8 @@
     <string name="wireless_which_car">どの車ですか？</string>
     <string name="wireless_none_paired">スマートフォンはまだ何ともペア設定されていません。先に車とペア設定してください。</string>
     <string name="wireless_not_listed">車が表示されない場合は、先にスマートフォンとペア設定してください。</string>
+    <string name="wireless_auto_off">自動では接続しません</string>
+    <string name="wireless_auto_turn_on">自動で接続する</string>
     <string name="bluetooth_settings">Bluetooth の設定</string>
 
     <!-- Voice models -->

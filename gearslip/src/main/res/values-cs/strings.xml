@@ -374,6 +374,8 @@
     <string name="wireless_which_car">Které auto?</string>
     <string name="wireless_none_paired">Telefon zatím není s ničím spárovaný. Nejdřív ho spárujte s autem.</string>
     <string name="wireless_not_listed">Auto v seznamu není? Nejdřív ho spárujte s telefonem.</string>
+    <string name="wireless_auto_off">Nepřipojuje se samo</string>
+    <string name="wireless_auto_turn_on">Povolit automatické připojení</string>
     <string name="bluetooth_settings">Nastavení Bluetooth</string>
 
     <!-- Voice models -->
