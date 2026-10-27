@@ -117,7 +117,7 @@
     <string name="cert_download_failed">다운로드 실패: %1$s</string>
     <string name="cert_download_sub">오픈 소스 aasdk 프로젝트는 GitHub에서 발행합니다. 대부분의 자동차는 그것을 받아 들일 수 있지만 2020 년 주위에는 거부합니다</string>
     <string name="cert_import">내 자신의 파일을 가져 오기</string>
-    <string name="cert_import_sub">A .p12 파일과 함께 개인 키, 당신이 선택하는 곳</string>
+    <string name="cert_import_sub">.p12 파일과 개인 키. 당신의 차가 aasdk 증명서를 거절할 때 당신의 자신의 사용</string>
     <string name="cert_remove_imported">수입된 인증서 제거</string>
     <string name="cert_remove_downloaded">다운로드 된 인증서 제거</string>
     <string name="cert_removed_imported">수입 된 인증서 제거.</string>
@@ -242,7 +242,7 @@
     <string name="help_aa_off">Android Auto를 켜십시오.</string>
     <string name="help_aa_off_detail">Android Auto 앱을 제거하거나 제거할 수 없으므로 대신 Gearslip에 자동차가 이야기합니다.</string>
     <string name="help_cert">인증서를로드합니다.</string>
-    <string name="help_cert_detail">설정에서, 하나를 다운로드하거나 자신을 가져 오기.</string>
+    <string name="help_cert_detail">설정에서 대부분의 차량이 허용하는 aasdk 인증서를 다운로드하십시오. 차를 거부하면, 대신 자신의 수입.</string>
     <string name="help_mic">마이크를 허용한다.</string>
     <string name="help_mic_detail">Android는 앱이 음악을 차에 전달하지 않습니다. Gearslip는 mic을 탭하거나 바퀴에 대화 버튼을 누릅니다.</string>
     <string name="help_plug_in">플러그 인 또는 무선 연결.</string>
@@ -255,7 +255,7 @@
     <string name="help_prompt_detail">USB 디버깅을 가진 컴퓨터에 전화를 연결하고 이것을 한 번 실행하십시오. 그것을 건너 뛰고 당신이 설정 한 때마다 시작을 탭합니다.</string>
     <string name="help_readable">자주 묻는 질문.</string>
     <string name="help_readable_detail">Android는 오디오를 공유하면서 알림이 말하는 것을 숨깁니다. 이 작업을 실행하고 Gearslip는 음악이 차에 간다 동안 들어갑니다.</string>
-    <string name="help_which_cars_body">대부분의 차 일. 2020 년 주위에 시작, 일부 자동차는 Gearslip의 인증서를 거부하는 더 새로운 보안 표준을 추가하고 Gearslip은 그 자동차에서 실행할 수 없습니다.</string>
+    <string name="help_which_cars_body">대부분의 차는 aasdk 증명서를 받아들입니다. 2020 년 주위에 시작, 일부 자동차는 거부하는 더 새로운 보안 검사를 추가, 그리고 그 차 Gearslip 자신의 인증서를 필요로.</string>
     <string name="update_downloaded_ask">다운로드. Android는 설치하기 전에 묻습니다.</string>
     <string name="update_install">설치하기</string>
     <string name="update_download_now">지금 다운로드. Android는 설치하기 전에 묻습니다.</string>
@@ -298,11 +298,11 @@
     <string name="certsetup_continue">계속하기</string>
     <string name="certsetup_failed">다운로드 실패</string>
     <string name="certsetup_retry">이름 *</string>
-    <string name="certsetup_import_sub">.p12 파일과 함께 개인 키, 어디 당신이 선택합니다.</string>
+    <string name="certsetup_import_sub">.p12 파일과 개인 키. 당신의 차가 aasdk 증명서를 거절할 때 당신의 자신의 사용.</string>
     <string name="certsetup_skip">자동차 연결 설정</string>
     <string name="certsetup_loaded">자동차는 Google-issued 인증서만 받아 들이고, 하나의 로드가 있습니다.</string>
     <string name="certsetup_choose">자동차는 Google-issued 인증서만받습니다. Gearslip는 한 가지를 포함하지 않습니다.</string>
-    <string name="certsetup_aasdk_sub">오픈 소스 aasdk 프로젝트는 github.com/opencardev/aasdk에서이 인증서를 발행합니다. 대부분의 자동차는 그것을 받아 들일 수 있습니다. 일부는 2020 년 주변에서하지 않습니다.</string>
+    <string name="certsetup_aasdk_sub">오픈 소스 aasdk 프로젝트는 github.com/opencardev/aasdk에서이 인증서를 발행합니다. 대부분의 차량은 그것을 받아들입니다. 약 2020 년 중 일부는 거부, 그리고 당신은 당신의 자신을 가져올 필요가.</string>
     <string name="storage_title">Gearslip 저장</string>
     <string name="storage_measuring">측정 ..</string>
     <string name="storage_lyrics">인기 카테고리</string>
@@ -358,7 +358,7 @@
     <string name="audio_keep_asking">자주 묻는 질문</string>
     <string name="audio_mic_title">자동차 오디오는 마이크 권한이 필요합니다</string>
     <string name="audio_open_settings">앱 설정 열기</string>
-    <string name="audio_bt_body">Android는 화면을 공유하고 같은 USB를 통해 전송 한 음악을 취급하므로 모든 드라이브를 묻습니다. Bluetooth에 그것은 결코 요구하지 않습니다. 설정에서 나중에 변경할 수 있습니다.</string>
+    <string name="audio_bt_body">Android는 음악 Gearslip가 화면을 공유하고 같은 차에 보냅니다. 그래서 케이블 또는 무선을 통해 모든 드라이브를 요청합니다. Bluetooth에 그것은 결코 요구하지 않습니다. 설정에서 나중에 변경할 수 있습니다.</string>
     <string name="audio_keep_usb">또는 USB를 유지하고 좋은 질문을 중지하십시오 : USB 디버깅을 가진 컴퓨터에 전화를 폐쇄하고 이것을 한 번 실행하십시오.</string>
     <string name="audio_mic_body">Android는 마이크 권한이 있는 경우에만 다른 앱의 사운드를 전송합니다. 그것은 Gearslip를 위해 꺼져있어, 그래서 음악은 전화에서 재생합니다. 권한의 밑에, 그 후에 마이크를 켜십시오.</string>
     <string name="typing_close">자동차 키보드 닫기</string>
@@ -678,4 +678,8 @@
     <plurals name="dir_meters">
         <item quantity="other">%1$d 미터</item>
     </plurals>
+    <string name="certsetup_installed_hint">차를 연결하지 않으면이 인증서를 거부 할 수 있습니다. 설정에서 직접 가져 오기, 인증서 아래.</string>
+    <string name="cert_downloaded_footer">자동차가 연결되지 않습니까? 2020 년 주위에 일부 자동차는 aasdk 인증서를 거부하므로 대신 자신의 수입하십시오. 변화는 다음 연결에 영향을 미칩니다.</string>
+    <string name="car_cluster_video">클러스터 화면에서 카드 설정</string>
+    <string name="car_cluster_video_note">악기 클러스터의 두 번째 화면을 가진 자동차 : Gearslip는 다음 차례를 보여줍니다. 다음 연결에 적용됩니다.</string>
 </resources>
