@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="touch_relay_description">Laat Gearslip aanrakingen op het autoscherm doorgeven aan de telefoon tijdens schermdelen. Gearslip leest de inhoud van het scherm niet.</string>
-
     <!-- Setup guide -->
     <string name="guide_usage_title">Help andere bestuurders.</string>
     <string name="guide_safety_title">Rijd veilig.</string>
@@ -18,7 +17,7 @@
     <string name="guide_bluetooth_body">De eerste keer dat je de kabel insteekt, biedt Gearslip aan je telefoon met de auto te koppelen, zodat gesprekken via de luidsprekers klinken.</string>
     <string name="guide_notifications_title">Meldingen.</string>
     <string name="guide_notifications_body">Zolang Gearslip verbonden is, toont het een melding met een knop om te stoppen. Zonder deze toestemming verbergt Android die.</string>
-    <string name="guide_messages_title">Berichten.</string>
+    <string name="guide_messages_title">Berichten</string>
     <string name="guide_messages_body">De auto toont je berichten, leest ze voor en laat je antwoorden. Zet Gearslip aan in de lijst die nu opent.</string>
     <string name="guide_android_auto_title">Zet Android Auto uit.</string>
     <string name="guide_android_auto_body">Android Auto is nog geïnstalleerd en vecht met Gearslip om de USB-verbinding van de auto. Schakel het uit of verwijder het op het scherm dat nu opent.</string>
@@ -44,7 +43,7 @@
     <string name="guide_voice_downloading">Downloaden, %1$d%%. Je kunt verdergaan; het loopt door.</string>
     <string name="guide_voice_ready">Spraak is klaar.</string>
     <string name="guide_voice_failed">De download is niet afgerond. Tik op Spraak downloaden om het opnieuw te proberen.</string>
-    <string name="guide_audio_bluetooth">Bluetooth</string>
+    <string name="guide_audio_bluetooth">Bluetooth aan</string>
     <string name="guide_recommended">Aanbevolen</string>
     <string name="guide_audio_bluetooth_body">Geen vraag bij elke rit, en de stem van je kaarten-app komt in de auto.</string>
     <string name="guide_audio_usb">Via Gearslip</string>
@@ -58,7 +57,6 @@
     <string name="guide_next">Volgende</string>
     <string name="guide_done">Klaar</string>
     <string name="guide_back">Terug</string>
-
     <!-- Usage notes -->
     <string name="usage_intro">Zet dit aan, en Gearslip stuurt een korte notitie als je het opent en na elke rit. &lt;b&gt;De notitie bevat geen naam, account of locatie. Een willekeurig getal telt je telefoon één keer, en de server bewaart geen IP-adres.&lt;/b&gt; De notities laten zien welke auto\'s werken en waar de andere vastlopen.</string>
     <string name="usage_send">Gebruiksnotities versturen</string>
@@ -75,11 +73,10 @@
     <string name="usage_no_server">Deze build heeft geen statistiekenserver en verstuurt dus niets</string>
     <string name="usage_debug_build">Debugbuild: notities worden apart gehouden en nooit meegeteld</string>
     <string name="worked_title">Gearslip werkte met je %1$s</string>
-    <string name="worked_title_unknown">Gearslip werkte met je auto</string>
+    <string name="worked_title_unknown">Gearslip werkte met je %1$s</string>
     <string name="worked_body">Delen, zodat de volgende bestuurder weet dat het werkt? Geen naam, account of locatie.</string>
     <string name="worked_not_now">Niet nu</string>
     <string name="worked_share">Delen</string>
-
     <!-- Recommended apps -->
     <string name="recommended_intro">Deze gratis apps draaien op het autoscherm van Gearslip. Elke knop opent de pagina van de app op GitHub.</string>
     <string name="recommended_title">Aanbevolen apps</string>
@@ -94,7 +91,6 @@
     <string name="recommended_about_ytm">Een YouTube Music-speler.</string>
     <string name="recommended_about_antennapod">Podcasts, hoofdstukken en al.</string>
     <string name="recommended_about_rfsentinel">Spoort trackers en camera\'s in de buurt op.</string>
-
     <!-- Settings -->
     <string name="settings_title">Instellingen</string>
     <string name="settings_whats_new">Wat is er nieuw</string>
@@ -102,11 +98,11 @@
     <string name="settings_support">Steun Gearslip</string>
     <string name="settings_support_footer">Gearslip is gratis, zonder advertenties en zonder tracking. Jouw steun houdt het draaiende.</string>
     <string name="settings_usage_notes">Gebruiksnotities</string>
-    <string name="settings_updates">Updates</string>
+    <string name="settings_updates">Bijwerken</string>
     <string name="settings_about">Over</string>
     <string name="settings_replay">Installatiegids opnieuw doorlopen</string>
     <string name="settings_replay_sub">De stappen van de eerste start nog eens doen</string>
-    <string name="settings_connection">Verbinding</string>
+    <string name="settings_connection">Verbinden</string>
     <string name="settings_use_in_car">Gearslip in de auto gebruiken</string>
     <string name="settings_use_in_car_on">Gearslip reageert als je de telefoon op een auto aansluit</string>
     <string name="settings_use_in_car_off">Uit: Android Auto kan de verbinding overnemen</string>
@@ -136,7 +132,6 @@
     <string name="cert_password">Wachtwoord</string>
     <string name="cert_password_hint">Laat leeg als het bestand er geen heeft.</string>
     <string name="cert_import_button">Importeren</string>
-
     <!-- Certificate summary -->
     <string name="cancel">Annuleren</string>
     <string name="cert_none">Geen geladen (zelfondertekend; auto\'s weigeren het)</string>
@@ -144,7 +139,6 @@
     <string name="cert_kind_downloaded">Gedownload: %1$s</string>
     <string name="cert_kind_adb">Via adb geplaatst: %1$s</string>
     <string name="cert_kind_self">Zelfondertekend: %1$s</string>
-
     <!-- Car settings on the phone -->
     <string name="car_group_screen">Scherm</string>
     <string name="car_group_nav_bar">Navigatiebalk en speler</string>
@@ -220,7 +214,6 @@
     <string name="car_audio_usb_sub">Helderder geluid zonder vertraging. Bij elke rit vraagt Android je om je scherm te delen, zodat Gearslip het geluid kan sturen</string>
     <string name="car_audio_usb_footer">Voer de opdracht uit Hulp één keer uit, en Android vraagt het niet meer.</string>
     <string name="car_audio_bt_footer">Gesprekken gaan hoe dan ook via Bluetooth.</string>
-
     <!-- Car screen size -->
     <string name="screen_car_size">Grootte van het autoscherm</string>
     <string name="screen_use_cars">Die van de auto</string>
@@ -245,10 +238,8 @@
     <string name="screen_width">Breedte</string>
     <string name="screen_height">Hoogte</string>
     <string name="save">Opslaan</string>
-
     <string name="screen_car_size_note">Gebruik dit als het beeld in de auto uitgerekt lijkt. Voer de echte grootte van het scherm in, zoals 1280x480. Het geldt vanaf de volgende verbinding.</string>
     <string name="screen_set_by_you">%1$s, door jou ingesteld</string>
-
     <!-- Help -->
     <string name="help_title">Zo verbind je</string>
     <string name="help_which_cars">Welke auto\'s werken</string>
@@ -256,7 +247,6 @@
     <string name="help_first_drive">Voor je eerste rit</string>
     <string name="help_in_car">In de auto</string>
     <string name="help_usb_audio">Geluid via Gearslip</string>
-
     <string name="help_aa_off">Zet Android Auto uit.</string>
     <string name="help_aa_off_detail">Schakel de Android Auto-app uit of verwijder hem, zodat de auto met Gearslip praat.</string>
     <string name="help_cert">Laad een certificaat.</string>
@@ -274,7 +264,6 @@
     <string name="help_readable">Houd meldingen leesbaar.</string>
     <string name="help_readable_detail">Android verbergt de tekst van meldingen terwijl het geluid deelt. Voer dit ook uit, en Gearslip heft dat alleen op terwijl de muziek naar de auto gaat.</string>
     <string name="help_which_cars_body">De meeste auto\'s accepteren het aasdk-certificaat. Vanaf ongeveer 2020 kregen sommige auto\'s nieuwere beveiligingscontroles die het weigeren, en in die auto\'s heeft Gearslip een eigen certificaat van je nodig.</string>
-
     <!-- Updates -->
     <string name="update_downloaded_ask">Gedownload. Android vraagt het voordat het installeert.</string>
     <string name="update_install">Installeren</string>
@@ -287,7 +276,6 @@
     <string name="update_check_now">Nu controleren</string>
     <string name="update_check_auto">Automatisch controleren</string>
     <string name="update_once_a_day">Eén keer per dag</string>
-
     <string name="update_unplug_first">Koppel los van de auto om te installeren. Installeren sluit Gearslip.</string>
     <string name="update_card_title">Gearslip %1$s is uit</string>
     <string name="update_downloading">Downloaden… %1$d%%</string>
@@ -296,7 +284,6 @@
     <string name="update_version_out">Versie %1$s is uit</string>
     <string name="update_version_ready">Versie %1$s is klaar om te installeren</string>
     <string name="update_dialog_status">Versie %1$s. %2$s.</string>
-
     <!-- About and support -->
     <string name="about_give_regularly">Geef wekelijks of maandelijks</string>
     <string name="about_bmac_sub" formatted="false">Geef één keer of maandelijks, per kaart. Buy Me a Coffee houdt 5% in</string>
@@ -315,11 +302,9 @@
     <string name="about_source">Broncode</string>
     <string name="about_source_sub">Lees of wijzig de code van Gearslip onder de AGPL</string>
     <string name="about_voice_credits">Spraakcredits</string>
-
     <string name="about_no_wallet">Geen Monero-wallet-app gevonden. Kopieer het adres in plaats daarvan.</string>
     <string name="about_monero_copied">Monero-adres gekopieerd</string>
     <string name="about_voice_credits_sub">Spraakherkenning door sherpa-onnx (Apache 2.0), met Kroko ASR van Banafo (CC BY-SA 4.0), en Parakeet en Canary van NVIDIA (CC BY 4.0)</string>
-
     <!-- Certificate setup -->
     <string name="certsetup_title">Certificaat instellen</string>
     <string name="certsetup_installed">Certificaat geïnstalleerd.</string>
@@ -328,11 +313,9 @@
     <string name="certsetup_retry">Opnieuw</string>
     <string name="certsetup_import_sub">Een .p12-bestand met de privésleutel. Gebruik je eigen bestand als je auto het aasdk-certificaat weigert.</string>
     <string name="certsetup_skip">Instellen van de autoverbinding overslaan</string>
-
     <string name="certsetup_loaded">Auto\'s accepteren alleen door Google uitgegeven certificaten, en je hebt er een geladen.</string>
     <string name="certsetup_choose">Auto\'s accepteren alleen door Google uitgegeven certificaten. Gearslip heeft er geen ingebouwd, dus kies waar het jouwe vandaan komt.</string>
     <string name="certsetup_aasdk_sub">Het opensourceproject aasdk publiceert dit certificaat op github.com/opencardev/aasdk. De meeste auto\'s accepteren het. Sommige vanaf ongeveer 2020 weigeren het, en dan moet je je eigen certificaat importeren.</string>
-
     <!-- Storage -->
     <string name="storage_title">Opslag van Gearslip</string>
     <string name="storage_measuring">Meten…</string>
@@ -343,7 +326,6 @@
     <string name="storage_logs">Oude logs</string>
     <string name="storage_other">Andere tijdelijke bestanden</string>
     <string name="storage_delete_all">Alle gegevens van Gearslip verwijderen</string>
-
     <string name="storage_total">De gegevens van Gearslip nemen %1$s van de opslag van de telefoon in.</string>
     <plurals name="storage_lyrics_detail">
         <item quantity="one">%1$d nummer · %2$s. Gewiste songteksten worden opnieuw gedownload als je ze opent.</item>
@@ -356,15 +338,12 @@
     <string name="storage_delete_sub">Instellingen, certificaten, spraakmodellen, songteksten en logs.</string>
     <string name="storage_delete">Verwijderen</string>
     <string name="storage_delete_ellipsis">Verwijderen…</string>
-
     <!-- Donate prompt -->
     <string name="donate_title">Fijn dat die rit lukte</string>
     <string name="donate_liberapay">Steun via Liberapay</string>
     <string name="donate_bmac">Trakteer me op koffie</string>
     <string name="donate_card">Eén keer geven per kaart</string>
-
     <string name="donate_body">Gearslip is gratis, zonder advertenties en zonder tracking. Brengt het je op weg, dan houdt jouw steun het draaiende.</string>
-
     <!-- Wireless -->
     <string name="wireless_needs_permission">Gearslip heeft hiervoor toegang tot Bluetooth en wifi in de buurt nodig.</string>
     <string name="wireless_enable_permission">Toestemming Apparaten in de buurt aanzetten</string>
@@ -373,30 +352,25 @@
     <string name="wireless_none_paired">Je telefoon is nog met niets gekoppeld. Koppel hem eerst met de auto.</string>
     <string name="wireless_not_listed">Auto staat er niet bij? Koppel hem eerst met je telefoon.</string>
     <string name="bluetooth_settings">Bluetooth-instellingen</string>
-
     <!-- Voice models -->
     <string name="voice_live_title">Spraak: live woorden</string>
     <string name="voice_final_title">Spraak: definitieve woorden</string>
     <string name="voice_none">Geen</string>
     <string name="voice_none_sub">De live woorden houden. Snelst, minst nauwkeurig</string>
-
     <string name="voice_live_body">De spraakassistent zet spraak om in tekst op deze telefoon, en niets wat je zegt verlaat hem. Er zijn twee modellen nodig, samen ongeveer 270 MB, één keer gedownload. Dit model schrijft je woorden terwijl je praat.</string>
     <string name="voice_final_body">Als je stopt met praten, leest dit model de hele zin opnieuw. Het vangt namen en plaatsen op die het livemodel mist.</string>
     <string name="voice_model_size">%1$s · %2$d MB</string>
     <string name="voice_downloaded">Gedownload. %1$s</string>
     <string name="voice_downloading">Downloaden, %1$d%%</string>
-
     <!-- Home -->
     <string name="home_help">Hulp</string>
     <string name="home_preview">Voorvertoning</string>
     <string name="home_logs">Logs</string>
     <string name="home_disconnect">Verbinding verbreken</string>
     <string name="home_bt_title">Bluetooth is niet verbonden</string>
-
     <string name="home_debug_build">%1$s · debugbuild</string>
     <string name="home_bt_body">Muziek speelt via Bluetooth, maar je telefoon is niet met de auto verbonden. Verbind hem hier of via het Bluetooth-menu van de auto.</string>
     <string name="home_voice_downloading">Spraak downloaden, %1$d%%</string>
-
     <!-- Car audio dialogs -->
     <string name="audio_bt_title">Autogeluid via Bluetooth afspelen?</string>
     <string name="audio_never_ask">Nooit vragen, met een computer</string>
@@ -404,21 +378,17 @@
     <string name="audio_keep_asking">Blijven vragen</string>
     <string name="audio_mic_title">Autogeluid heeft de microfoontoestemming nodig</string>
     <string name="audio_open_settings">App-instellingen openen</string>
-
     <string name="audio_bt_body">Android behandelt de muziek die Gearslip naar de auto stuurt als schermdelen, en vraagt het dus bij elke rit, via kabel of draadloos. Via Bluetooth vraagt het nooit. Je kunt dit later wijzigen in Instellingen.</string>
     <string name="audio_keep_usb">Of laat het geluid via Gearslip gaan en stop de vraag voorgoed: sluit de telefoon aan op een computer met USB-foutopsporing aan en voer dit één keer uit.</string>
     <string name="audio_mic_body">Android laat een app alleen het geluid van andere apps naar de auto sturen als die app microfoontoestemming heeft. Die staat uit voor Gearslip, dus speelt de muziek op de telefoon. Zet hem aan onder Rechten en dan Microfoon.</string>
-
     <!-- Phone keyboard -->
     <string name="typing_close">Autotoetsenbord sluiten</string>
     <string name="typing_label">Typ voor het autoscherm</string>
     <string name="typing_search">Zoeken op het autoscherm</string>
-
     <!-- Copyable command -->
     <string name="command_tap_copy">Tik om te kopiëren</string>
     <string name="command_copied">Opdracht gekopieerd</string>
     <string name="whats_new_this_version">%1$s (deze versie)</string>
-
     <!-- Car settings screen -->
     <string name="carset_theme">Thema</string>
     <string name="carset_imperial">Imperiaal (mi, ft, °F)</string>
@@ -445,7 +415,6 @@
     <string name="carset_bottom">Onder</string>
     <string name="carset_save_vehicle">Opslaan voor dit voertuig</string>
     <string name="carset_no_profile">Geen voertuigprofiel gevonden</string>
-
     <string name="carset_audio_note">Via Gearslip stuurt het geluid van de telefoon over de autoverbinding, via kabel of draadloos. Android vraagt bij elke rit om je scherm te delen, en een paar apps blokkeren dat. Bluetooth speelt af zoals de telefoon dat normaal doet, en Android vraagt nooit iets.</string>
     <string name="carset_directions_note">Gearslip leest elke afslag voor via de luidsprekers van de auto, en de muziek gaat zachter terwijl het praat. Zet dit uit als de stem van je kaarten-app al in de auto klinkt.</string>
     <string name="carset_phone_speech_note">Luistert via de spraakdienst van de telefoon in plaats van die van Gearslip. Op de meeste telefoons is dat die van Google, die je stem naar Google kan sturen. GrapheneOS heeft er geen, dus Gearslip blijft zijn eigen gebruiken.</string>
@@ -455,7 +424,6 @@
     <string name="carset_saved_to">Opgeslagen in %1$s</string>
     <string name="carset_save_failed">Opslaan mislukt</string>
     <string name="carset_px">%1$dpx</string>
-
     <!-- Car media app -->
     <string name="media_open_on_phone">Openen op de telefoon</string>
     <string name="media_now_playing">Speelt nu</string>
@@ -465,7 +433,6 @@
     <string name="media_looking_lyrics">Songtekst zoeken…</string>
     <string name="media_nothing_playing">Er speelt niets</string>
     <string name="media_press_play">Druk op afspelen om verder te gaan waar je was, of zoek iets in Bladeren.</string>
-
     <string name="media_keeps_library">%1$s houdt zijn bibliotheek voor zichzelf.</string>
     <string name="media_needs_access">Gearslip kan het toch bedienen zodra het meldingstoegang heeft op de telefoon. Sta dat toe onder Instellingen &gt; Meldingen &gt; Meldingstoegang.</string>
     <string name="media_not_running">%1$s draait niet.</string>
@@ -483,7 +450,6 @@
     <string name="media_searching_for">In %1$s zoeken naar “%2$s”…</string>
     <string name="media_nothing_playing_dot">Er speelt niets.</string>
     <string name="media_no_lyrics">Geen songtekst gevonden voor dit nummer.</string>
-
     <!-- Car media browsing -->
     <string name="media_up">Omhoog</string>
     <string name="media_loading">Laden…</string>
@@ -492,10 +458,8 @@
     <string name="media_nothing_here">Niets hier.</string>
     <string name="media_nothing_queued">Niets in de wachtrij.</string>
     <string name="media_play">Afspelen</string>
-
     <string name="media_queue_empty_idle">Er speelt niets - niet elke app vertelt Gearslip wat er hierna komt.</string>
     <string name="media_queue_empty_playing">Alleen wat al speelt - niet elke app vertelt Gearslip wat er hierna komt.</string>
-
     <!-- Player controls -->
     <string name="player_previous">Vorige</string>
     <string name="player_next">Volgende</string>
@@ -505,7 +469,6 @@
     <string name="player_like">Leuk</string>
     <string name="player_shuffle_off">Shuffle uit</string>
     <string name="player_shuffle_on">Shuffle aan</string>
-
     <!-- Car home -->
     <string name="home_choose_app">Andere app kiezen</string>
     <string name="home_no_maps">Geen kaarten-apps gevonden.</string>
@@ -517,12 +480,10 @@
     <string name="home_back_nav">Terug naar de navigatiebalk</string>
     <string name="home_show_player">Speler tonen</string>
     <string name="home_hide_lyrics">Songtekst verbergen</string>
-
     <string name="home_starting">%1$s starten…</string>
     <string name="home_starting_map">De kaart starten…</string>
     <string name="home_failed">%1$s wilde niet starten.</string>
     <string name="home_failed_map">De kaarten-app wilde niet starten.</string>
-
     <!-- Breadcrumbs -->
     <string name="crumb_home">Start</string>
     <string name="crumb_media">Media</string>
@@ -530,9 +491,8 @@
     <string name="crumb_dashboard">Dashboard</string>
     <string name="crumb_weather">Weer</string>
     <string name="crumb_reply">Antwoorden</string>
-
     <!-- Built-in apps -->
-    <string name="app_browser">Browser</string>
+    <string name="app_browser">Bladeren</string>
     <string name="app_screen_sharing">Scherm delen</string>
     <string name="app_exit">Afsluiten</string>
     <string name="navapps_unpin">Losmaken van navigatiebalk</string>
@@ -542,7 +502,6 @@
     <string name="navapps_move_left">Naar links</string>
     <string name="navapps_move_right">Naar rechts</string>
     <string name="navapps_reset">Volgorde van apps herstellen</string>
-
     <!-- Message popup -->
     <string name="msg_dismiss">Sluiten</string>
     <string name="msg_read">Voorlezen</string>
@@ -550,7 +509,6 @@
     <string name="msg_no">Nee</string>
     <string name="msg_send_now">Nu versturen</string>
     <string name="msg_type">Typen</string>
-
     <plurals name="msg_burst">
         <item quantity="one">%1$s · %2$d nieuw</item>
         <item quantity="other">%1$s · %2$d nieuw</item>
@@ -560,12 +518,10 @@
     <string name="msg_sending_to">Versturen naar %1$s</string>
     <string name="msg_sent_to">Verstuurd naar %1$s</string>
     <string name="msg_reply_failed">Antwoorden mislukt</string>
-
     <!-- Bluetooth pairing -->
     <string name="bt_pair_unfinished">Koppelen is niet afgerond. Koppel in plaats daarvan via het Bluetooth-menu van de auto.</string>
     <string name="bt_pair_not_started">Koppelen is niet gestart. Koppel in plaats daarvan via het Bluetooth-menu van de auto.</string>
     <string name="bt_paired">Gekoppeld. Gesprekken klinken nu via de auto.</string>
-
     <!-- Car overlays -->
     <string name="overlay_dont_show">Niet meer tonen</string>
     <string name="overlay_ok">OK</string>
@@ -574,12 +530,10 @@
     <string name="overlay_pair">Koppelen</string>
     <string name="overlay_confirm_title">Bevestig op je telefoon</string>
     <string name="overlay_confirm_body">Controleer de code op je telefoon en tik op Koppelen. De auto kan het ook vragen.</string>
-
     <string name="overlay_bt_body">Muziek speelt via Bluetooth, maar je telefoon is niet met de auto verbonden. Verbind hem via het Bluetooth-menu van de auto of van je telefoon.</string>
     <string name="overlay_location_body">Kaarten-apps kunnen niet tonen waar je bent of de weg wijzen. Zet locatie aan in de snelle instellingen van je telefoon als je geparkeerd staat.</string>
     <string name="overlay_pair_body_music">Gesprekken en muziek klinken via de luidsprekers van de auto zodra je telefoon en de auto gekoppeld zijn. Je telefoon vraagt je daarna een code te bevestigen.</string>
     <string name="overlay_pair_body">Gesprekken klinken via de luidsprekers van de auto zodra je telefoon en de auto gekoppeld zijn. Je telefoon vraagt je daarna een code te bevestigen.</string>
-
     <!-- Weather -->
     <string name="weather_waiting_fix">Wachten op een locatiebepaling.</string>
     <string name="weather_allow_location">Sta locatie toe voor Gearslip op de telefoon om het weer te zien.</string>
@@ -595,18 +549,15 @@
     <string name="weather_rain_showers">Regenbuien</string>
     <string name="weather_snow_showers">Sneeuwbuien</string>
     <string name="weather_thunderstorm">Onweer</string>
-
     <!-- Weather screen -->
     <string name="weather_getting">Weer ophalen…</string>
     <string name="weather_next_hours">Komende uren</string>
     <string name="weather_this_week">Deze week</string>
     <string name="weather_today">Vandaag</string>
     <string name="weather_credit">Weergegevens van Open-Meteo.com (CC BY 4.0)</string>
-
     <string name="weather_feels_like">Voelt als %1$s</string>
     <string name="weather_humidity">Luchtvochtigheid %1$d%%</string>
     <string name="weather_wind">Wind %1$s</string>
-
     <!-- Dashboard -->
     <string name="dash_today">Vandaag</string>
     <string name="dash_getting_weather">Weer ophalen…</string>
@@ -614,7 +565,6 @@
     <string name="dash_loading_calendar">Agenda laden…</string>
     <string name="dash_nothing_week">Niets in de komende week.</string>
     <string name="dash_all_day">Hele dag</string>
-
     <!-- Phone dialer -->
     <string name="dialer_contacts">Contacten</string>
     <string name="dialer_keypad">Toetsenblok</string>
@@ -623,22 +573,18 @@
     <string name="dialer_call">Bellen</string>
     <string name="dialer_no_contacts">Geen contacten met een telefoonnummer gevonden.</string>
     <string name="dialer_search">Contacten zoeken</string>
-
     <string name="dialer_needs_permission">Gearslip heeft de rechten Telefoon en Contacten nodig om vanaf hier te bellen. Sta ze toe op de telefoon als je geparkeerd staat.</string>
     <string name="dialer_no_match">Geen contacten komen overeen met “%1$s”.</string>
     <string name="dialer_call_who">%1$s bellen?</string>
-
     <!-- Car screen -->
     <string name="carui_exit_fullscreen">Volledig scherm sluiten</string>
     <string name="carui_drive_safely">Rijd veilig</string>
     <string name="carui_understand">Ik begrijp het</string>
-
     <string name="carui_unofficial">Gearslip is onofficiële software: het is niet gemaakt of gecontroleerd door een autofabrikant, en het kan zonder waarschuwing uitvallen.</string>
     <string name="carui_never_interact">Bedien dit scherm nooit tijdens het rijden. Stel de route of het nummer in voor je vertrekt en houd daarna je aandacht op de weg.</string>
     <string name="carui_this_app">Deze app</string>
     <string name="carui_app_unsupported">%1$s werkt nog niet met Gearslip.</string>
     <string name="carui_app_unsupported_body">De app startte niet. Sommige apps werken alleen in Android Auto van Google.</string>
-
     <!-- Nav bar -->
     <string name="navbar_on_call">In gesprek</string>
     <string name="navbar_end_call">Gesprek beëindigen</string>
@@ -646,21 +592,18 @@
     <string name="navbar_mute">Dempen</string>
     <string name="navbar_close_panel">Zijpaneel sluiten</string>
     <string name="navbar_dock_player">Speler naast de kaart zetten</string>
-
     <!-- Browser -->
     <string name="web_search">Zoek of typ een adres</string>
     <string name="web_forward">Vooruit</string>
     <string name="web_reload">Opnieuw laden</string>
     <string name="web_start_page">Startpagina</string>
     <string name="web_fullscreen">Volledig scherm</string>
-
     <!-- Notifications -->
     <string name="notif_title">Meldingen</string>
     <string name="notif_clear_all">Alles wissen</string>
     <string name="notif_empty">Nog niets. Nieuwe meldingen van de telefoon verschijnen hier.</string>
     <string name="notif_off">Meldingen staan uit. Sta Gearslip toe onder Instellingen &gt; Meldingen &gt; Meldingstoegang op de telefoon.</string>
     <string name="notif_replied">Beantwoord</string>
-
     <!-- Messages -->
     <string name="msg_mark_read">Markeren als gelezen</string>
     <string name="msg_messages">Berichten</string>
@@ -673,7 +616,6 @@
     <string name="msg_quick">Snel antwoord</string>
     <string name="msg_you">Jij: </string>
     <string name="msg_sender">%1$s: </string>
-
     <!-- Car app navigation -->
     <string name="nav_finding_route">Route zoeken…</string>
     <string name="nav_then">Daarna</string>
@@ -682,39 +624,31 @@
     <string name="nav_lane_recommended">Aanbevolen rijstrook</string>
     <string name="nav_lane">Rijstrook</string>
     <string name="nav_arrive">Aankomst %1$s</string>
-
     <!-- Car app screens -->
     <string name="template_nothing_playing">Er speelt nog niets.</string>
     <string name="template_search">Zoeken</string>
     <string name="template_start">Starten</string>
-
     <!-- Calls -->
     <string name="call_incoming">Inkomend gesprek</string>
     <string name="call_decline">Weigeren</string>
     <string name="call_answer">Opnemen</string>
     <string name="call_ringing">Gaat al hardop over - neem hier op of laat hem overgaan.</string>
-
     <!-- Screen sharing -->
     <string name="phoneapps_touch_off">Aanraken staat uit. Zet Gearslip aan onder Instellingen &gt; Toegankelijkheid op de telefoon.</string>
-
     <!-- What's new in the car -->
     <string name="whatsnew_show_after">Tonen na updates</string>
     <string name="whatsnew_got_it">Begrepen</string>
     <string name="whatsnew_title">Nieuw in versie %1$s</string>
-
     <!-- Car keyboard -->
     <string name="keyboard_space">spatie</string>
     <string name="keyboard_hide">Toetsenbord verbergen</string>
     <string name="keyboard_submit">Verzenden</string>
-
     <!-- Launcher -->
     <string name="launcher_broken">Werkt niet met Gearslip</string>
-
     <!-- Car app stage -->
     <string name="stage_car_app">Auto-app</string>
     <string name="stage_close">%1$s sluiten</string>
     <string name="stage_close_app">De app sluiten</string>
-
     <!-- Spoken directions -->
     <string name="dir_slight_left">Flauwe bocht naar links</string>
     <string name="dir_slight_left_onto">Flauwe bocht naar links, de %1$s op</string>
@@ -801,14 +735,11 @@
         <item quantity="one">%1$d meter</item>
         <item quantity="other">%1$d meter</item>
     </plurals>
-
     <string name="certsetup_installed_hint">Verbindt je auto niet, dan weigert hij misschien dit certificaat. Importeer je eigen certificaat in Instellingen, onder Certificaat.</string>
     <string name="cert_downloaded_footer">Verbindt de auto niet? Sommige auto\'s vanaf ongeveer 2020 weigeren het aasdk-certificaat, dus importeer dan je eigen. Wijzigingen gelden vanaf de volgende verbinding.</string>
-
     <!-- Cluster screen -->
     <string name="car_cluster_video">Afslagkaart op het instrumentenpaneel</string>
     <string name="car_cluster_video_note">Voor een auto met een tweede scherm in het instrumentenpaneel: Gearslip toont daar de volgende afslag. Geldt vanaf de volgende verbinding.</string>
-
     <!-- Connection status on Home -->
     <string name="status_idle">Niet verbonden</string>
     <string name="status_idle_detail">Sluit aan op de USB-poort van de auto, of verbind draadloos. Gearslip opent vanzelf als de auto antwoordt.</string>
