@@ -95,9 +95,9 @@
     <string name="cert_download">Téléchargement de aasdk</string>
     <string name="cert_downloaded">Certificat téléchargé.</string>
     <string name="cert_download_failed">Téléchargement échoué : %1$s</string>
-    <string name="cert_download_sub">Le certificat du projet open-source aasdk publie sur GitHub. Gearslip n\'inclut pas un</string>
+    <string name="cert_download_sub">Le certificat du projet open-source aasdk publie sur GitHub. La plupart des voitures l\'acceptent, mais certains d\'environ 2020 sur le rejet</string>
     <string name="cert_import">Importer mon propre fichier</string>
-    <string name="cert_import_sub">Un fichier .p12 avec sa clé privée, de là où vous choisissez</string>
+    <string name="cert_import_sub">Un fichier .p12 avec sa clé privée. Utilisez votre propre lorsque votre voiture rejette le certificat d\'asdk</string>
     <string name="cert_remove_imported">Supprimer le certificat importé</string>
     <string name="cert_remove_downloaded">Supprimer le certificat téléchargé</string>
     <string name="cert_removed_imported">Enlevé le certificat importé.</string>
@@ -222,7 +222,7 @@
     <string name="help_aa_off">Éteins Android Auto.</string>
     <string name="help_aa_off_detail">Désactiver ou désinstaller l\'application Android Auto, donc la voiture parle à Gearslip à la place.</string>
     <string name="help_cert">Chargez un certificat.</string>
-    <string name="help_cert_detail">Dans Paramètres, téléchargez un ou importez le vôtre.</string>
+    <string name="help_cert_detail">Dans Réglages, téléchargez le certificat aasdk, que la plupart des voitures acceptent. Si votre voiture le rejette, importez le vôtre à la place.</string>
     <string name="help_mic">Laissez le micro.</string>
     <string name="help_mic_detail">Android ne laissera pas une application passer de la musique à la voiture sans elle. Gearslip n\'écoute que lorsque vous appuyez sur le micro ou appuyez sur le bouton de discussion sur votre roue.</string>
     <string name="help_plug_in">Branchez ou connectez sans fil.</string>
@@ -235,7 +235,7 @@
     <string name="help_prompt_detail">Connectez le téléphone à un ordinateur avec le débogage USB sur, et exécutez cette fois. Sachez-le et appuyez sur Démarrer chaque fois que vous démarrez.</string>
     <string name="help_readable">Gardez les notifications lisibles.</string>
     <string name="help_readable_detail">Android cache ce que les notifications disent pendant qu\'il partage l\'audio. Courez aussi, et Gearslip soulève que seulement pendant que la musique va à la voiture.</string>
-    <string name="help_which_cars_body">La plupart des voitures fonctionnent. À partir de 2020, certaines voitures ont ajouté de nouvelles normes de sécurité qui rejettent le certificat de Gearslip, et Gearslip ne peut pas fonctionner dans ces voitures.</string>
+    <string name="help_which_cars_body">La plupart des voitures acceptent le certificat aasdk. À partir de 2020, certaines voitures ont ajouté de nouveaux contrôles de sécurité qui le rejettent, et dans ces voitures Gearslip a besoin d\'un certificat de votre propre.</string>
     <string name="update_downloaded_ask">Téléchargé. Android demande avant qu\'il installe.</string>
     <string name="update_install">Installez</string>
     <string name="update_download_now">Téléchargez-le. Android demande avant qu\'il installe.</string>
@@ -278,11 +278,11 @@
     <string name="certsetup_continue">Continuer</string>
     <string name="certsetup_failed">Télécharger échoué</string>
     <string name="certsetup_retry">Retry</string>
-    <string name="certsetup_import_sub">Un fichier .p12 avec sa clé privée, de partout où vous choisissez.</string>
+    <string name="certsetup_import_sub">Un fichier .p12 avec sa clé privée. Utilisez votre propre lorsque votre voiture rejette le certificat d\'asdk.</string>
     <string name="certsetup_skip">Installation de connexion de voiture Skip</string>
     <string name="certsetup_loaded">Les voitures n\'acceptent que les certificats émis par Google, et vous en avez un chargé.</string>
     <string name="certsetup_choose">Les voitures n\'acceptent que les certificats émis par Google. Gearslip n\'inclut pas un, alors choisissez d\'où vient le vôtre.</string>
-    <string name="certsetup_aasdk_sub">Le projet open-source aasdk publie ce certificat sur github.com/opencardev/aasdk. La plupart des voitures l\'acceptent; certains d\'environ 2020 sur ne le font pas.</string>
+    <string name="certsetup_aasdk_sub">Le projet open-source aasdk publie ce certificat sur github.com/opencardev/aasdk. La plupart des voitures l\'acceptent. Certains d\'environ 2020 sur le rejet, et puis vous devez importer votre propre.</string>
     <string name="storage_title">Stockage de rapports</string>
     <string name="storage_measuring">Mesurer..</string>
     <string name="storage_lyrics">Lyrics</string>
@@ -339,7 +339,7 @@
     <string name="audio_keep_asking">Continuez à demander</string>
     <string name="audio_mic_title">L\'audio de voiture a besoin de la permission du microphone</string>
     <string name="audio_open_settings">Ouvrez les paramètres de l\'application</string>
-    <string name="audio_bt_body">Android traite la musique envoyée sur USB comme le partage de votre écran, donc il demande chaque disque. Sur Bluetooth, il ne demande jamais. Vous pouvez changer ça plus tard dans Settings.</string>
+    <string name="audio_bt_body">Android traite la musique Gearslip envoie à la voiture comme partager votre écran, donc il demande chaque lecteur, sur un câble ou sans fil. Sur Bluetooth, il ne demande jamais. Vous pouvez changer ça plus tard dans Settings.</string>
     <string name="audio_keep_usb">Ou garder USB et arrêter la question pour de bon: brancher le téléphone dans un ordinateur avec le débogage USB sur, et exécuter cette fois.</string>
     <string name="audio_mic_body">Android laisse une application envoyer le son d\'autres applications à la voiture seulement si elle a la permission du microphone. Il est éteint pour Gearslip, donc la musique joue au téléphone. Allumez-le sous Permissions, puis Microphone.</string>
     <string name="typing_close">Fermez le clavier de la voiture</string>
@@ -686,4 +686,8 @@
     <string name="guide_download_voice">Télécharger la voix</string>
     <string name="guide_set_up">Montez</string>
     <string name="guide_voice_downloading">Téléchargement, %1$d%%. Vous pouvez continuer; il continue.</string>
+    <string name="certsetup_installed_hint">Si votre voiture ne se connecte pas, il peut rejeter ce certificat. Importez votre propre dans Réglages, sous Certificat.</string>
+    <string name="cert_downloaded_footer">La voiture ne se connectera pas ? Certaines voitures d\'environ 2020 sur le rejet du certificat d\'aasdk, donc importer votre propre à la place. Les changements prennent effet sur la prochaine connexion.</string>
+    <string name="car_cluster_video">Tournez la carte sur l\'écran du cluster</string>
+    <string name="car_cluster_video_note">Pour une voiture avec un deuxième écran dans le cluster de l\'instrument: Gearslip montre le tour suivant là. S\'applique sur la prochaine connexion.</string>
 </resources>
