@@ -111,7 +111,7 @@
     <string name="cancel">Annuler</string>
     <string name="cert_none">Aucun chargé (autosigné; les voitures le rejettent)</string>
     <string name="cert_kind_imported">Importé : %1$s</string>
-    <string name="cert_kind_downloaded">Téléchargé: %1$s</string>
+    <string name="cert_kind_downloaded">Téléchargement échoué : %1$s</string>
     <string name="cert_kind_adb">Etaped over adb: %1$s</string>
     <string name="cert_kind_self">Autosignée : %1$s</string>
     <string name="car_group_screen">Écran</string>
