@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="touch_relay_description">Umožňuje Gearslipu přenášet dotyky z obrazovky auta na telefon během zrcadlení. Gearslip nečte obsah obrazovky.</string>
-
     <!-- Setup guide -->
     <string name="guide_usage_title">Pomozte ostatním řidičům.</string>
     <string name="guide_safety_title">Jezděte bezpečně.</string>
@@ -14,7 +13,7 @@
     <string name="guide_calendar_body">Obrazovka auta ukazuje vaši příští událost. Gearslip kalendář jen čte.</string>
     <string name="guide_calls_title">Hovory a kontakty.</string>
     <string name="guide_calls_body">Auto ukazuje jméno volajícího a jeho aplikace Telefon umí vytočit číslo nebo zavolat kontaktu. Gearslip je jen čte.</string>
-    <string name="guide_bluetooth_title">Bluetooth.</string>
+    <string name="guide_bluetooth_title">Bluetooth</string>
     <string name="guide_bluetooth_body">Při prvním připojení vám Gearslip nabídne spárovat telefon s autem, aby hovory hrály z jeho reproduktorů.</string>
     <string name="guide_notifications_title">Oznámení.</string>
     <string name="guide_notifications_body">Když je Gearslip připojený, zobrazuje oznámení s tlačítkem pro ukončení. Bez tohoto oprávnění ho Android skryje.</string>
@@ -57,8 +56,7 @@
     <string name="guide_open">Otevřít</string>
     <string name="guide_next">Další</string>
     <string name="guide_done">Hotovo</string>
-    <string name="guide_back">Zpět</string>
-
+    <string name="guide_back">Černá</string>
     <!-- Usage notes -->
     <string name="usage_intro">Zapněte to a Gearslip pošle krátkou poznámku, když ho otevřete, a po každé jízdě. &lt;b&gt;Poznámka neobsahuje jméno, účet ani polohu. Náhodné číslo započítá váš telefon jednou a server neukládá žádnou IP adresu.&lt;/b&gt; Poznámky ukazují, která auta fungují a kde ostatní selhávají.</string>
     <string name="usage_send">Posílat poznámky o používání</string>
@@ -79,11 +77,10 @@
     <string name="worked_body">Sdílet to, aby další řidič věděl, že to funguje? Bez jména, účtu a polohy.</string>
     <string name="worked_not_now">Teď ne</string>
     <string name="worked_share">Sdílet</string>
-
     <!-- Recommended apps -->
     <string name="recommended_intro">Tyto bezplatné aplikace běží na obrazovce auta v Gearslipu. Každé tlačítko otevře stránku aplikace na GitHubu.</string>
     <string name="recommended_title">Doporučené aplikace</string>
-    <string name="back">Zpět</string>
+    <string name="back">Černá</string>
     <string name="recommended_installed">Nainstalováno</string>
     <string name="recommended_maps">Mapy</string>
     <string name="recommended_music">Hudba</string>
@@ -94,7 +91,6 @@
     <string name="recommended_about_ytm">Přehrávač YouTube Music.</string>
     <string name="recommended_about_antennapod">Podcasty i s kapitolami.</string>
     <string name="recommended_about_rfsentinel">Najde sledovací zařízení a kamery v okolí.</string>
-
     <!-- Settings -->
     <string name="settings_title">Nastavení</string>
     <string name="settings_whats_new">Co je nového</string>
@@ -126,8 +122,8 @@
     <string name="cert_download_sub">Certifikát, který zveřejňuje open-source projekt aasdk na GitHubu. Většina aut ho přijme, ale některá zhruba od roku 2020 ho odmítají</string>
     <string name="cert_import">Importovat vlastní soubor</string>
     <string name="cert_import_sub">Soubor .p12 se soukromým klíčem. Použijte vlastní, když auto odmítá certifikát aasdk</string>
-    <string name="cert_remove_imported">Odebrat importovaný certifikát</string>
-    <string name="cert_remove_downloaded">Odebrat stažený certifikát</string>
+    <string name="cert_remove_imported">Importovaný certifikát odebrán.</string>
+    <string name="cert_remove_downloaded">Stažený certifikát odebrán.</string>
     <string name="cert_removed_imported">Importovaný certifikát odebrán.</string>
     <string name="cert_removed_downloaded">Stažený certifikát odebrán.</string>
     <string name="cert_imported">Certifikát importován.</string>
@@ -136,7 +132,6 @@
     <string name="cert_password">Heslo</string>
     <string name="cert_password_hint">Nechte prázdné, pokud soubor heslo nemá.</string>
     <string name="cert_import_button">Importovat</string>
-
     <!-- Certificate summary -->
     <string name="cancel">Zrušit</string>
     <string name="cert_none">Žádný načtený (podepsaný sám sebou; auta ho odmítají)</string>
@@ -144,7 +139,6 @@
     <string name="cert_kind_downloaded">Stažený: %1$s</string>
     <string name="cert_kind_adb">Nahraný přes adb: %1$s</string>
     <string name="cert_kind_self">Podepsaný sám sebou: %1$s</string>
-
     <!-- Car settings on the phone -->
     <string name="car_group_screen">Obrazovka</string>
     <string name="car_group_nav_bar">Navigační lišta a přehrávač</string>
@@ -208,7 +202,7 @@
     <string name="car_phone_speech_note">Na většině telefonů je to služba Google, která může posílat váš hlas Googlu.</string>
     <string name="car_warn_bluetooth">Upozornit, když Bluetooth není připojeno</string>
     <string name="car_warn_location">Upozornit, když je poloha vypnutá</string>
-    <string name="car_experimental">Experimentální funkce</string>
+    <string name="car_experimental">Experimentální funkce zobrazeny</string>
     <string name="car_vehicle_data">Data vozidla</string>
     <string name="car_vehicle_data_note">Přidá dlaždici Data vozidla: živý výpis senzorů auta. Názvy polí jsou odhady, dokud neuvidíte, jak se některé mění.</string>
     <string name="car_adaptive_video">Adaptivní kvalita obrazu</string>
@@ -220,7 +214,6 @@
     <string name="car_audio_usb_sub">Čistší zvuk bez zpoždění. Při každé jízdě vás Android požádá o sdílení obrazovky, díky čemuž může Gearslip posílat zvuk</string>
     <string name="car_audio_usb_footer">Spusťte jednou příkaz z Nápovědy a Android se přestane ptát.</string>
     <string name="car_audio_bt_footer">Hovory jdou v každém případě přes Bluetooth.</string>
-
     <!-- Car screen size -->
     <string name="screen_car_size">Velikost obrazovky auta</string>
     <string name="screen_use_cars">Podle auta</string>
@@ -245,10 +238,8 @@
     <string name="screen_width">Šířka</string>
     <string name="screen_height">Výška</string>
     <string name="save">Uložit</string>
-
     <string name="screen_car_size_note">Použijte to, pokud obraz v autě vypadá roztažený. Zadejte skutečnou velikost obrazovky, například 1280x480. Projeví se při příštím připojení.</string>
     <string name="screen_set_by_you">%1$s, nastaveno vámi</string>
-
     <!-- Help -->
     <string name="help_title">Jak se připojit</string>
     <string name="help_which_cars">Která auta fungují</string>
@@ -256,7 +247,6 @@
     <string name="help_first_drive">Před první jízdou</string>
     <string name="help_in_car">V autě</string>
     <string name="help_usb_audio">Zvuk přes Gearslip</string>
-
     <string name="help_aa_off">Vypněte Android Auto.</string>
     <string name="help_aa_off_detail">Zakažte nebo odinstalujte aplikaci Android Auto, aby auto mluvilo s Gearslipem.</string>
     <string name="help_cert">Načtěte certifikát.</string>
@@ -274,7 +264,6 @@
     <string name="help_readable">Zachovejte čitelná oznámení.</string>
     <string name="help_readable_detail">Android skrývá text oznámení, když sdílí zvuk. Spusťte i tohle a Gearslip to zruší jen po dobu, kdy hudba jde do auta.</string>
     <string name="help_which_cars_body">Většina aut přijme certifikát aasdk. Zhruba od roku 2020 dostala některá auta novější bezpečnostní kontroly, které ho odmítají, a v nich Gearslip potřebuje váš vlastní certifikát.</string>
-
     <!-- Updates -->
     <string name="update_downloaded_ask">Staženo. Android se před instalací zeptá.</string>
     <string name="update_install">Nainstalovat</string>
@@ -287,7 +276,6 @@
     <string name="update_check_now">Zkontrolovat teď</string>
     <string name="update_check_auto">Kontrolovat automaticky</string>
     <string name="update_once_a_day">Jednou denně</string>
-
     <string name="update_unplug_first">Pro instalaci se odpojte od auta. Instalace zavře Gearslip.</string>
     <string name="update_card_title">Vyšel Gearslip %1$s</string>
     <string name="update_downloading">Stahování… %1$d %%</string>
@@ -296,7 +284,6 @@
     <string name="update_version_out">Vyšla verze %1$s</string>
     <string name="update_version_ready">Verze %1$s je připravena k instalaci</string>
     <string name="update_dialog_status">Verze %1$s. %2$s.</string>
-
     <!-- About and support -->
     <string name="about_give_regularly">Přispívat týdně nebo měsíčně</string>
     <string name="about_bmac_sub" formatted="false">Přispějte jednou nebo měsíčně kartou. Buy Me a Coffee si nechá 5 %</string>
@@ -315,24 +302,20 @@
     <string name="about_source">Zdrojový kód</string>
     <string name="about_source_sub">Čtěte nebo měňte kód Gearslipu pod licencí AGPL</string>
     <string name="about_voice_credits">Poděkování za hlas</string>
-
     <string name="about_no_wallet">Nenašla se žádná peněženka Monero. Zkopírujte raději adresu.</string>
     <string name="about_monero_copied">Adresa Monero zkopírována</string>
     <string name="about_voice_credits_sub">Rozpoznávání řeči: sherpa-onnx (Apache 2.0), s Kroko ASR od Banafo (CC BY-SA 4.0) a Parakeet a Canary od NVIDIA (CC BY 4.0)</string>
-
     <!-- Certificate setup -->
     <string name="certsetup_title">Nastavení certifikátu</string>
     <string name="certsetup_installed">Certifikát nainstalován.</string>
-    <string name="certsetup_continue">Pokračovat</string>
+    <string name="certsetup_continue">Pokračujte</string>
     <string name="certsetup_failed">Stažení selhalo</string>
     <string name="certsetup_retry">Zkusit znovu</string>
     <string name="certsetup_import_sub">Soubor .p12 se soukromým klíčem. Použijte vlastní, když auto odmítá certifikát aasdk.</string>
     <string name="certsetup_skip">Přeskočit nastavení připojení k autu</string>
-
     <string name="certsetup_loaded">Auta přijímají jen certifikáty vydané Googlem a vy jeden máte načtený.</string>
     <string name="certsetup_choose">Auta přijímají jen certifikáty vydané Googlem. Gearslip žádný neobsahuje, takže vyberte, odkud vezmete svůj.</string>
     <string name="certsetup_aasdk_sub">Open-source projekt aasdk zveřejňuje tento certifikát na github.com/opencardev/aasdk. Většina aut ho přijme. Některá zhruba od roku 2020 ho odmítají a pak musíte importovat vlastní.</string>
-
     <!-- Storage -->
     <string name="storage_title">Úložiště Gearslipu</string>
     <string name="storage_measuring">Měření…</string>
@@ -343,7 +326,6 @@
     <string name="storage_logs">Staré logy</string>
     <string name="storage_other">Další dočasné soubory</string>
     <string name="storage_delete_all">Smazat všechna data Gearslipu</string>
-
     <string name="storage_total">Data Gearslipu zabírají %1$s úložiště telefonu.</string>
     <plurals name="storage_lyrics_detail">
         <item quantity="one">%1$d skladba · %2$s. Vymazané texty se znovu stáhnou, až je otevřete.</item>
@@ -358,15 +340,12 @@
     <string name="storage_delete_sub">Nastavení, certifikáty, hlasové modely, texty a logy.</string>
     <string name="storage_delete">Smazat</string>
     <string name="storage_delete_ellipsis">Smazat…</string>
-
     <!-- Donate prompt -->
     <string name="donate_title">Rád, že jízda vyšla</string>
     <string name="donate_liberapay">Podpořit na Liberapay</string>
     <string name="donate_bmac">Kupte mi kafe</string>
     <string name="donate_card">Přispět jednou kartou</string>
-
     <string name="donate_body">Gearslip je zdarma, bez reklam a bez sledování. Jestli vás dostane na cestu, vaše podpora ho udrží při životě.</string>
-
     <!-- Wireless -->
     <string name="wireless_needs_permission">Gearslip k tomu potřebuje přístup k Bluetooth a Wi-Fi v okolí.</string>
     <string name="wireless_enable_permission">Povolit oprávnění Zařízení v okolí</string>
@@ -375,30 +354,25 @@
     <string name="wireless_none_paired">Telefon zatím není s ničím spárovaný. Nejdřív ho spárujte s autem.</string>
     <string name="wireless_not_listed">Auto v seznamu není? Nejdřív ho spárujte s telefonem.</string>
     <string name="bluetooth_settings">Nastavení Bluetooth</string>
-
     <!-- Voice models -->
     <string name="voice_live_title">Hlas: slova naživo</string>
     <string name="voice_final_title">Hlas: konečná slova</string>
     <string name="voice_none">Žádný</string>
     <string name="voice_none_sub">Ponechat slova naživo. Nejrychlejší, nejméně přesné</string>
-
     <string name="voice_live_body">Hlasový asistent převádí řeč na text v tomto telefonu a nic z toho, co řeknete, ho neopustí. Potřebuje dva modely, dohromady asi 270 MB, stažené jednou. Tento píše vaše slova, zatímco mluvíte.</string>
     <string name="voice_final_body">Když domluvíte, tento model přečte celou větu znovu. Zachytí jména a místa, která model naživo přehlédne.</string>
     <string name="voice_model_size">%1$s · %2$d MB</string>
     <string name="voice_downloaded">Staženo. %1$s</string>
     <string name="voice_downloading">Stahování, %1$d %%</string>
-
     <!-- Home -->
     <string name="home_help">Nápověda</string>
     <string name="home_preview">Náhled</string>
     <string name="home_logs">Logy</string>
     <string name="home_disconnect">Odpojit</string>
     <string name="home_bt_title">Bluetooth není připojeno</string>
-
     <string name="home_debug_build">%1$s · ladicí verze</string>
     <string name="home_bt_body">Hudba hraje přes Bluetooth, ale telefon není připojený k autu. Připojte ho tady nebo v Bluetooth menu auta.</string>
     <string name="home_voice_downloading">Stahování hlasu, %1$d %%</string>
-
     <!-- Car audio dialogs -->
     <string name="audio_bt_title">Přehrávat zvuk v autě přes Bluetooth?</string>
     <string name="audio_never_ask">Nikdy se neptat, pomocí počítače</string>
@@ -406,21 +380,17 @@
     <string name="audio_keep_asking">Dál se ptát</string>
     <string name="audio_mic_title">Zvuk v autě potřebuje oprávnění k mikrofonu</string>
     <string name="audio_open_settings">Otevřít nastavení aplikace</string>
-
     <string name="audio_bt_body">Android bere hudbu, kterou Gearslip posílá do auta, jako sdílení obrazovky, takže se ptá při každé jízdě, kabelem i bezdrátově. Přes Bluetooth se nikdy neptá. Později to můžete změnit v Nastavení.</string>
     <string name="audio_keep_usb">Nebo nechte zvuk jít přes Gearslip a zbavte se dotazu natrvalo: připojte telefon k počítači se zapnutým laděním USB a jednou spusťte tohle.</string>
     <string name="audio_mic_body">Android nechá aplikaci posílat zvuk jiných aplikací do auta, jen když má oprávnění k mikrofonu. Pro Gearslip je vypnuté, takže hudba hraje v telefonu. Zapněte ho v Oprávněních, pak Mikrofon.</string>
-
     <!-- Phone keyboard -->
     <string name="typing_close">Zavřít klávesnici auta</string>
     <string name="typing_label">Psát na obrazovku auta</string>
     <string name="typing_search">Hledat na obrazovce auta</string>
-
     <!-- Copyable command -->
     <string name="command_tap_copy">Klepnutím zkopírujete</string>
     <string name="command_copied">Příkaz zkopírován</string>
     <string name="whats_new_this_version">%1$s (tato verze)</string>
-
     <!-- Car settings screen -->
     <string name="carset_theme">Motiv</string>
     <string name="carset_imperial">Imperiální (mi, ft, °F)</string>
@@ -447,7 +417,6 @@
     <string name="carset_bottom">Dole</string>
     <string name="carset_save_vehicle">Uložit pro toto vozidlo</string>
     <string name="carset_no_profile">Žádný odpovídající profil vozidla</string>
-
     <string name="carset_audio_note">Přes Gearslip posílá zvuk telefonu připojením k autu, kabelem nebo bezdrátově. Android při každé jízdě žádá o sdílení obrazovky a pár aplikací to blokuje. Bluetooth hraje tak, jak by telefon hrál normálně, a Android se nikdy neptá.</string>
     <string name="carset_directions_note">Gearslip čte každé odbočení nahlas z reproduktorů auta a hudba se při tom ztiší. Vypněte to, pokud hlas vaší mapové aplikace už v autě hraje.</string>
     <string name="carset_phone_speech_note">Poslouchá přes službu řeči v telefonu místo Gearslipu. Na většině telefonů je to služba Google, která může posílat váš hlas Googlu. GrapheneOS žádnou nemá, takže Gearslip dál používá svou.</string>
@@ -457,7 +426,6 @@
     <string name="carset_saved_to">Uloženo do %1$s</string>
     <string name="carset_save_failed">Uložení se nezdařilo</string>
     <string name="carset_px">%1$dpx</string>
-
     <!-- Car media app -->
     <string name="media_open_on_phone">Otevřít v telefonu</string>
     <string name="media_now_playing">Právě hraje</string>
@@ -467,7 +435,6 @@
     <string name="media_looking_lyrics">Hledání textu…</string>
     <string name="media_nothing_playing">Nic nehraje</string>
     <string name="media_press_play">Stiskněte přehrát a pokračujte, kde jste skončili, nebo něco najděte v Procházet.</string>
-
     <string name="media_keeps_library">%1$s si svou knihovnu nechává pro sebe.</string>
     <string name="media_needs_access">Gearslip ji přesto může ovládat, jakmile bude mít v telefonu přístup k oznámením. Povolte ho v Nastavení &gt; Oznámení &gt; Přístup k oznámením.</string>
     <string name="media_not_running">%1$s neběží.</string>
@@ -483,9 +450,8 @@
     <string name="media_search_nothing">%1$s nic nenašla pro „%2$s“.</string>
     <string name="media_search_ignored">%1$s pro „%2$s“ nic nepustila.</string>
     <string name="media_searching_for">Hledání „%2$s“ v %1$s…</string>
-    <string name="media_nothing_playing_dot">Nic nehraje.</string>
+    <string name="media_nothing_playing_dot">Nic nehraje</string>
     <string name="media_no_lyrics">Pro tuto skladbu nebyl nalezen text.</string>
-
     <!-- Car media browsing -->
     <string name="media_up">Nahoru</string>
     <string name="media_loading">Načítání…</string>
@@ -494,10 +460,8 @@
     <string name="media_nothing_here">Nic tu není.</string>
     <string name="media_nothing_queued">Fronta je prázdná.</string>
     <string name="media_play">Přehrát</string>
-
     <string name="media_queue_empty_idle">Nic nehraje - ne každá aplikace Gearslipu řekne, co bude dál.</string>
     <string name="media_queue_empty_playing">Jen to, co už hraje - ne každá aplikace Gearslipu řekne, co bude dál.</string>
-
     <!-- Player controls -->
     <string name="player_previous">Předchozí</string>
     <string name="player_next">Další</string>
@@ -507,7 +471,6 @@
     <string name="player_like">Líbí se</string>
     <string name="player_shuffle_off">Náhodně vypnuto</string>
     <string name="player_shuffle_on">Náhodně zapnuto</string>
-
     <!-- Car home -->
     <string name="home_choose_app">Vybrat jinou aplikaci</string>
     <string name="home_no_maps">Nenašly se žádné mapové aplikace.</string>
@@ -519,12 +482,10 @@
     <string name="home_back_nav">Zpět na navigační lištu</string>
     <string name="home_show_player">Zobrazit přehrávač</string>
     <string name="home_hide_lyrics">Skrýt text</string>
-
     <string name="home_starting">Spouštění %1$s…</string>
     <string name="home_starting_map">Spouštění mapy…</string>
     <string name="home_failed">%1$s se nespustila.</string>
     <string name="home_failed_map">Mapová aplikace se nespustila.</string>
-
     <!-- Breadcrumbs -->
     <string name="crumb_home">Domů</string>
     <string name="crumb_media">Média</string>
@@ -532,7 +493,6 @@
     <string name="crumb_dashboard">Nástěnka</string>
     <string name="crumb_weather">Počasí</string>
     <string name="crumb_reply">Odpovědět</string>
-
     <!-- Built-in apps -->
     <string name="app_browser">Prohlížeč</string>
     <string name="app_screen_sharing">Sdílení obrazovky</string>
@@ -544,7 +504,6 @@
     <string name="navapps_move_left">Posunout doleva</string>
     <string name="navapps_move_right">Posunout doprava</string>
     <string name="navapps_reset">Obnovit pořadí aplikací</string>
-
     <!-- Message popup -->
     <string name="msg_dismiss">Zavřít</string>
     <string name="msg_read">Přečíst</string>
@@ -552,7 +511,6 @@
     <string name="msg_no">Ne</string>
     <string name="msg_send_now">Odeslat teď</string>
     <string name="msg_type">Napsat</string>
-
     <plurals name="msg_burst">
         <item quantity="one">%1$s · %2$d nová</item>
         <item quantity="few">%1$s · %2$d nové</item>
@@ -564,12 +522,10 @@
     <string name="msg_sending_to">Odesílání: %1$s</string>
     <string name="msg_sent_to">Odesláno: %1$s</string>
     <string name="msg_reply_failed">Odpověď se nezdařila</string>
-
     <!-- Bluetooth pairing -->
     <string name="bt_pair_unfinished">Párování se nedokončilo. Spárujte raději v Bluetooth menu auta.</string>
     <string name="bt_pair_not_started">Párování nezačalo. Spárujte raději v Bluetooth menu auta.</string>
     <string name="bt_paired">Spárováno. Hovory teď hrají v autě.</string>
-
     <!-- Car overlays -->
     <string name="overlay_dont_show">Znovu nezobrazovat</string>
     <string name="overlay_ok">OK</string>
@@ -578,12 +534,10 @@
     <string name="overlay_pair">Spárovat</string>
     <string name="overlay_confirm_title">Potvrďte v telefonu</string>
     <string name="overlay_confirm_body">Zkontrolujte kód v telefonu a klepněte na Spárovat. Auto se může zeptat také.</string>
-
     <string name="overlay_bt_body">Hudba hraje přes Bluetooth, ale telefon není připojený k autu. Připojte ho v Bluetooth menu auta nebo telefonu.</string>
     <string name="overlay_location_body">Mapové aplikace nemůžou ukázat, kde jste, ani navigovat. Až zaparkujete, zapněte polohu v rychlém nastavení telefonu.</string>
     <string name="overlay_pair_body_music">Hovory i hudba hrají z reproduktorů auta, jakmile jsou telefon a auto spárované. Telefon vás pak požádá o potvrzení kódu.</string>
     <string name="overlay_pair_body">Hovory hrají z reproduktorů auta, jakmile jsou telefon a auto spárované. Telefon vás pak požádá o potvrzení kódu.</string>
-
     <!-- Weather -->
     <string name="weather_waiting_fix">Čekání na určení polohy.</string>
     <string name="weather_allow_location">Povolte Gearslipu v telefonu polohu a uvidíte počasí.</string>
@@ -599,18 +553,15 @@
     <string name="weather_rain_showers">Dešťové přeháňky</string>
     <string name="weather_snow_showers">Sněhové přeháňky</string>
     <string name="weather_thunderstorm">Bouřka</string>
-
     <!-- Weather screen -->
     <string name="weather_getting">Zjišťování počasí…</string>
     <string name="weather_next_hours">Příští hodiny</string>
     <string name="weather_this_week">Tento týden</string>
     <string name="weather_today">Dnes</string>
     <string name="weather_credit">Data o počasí od Open-Meteo.com (CC BY 4.0)</string>
-
     <string name="weather_feels_like">Pocitově %1$s</string>
     <string name="weather_humidity">Vlhkost %1$d %%</string>
     <string name="weather_wind">Vítr %1$s</string>
-
     <!-- Dashboard -->
     <string name="dash_today">Dnes</string>
     <string name="dash_getting_weather">Zjišťování počasí…</string>
@@ -618,7 +569,6 @@
     <string name="dash_loading_calendar">Načítání kalendáře…</string>
     <string name="dash_nothing_week">Příští týden nic.</string>
     <string name="dash_all_day">Celý den</string>
-
     <!-- Phone dialer -->
     <string name="dialer_contacts">Kontakty</string>
     <string name="dialer_keypad">Klávesnice</string>
@@ -627,22 +577,18 @@
     <string name="dialer_call">Volat</string>
     <string name="dialer_no_contacts">Nenašly se žádné kontakty s telefonním číslem.</string>
     <string name="dialer_search">Hledat kontakty</string>
-
     <string name="dialer_needs_permission">Gearslip potřebuje oprávnění Telefon a Kontakty, aby mohl volat odsud. Povolte je v telefonu, až zaparkujete.</string>
     <string name="dialer_no_match">Žádný kontakt neodpovídá „%1$s“.</string>
     <string name="dialer_call_who">Volat: %1$s?</string>
-
     <!-- Car screen -->
     <string name="carui_exit_fullscreen">Ukončit celou obrazovku</string>
     <string name="carui_drive_safely">Jezděte bezpečně</string>
     <string name="carui_understand">Rozumím</string>
-
     <string name="carui_unofficial">Gearslip je neoficiální software: nevytvořila ho ani neprověřila žádná automobilka a může bez varování selhat.</string>
     <string name="carui_never_interact">Za jízdy tuto obrazovku nikdy neovládejte. Nastavte trasu nebo skladbu před jízdou a pak se soustřeďte na silnici.</string>
     <string name="carui_this_app">Tato aplikace</string>
     <string name="carui_app_unsupported">%1$s zatím s Gearslipem nefunguje.</string>
     <string name="carui_app_unsupported_body">Nespustila se. Některé aplikace běží jen v Android Auto od Googlu.</string>
-
     <!-- Nav bar -->
     <string name="navbar_on_call">Probíhá hovor</string>
     <string name="navbar_end_call">Ukončit hovor</string>
@@ -650,21 +596,18 @@
     <string name="navbar_mute">Ztlumit mikrofon</string>
     <string name="navbar_close_panel">Zavřít boční panel</string>
     <string name="navbar_dock_player">Přesunout přehrávač vedle mapy</string>
-
     <!-- Browser -->
     <string name="web_search">Hledejte nebo zadejte adresu</string>
     <string name="web_forward">Vpřed</string>
     <string name="web_reload">Načíst znovu</string>
     <string name="web_start_page">Úvodní stránka</string>
     <string name="web_fullscreen">Celá obrazovka</string>
-
     <!-- Notifications -->
     <string name="notif_title">Oznámení</string>
     <string name="notif_clear_all">Vymazat vše</string>
     <string name="notif_empty">Zatím nic. Nová oznámení z telefonu se objeví tady.</string>
     <string name="notif_off">Oznámení jsou vypnutá. Povolte Gearslip v telefonu v Nastavení &gt; Oznámení &gt; Přístup k oznámením.</string>
     <string name="notif_replied">Odpovězeno</string>
-
     <!-- Messages -->
     <string name="msg_mark_read">Označit jako přečtené</string>
     <string name="msg_messages">Zprávy</string>
@@ -679,7 +622,6 @@
     <string name="msg_quick">Rychlá odpověď</string>
     <string name="msg_you">Vy: </string>
     <string name="msg_sender">%1$s: </string>
-
     <!-- Car app navigation -->
     <string name="nav_finding_route">Hledání trasy…</string>
     <string name="nav_then">Potom</string>
@@ -688,39 +630,31 @@
     <string name="nav_lane_recommended">Doporučený jízdní pruh</string>
     <string name="nav_lane">Jízdní pruh</string>
     <string name="nav_arrive">Příjezd %1$s</string>
-
     <!-- Car app screens -->
     <string name="template_nothing_playing">Zatím nic nehraje.</string>
     <string name="template_search">Hledat</string>
     <string name="template_start">Spustit</string>
-
     <!-- Calls -->
     <string name="call_incoming">Příchozí hovor</string>
     <string name="call_decline">Odmítnout</string>
     <string name="call_answer">Přijmout</string>
     <string name="call_ringing">Už nahlas zvoní - přijměte tady, nebo nechte zvonit.</string>
-
     <!-- Screen sharing -->
     <string name="phoneapps_touch_off">Dotyk je vypnutý. Zapněte Gearslip v telefonu v Nastavení &gt; Přístupnost.</string>
-
     <!-- What's new in the car -->
     <string name="whatsnew_show_after">Zobrazit po aktualizacích</string>
     <string name="whatsnew_got_it">Rozumím</string>
     <string name="whatsnew_title">Co je nového ve verzi %1$s</string>
-
     <!-- Car keyboard -->
     <string name="keyboard_space">mezera</string>
     <string name="keyboard_hide">Skrýt klávesnici</string>
     <string name="keyboard_submit">Potvrdit</string>
-
     <!-- Launcher -->
     <string name="launcher_broken">Nefunguje s Gearslipem</string>
-
     <!-- Car app stage -->
     <string name="stage_car_app">Aplikace do auta</string>
     <string name="stage_close">Zavřít %1$s</string>
     <string name="stage_close_app">Zavřít aplikaci</string>
-
     <!-- Spoken directions -->
     <string name="dir_slight_left">Odbočte mírně vlevo</string>
     <string name="dir_slight_left_onto">Odbočte mírně vlevo na %1$s</string>
@@ -817,14 +751,11 @@
         <item quantity="many">%1$d metru</item>
         <item quantity="other">%1$d metrů</item>
     </plurals>
-
     <string name="certsetup_installed_hint">Pokud se auto nepřipojí, možná tento certifikát odmítá. Importujte vlastní v Nastavení v části Certifikát.</string>
     <string name="cert_downloaded_footer">Auto se nepřipojí? Některá auta zhruba od roku 2020 odmítají certifikát aasdk, takže importujte vlastní. Změny se projeví při příštím připojení.</string>
-
     <!-- Cluster screen -->
     <string name="car_cluster_video">Karta odbočení na přístrojovém štítu</string>
     <string name="car_cluster_video_note">Pro auto s druhou obrazovkou v přístrojovém štítu: Gearslip na ní ukáže příští odbočení. Platí od příštího připojení.</string>
-
     <!-- Connection status on Home -->
     <string name="status_idle">Nepřipojeno</string>
     <string name="status_idle_detail">Připojte telefon do USB portu auta nebo se připojte bezdrátově. Gearslip se otevře sám, když auto odpoví.</string>
