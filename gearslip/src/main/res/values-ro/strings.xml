@@ -34,4 +34,5 @@
     <string name="guide_answer_body">Setează Gearslip ca aplicație pentru identificarea apelantului, iar mașina va putea prelua sau respinge apelurile. Fără această aplicație, apelurile vor suna în continuare, dar numai telefonul le va putea prelua.</string>
     <string name="guide_apps_title">O companie plăcută.</string>
     <string name="guide_buttons_title">Butoanele tale.</string>
+    <string name="guide_buttons_body">Alege aspectul butoanelor mașinii. Poți să-l modifici oricând din setările mașinii.</string>
 </resources>
