@@ -1,3 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="touch_relay_description">Lad Gearslip afspille ved berøringer fra bilens skærm under telefon spejling. Gearslip læser ikke skærmens indhold.</string>
+    <string name="guide_usage_title">Hjælp andre bilister.</string>
+    <string name="guide_safety_title">Kør forsigtigt.</string>
+    <string name="guide_safety_body">Lad Gearslip afspille ved berøringer fra bilens skærm under telefon spejling. Gearslip læser ikke skærmens indhold.</string>
+    <string name="guide_mic_title">Mikrofon.</string>
+    <string name="guide_mic_body">Gearslip bruger den til at sende din musik til bilen og til at lytte når du spørger om noget eller svarer på en besked. Det du siger forbliver på din telefon.</string>
+    <string name="guide_location_title">Lokation.</string>
+    <string name="guide_location_body">Bilens kort og søgninger på ting i nærheden har brug for dette. Uden lokation vil der ikke være et kort.</string>
+    <string name="guide_calendar_title">Kalender.</string>
 </resources>
