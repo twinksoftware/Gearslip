@@ -1,3 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="touch_relay_description">Permite aplicației Gearslip să redirecționeze atingerile de pe ecranul mașinii către telefon în timpul oglindirii ecranului. Gearslip nu citește conținutul ecranului.</string>
+    <string name="guide_usage_title">Ajută-i pe ceilalți șoferi.</string>
+    <string name="guide_safety_title">Condu cu prudență.</string>
+    <string name="guide_safety_body">Gearslip nu este o aplicație oficială. Niciun producător auto nu a creat-o sau verificat-o, iar aceasta se poate defecta fără avertisment. Configureaz-o înainte de a porni la drum, apoi concentrează-te pe șosea.</string>
+    <string name="guide_mic_title">Microfon.</string>
+    <string name="guide_mic_body">Gearslip folosește această funcție pentru a transmite muzica ta către mașină și pentru a te auzi atunci când soliciți ceva sau răspunzi la un mesaj. Ceea ce spui rămâne pe telefon.</string>
+    <string name="guide_location_title">Locație.</string>
+    <string name="guide_location_body">Harta mașinii și căutările din apropiere au nevoie de ea. Fără ea, tabloul de bord nu afișează nicio hartă.</string>
+    <string name="guide_calendar_title">Calendar.</string>
+    <string name="guide_calendar_body">Ecranul mașinii afișează următorul eveniment din agenda ta. Gearslip citește doar calendarul tău.</string>
+    <string name="guide_calls_title">Apeluri și contacte.</string>
+    <string name="guide_calls_body">Mașina afișează numele persoanei care sună, iar aplicația sa de telefon poate forma un număr sau poate apela unul dintre contactele tale. Gearslip doar le citește.</string>
+    <string name="guide_bluetooth_title">Bluetooth.</string>
+    <string name="guide_bluetooth_body">La prima conectare, Gearslip îți propune să îți conectezi telefonul la mașină, astfel încât apelurile să fie redate prin difuzoarele acesteia.</string>
+    <string name="guide_notifications_title">Notificări.</string>
+    <string name="guide_notifications_body">Atâta timp cât Gearslip este conectat, afișează o notificare cu un buton de oprire. În lipsa acestuia, Android o ascunde.</string>
+    <string name="guide_messages_title">Mesaje.</string>
+    <string name="guide_messages_body">Mașina îți afișează mesajele, ți le citește cu voce tare și îți permite să răspunzi. Activează opțiunea „Gearslip” din lista care se deschide.</string>
+    <string name="guide_android_auto_title">Dezactivează Android Auto.</string>
+    <string name="guide_android_auto_body">Android Auto este încă instalat și intră în conflict cu Gearslip pentru conexiunea USB a mașinii. Dezactivează-l sau dezinstalează-l din fereastra care se deschide.</string>
+    <string name="guide_default_title">Alege Gearslip.</string>
+    <string name="guide_default_body">Dacă telefonul te întreabă ce aplicație să deschidă atunci când îl conectezi la mașină, alege „Gearslip” și atinge „Întotdeauna”.</string>
+    <string name="guide_audio_title">Sunet în automobil.</string>
+    <string name="guide_audio_body">Alege modul în care muzica ajunge în mașină. Apelurile se transmit prin Bluetooth în ambele cazuri.</string>
+    <string name="guide_voice_title">Voce.</string>
+    <string name="guide_voice_body">Cere indicații de orientare, muzică sau un apel prin comandă vocală. Telefonul tău transformă automat vorbirea în text, iar nimic din ceea ce spui nu părăsește dispozitivul. Are nevoie de %1$d MB, se descarcă o singură dată. Folosește Wi-Fi dacă poți.</string>
+    <string name="guide_audio_prompt_title">Fără solicitare de sunet.</string>
+    <string name="guide_audio_prompt_body">Execută această comandă de pe un computer pe care este activată opțiunea de depanare USB, iar Android va încredința definitiv gestionarea sunetului aplicației Gearslip. Fără aceasta, trebuie să apeși o dată pe „Start” la fiecare cursă.</string>
+    <string name="guide_readable_title">Notificări ușor de citit.</string>
+    <string name="guide_readable_body">În timp ce sunetul este redat în mașină, Android ascunde conținutul notificărilor, ca și cum ai partaja ecranul. Astfel, Gearslip le poate afișa în timpul călătoriei și le poate ascunde din nou după aceea.</string>
+    <string name="guide_answer_title">Răspunde la apeluri.</string>
+    <string name="guide_answer_body">Setează Gearslip ca aplicație pentru identificarea apelantului, iar mașina va putea prelua sau respinge apelurile. Fără această aplicație, apelurile vor suna în continuare, dar numai telefonul le va putea prelua.</string>
+    <string name="guide_apps_title">O companie plăcută.</string>
+    <string name="guide_buttons_title">Butoanele tale.</string>
 </resources>
