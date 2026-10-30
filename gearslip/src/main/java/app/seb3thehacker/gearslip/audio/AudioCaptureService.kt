@@ -5,12 +5,15 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.content.pm.ServiceInfo
 import android.media.AudioAttributes
 import android.media.AudioFormat
+import android.media.AudioManager
 import android.media.AudioPlaybackCaptureConfiguration
 import android.media.AudioRecord
 import android.media.projection.MediaProjection
@@ -36,6 +39,7 @@ class AudioCaptureService : Service() {
     private var projection: MediaProjection? = null
     private var thread: Thread? = null
     private var mutedPhone = false
+    private var muteGuard: BroadcastReceiver? = null
 
     /**
      * Silence the phone's own speaker while the car is being fed.
@@ -52,11 +56,39 @@ class AudioCaptureService : Service() {
             mutedPhone = true
             GearslipLog.i("audio: muted the phone's speaker for the drive")
         }.onFailure { GearslipLog.w("audio: could not mute the phone: ${it.message}") }
+        keepPhoneMuted()
+    }
+
+    /**
+     * Pressing volume up on a muted phone unmutes it, and the music came out of the phone as well
+     * as the car. Mute it again whenever that happens. The keys still move the phone's volume, for
+     * after the drive, but the car's level is the head unit's: capture is always full level.
+     */
+    private fun keepPhoneMuted() {
+        if (muteGuard != null) return
+        val audio = getSystemService(AudioManager::class.java)
+        val receiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                if (!mutedPhone || audio.isStreamMute(AudioManager.STREAM_MUSIC)) return
+                audio.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_MUTE, 0)
+                GearslipLog.i("audio: the phone's speaker came back on - muted it again")
+            }
+        }
+        runCatching {
+            registerReceiver(
+                receiver,
+                IntentFilter(ACTION_VOLUME_CHANGED).apply { addAction(ACTION_MUTE_CHANGED) },
+                RECEIVER_NOT_EXPORTED,
+            )
+            muteGuard = receiver
+        }.onFailure { GearslipLog.w("audio: can't keep the phone muted: ${it.message}") }
     }
 
     private fun unmutePhone() {
         if (!mutedPhone) return
         mutedPhone = false
+        muteGuard?.let { runCatching { unregisterReceiver(it) } }
+        muteGuard = null
         runCatching {
             getSystemService(android.media.AudioManager::class.java)
                 .adjustStreamVolume(android.media.AudioManager.STREAM_MUSIC, android.media.AudioManager.ADJUST_UNMUTE, 0)
@@ -248,6 +280,11 @@ class AudioCaptureService : Service() {
         private const val BUFFER_CHUNKS = 24
         private const val LEVEL_LOG_MS = 3_000L
         private const val SILENCE_MS = 5_000L
+
+        // AudioManager's own volume broadcasts: hidden from the SDK, but sent on every Android
+        // version Gearslip runs on.
+        private const val ACTION_VOLUME_CHANGED = "android.media.VOLUME_CHANGED_ACTION"
+        private const val ACTION_MUTE_CHANGED = "android.media.STREAM_MUTE_CHANGED_ACTION"
 
         private var appContext: Context? = null
 

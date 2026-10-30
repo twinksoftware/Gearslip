@@ -182,6 +182,32 @@ class ConnectionLifecycleTest {
         assertEquals(SessionStatus.Phase.DISCONNECTED, SessionStatus.state.value.phase)
     }
 
+    @Test fun `EOF and transport failure tell the owner the car is gone`() {
+        val failing = object : InputStream() {
+            override fun read(): Int = throw IOException("test disconnect")
+        }
+        for (input in listOf(ByteArrayInputStream(version), failing)) {
+            var gone = 0
+            GearslipRunner(input, ByteArrayOutputStream(), ::identity, onCarGone = { gone++ }).run()
+            assertEquals(1, gone)
+        }
+    }
+
+    @Test fun `a stop from the phone is not the car leaving`() {
+        var gone = 0
+        lateinit var runner: GearslipRunner
+        val input = object : InputStream() {
+            override fun read(): Int = error("bulk reads only")
+            override fun read(bytes: ByteArray, offset: Int, length: Int): Int {
+                runner.stop()
+                return -1
+            }
+        }
+        runner = GearslipRunner(input, ByteArrayOutputStream(), ::identity, onCarGone = { gone++ })
+        runner.run()
+        assertEquals(0, gone)
+    }
+
     @Test fun `EOF and transport failure shut down the writer`() {
         val failing = object : InputStream() {
             override fun read(): Int = throw IOException("test disconnect")

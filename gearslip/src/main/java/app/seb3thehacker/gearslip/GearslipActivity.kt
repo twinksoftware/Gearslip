@@ -192,6 +192,13 @@ class GearslipActivity : ComponentActivity(), Projection {
                         onDismiss = { micBlockedNotice.value = false },
                     )
                 }
+                val vpnCar by app.seb3thehacker.gearslip.wireless.WirelessLink.vpnWarning.collectAsState()
+                vpnCar?.let { car ->
+                    app.seb3thehacker.gearslip.ui.VpnDialog(
+                        car,
+                        onDismiss = app.seb3thehacker.gearslip.wireless.WirelessLink::dismissVpnWarning,
+                    )
+                }
             }
         }
 
@@ -373,7 +380,7 @@ class GearslipActivity : ComponentActivity(), Projection {
             return
         }
         GearslipLog.i("auto-connect: connecting")
-        app.seb3thehacker.gearslip.wireless.WirelessLink.start(this, device)
+        app.seb3thehacker.gearslip.wireless.WirelessLink.start(this, device, automatic = true)
     }
 
     private fun start(accessory: UsbAccessory) {
@@ -401,6 +408,7 @@ class GearslipActivity : ComponentActivity(), Projection {
             identityProvider = { CertProvider.load(this) },
             projection = this,
             vehicleProfileFor = { info -> VehicleProfiles.find(VehicleProfiles.load(this), info) },
+            onCarGone = ::onCarGone,
         )
         this.runner = runner
         worker = Thread { runner.run() }.apply { name = "gearslip"; start() }
@@ -423,9 +431,27 @@ class GearslipActivity : ComponentActivity(), Projection {
             projection = this,
             vehicleProfileFor = { info -> VehicleProfiles.find(VehicleProfiles.load(this), info) },
             wireless = true,
+            onCarGone = ::onCarGone,
         )
         this.runner = runner
         worker = Thread { runner.run() }.apply { name = "gearslip"; start() }
+    }
+
+    /**
+     * The car hung up on its own: a wireless car switched off or dropped Wi-Fi, or a head unit
+     * closed the link without the phone seeing a USB detach. Nothing used to tear the session
+     * down then, so the music played on, captured into a link nobody was reading, until the next
+     * connection cleaned up. End it as an unplug does - pause, stop capture, unmute - but leave
+     * the wireless link up so auto-connect can reach the car again.
+     */
+    private fun onCarGone() {
+        val ended = Thread.currentThread() // the session's own reading thread
+        runOnUiThread {
+            // Already closed from the phone, or replaced by a newer session.
+            if (runner == null || worker !== ended) return@runOnUiThread
+            GearslipLog.w("the car ended the session - closing it on the phone too")
+            closeAccessory(stopWireless = false)
+        }
     }
 
     private fun describe(accessory: UsbAccessory) {
