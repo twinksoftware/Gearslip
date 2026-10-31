@@ -427,7 +427,7 @@
     <string name="settings_apps">Apps</string>
     <string name="settings_certificate">Zertifikat</string>
     <string name="cert_next_connection">Änderungen wirken auf die nächste Verbindung.</string>
-    <string name="cert_checking">Sieh..</string>
+    <string name="cert_checking">Überprüfe..</string>
     <string name="cert_valid_until">Gültigkeit bis %1$s</string>
     <string name="cert_hide_details">Details verbergen</string>
     <string name="cert_show_details">Details anzeigen</string>
@@ -475,7 +475,7 @@
     <string name="choice_night_day">Tag</string>
     <string name="choice_night_night">Nacht</string>
     <string name="choice_units_imperial">Kaiser</string>
-    <string name="choice_units_metric">Metric</string>
+    <string name="choice_units_metric">Metrisch</string>
     <string name="choice_nav_show">Immer anzeigen</string>
     <string name="choice_nav_hide_navigating">Verstecken beim Navigieren</string>
     <string name="choice_nav_hide">Verstecken bis gezapft</string>
@@ -502,7 +502,7 @@
     <string name="car_buttons">Knöpfe</string>
     <string name="car_map_day_night">Karte Tag/Nacht</string>
     <string name="car_units">Einheiten</string>
-    <string name="car_nav_bar">Nav bar</string>
+    <string name="car_nav_bar">Navigationsleiste</string>
     <string name="car_player_nav_bar">Player in der Navigationsleiste</string>
     <string name="car_skip_buttons">Überspringen von Tasten</string>
     <string name="car_song_title">Songtitel</string>
@@ -522,7 +522,7 @@
     <string name="car_vehicle_data">Fahrzeugdaten</string>
     <string name="car_vehicle_data_note">Fügt eine Fahrzeugdatenfliese hinzu: eine Live-Dumpe der Autosensoren. Die Feldnamen sind Vermutungen, bis Sie eine Änderung beobachtet haben.</string>
     <string name="car_adaptive_video">Adaptive Videoqualität</string>
-    <string name="car_adaptive_video_note">Erniedrigt die Qualität des Bildes, wenn das Auto oder sein WLAN nicht aufrecht erhalten kann, und erhöht es wieder, sobald es kann. Gilt für die nächste Verbindung.</string>
+    <string name="car_adaptive_video_note">Verringert die Bildqualität, wenn das Auto oder sein WLAN nicht mithalten können, und erhöht sie wieder, sobald dies möglich ist. Gilt für die nächste Verbindung.</string>
     <string name="web_page_note">Gezeigt von der Browser-App im Auto. Leere öffnet DuckDuckGo. Gilt für die nächste Verbindung.</string>
     <string name="car_audio">Auto Audio</string>
     <string name="car_audio_bt">Bluetooth (empfohlen)</string>
@@ -541,7 +541,7 @@
     <string name="screen_crop">Schneiden Sie die Kanten</string>
     <string name="screen_crop_sub">Für ein Auto, das oben und unten abschneidet, oder die Seiten</string>
     <string name="screen_squash">Squash zum Passen</string>
-    <string name="screen_squash_sub">Für ein Auto, das das ganze Bild drückt, also Kreise aussehen wie Ovale</string>
+    <string name="screen_squash_sub">Für ein Auto, das das ganze Bild staucht, so dass Kreise wie Ovale aussehen</string>
     <string name="screen_preview_title">Auto Vorschau Größe</string>
     <string name="screen_last_car">Letztes Auto</string>
     <string name="screen_last_car_sub">Die Größe des letzten Autos, mit dem Sie verbunden sind</string>
@@ -583,7 +583,7 @@
     <string name="update_download_now">Laden Sie es jetzt herunter. Android fragt, bevor es installiert.</string>
     <string name="update_try_again">Versuchen Sie es wieder</string>
     <string name="update_update">Aktualisieren</string>
-    <string name="update_checking">Sieh..</string>
+    <string name="update_checking">Überprüfe..</string>
     <string name="update_latest">Sie haben die neueste Version</string>
     <string name="update_download">Downloads</string>
     <string name="update_check_now">Jetzt überprüfen</string>
@@ -628,7 +628,7 @@
     <string name="certsetup_choose">Autos akzeptieren nur Google-ausgestellte Zertifikate. Gearslip enthält keine, also wählen Sie, woher Sie kommen.</string>
     <string name="certsetup_aasdk_sub">Das Open-Source-Aasdk-Projekt veröffentlicht dieses Zertifikat bei github.com/opencardev/aasdk. Die meisten Autos akzeptieren es; einige ab etwa 2020 nicht.</string>
     <string name="storage_title">Gearslip Aufbewahrung</string>
-    <string name="storage_measuring">Messen..</string>
+    <string name="storage_measuring">Messung läuft..</string>
     <string name="storage_lyrics">- Ja</string>
     <string name="storage_clear">Löschen</string>
     <string name="storage_voice">Sprachmodelle</string>
@@ -649,7 +649,7 @@
     <string name="donate_bmac">Kaufen Sie mir einen Kaffee</string>
     <string name="donate_card">Einmal mit Karte</string>
     <string name="donate_body">Gearslip ist frei, ohne Anzeigen und kein Tracking. Wenn es dich auf die Straße bringt, hält es deine Unterstützung.</string>
-    <string name="wireless_needs_permission">Dazu benötigt Gearslip Bluetooth und WLAN in der Nähe.</string>
+    <string name="wireless_needs_permission">Dazu benötigt Gearslip die Brrechtigung \"Geräte in der Nähe\".</string>
     <string name="wireless_enable_permission">Enable Nearby Geräte Erlaubnis</string>
     <string name="wireless_connect">Drahtlos verbinden</string>
     <string name="wireless_which_car">Welches Auto?</string>
@@ -663,11 +663,11 @@
     <string name="voice_live_body">Der Sprachassistent verwandelt die Rede in Text auf diesem Telefon, und nichts, was Sie sagen, lässt sie. Es braucht zwei Modelle, etwa 270 MB zusammen, einmal heruntergeladen. Dieser schreibt Ihre Worte, wie Sie sprechen.</string>
     <string name="voice_final_body">Wenn Sie aufhören zu reden, liest dieses Modell den ganzen Satz wieder. Es fängt Namen und stellt das Live-Modell Misses.</string>
     <string name="voice_model_size">%1$s · %2$d MB</string>
-    <string name="voice_downloaded">Downloaded. %1$s</string>
+    <string name="voice_downloaded">Heruntergeladen. %1$s</string>
     <string name="voice_downloading">Download, %1$d%%</string>
     <string name="home_help">Hilfe</string>
     <string name="home_preview">Voransicht</string>
-    <string name="home_logs">Logs</string>
+    <string name="home_logs">Ereignisprotokolle</string>
     <string name="home_disconnect">Getrennt</string>
     <string name="home_bt_title">Bluetooth ist nicht angeschlossen</string>
     <string name="home_debug_build">%1$s · Debug-Build</string>
