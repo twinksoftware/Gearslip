@@ -3,7 +3,7 @@
     <string name="touch_relay_description">Lad Gearslip afspille ved berøringer fra bilens skærm under telefon spejling. Gearslip læser ikke skærmens indhold.</string>
     <string name="guide_usage_title">Hjælp andre bilister.</string>
     <string name="guide_safety_title">Kør forsigtigt.</string>
-    <string name="guide_safety_body">Lad Gearslip afspille ved berøringer fra bilens skærm under telefon spejling. Gearslip læser ikke skærmens indhold.</string>
+    <string name="guide_safety_body">Gearslip er uofficielt. Det er hverken udviklet eller testet af nogen bilproducent, og det kan svigte uden forvarsel. Indstil det, før du kører, og hold derefter øjnene på vejen.</string>
     <string name="guide_mic_title">Mikrofon.</string>
     <string name="guide_mic_body">Gearslip bruger den til at sende din musik til bilen og til at lytte når du spørger om noget eller svarer på en besked. Det du siger forbliver på din telefon.</string>
     <string name="guide_location_title">Lokation.</string>
@@ -46,4 +46,22 @@
     <string name="guide_recommended">Anbefalet</string>
     <string name="guide_audio_bluetooth_body">Der vises ingen meddelelse ved hvert kørsel, og stemmen fra din kortapp kan høres i bilen.</string>
     <string name="guide_audio_usb">Gennem Gearslip</string>
+    <string name="guide_audio_usb_body">Bedre lyd uden forsinkelse. Hver gang du starter appen, beder Android dig om at dele din skærm, hvilket gør det muligt for Gearslip at sende lyden.</string>
+    <string name="guide_optional">Valgfri</string>
+    <string name="guide_already_allowed">Allerede tilladt.</string>
+    <string name="guide_scroll_more">Rul ned for at se mere ↓</string>
+    <string name="guide_allow">Tillad</string>
+    <string name="guide_skip">Spring over</string>
+    <string name="guide_open">Åben</string>
+    <string name="guide_next">Næste</string>
+    <string name="guide_done">Færdig</string>
+    <string name="guide_back">Tilbage</string>
+    <string name="usage_intro">Aktivér denne funktion, så sender Gearslip en kort besked, når du åbner appen og efter hver køretur. &lt;b&gt;Beskeden indeholder hverken navn, kontooplysninger eller placering. Et tilfældigt tal tæller din telefon én gang, og serveren gemmer ingen IP-adresse.&lt;/b&gt; Beskederne viser, hvilke biler der fungerer, og hvor de andre svigter.</string>
+    <string name="usage_send">Send forbrug information</string>
+    <string name="usage_also_share">Del også</string>
+    <string name="usage_share_android">Android version og system</string>
+    <string name="usage_share_phone">Telefon model</string>
+    <string name="usage_share_cars">Hver bil og om den var tilsluttet</string>
+    <string name="usage_share_drives">Hvert tur og hvordan det endte</string>
+    <string name="usage_what_sent">Hvad bliver sendt</string>
 </resources>
