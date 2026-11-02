@@ -28,9 +28,9 @@
     <string name="carset_bottom">Unten</string>
     <string name="carset_save_vehicle">Für dieses Fahrzeug speichern</string>
     <string name="carset_no_profile">Kein passendes Fahrzeugprofil gefunden</string>
-    <string name="carset_audio_note">„Über Gearslip“ schickt den Ton des Handys über die Verbindung zum Auto, per Kabel oder kabellos. Android fragt bei jeder Fahrt, ob du deinen Bildschirm teilen willst, und ein paar Apps blockieren das. Bluetooth spielt so ab, wie es das Handy normalerweise tut, und Android fragt nie nach.</string>
+    <string name="carset_audio_note">Über Gearslip wird der Ton des Smartphones über die Auto-Verbindung übertragen – entweder per Kabel oder kabellos. Android fragt bei jeder Fahrt nach der Freigabe des Bildschirms, und einige Apps blockieren dies. Über Bluetooth wird der Ton wie gewohnt vom Smartphone wiedergegeben, und Android fragt nie danach.</string>
     <string name="carset_directions_note">Gearslip liest jedes Abbiegen laut über die Lautsprecher des Autos vor und senkt dabei die Musiklautstärke. Schalte es aus, wenn die Sprachansage deiner Karten-App bereits im Auto zu hören ist.</string>
-    <string name="carset_phone_speech_note">Hört über den Sprachdienst des Handys zu statt über den von Gearslip. Auf den meisten Handys ist das der von Google, der deine Stimme an Google schicken kann. GrapheneOS hat keinen, deshalb nimmt Gearslip dort weiter seinen eigenen.</string>
+    <string name="carset_phone_speech_note">Nutzt den sprachbasierten Dienst des Handys selbst anstelle des Dienstes von Gearslip. Bei den meisten Handys ist das der Dienst von Google, der Ihre Stimme möglicherweise an Google weiterleitet. GrapheneOS verfügt über keinen solchen Dienst, daher nutzt Gearslip weiterhin seinen eigenen.</string>
     <string name="carset_vehicle_data_note">Fügt eine Kachel „Fahrzeugdaten“ hinzu: ein roher Live-Mitschnitt des Sensorkanals des Infotainment-Systems. Die Feldbezeichnungen (Geschwindigkeit, Drehzahl, Kraftstoff …) stammen aus anderen Reverse-Engineering-Projekten und wurden für dieses Auto nicht überprüft – betrachte sie als Vermutung, nicht als Tatsache, bis du selbst gesehen hast, wie sich ein Wert ändert.</string>
     <string name="carset_adaptive_note">Senkt die Bildqualität, wenn das Auto oder sein WLAN nicht mithalten kann, und erhöht sie wieder, sobald es geht. Gilt ab der nächsten Verbindung.</string>
     <string name="carset_usable_height">Nutzbare Höhe: %1$d px von 480</string>
@@ -48,7 +48,7 @@
     <string name="media_keeps_library">%1$s gibt seine Mediathek nicht frei.</string>
     <string name="media_needs_access">Gearslip kann die App trotzdem steuern, sobald es auf dem Handy Zugriff auf Benachrichtigungen hat. Erlaube das unter Einstellungen &gt; Benachrichtigungen &gt; Zugriff auf Benachrichtigungen.</string>
     <string name="media_not_running">%1$s läuft nicht.</string>
-    <string name="media_not_running_body">%1$s spielt über den Player von Gearslip, aber nur, solange es am Handy offen ist. Öffne es einmal, dann spielt es hier im Auto weiter.</string>
+    <string name="media_not_running_body">%1$s wird über den Gearslip-eigenen Player abgespielt, allerdings nur, solange die App auf dem Smartphone geöffnet ist. Sobald man sie einmal geöffnet hat, läuft die Wiedergabe hier im Auto weiter.</string>
     <string name="media_open_app">%1$s öffnen</string>
     <string name="media_refused">%1$s hat Gearslip das Durchsuchen nicht erlaubt.</string>
     <string name="media_refused_body">Manche Medien-Apps akzeptieren nur Googles eigenen Host.</string>
@@ -84,7 +84,7 @@
     <string name="home_no_maps_body">Installiere eine Navigations-App, die Android Auto unterstützt, dann startet sie hier von selbst.</string>
     <string name="home_map_stopped">Karte beendet</string>
     <string name="home_map_stopped_body">Sie bleibt geschlossen, bis du sie wieder öffnest.</string>
-    <string name="home_reopen_map">Karte wieder öffnen</string>
+    <string name="home_reopen_map">Die Karte erneut öffnen</string>
     <string name="home_car_apps">Auto-Apps</string>
     <string name="home_back_nav">Zurück zur Navigationsleiste</string>
     <string name="home_show_player">Player anzeigen</string>
@@ -163,7 +163,7 @@
     <string name="dash_getting_weather">Wetter wird abgerufen …</string>
     <string name="dash_coming_up">Demnächst</string>
     <string name="dash_loading_calendar">Kalender wird geladen …</string>
-    <string name="dash_nothing_week">Nichts in der nächsten Woche.</string>
+    <string name="dash_nothing_week">In der nächsten Woche steht nichts an.</string>
     <string name="dash_all_day">Ganztägig</string>
     <string name="dialer_contacts">Kontakte</string>
     <string name="dialer_keypad">Tastenfeld</string>
@@ -197,7 +197,7 @@
     <string name="notif_title">Benachrichtigungen</string>
     <string name="notif_clear_all">Alle löschen</string>
     <string name="notif_empty">Noch nichts da. Neue Benachrichtigungen vom Handy erscheinen hier.</string>
-    <string name="notif_off">Benachrichtigungen sind aus. Erlaub Gearslip am Handy unter Einstellungen &gt; Benachrichtigungen &gt; Benachrichtigungszugriff.</string>
+    <string name="notif_off">Benachrichtigungen sind aus. Erlaub Gearslip am Handy unter Einstellungen &gt; Benachrichtigungen &gt; Benachrichtigungen lesen, beantworten &amp; verwalten.</string>
     <string name="notif_replied">Beantwortet</string>
     <string name="msg_mark_read">Als gelesen markieren</string>
     <string name="msg_messages">Nachrichten</string>
@@ -213,8 +213,8 @@
     <string name="nav_then">Dann</string>
     <string name="nav_stop">Navigation beenden</string>
     <string name="nav_finding_routes">Routen werden gesucht …</string>
-    <string name="nav_lane_recommended">Empfohlener Fahrstreifen</string>
-    <string name="nav_lane">Fahrstreifen</string>
+    <string name="nav_lane_recommended">Empfohlene Fahrspur</string>
+    <string name="nav_lane">Fahrspur</string>
     <string name="nav_arrive">Ankunft %1$s</string>
     <string name="template_nothing_playing">Es läuft noch nichts.</string>
     <string name="template_search">Suchen</string>
@@ -224,7 +224,7 @@
     <string name="call_answer">Annehmen</string>
     <string name="call_ringing">Es klingelt schon laut – nimm hier ab oder lass es klingeln.</string>
     <string name="phoneapps_touch_off">Touch ist aus. Aktiviere Gearslip auf dem Handy unter Einstellungen &gt; Bedienungshilfen.</string>
-    <string name="whatsnew_show_after">Nach Updates anzeigen</string>
+    <string name="whatsnew_show_after">Nach den Aktualisierungen anzeigen</string>
     <string name="whatsnew_got_it">Verstanden</string>
     <string name="whatsnew_title">Neu in %1$s</string>
     <string name="keyboard_space">Leerzeichen</string>
@@ -316,7 +316,7 @@
     </plurals>
     <string name="touch_relay_description">Ermöglicht es Gearslip, Berührungen vom Autobildschirm während der Spiegelung auf das Handy zu übertragen. Gearslip liest keine Bildschirminhalte.</string>
     <string name="guide_usage_title">Hilf anderen Fahrern.</string>
-    <string name="guide_safety_title">Fahr sicher.</string>
+    <string name="guide_safety_title">Fahren Sie vorsichtig.</string>
     <string name="guide_safety_body">Gearslip ist inoffiziell. Kein Autohersteller hat es entwickelt oder geprüft, und es kann ohne Vorwarnung ausfallen. Richte es ein, bevor du losfährst, und behalte dann die Straße im Blick.</string>
     <string name="guide_mic_title">Mikrofon.</string>
     <string name="guide_mic_body">Gearslip nutzt es, um deine Musik ans Auto zu senden und dich zu hören, wenn du nach etwas fragst oder auf eine Nachricht antwortest. Was du sagst, bleibt auf dem Handy.</string>
@@ -370,8 +370,8 @@
     <string name="guide_next">Weiter</string>
     <string name="guide_done">Fertig</string>
     <string name="guide_back">Zurück</string>
-    <string name="usage_intro">Wenn du das einschaltest, sendet Gearslip eine kurze Notiz, wenn du es öffnest und nach jeder Fahrt. &lt;b&gt;Die Notiz enthält keinen Namen, kein Konto und keinen Standort. Eine Zufallszahl zählt dein Handy einmal, und der Server speichert keine IP-Adresse.&lt;/b&gt; Die Notizen zeigen, welche Autos funktionieren und wo es bei anderen hakt.</string>
-    <string name="usage_send">Nutzungsmeldungen senden</string>
+    <string name="usage_intro">Wenn du das einschaltest, sendet Gearslip eine kurze Notiz, wenn du es öffnest und nach jeder Fahrt. &lt;b&gt;Die Übertragung enthält keinen Namen, kein Konto und keinen Standort. Eine Zufallszahl zählt dein Handy einmal, und der Server speichert keine IP-Adresse.&lt;/b&gt; Die Notizen zeigen, welche Autos funktionieren und wo es bei anderen hakt.</string>
+    <string name="usage_send">Verwendungshinweise senden</string>
     <string name="usage_also_share">Außerdem teilen</string>
     <string name="usage_share_android">Android-Version und System</string>
     <string name="usage_share_phone">Handymodell</string>
@@ -381,14 +381,14 @@
     <string name="usage_what_sent_sub">Jedes Feld, genau wie es übertragen wird</string>
     <string name="usage_hide_note">Meldung ausblenden</string>
     <string name="usage_show_note">Meldung anzeigen</string>
-    <string name="usage_example">Beispiel, nicht gesendet: Eine Fahrt fügt dies zu „sessions“ hinzu</string>
+    <string name="usage_example">Beispiel, nicht gesendet: Eine Fahrt fügt dies zu „Sitzungen“ hinzu</string>
     <string name="usage_no_server">Diese Version hat keinen Server für Statistiken und sendet daher nichts</string>
     <string name="usage_debug_build">Debug-Version: Meldungen werden getrennt aufbewahrt und fließen nicht in die Statistik ein</string>
     <string name="worked_title">Gearslip hat mit deinem %1$s funktioniert</string>
     <string name="worked_title_unknown">Gearslip hat mit deinem Auto funktioniert</string>
     <string name="worked_body">Willst du das teilen, damit die Nächsten wissen, dass es funktioniert? Ohne Namen, Konto oder Standort.</string>
     <string name="worked_not_now">Nicht jetzt</string>
-    <string name="worked_share">Anteil</string>
+    <string name="worked_share">Teilen</string>
     <string name="recommended_intro">Diese kostenlosen Apps laufen auf dem Autodisplay von Gearslip. Jeder Knopf öffnet die Seite der App auf GitHub.</string>
     <string name="recommended_title">Empfohlene Apps</string>
     <string name="back">Zurück</string>
@@ -408,7 +408,7 @@
     <string name="settings_support">Gearslip unterstützen</string>
     <string name="settings_support_footer">Gearslip ist kostenlos, ohne Werbung und ohne Tracking. Deine Unterstützung hält das Projekt am Laufen.</string>
     <string name="settings_usage_notes">Nutzungshinweise</string>
-    <string name="settings_updates">Updates</string>
+    <string name="settings_updates">Aktualisierungen</string>
     <string name="settings_about">Über</string>
     <string name="settings_replay">Einrichtung wiederholen</string>
     <string name="settings_replay_sub">Ersteinrichtung erneut durchlaufen</string>
@@ -532,7 +532,7 @@
     <string name="screen_from_car">Vom Auto</string>
     <string name="screen_crop">Ränder abschneiden</string>
     <string name="screen_crop_sub">Für Autos, die das Bild oben und unten oder an den Seiten abschneiden</string>
-    <string name="screen_squash">Zusammenstauchen</string>
+    <string name="screen_squash">Zuschneiden</string>
     <string name="screen_squash_sub">Für Autos, die das ganze Bild zusammendrücken, sodass Kreise wie Ovale aussehen</string>
     <string name="screen_preview_title">Vorschau-Größe (Auto)</string>
     <string name="screen_last_car">Letztes Auto</string>
@@ -565,7 +565,7 @@
     <string name="help_pair_detail">Anrufe werden über das Auto wiedergegeben, sobald dein Telefon und das Auto gekoppelt sind. Gearslip bietet die Kopplung beim ersten Einstecken an.</string>
     <string name="help_answer">Anrufe am Autodisplay annehmen.</string>
     <string name="help_answer_detail">Lege Gearslip als App für Anrufer-ID und Spam-Schutz fest. Ohne diese Einstellung klingeln Anrufe zwar, können aber nur über das Telefon angenommen werden.</string>
-    <string name="help_prompt">Die Ton-Abfrage bei jeder Fahrt deaktivieren.</string>
+    <string name="help_prompt">Die Audioansage bei jeder Fahrt unterbrechen.</string>
     <string name="help_prompt_detail">Verbinde das Telefon mit aktiviertem USB-Debugging mit einem Computer und führe dies einmal aus. Ohne diesen Schritt musst du bei jeder Abfahrt auf ‚Start‘ tippen.</string>
     <string name="help_readable">Halte Benachrichtigungen lesbar.</string>
     <string name="help_readable_detail">Android verbirgt Benachrichtigungstexte bei der Audiowiedergabe. Führe dies ebenfalls aus, damit Gearslip diese Sperre aufhebt - allerdings nur, während Musik zum Auto gestreamt wird.</string>
@@ -623,15 +623,15 @@
     <string name="storage_measuring">Wird berechnet …</string>
     <string name="storage_lyrics">Songtexte</string>
     <string name="storage_clear">Leeren</string>
-    <string name="storage_voice">Sprachmodelle</string>
+    <string name="storage_voice">Stimmmodelle</string>
     <string name="storage_remove">Entfernen</string>
     <string name="storage_logs">Alte Protokolle</string>
     <string name="storage_other">Andere temporäre Dateien</string>
     <string name="storage_delete_all">Alle Gearslip-Daten löschen</string>
     <string name="storage_total">Die Daten von Gearslip belegen %1$s des Handyspeichers.</string>
-    <string name="storage_voice_detail">%1$s. Die Sprachbefehle brauchen sie. Du kannst sie in den Einstellungen wieder herunterladen.</string>
+    <string name="storage_voice_detail">%1$s. Für Sprachbefehle werden sie benötigt. Du kannst sie in den Einstellungen erneut herunterladen.</string>
     <string name="storage_logs_detail">%1$s. Protokolle früherer Starts; das Protokoll des aktuellen Starts bleibt erhalten.</string>
-    <string name="storage_other_detail">%1$s. Heruntergeladene Updates und andere Dateien, die Gearslip neu erstellen kann.</string>
+    <string name="storage_other_detail">%1$s. Heruntergeladene Updates und andere Dateien, die Gearslip erneut erstellen kann.</string>
     <string name="storage_delete_armed">Tippe erneut auf „Löschen“, um Einstellungen, Zertifikate, Sprachmodelle und Protokolle zu löschen. Gearslip wird geschlossen und startet beim nächsten Mal mit der Einrichtung.</string>
     <string name="storage_delete_sub">Einstellungen, Zertifikate, Sprachmodelle, Songtexte und Protokolle.</string>
     <string name="storage_delete">Löschen</string>
@@ -640,13 +640,13 @@
     <string name="donate_liberapay">Auf Liberapay unterstützen</string>
     <string name="donate_bmac">Spendier mir einen Kaffee</string>
     <string name="donate_card">Einmalig per Karte spenden</string>
-    <string name="donate_body">Gearslip ist kostenlos, ohne Werbung und ohne Tracking. Wenn es dich auf die Straße bringt, hält deine Unterstützung das Projekt am Laufen.</string>
+    <string name="donate_body">Gearslip ist kostenlos, werbefrei und ohne Tracking. Wenn es dir hilft, mobil zu bleiben, sorgt deine Unterstützung dafür, dass es weiterläuft.</string>
     <string name="wireless_needs_permission">Gearslip braucht dafür Zugriff auf Bluetooth und WLAN-Geräte in der Nähe.</string>
     <string name="wireless_enable_permission">Berechtigung „Geräte in der Nähe“ erteilen</string>
     <string name="wireless_connect">Kabellos verbinden</string>
     <string name="wireless_which_car">Welches Auto?</string>
     <string name="wireless_none_paired">Dein Handy ist noch mit nichts gekoppelt. Kopple es zuerst mit dem Auto.</string>
-    <string name="wireless_not_listed">Auto nicht in der Liste? Kopple es zuerst mit deinem Handy.</string>
+    <string name="wireless_not_listed">Das Fahrzeug ist nicht aufgeführt? Kopple es zuerst mit deinem Handy.</string>
     <string name="bluetooth_settings">Bluetooth-Einstellungen</string>
     <string name="voice_live_title">Sprache: Live-Erkennung</string>
     <string name="voice_final_title">Sprache: Endgültige Erkennung</string>
@@ -700,7 +700,7 @@
     <string name="places_not_found">Gearslip konnte deinen Standort nicht finden. Prüfe, ob der Standort eingeschaltet ist.</string>
     <string name="places_clear">Löschen</string>
     <string name="certsetup_installed_hint">Wenn sich dein Auto nicht verbindet, lehnt es dieses Zertifikat vielleicht ab. Importiere dein eigenes in den Einstellungen unter „Zertifikat“.</string>
-    <string name="cert_downloaded_footer">Auto verbindet sich nicht? Manche Autos ab etwa Baujahr 2020 lehnen das aasdk-Zertifikat ab. Importier dann stattdessen dein eigenes. Änderungen gelten ab der nächsten Verbindung.</string>
+    <string name="cert_downloaded_footer">Das Auto lässt sich nicht verbinden? Einige Fahrzeuge ab etwa 2020 lehnen das aasdk-Zertifikat ab; importiere daher stattdessen dein eigenes. Die Änderungen werden bei der nächsten Verbindung wirksam.</string>
     <string name="car_cluster_video">Abbiegehinweis im Kombiinstrument</string>
     <string name="car_cluster_video_note">Für Autos mit einem zweiten Bildschirm im Kombiinstrument: Gearslip zeigt dort das nächste Abbiegen an. Gilt ab der nächsten Verbindung.</string>
 </resources>
