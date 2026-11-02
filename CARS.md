@@ -23,6 +23,7 @@ and some don't say.
 | Jeep Cherokee | 2019 | Uconnect 8.4 (Delphi) |
 | MG | 2019 | Desay SV |
 | Ram 1500 | 2018 | Uconnect 8.4 (Panasonic) |
+| Renault Clio V | 2019-2024 | Easy Link |
 | Škoda | 2018 | MIB Standard2 (TechniSat) |
 | Subaru Outback | 2020 | Denso |
 | Toyota RAV4 | 2020 | Pioneer T1 |
