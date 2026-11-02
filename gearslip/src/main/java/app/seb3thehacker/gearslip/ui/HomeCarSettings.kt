@@ -4,19 +4,23 @@ import androidx.annotation.StringRes
 import androidx.compose.ui.res.stringResource
 import app.seb3thehacker.gearslip.R
 import app.seb3thehacker.gearslip.car.theme.DarkStyle
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -24,6 +28,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,18 +36,23 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import app.seb3thehacker.gearslip.car.AppTheme
 import app.seb3thehacker.gearslip.car.CarApps
 import app.seb3thehacker.gearslip.car.CarSettings
+import app.seb3thehacker.gearslip.car.LauncherCache
 import app.seb3thehacker.gearslip.car.NavBarMode
 import app.seb3thehacker.gearslip.car.NightMode
 import app.seb3thehacker.gearslip.car.Units
 import app.seb3thehacker.gearslip.car.theme.GsThemes
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 /** The car's setting groups, each opening its own screen from the phone's home screen. */
 enum class CarGroup(@param:StringRes val title: Int) {
+    APPS(R.string.crumb_apps),
     SCREEN(R.string.car_group_screen),
     NAV_BAR(R.string.car_group_nav_bar),
     SOUND(R.string.car_group_sound),
@@ -102,6 +112,7 @@ internal fun HomeCarSettings(onOpen: (CarGroup) -> Unit, modifier: Modifier = Mo
     // Read again each time Home shows, so a place saved a moment ago is listed.
     val places = androidx.compose.runtime.remember { app.seb3thehacker.gearslip.car.SavedPlaces.all(context) }
     fun summary(group: CarGroup) = when (group) {
+        CarGroup.APPS -> listOf(str(R.string.car_apps_sub))
         CarGroup.SCREEN -> listOf(opens.label(open), sizes.label(scale), themes.label(theme))
         CarGroup.NAV_BAR -> listOf(navBars.label(navBar), str(if (playerLeft) R.string.summary_player_left else R.string.summary_player_right))
         CarGroup.SOUND -> listOf(
@@ -181,7 +192,8 @@ internal fun CarGroupScreen(group: CarGroup, onBack: () -> Unit) {
                 }
                 else -> Unit
             }
-            Text(
+            // The car's own Settings has no list of apps.
+            if (group != CarGroup.APPS) Text(
                 stringResource(R.string.car_group_same),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -216,6 +228,7 @@ private fun GroupRows(group: CarGroup) {
     val clusterVideo by CarSettings.clusterVideoEnabled.collectAsState()
 
     when (group) {
+        CarGroup.APPS -> AppRows()
         CarGroup.SCREEN -> {
             Choice(stringResource(R.string.car_open_on_connect), openChoices(), open, CarSettings::setOpenOnConnect)
             SettingsDivider()
@@ -300,6 +313,28 @@ private fun GroupRows(group: CarGroup) {
                 )
             }
         }
+    }
+}
+
+/** One row per tile the installed apps put in the car's drawer, ticked while it shows there. */
+@Composable
+private fun AppRows() {
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val apps by LauncherCache.state.collectAsState()
+    val hidden by CarSettings.hiddenApps.collectAsState()
+    // Its own scan, so an app installed since the last drive is here to choose.
+    LaunchedEffect(Unit) { withContext(Dispatchers.IO) { LauncherCache.load(context, force = true) } }
+    val rows = apps.orEmpty().mapNotNull { entry -> entry.componentId?.let { it to entry } }
+    if (rows.isEmpty()) SettingsRow(stringResource(if (apps == null) R.string.car_apps_finding else R.string.car_apps_none))
+    rows.forEachIndexed { i, (id, entry) ->
+        val shown = id !in hidden
+        if (i > 0) SettingsDivider()
+        SettingsRow(
+            entry.label,
+            Modifier.toggleable(shown, role = Role.Checkbox) { CarSettings.setAppHidden(id, !it) },
+            leading = { entry.icon?.let { Image(it, contentDescription = null, Modifier.size(40.dp)) } },
+            trailing = { Checkbox(checked = shown, onCheckedChange = null) },
+        )
     }
 }
 
