@@ -3,7 +3,7 @@
     <plurals name="storage_lyrics_detail">
         <item quantity="one">%1$d Song · %2$s. Gelöschte Songtexte werden erneut heruntergeladen, wenn du sie öffnest.%1$d Songs · %2$s. Gelöschte Songtexte werden erneut heruntergeladen, wenn du sie öffnest.</item>
     </plurals>
-    <string name="carset_theme">Design</string>
+    <string name="carset_theme">Thema</string>
     <string name="carset_imperial">Imperial (mi, ft, °F)</string>
     <string name="carset_metric">Metrisch (km, m, °C)</string>
     <string name="carset_screen_size">Bildschirmgröße (nächste Verbindung)</string>
@@ -61,7 +61,7 @@
     <string name="media_search_ignored">%1$s hat zu „%2$s“ nichts abgespielt.</string>
     <string name="media_searching_for">Durchsuche %1$s nach „%2$s“ …</string>
     <string name="media_nothing_playing_dot">Es läuft nichts.</string>
-    <string name="media_no_lyrics">Keine Songtexte zu diesem Titel gefunden.</string>
+    <string name="media_no_lyrics">Keine Songtexte für diesen Titel gefunden.</string>
     <string name="media_up">Nach oben</string>
     <string name="media_loading">Wird geladen …</string>
     <string name="media_browse_start">Starte die Musik in der App auf deinem Handy. Wiedergabe, Pause, Überspringen und Spulen funktionieren dann von hier aus.</string>
@@ -71,8 +71,8 @@
     <string name="media_play">Abspielen</string>
     <string name="media_queue_empty_idle">Es läuft nichts – nicht jede App verrät Gearslip, was als Nächstes kommt.</string>
     <string name="media_queue_empty_playing">Nur der aktuelle Titel – nicht jede App verrät Gearslip, was als Nächstes kommt.</string>
-    <string name="player_previous">Zurück</string>
-    <string name="player_next">Weiter</string>
+    <string name="player_previous">Vorherige</string>
+    <string name="player_next">Nächste</string>
     <string name="player_repeat">Wiederholen</string>
     <string name="player_pause">Pause</string>
     <string name="player_unlike">Gefällt mir nicht mehr</string>
@@ -225,7 +225,7 @@
     <string name="call_ringing">Es klingelt schon laut – nimm hier ab oder lass es klingeln.</string>
     <string name="phoneapps_touch_off">Touch ist aus. Aktiviere Gearslip auf dem Handy unter Einstellungen &gt; Bedienungshilfen.</string>
     <string name="whatsnew_show_after">Nach Updates anzeigen</string>
-    <string name="whatsnew_got_it">Alles klar</string>
+    <string name="whatsnew_got_it">Verstanden</string>
     <string name="whatsnew_title">Neu in %1$s</string>
     <string name="keyboard_space">Leerzeichen</string>
     <string name="keyboard_hide">Tastatur ausblenden</string>
@@ -332,7 +332,7 @@
     <string name="guide_notifications_body">Solange Gearslip verbunden ist, zeigt es eine Benachrichtigung mit einer Stopp-Taste an. Ohne diese Berechtigung blendet Android sie aus.</string>
     <string name="guide_messages_title">Nachrichten.</string>
     <string name="guide_messages_body">Das Auto zeigt deine Nachrichten an, liest sie vor und lässt dich antworten. Aktiviere Gearslip in der Liste, die sich jetzt öffnet.</string>
-    <string name="guide_android_auto_title">Android Auto ausschalten.</string>
+    <string name="guide_android_auto_title">Schalten Sie Android Auto aus.</string>
     <string name="guide_android_auto_body">Android Auto ist noch installiert und konkurriert mit Gearslip um die USB-Verbindung des Autos. Deaktiviere oder deinstalliere es auf dem Bildschirm, der sich jetzt öffnet.</string>
     <string name="guide_default_title">Gearslip auswählen.</string>
     <string name="guide_default_body">Wenn dein Handy beim Anschließen ans Auto fragt, welche App geöffnet werden soll, wähle Gearslip und tippe auf „Immer“.</string>
@@ -388,7 +388,7 @@
     <string name="worked_title_unknown">Gearslip hat mit deinem Auto funktioniert</string>
     <string name="worked_body">Willst du das teilen, damit die Nächsten wissen, dass es funktioniert? Ohne Namen, Konto oder Standort.</string>
     <string name="worked_not_now">Nicht jetzt</string>
-    <string name="worked_share">Teilen</string>
+    <string name="worked_share">Anteil</string>
     <string name="recommended_intro">Diese kostenlosen Apps laufen auf dem Autodisplay von Gearslip. Jeder Knopf öffnet die Seite der App auf GitHub.</string>
     <string name="recommended_title">Empfohlene Apps</string>
     <string name="back">Zurück</string>
@@ -616,7 +616,7 @@
     <string name="certsetup_retry">Erneut versuchen</string>
     <string name="certsetup_import_sub">Eine .p12-Datei mit dem zugehörigen privaten Schlüssel. Nutze deine eigene, wenn dein Auto das aasdk-Zertifikat ablehnt.</string>
     <string name="certsetup_skip">Einrichtung der Autoverbindung überspringen</string>
-    <string name="certsetup_loaded">Autos akzeptieren nur Zertifikate, die Google ausgestellt hat, und du hast eins geladen.</string>
+    <string name="certsetup_loaded">Autos akzeptieren nur Google-ausgestellte Zertifikate, und Sie haben eine geladen.</string>
     <string name="certsetup_choose">Autos akzeptieren nur von Google ausgestellte Zertifikate. Gearslip bringt keins mit, also wähle aus, woher deins kommen soll.</string>
     <string name="certsetup_aasdk_sub">Das Open-Source-Projekt aasdk veröffentlicht dieses Zertifikat unter github.com/opencardev/aasdk. Die meisten Autos akzeptieren es. Manche ab etwa Baujahr 2020 lehnen es ab, dann musst du dein eigenes importieren.</string>
     <string name="storage_title">Gearslip-Speicher</string>
@@ -627,7 +627,7 @@
     <string name="storage_remove">Entfernen</string>
     <string name="storage_logs">Alte Protokolle</string>
     <string name="storage_other">Andere temporäre Dateien</string>
-    <string name="storage_delete_all">Alle Daten von Gearslip löschen</string>
+    <string name="storage_delete_all">Alle Gearslip-Daten löschen</string>
     <string name="storage_total">Die Daten von Gearslip belegen %1$s des Handyspeichers.</string>
     <string name="storage_voice_detail">%1$s. Die Sprachbefehle brauchen sie. Du kannst sie in den Einstellungen wieder herunterladen.</string>
     <string name="storage_logs_detail">%1$s. Protokolle früherer Starts; das Protokoll des aktuellen Starts bleibt erhalten.</string>
