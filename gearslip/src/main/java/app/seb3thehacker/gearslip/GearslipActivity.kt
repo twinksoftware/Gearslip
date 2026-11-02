@@ -118,6 +118,10 @@ class GearslipActivity : ComponentActivity(), Projection {
 
     /** Android's one-time "Allow" for a car to connect by itself; see [WirelessAuto]. */
     private var approvingCar: String? = null
+
+    /** Whether the phone showed Gearslip when the car's intent arrived; see [stepAside]. */
+    private var shownOnPhone = false
+    private var stepAsideOnVideo = false
     private val carApproval = registerForActivityResult(
         androidx.activity.result.contract.ActivityResultContracts.StartIntentSenderForResult(),
     ) { result ->
@@ -223,6 +227,16 @@ class GearslipActivity : ComponentActivity(), Projection {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        shownOnPhone = true
+    }
+
+    override fun onStop() {
+        super.onStop()
+        shownOnPhone = false
+    }
+
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         handleIntent(intent)
@@ -323,6 +337,7 @@ class GearslipActivity : ComponentActivity(), Projection {
         // Debug builds only: opens the audio choice for a look, without turning down a real prompt.
         if (BuildConfig.DEBUG && intent?.getBooleanExtra("show_audio_choice", false) == true) offerBluetooth.value = true
         if (intent?.action == app.seb3thehacker.gearslip.wireless.WirelessAuto.ACTION_CAR_NEARBY) {
+            stepAsideOnVideo = !shownOnPhone
             connectToNearbyCar(intent.getStringExtra(app.seb3thehacker.gearslip.wireless.WirelessAuto.EXTRA_ADDRESS))
             return
         }
@@ -340,6 +355,7 @@ class GearslipActivity : ComponentActivity(), Projection {
             return
         }
         GearslipLog.i("accessory attached by the system - permission is implicit on this path")
+        stepAsideOnVideo = !shownOnPhone
         start(accessory)
     }
 
@@ -451,6 +467,19 @@ class GearslipActivity : ComponentActivity(), Projection {
 
     // --- Projection ---------------------------------------------------------------------
 
+    /**
+     * The car opens Gearslip on the phone, since Android hands a USB car only to an activity and
+     * auto-connect has to start one too. Once the car's screen is up, go back to whatever the
+     * phone showed, as Home would; the session carries on as it does with the phone locked. A
+     * question for the driver keeps Gearslip in front, and so does the phone already showing it.
+     */
+    private fun stepAside() {
+        stepAsideOnVideo = false
+        if (offerBluetooth.value || micBlockedNotice.value || approvingCar != null) return
+        GearslipLog.i("the car's screen is up - moving Gearslip off the phone's screen")
+        moveTaskToBack(true)
+    }
+
     override fun onSurfaceReady(surface: Surface, width: Int, height: Int, densityDpi: Int) {
         runOnUiThread {
             this.surface = surface
@@ -460,6 +489,7 @@ class GearslipActivity : ComponentActivity(), Projection {
             CarEnvironment.setDisplay(width, height, densityDpi)
             CarEnvironment.start(this)
             showCarUi()
+            if (stepAsideOnVideo) stepAside()
             app.seb3thehacker.gearslip.car.CarKeys.focusSink = { code, down ->
                 runOnUiThread { screenProjector?.dispatchKey(code, down) }
             }
