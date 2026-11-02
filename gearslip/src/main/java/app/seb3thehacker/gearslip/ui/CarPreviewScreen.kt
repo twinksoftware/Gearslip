@@ -59,7 +59,7 @@ import app.seb3thehacker.gearslip.car.CarUi
 @Composable
 fun CarPreviewScreen(onBack: () -> Unit) {
     val context = LocalContext.current
-    val frame by CarEnvironment.frame.collectAsStateWithLifecycle()
+    val frame by remember { CarEnvironment.frame.also { CarEnvironment.applyDensity() } }.collectAsStateWithLifecycle()
     var viewSize by remember { mutableStateOf(0 to 0) }
     // Tied to how the phone itself is held, not a button: turn it sideways and the preview goes
     // fullscreen, turn it back and the phone's own chrome (the Back/title above the frame) returns.
@@ -263,7 +263,7 @@ private fun previewFrame(
     size: app.seb3thehacker.gearslip.car.PreviewSize,
     custom: app.seb3thehacker.gearslip.car.ScreenSize?,
 ): Triple<Int, Int, Int> {
-    fun carLike(w: Int, h: Int) = Triple(w, h, (160 * h / 480).coerceIn(120, 640))
+    fun carLike(w: Int, h: Int) = Triple(w, h, app.seb3thehacker.gearslip.car.CarSettings.effectiveDensity((160 * h / 480).coerceIn(120, 640)))
     return when (size) {
         app.seb3thehacker.gearslip.car.PreviewSize.LAST_CAR -> Triple(lastCar.width, lastCar.height, lastCar.densityDpi)
         app.seb3thehacker.gearslip.car.PreviewSize.CUSTOM ->

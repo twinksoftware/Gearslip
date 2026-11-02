@@ -53,6 +53,7 @@ enum class NavBarMode { SHOW, HIDE_NAVIGATING, HIDE }
 object CarSettings {
 
     private const val KEY_SCALE = "car_scale"
+    private const val KEY_DENSITY = "car_density"
     private const val KEY_OPEN = "car_open_on_connect"
     private const val KEY_NIGHT = "car_night_mode"
     private const val KEY_PIPE_AUDIO = "car_pipe_audio"
@@ -97,6 +98,7 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
     private lateinit var app: Context
 
     private val scaleFlow = MutableStateFlow(1f)
+    private val carDensityFlow = MutableStateFlow(DENSITY_FROM_CAR)
     private val openFlow = MutableStateFlow(HOME)
     private val nightFlow = MutableStateFlow(NightMode.AUTO)
     private val pipeAudioFlow = MutableStateFlow(true)
@@ -238,6 +240,16 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
     val moreLyrics: StateFlow<Boolean> = moreLyricsFlow
 
     val scale: StateFlow<Float> = scaleFlow
+
+    /** [carDensity] when it leaves the choice to the car. */
+    const val DENSITY_FROM_CAR = 0
+    val DENSITIES = listOf(160, 180, 200, 220, 240)
+
+    /** An absolute DPI for the car UI and its apps; the video's resolution doesn't change with it. */
+    val carDensity: StateFlow<Int> = carDensityFlow
+
+    /** The density to draw at, for a car or preview that would otherwise use [carDpi]. */
+    fun effectiveDensity(carDpi: Int) = carDensityFlow.value.takeIf { it != DENSITY_FROM_CAR } ?: carDpi
     val openOnConnect: StateFlow<String> = openFlow
     val nightMode: StateFlow<NightMode> = nightFlow
 
@@ -326,6 +338,7 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
     fun init(context: Context) {
         app = context.applicationContext
         scaleFlow.value = AppSettings.getString(app, KEY_SCALE, "1.0").toFloatOrNull() ?: 1f
+        carDensityFlow.value = AppSettings.getString(app, KEY_DENSITY, "").toIntOrNull()?.takeIf { it in DENSITIES } ?: DENSITY_FROM_CAR
         openFlow.value = AppSettings.getString(app, KEY_OPEN, HOME)
         lastNavFlow.value = AppSettings.getString(app, KEY_LAST_NAV, "").ifEmpty { null }
         lastMediaFlow.value = AppSettings.getString(app, KEY_LAST_MEDIA, "").ifEmpty { null }
@@ -381,6 +394,11 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
     fun setScale(value: Float) {
         scaleFlow.value = value
         AppSettings.putString(app, KEY_SCALE, value.toString())
+    }
+
+    fun setCarDensity(dpi: Int) {
+        carDensityFlow.value = dpi
+        AppSettings.putString(app, KEY_DENSITY, dpi.toString())
     }
 
     fun setOpenOnConnect(id: String) {
