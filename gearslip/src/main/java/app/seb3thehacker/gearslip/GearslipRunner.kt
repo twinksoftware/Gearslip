@@ -1006,13 +1006,8 @@ class GearslipRunner(
                     "${videoConfigs.getOrNull(selectedConfigIndex ?: -1)?.resolutionName ?: "?"} " +
                         "(head unit offered ${offered.size}), max_unacked=$maxUnacked",
                 )
-                // VideoFocusRequestNotification { mode = 2; reason = 3 }. Reason 1 means "the phone's
-                // screen is off", which a 2020 Civic may have taken as a reason to keep its own
-                // screen (issue #43); 0 is UNKNOWN.
-                val focus = Protobuf.varintField(2, VIDEO_FOCUS_PROJECTED.toLong()) +
-                    Protobuf.varintField(3, 0L)
-                send(MSG_VIDEO_FOCUS_REQUEST, focus, encrypted = true, channel = videoChannelId)
-                log.i("-> VideoFocusRequest(mode=PROJECTED)")
+                requestProjectedFocus()
+                if (CarAudio.openSink != null) watchForWithheldScreen()
             }
 
             MSG_VIDEO_FOCUS_NOTIFICATION -> {
@@ -1286,6 +1281,38 @@ class GearslipRunner(
             send(MSG_MEDIA_STOP, Protobuf.varintField(1, SESSION_ID.toLong()), encrypted = true, channel = videoChannelId)
             log.i("the car is showing its own screen - video stopped, audio carries on")
         }
+    }
+
+    /** Asks the car for its screen; the answer comes to [onVideoFocus]. */
+    private fun requestProjectedFocus() {
+        // VideoFocusRequestNotification { mode = 2; reason = 3 }. Reason 1 means "the phone's
+        // screen is off", which a 2020 Civic may have taken as a reason to keep its own
+        // screen (issue #43); 0 is UNKNOWN.
+        val focus = Protobuf.varintField(2, VIDEO_FOCUS_PROJECTED.toLong()) +
+            Protobuf.varintField(3, 0L)
+        send(MSG_VIDEO_FOCUS_REQUEST, focus, encrypted = true, channel = videoChannelId)
+        log.i("-> VideoFocusRequest(mode=PROJECTED)")
+    }
+
+    /**
+     * Some older head units keep their own screen until every channel the phone was offered is
+     * open: a 2017 Pilot, a 2020 Civic and a 2024 Mirage (issues #43, #49, #57) never showed
+     * ours with the media channel closed, and the Mirage worked on 0.3.01, which opened it. With
+     * music over Bluetooth that channel waits for the car to switch source, so if the screen
+     * hasn't come a few seconds after asking, open it and ask again. Cars that hand the screen
+     * straight over keep their own source as before.
+     */
+    private fun watchForWithheldScreen() {
+        Thread({
+            Thread.sleep(WITHHELD_SCREEN_MS)
+            if (!running || videoStarted) return@Thread
+            val open = CarAudio.openSink ?: return@Thread
+            log.w("no screen from the car after ${WITHHELD_SCREEN_MS / 1000}s - opening the media channel and asking again")
+            open()
+            // Give the car the channel's open response before it hears the request again.
+            Thread.sleep(1_000)
+            if (running && !videoStarted) requestProjectedFocus()
+        }, "gearslip-focus-fallback").apply { isDaemon = true }.start()
     }
 
     /** Android Auto's Exit: asks the car for its own interface, leaving the session running. */
@@ -1569,6 +1596,7 @@ class GearslipRunner(
         const val ACTION_UP = 1
 
         const val ACK_STALL_MS = 2_000L
+        const val WITHHELD_SCREEN_MS = 5_000L
         const val AUDIO_TRACE_MESSAGES = 6
         const val GUIDANCE_SESSION_ID = 1
         const val PERIODIC_KEYFRAME_MS = 5_000L
