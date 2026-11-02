@@ -495,7 +495,7 @@
     <string name="car_map_day_night">Karte Tag/Nacht</string>
     <string name="car_units">Einheiten</string>
     <string name="car_nav_bar">Navigationsleiste</string>
-    <string name="car_player_nav_bar">Player in der Navigationsleiste</string>
+    <string name="car_player_nav_bar">Wiedergabe in der Navigationsleiste</string>
     <string name="car_skip_buttons">Tasten zum Überspringen</string>
     <string name="car_song_title">Songtitel</string>
     <string name="car_player_beside_map">Player neben der Karte</string>
@@ -503,7 +503,7 @@
     <string name="car_left">Links</string>
     <string name="car_autoplay">Automatisch abspielen beim Verbinden</string>
     <string name="car_more_lyrics">Weitere Songtext-Quellen</string>
-    <string name="car_more_lyrics_note">Fragt zusätzlich bei BetterLyrics und KuGou an, die dann Titel und Künstler des Songs erhalten. Wenn aus, wird nur LRCLIB gefragt.</string>
+    <string name="car_more_lyrics_note">Fragt außerdem BetterLyrics und KuGou ab, um den Titel und den Interpreten des Songs zu ermitteln. Mit „Off“ wird nur LRCLIB abgefragt.</string>
     <string name="car_spoken_directions">Gesprochene Navigationsansagen</string>
     <string name="car_spoken_directions_note">Schalte das aus, wenn die Sprachansage deiner Karten-App bereits im Auto zu hören ist.</string>
     <string name="car_phone_speech">Spracherkennung des Handys verwenden</string>
@@ -516,12 +516,12 @@
     <string name="car_adaptive_video">Adaptive Videoqualität</string>
     <string name="car_adaptive_video_note">Verringert die Bildqualität, wenn das Auto oder dessen WLAN überlastet ist, und erhöht sie wieder, sobald die Verbindung stabil ist. Wirkt ab der nächsten Verbindung.</string>
     <string name="web_page_note">Wird von der Browser-App im Auto angezeigt. Wenn leer, öffnet sich DuckDuckGo. Gilt ab der nächsten Verbindung.</string>
-    <string name="car_audio">Audio im Auto</string>
+    <string name="car_audio">Auto-Audio</string>
     <string name="car_audio_bt">Bluetooth (empfohlen)</string>
     <string name="car_audio_bt_sub">Keine Abfrage bei jeder Fahrt, und die Sprachansage deiner Karten-App kommt im Auto an</string>
     <string name="car_audio_usb_sub">Klarerer Ton ohne Verzögerung. Bei jeder Fahrt bittet Android dich, deinen Bildschirm zu teilen, damit Gearslip den Ton senden kann</string>
     <string name="car_audio_usb_footer">Führe den Befehl aus der Hilfe einmal aus, dann fragt Android nicht mehr.</string>
-    <string name="car_audio_bt_footer">Anrufe laufen so oder so über Bluetooth.</string>
+    <string name="car_audio_bt_footer">Anrufe werden in beiden Fällen über Bluetooth weitergeleitet.</string>
     <string name="screen_car_size">Bildschirmgröße im Auto</string>
     <string name="screen_use_cars">Vom Auto übernehmen</string>
     <string name="screen_preview_size">Vorschaugröße</string>
@@ -533,8 +533,8 @@
     <string name="screen_crop">Ränder abschneiden</string>
     <string name="screen_crop_sub">Für ein Auto, das oben und unten oder an den Seiten etwas abschneidet</string>
     <string name="screen_squash">Stauchen, damit es passt</string>
-    <string name="screen_squash_sub">Für Autos, die das ganze Bild zusammendrücken, sodass Kreise wie Ovale aussehen</string>
-    <string name="screen_preview_title">Größe der Auto-Vorschau</string>
+    <string name="screen_squash_sub">Für Autos, die das ganze Bild stauchen, sodass Kreise wie Ovale aussehen</string>
+    <string name="screen_preview_title">Vorschaugröße im Auto</string>
     <string name="screen_last_car">Letztes Auto</string>
     <string name="screen_last_car_sub">Die Größe des letzten Autos, mit dem du verbunden warst</string>
     <string name="screen_this_screen">Dieser Bildschirm</string>
@@ -547,7 +547,7 @@
     <string name="save">Speichern</string>
     <string name="screen_car_size_note">Nutze das, wenn das Bild im Auto verzerrt aussieht. Gib die tatsächliche Größe des Bildschirms ein, z. B. 1280x480. Die Änderung gilt ab der nächsten Verbindung.</string>
     <string name="screen_set_by_you">%1$s, von dir festgelegt</string>
-    <string name="help_title">So verbindest du dich</string>
+    <string name="help_title">Wie verbinden</string>
     <string name="help_which_cars">Welche Autos funktionieren</string>
     <string name="help_full_list">Vollständige Liste anzeigen</string>
     <string name="help_first_drive">Vor deiner ersten Fahrt</string>
