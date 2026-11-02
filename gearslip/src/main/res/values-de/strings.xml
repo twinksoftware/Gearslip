@@ -409,7 +409,7 @@
     <string name="settings_support_footer">Gearslip ist kostenlos, ohne Werbung und ohne Tracking. Deine Unterstützung hält es am Laufen.</string>
     <string name="settings_usage_notes">Nutzungsnotizen</string>
     <string name="settings_updates">Aktualisierungen</string>
-    <string name="settings_about">Über</string>
+    <string name="settings_about">Über uns</string>
     <string name="settings_replay">Einrichtungsassistent erneut starten</string>
     <string name="settings_replay_sub">Die ersten Schritte noch einmal durchgehen</string>
     <string name="settings_connection">Verbindung</string>
@@ -434,8 +434,8 @@
     <string name="cert_import_sub">Eine .p12-Datei mit dem zugehörigen privaten Schlüssel. Nutze deine eigene, wenn dein Auto das aasdk-Zertifikat ablehnt</string>
     <string name="cert_remove_imported">Importiertes Zertifikat entfernen</string>
     <string name="cert_remove_downloaded">Heruntergeladenes Zertifikat entfernen</string>
-    <string name="cert_removed_imported">Importiertes Zertifikat entfernt.</string>
-    <string name="cert_removed_downloaded">Heruntergeladenes Zertifikat entfernt.</string>
+    <string name="cert_removed_imported">Das importierte Zertifikat wurde entfernt.</string>
+    <string name="cert_removed_downloaded">Das heruntergeladene Zertifikat wurde entfernt.</string>
     <string name="cert_imported">Zertifikat importiert.</string>
     <string name="cert_import_failed">Import fehlgeschlagen: Falsches Passwort oder keine PKCS#12-Datei mit privatem Schlüssel.</string>
     <string name="cert_password_title">Zertifikatspasswort</string>
@@ -456,7 +456,7 @@
     <string name="choice_size_normal">Normal</string>
     <string name="choice_size_large">Groß</string>
     <string name="choice_size_xlarge">Extra groß</string>
-    <string name="choice_theme_phone">Dem Telefon folgen</string>
+    <string name="choice_theme_phone">Folgen Sie dem Telefon</string>
     <string name="choice_theme_light">Hell</string>
     <string name="choice_theme_dark">Dunkel</string>
     <string name="choice_dark_black">Schwarz</string>
@@ -489,7 +489,7 @@
     <string name="car_group_same">Das sind dieselben Einstellungen wie die Einstellungen im Auto. Eine Änderung hier wirkt sich auch dort aus.</string>
     <string name="car_open_on_connect">Beim Verbinden öffnen</string>
     <string name="car_size">Größe</string>
-    <string name="car_app_theme">App-Design</string>
+    <string name="car_app_theme">App Thema</string>
     <string name="car_dark_mode">Dunkelmodus</string>
     <string name="car_buttons">Tasten</string>
     <string name="car_map_day_night">Karte Tag/Nacht</string>
