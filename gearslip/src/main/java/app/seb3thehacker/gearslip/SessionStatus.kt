@@ -14,7 +14,10 @@ object SessionStatus {
 
     enum class Phase { IDLE, CONNECTING, PROJECTING, FAILED, DISCONNECTED }
 
-    data class Snapshot(val phase: Phase, val headline: String, val detail: String)
+    /** [stuckOn] is set when connecting has gone on too long: the cable or Wi-Fi, for what to try. */
+    data class Snapshot(val phase: Phase, val headline: String, val detail: String, val stuckOn: Link? = null)
+
+    enum class Link { CABLE, WIRELESS }
 
     private val flow = MutableStateFlow(
         Snapshot(
@@ -28,6 +31,12 @@ object SessionStatus {
 
     fun connecting(stage: String) {
         flow.value = Snapshot(Phase.CONNECTING, "Connecting", stage)
+    }
+
+    /** Still connecting after [GearslipRunner]'s patience ran out: Home says what to try. */
+    fun stillConnecting(link: Link) {
+        val now = flow.value
+        if (now.phase == Phase.CONNECTING) flow.value = now.copy(stuckOn = link)
     }
 
     fun projecting() {

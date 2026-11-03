@@ -58,6 +58,8 @@ class GearslipRunner(
     private val parser = Frames.Parser()
     private val assembler = Frames.Assembler()
     private lateinit var identityTask: FutureTask<PhoneTls>
+    /** The certificate in use, to tell a wrong date on the car from a certificate that's really out of date. */
+    @Volatile private var phoneCert: java.security.cert.X509Certificate? = null
 
     /** Sends every message, in order, so no other thread ever blocks on the USB link. See [send]. */
     private val writer = java.util.concurrent.Executors.newSingleThreadExecutor {
@@ -130,6 +132,7 @@ class GearslipRunner(
         identityTask = FutureTask {
             val identity = identityProvider()
             val cert = identity.certificate
+            phoneCert = cert
             log.i("phone certificate source: ${identity.source}")
             SessionReport.certificate(identity.source.toString(), cert.issuerX500Principal.toString())
             log.i("  subject = ${cert.subjectX500Principal}")
@@ -407,8 +410,7 @@ class GearslipRunner(
             }
             -2, -23, -24 -> {
                 val reason = when (status) {
-                    -23 -> "The phone's certificate is not valid yet."
-                    -24 -> "The phone's certificate has expired."
+                    -23, -24 -> certificateDates(status)
                     else -> "The head unit refused the phone's certificate."
                 }
                 SessionReport.fail(SessionReport.Category.CERTIFICATE, "AuthComplete status $status", state.name, "auth $status")
@@ -447,6 +449,30 @@ class GearslipRunner(
             }
         }
         if (authenticationFailed) running = false
+    }
+
+    /**
+     * The car checks the certificate's dates against its own clock. When they're fine by the
+     * phone's clock, the car's clock is the one that's wrong, which a flat battery or a car
+     * that never got the time from GPS leaves behind.
+     */
+    private fun certificateDates(status: Int): String {
+        val cert = phoneCert ?: return if (status == -23) "The phone's certificate is not valid yet." else "The phone's certificate has expired."
+        val now = java.util.Date()
+        val day = java.text.DateFormat.getDateInstance(java.text.DateFormat.LONG)
+        return when {
+            status == -23 && now.before(cert.notBefore) ->
+                "The phone's certificate is not valid until ${day.format(cert.notBefore)}."
+            status == -24 && now.after(cert.notAfter) ->
+                "The phone's certificate expired on ${day.format(cert.notAfter)}. Get a new one under Certificate in Settings."
+            else -> {
+                val side = if (status == -23) "behind" else "ahead"
+                log.w("the certificate's dates are fine by the phone's clock, so the car's clock is $side")
+                "The car's clock looks wrong: the certificate is valid today, but the car thinks it " +
+                    (if (status == -23) "isn't valid yet" else "has expired") +
+                    ". Set the car's date and time, then connect again."
+            }
+        }
     }
 
     /**
@@ -1443,6 +1469,9 @@ class GearslipRunner(
         SessionReport.print()
     }
 
+    private val startedAt = System.currentTimeMillis()
+    private var toldStuck = false
+
     private fun startWatchdog() {
         Thread {
             var lastFrames = 0
@@ -1453,6 +1482,11 @@ class GearslipRunner(
                 if (state != State.DONE) {
                     val idle = System.currentTimeMillis() - lastProgress
                     if (idle > 10_000) log.w("stalled in state $state for ${idle / 1000}s")
+                }
+                if (!videoStarted && !toldStuck && System.currentTimeMillis() - startedAt > STUCK_MS) {
+                    toldStuck = true
+                    log.w("still not on the car's screen after ${STUCK_MS / 1000}s, in state $state")
+                    SessionStatus.stillConnecting(if (wireless) SessionStatus.Link.WIRELESS else SessionStatus.Link.CABLE)
                 }
 
                 // Stream health. Without this a drive cannot tell "streaming fine" from
@@ -1545,6 +1579,9 @@ class GearslipRunner(
     internal companion object {
         /** The stats window adaptive bitrate reads, matching the watchdog's sleep. */
         const val ADAPT_WINDOW_MS = 5_000L
+
+        /** A car shows its screen within seconds; this long without one, Home says what to try. */
+        const val STUCK_MS = 45_000L
 
         // protobuf/aap_protobuf/service/control/ControlMessageType.proto:7-17
         const val MSG_VERSION_REQUEST = 1

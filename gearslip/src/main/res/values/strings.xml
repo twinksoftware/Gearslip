@@ -862,6 +862,8 @@
     <string name="status_idle_detail">Plug into the car\'s USB port, or connect wirelessly. Gearslip opens by itself when the car answers.</string>
     <string name="status_no_car">The phone is charging, but no car has answered. Some cables only charge; try one that carries data.</string>
     <string name="status_no_car_graphene">The phone is charging, but no car has answered. Check that USB-C port control, under Security &amp; privacy, allows data and isn\'t set to Charging-only.</string>
+    <string name="status_stuck_cable">The car hasn\'t shown Gearslip yet. Unplug the cable, wait a few seconds, and plug it back in. If it keeps happening, try another cable or USB port, and share the log in an issue.</string>
+    <string name="status_stuck_wireless">The car hasn\'t shown Gearslip yet. Turn the car off and on again, or connect with a cable. If it keeps happening, share the log in an issue.</string>
     <string name="status_open_settings">Open settings</string>
     <string name="status_connecting">Connecting</string>
     <string name="status_projecting">Projecting</string>

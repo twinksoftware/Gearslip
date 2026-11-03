@@ -307,6 +307,11 @@ private fun StatusCard(status: SessionStatus.Snapshot) {
                     )
                     SessionStatus.Phase.PROJECTING -> stringResource(R.string.status_projecting_detail)
                     SessionStatus.Phase.DISCONNECTED -> stringResource(R.string.status_disconnected_detail)
+                    SessionStatus.Phase.CONNECTING -> when (status.stuckOn) {
+                        SessionStatus.Link.CABLE -> stringResource(R.string.status_stuck_cable)
+                        SessionStatus.Link.WIRELESS -> stringResource(R.string.status_stuck_wireless)
+                        null -> status.detail
+                    }
                     else -> status.detail
                 }
                 Text(headline, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold)
