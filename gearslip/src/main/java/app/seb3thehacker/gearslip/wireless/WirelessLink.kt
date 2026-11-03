@@ -190,14 +190,18 @@ object WirelessLink {
                         log.hex("   version", body)
                         // Laid out the way a real phone's reply is (aa-proxy-rs and LIVI both
                         // parse it from real phones): 1 and 2 the version, echoing the car's;
-                        // 3 a serial; 4 the status; 6 the device's ids.
+                        // 3 a serial; 4 the status; 5 the Wi-Fi channel type the car asked for;
+                        // 6 the device's ids. Strict head units, such as Toyota's, hold back the
+                        // StartRequest until the reply carries more than the status.
                         val f = Wire.fields(body)
                         val serial = deviceId(context)
                         val ids = Protobuf.stringField(1, serial) + Protobuf.stringField(2, UUID.randomUUID().toString())
+                        val channelType = Wire.varint(f, 3)
                         val reply = Protobuf.varintField(1, Wire.varint(f, 1) ?: 1) +
                             Protobuf.varintField(2, Wire.varint(f, 2) ?: 0) +
                             Protobuf.stringField(3, serial) +
                             Protobuf.varintField(4, STATUS_SUCCESS) +
+                            (channelType?.let { Protobuf.varintField(5, it) } ?: ByteArray(0)) +
                             Protobuf.varint(((6 shl 3) or 2).toLong()) + Protobuf.varint(ids.size.toLong()) + ids
                         send(output, MSG_VERSION_RESPONSE, reply)
                         log.i("-> VersionResponse")
