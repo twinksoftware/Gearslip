@@ -132,6 +132,15 @@ object WirelessLink {
      */
     private fun startUp(context: Context, device: BluetoothDevice) {
         val me = Thread.currentThread()
+        try {
+            tryAndRetry(context, device, me)
+        } finally {
+            // A newer start-up has the service now; stop() already ended this one's.
+            if (worker === me) WirelessKeepAlive.stop(context)
+        }
+    }
+
+    private fun tryAndRetry(context: Context, device: BluetoothDevice, me: Thread) {
         var tries = 0
         while (true) {
             handedOver = false
@@ -165,6 +174,7 @@ object WirelessLink {
         worker?.interrupt()
         worker = null
         release(context)
+        WirelessKeepAlive.stop(context)
         // Stopped before the car's session began, so nothing else resets Home's card.
         if (starting) {
             log.i("wireless start-up stopped")
@@ -219,6 +229,8 @@ object WirelessLink {
         }
         rfcomm = socket
         log.i("Bluetooth: channel open")
+        // Before the Wi-Fi request: Android may refuse one from an app it sees as in the background.
+        WirelessKeepAlive.start(context)
         SessionStatus.connecting("Bluetooth: talking to $name")
 
         val input = DataInputStream(socket.inputStream)

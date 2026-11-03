@@ -19,6 +19,8 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+    <!-- Keeps a wireless start going with the phone locked; see WirelessKeepAlive. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
 
     <!--
         Wireless Android Auto: Bluetooth reaches the paired car's Android Auto service, which
@@ -203,6 +205,11 @@
             android:name=".host.LocationKeepAlive"
             android:exported="false"
             android:foregroundServiceType="location" />
+
+        <service
+            android:name=".wireless.WirelessKeepAlive"
+            android:exported="false"
+            android:foregroundServiceType="connectedDevice" />
 
         <!--
           Holds the capture session that carries a media app's audio to the car. It also claims
