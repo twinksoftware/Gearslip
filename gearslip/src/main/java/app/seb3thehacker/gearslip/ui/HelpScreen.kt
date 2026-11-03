@@ -5,6 +5,7 @@ import androidx.compose.ui.res.stringResource
 import app.seb3thehacker.gearslip.R
 import app.seb3thehacker.gearslip.BuildConfig
 import app.seb3thehacker.gearslip.car.CarSettings
+import app.seb3thehacker.gearslip.stats.UsageStats
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -59,11 +60,13 @@ private val FIRST_DRIVE = listOf(
     ),
 )
 
-private fun inTheCar(onRequestCallScreening: () -> Unit) = listOf(
+private fun inTheCar(grapheneOs: Boolean, onRequestCallScreening: () -> Unit) = listOfNotNull(
     Step(
         R.string.help_plug_in,
         R.string.help_plug_in_detail,
     ),
+    // GrapheneOS can turn off data on the USB port, and then the car never sees the phone (#71).
+    if (grapheneOs) Step(R.string.help_usb_data, R.string.help_usb_data_detail) else null,
     Step(
         R.string.help_pair,
         R.string.help_pair_detail,
@@ -93,9 +96,9 @@ private val USB_AUDIO = listOf(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HelpScreen(onBack: () -> Unit, onRequestCallScreening: () -> Unit) {
-    val car = remember(onRequestCallScreening) { inTheCar(onRequestCallScreening) }
-    val usb by CarSettings.pipeAudio.collectAsState()
     val context = LocalContext.current
+    val car = remember(onRequestCallScreening) { inTheCar(UsageStats.isGrapheneOs(context), onRequestCallScreening) }
+    val usb by CarSettings.pipeAudio.collectAsState()
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,

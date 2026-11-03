@@ -25,6 +25,15 @@ import app.seb3thehacker.gearslip.car.CarSettings
 import app.seb3thehacker.gearslip.car.BluetoothAudioCheck
 import android.provider.Settings
 import android.content.Intent
+import android.content.BroadcastReceiver
+import android.content.IntentFilter
+import android.os.BatteryManager
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import app.seb3thehacker.gearslip.stats.UsageStats
+import kotlinx.coroutines.delay
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -258,6 +267,9 @@ private fun StatusCard(status: SessionStatus.Snapshot) {
     }
 
     val live = status.phase == SessionStatus.Phase.CONNECTING || status.phase == SessionStatus.Phase.PROJECTING
+    val context = LocalContext.current
+    val grapheneOs = remember { UsageStats.isGrapheneOs(context) }
+    val noCar = chargingWithNoCar(status.phase == SessionStatus.Phase.IDLE)
     Surface(color = container, contentColor = content, shape = MaterialTheme.shapes.extraLarge) {
       Column(Modifier.fillMaxWidth().padding(24.dp)) {
         Row(
@@ -286,7 +298,13 @@ private fun StatusCard(status: SessionStatus.Snapshot) {
                     SessionStatus.Phase.FAILED -> status.headline
                 }
                 val detail = when (status.phase) {
-                    SessionStatus.Phase.IDLE -> stringResource(R.string.status_idle_detail)
+                    SessionStatus.Phase.IDLE -> stringResource(
+                        when {
+                            !noCar -> R.string.status_idle_detail
+                            grapheneOs -> R.string.status_no_car_graphene
+                            else -> R.string.status_no_car
+                        },
+                    )
                     SessionStatus.Phase.PROJECTING -> stringResource(R.string.status_projecting_detail)
                     SessionStatus.Phase.DISCONNECTED -> stringResource(R.string.status_disconnected_detail)
                     else -> status.detail
@@ -296,6 +314,13 @@ private fun StatusCard(status: SessionStatus.Snapshot) {
                 Text(detail, style = MaterialTheme.typography.bodyMedium)
             }
         }
+        // GrapheneOS keeps its USB-C port setting under Security & privacy.
+        if (noCar && grapheneOs) {
+            Spacer(Modifier.height(12.dp))
+            Button(onClick = {
+                runCatching { context.startActivity(Intent(Settings.ACTION_SECURITY_SETTINGS)) }
+            }) { Text(stringResource(R.string.status_open_settings)) }
+        }
         // The other way in: wireless, right under the cable's instructions.
         if (!live) {
             Spacer(Modifier.height(20.dp))
@@ -304,6 +329,37 @@ private fun StatusCard(status: SessionStatus.Snapshot) {
       }
     }
 }
+
+/**
+ * True once the phone has charged over a cable for [NO_CAR_MS] while Gearslip sat idle. With
+ * USB data blocked, by a charge-only cable or GrapheneOS's port setting, Android never tells
+ * Gearslip a car is there, so charging with no car is the only sign there is. A wall charger
+ * looks the same, which is why the hint only asks the driver to check.
+ */
+@Composable
+private fun chargingWithNoCar(idle: Boolean): Boolean {
+    val context = LocalContext.current
+    var plugged by remember { mutableStateOf(false) }
+    DisposableEffect(context) {
+        val receiver = object : BroadcastReceiver() {
+            override fun onReceive(c: Context, intent: Intent) {
+                val how = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0)
+                plugged = how == BatteryManager.BATTERY_PLUGGED_USB || how == BatteryManager.BATTERY_PLUGGED_AC
+            }
+        }
+        // The battery broadcast is sticky, so registering hands back the current state at once.
+        context.registerReceiver(receiver, IntentFilter(Intent.ACTION_BATTERY_CHANGED))?.let { receiver.onReceive(context, it) }
+        onDispose { context.unregisterReceiver(receiver) }
+    }
+    var waited by remember { mutableStateOf(false) }
+    LaunchedEffect(idle && plugged) {
+        waited = false
+        if (idle && plugged) { delay(NO_CAR_MS); waited = true }
+    }
+    return idle && plugged && waited
+}
+
+private const val NO_CAR_MS = 10_000L
 
 /** The version shown on screen, straight from the manifest - one place to bump per release. */
 private fun Context.appVersionName(): String =

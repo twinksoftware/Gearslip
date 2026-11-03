@@ -226,11 +226,11 @@ object UsageStats {
      * build names, not confirmed on a real phone.
      */
     fun osName(context: Context): String {
-        fun installed(pkg: String) = runCatching { context.packageManager.getPackageInfo(pkg, 0) }.isSuccess
+        fun installed(pkg: String) = installed(context, pkg)
         val names = listOf("ro.build.flavor", "ro.build.display.id", "ro.lineage.version")
             .joinToString(" ") { prop(it) } + " " + Build.DISPLAY + " " + Build.FINGERPRINT
         return when {
-            installed("app.grapheneos.setupwizard") -> "GrapheneOS"
+            isGrapheneOs(context) -> "GrapheneOS"
             prop("ro.calyxos.version").isNotEmpty() -> "CalyxOS"
             installed("foundation.e.apps") -> "/e/OS"
             names.contains("iode", ignoreCase = true) -> "iodéOS"
@@ -239,6 +239,12 @@ object UsageStats {
             else -> "Stock (${Build.BRAND.replaceFirstChar { it.uppercase() }})"
         }
     }
+
+    /** GrapheneOS, told apart from stock Pixel firmware by its own setup app. */
+    fun isGrapheneOs(context: Context) = installed(context, "app.grapheneos.setupwizard")
+
+    private fun installed(context: Context, pkg: String) =
+        runCatching { context.packageManager.getPackageInfo(pkg, 0) }.isSuccess
 
     /** A system property, or "" when it isn't set or can't be read. */
     private fun prop(name: String): String = runCatching {

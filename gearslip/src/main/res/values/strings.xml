@@ -269,6 +269,8 @@
     <string name="help_mic_detail">Android won\'t let an app pass music to the car without it. Gearslip listens only when you tap the mic or press the talk button on your wheel.</string>
     <string name="help_plug_in">Plug in, or connect wirelessly.</string>
     <string name="help_plug_in_detail">Gearslip opens by itself when the car connects. For wireless, pair the phone with the car first, then tap Connect wirelessly on Home.</string>
+    <string name="help_usb_data">Allow USB data.</string>
+    <string name="help_usb_data_detail">GrapheneOS can block data on the USB port. If USB-C port control is set to Charging-only, the car never sees the phone, even with a data cable. Set it to allow data.</string>
     <string name="help_pair">Pair over Bluetooth for calls.</string>
     <string name="help_pair_detail">Calls play through the car once your phone and the car are paired. Gearslip offers to pair the first time you plug in.</string>
     <string name="help_answer">Answer calls from the car screen.</string>
@@ -858,6 +860,9 @@
     <!-- Connection status on Home -->
     <string name="status_idle">Not connected</string>
     <string name="status_idle_detail">Plug into the car\'s USB port, or connect wirelessly. Gearslip opens by itself when the car answers.</string>
+    <string name="status_no_car">The phone is charging, but no car has answered. Some cables only charge; try one that carries data.</string>
+    <string name="status_no_car_graphene">The phone is charging, but no car has answered. Check that USB-C port control, under Security &amp; privacy, allows data and isn\'t set to Charging-only.</string>
+    <string name="status_open_settings">Open settings</string>
     <string name="status_connecting">Connecting</string>
     <string name="status_projecting">Projecting</string>
     <string name="status_projecting_detail">Streaming to the head unit.</string>
