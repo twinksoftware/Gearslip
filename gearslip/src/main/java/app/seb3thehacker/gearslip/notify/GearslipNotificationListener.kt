@@ -27,7 +27,10 @@ class GearslipNotificationListener : NotificationListenerService() {
 
     override fun onNotificationPosted(sbn: StatusBarNotification) = ingest(sbn, quiet = false)
 
-    override fun onNotificationRemoved(sbn: StatusBarNotification) = CarNotifications.gone(sbn.key)
+    override fun onNotificationRemoved(sbn: StatusBarNotification) {
+        PhoneNavigation.removed(sbn.key)
+        CarNotifications.gone(sbn.key)
+    }
 
     private fun ingest(sbn: StatusBarNotification, quiet: Boolean) {
         // Gearslip's own notifications are skipped, except a debug build's test message.
@@ -35,6 +38,11 @@ class GearslipNotificationListener : NotificationListenerService() {
             !(app.seb3thehacker.gearslip.BuildConfig.DEBUG && sbn.notification.channelId == TestMessage.CHANNEL)
         ) return
         val n = sbn.notification
+        // Google Maps or Waze guiding on the phone: the turn goes to the nav bar and the cluster.
+        if (n.category == Notification.CATEGORY_NAVIGATION && sbn.packageName in PhoneNavigation.APPS) {
+            PhoneNavigation.posted(this, sbn)
+            return
+        }
         // Ongoing entries (media, navigation, downloads) and group headers are status, not news.
         if (n.flags and (Notification.FLAG_ONGOING_EVENT or Notification.FLAG_GROUP_SUMMARY) != 0) return
         if (n.category in QUIET_CATEGORIES) return

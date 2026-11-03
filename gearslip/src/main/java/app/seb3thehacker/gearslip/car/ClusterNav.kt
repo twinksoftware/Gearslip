@@ -8,6 +8,7 @@ import androidx.car.app.navigation.model.RoutingInfo
 import androidx.car.app.navigation.model.Step
 import app.seb3thehacker.gearslip.GearslipLog
 import app.seb3thehacker.gearslip.Protobuf
+import app.seb3thehacker.gearslip.notify.PhoneNavigation
 
 /**
  * The next turn on the car's instrument cluster, over its NavigationStatusService (Service
@@ -200,6 +201,14 @@ internal class NavTurn(val step: Step, val distance: Distance?, val seconds: Lon
         /** The map app's next turn: from its trip (what clusters get), or its routing card. */
         fun current(): NavTurn? {
             val nav = CarServices.navOrNull() ?: return null
+            hosted(nav)?.let { return it }
+            // Google Maps or Waze guiding on the phone, when no map in the car is.
+            val phone = PhoneNavigation.turn.value ?: return null
+            val step = Step.Builder(phone.road).setManeuver(Maneuver.Builder(phone.maneuver).build()).build()
+            return NavTurn(step, phone.distance, null, false)
+        }
+
+        private fun hosted(nav: app.seb3thehacker.gearslip.host.CarAppConnection): NavTurn? {
             nav.trip.value?.let { trip ->
                 val step = trip.steps.firstOrNull() ?: return@let
                 val estimate = trip.stepTravelEstimates.firstOrNull()

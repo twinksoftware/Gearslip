@@ -75,6 +75,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import app.seb3thehacker.gearslip.R
+import app.seb3thehacker.gearslip.notify.PhoneNavigation
 import app.seb3thehacker.gearslip.car.theme.GsColors
 import app.seb3thehacker.gearslip.car.theme.withTintedSurfaces
 import app.seb3thehacker.gearslip.car.theme.GsIconBox
@@ -197,12 +198,13 @@ internal fun CarNavBar(navigator: CarNavigator) {
                 // Next turn first, off the map only; the player shares the space when it fits,
                 // and gives way to the turn when it doesn't.
                 // A call takes the player's place until it ends.
-                val turn = rememberNextTurn().takeIf { navigator.current != CarScreen.Home }
+                // A turn from the phone has no map in the car to show it, so it shows on Home too.
+                val turn = rememberNextTurn()?.takeIf { it.fromPhone || navigator.current != CarScreen.Home }
                 val call = CarCalls.state.collectAsState().value as? CallUiState.Active
                 BoxWithConstraints(Modifier.weight(1f).padding(horizontal = 16.dp), contentAlignment = Alignment.Center) {
                     val roomForBoth = maxWidth >= TURN_AND_PLAYER_MIN_WIDTH
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                        if (call == null || roomForBoth) turn?.let { NavTurnPill(it) { navigator.home() } }
+                        if (call == null || roomForBoth) turn?.let { NavTurnPill(it) { if (!it.fromPhone) navigator.home() } }
                         if (call != null) {
                             NavCallPill(call, Modifier.weight(1f, fill = false))
                         } else if (turn == null || roomForBoth) {
@@ -416,8 +418,8 @@ private const val TITLE_SHOWN_MS = 3_000L
 /** Below this, the nav bar's middle only has room for the turn, not the player beside it. */
 private val TURN_AND_PLAYER_MIN_WIDTH = 520.dp
 
-/** The next manoeuvre, as the running nav app last described it. */
-private class NextTurn(val icon: CarIcon?, val distance: String, val road: String)
+/** The next manoeuvre, as the running nav app last described it, or [fromPhone] a map guiding on the phone. */
+private class NextTurn(val icon: CarIcon?, val distance: String, val road: String, val fromPhone: Boolean = false)
 
 /**
  * Read straight off the nav app's own template: a navigation app keeps sending its routing card
@@ -429,15 +431,24 @@ private fun rememberNextTurn(): NextTurn? {
     val template by CarServices.nav.template.collectAsState()
     // Read so a change of units redraws the distance straight away, not at the next update.
     CarSettings.units.collectAsState().value
-    if (status.phase != CarAppConnection.Phase.RUNNING) return null
-    val routing = (template as? NavigationTemplate)?.navigationInfo as? RoutingInfo ?: return null
-    if (routing.isLoading) return null
-    val step = routing.currentStep ?: return null
+    val phone by PhoneNavigation.turn.collectAsState()
+    val routing = ((template as? NavigationTemplate)?.navigationInfo as? RoutingInfo)
+        ?.takeIf { status.phase == CarAppConnection.Phase.RUNNING }
+    val step = routing?.takeIf { !it.isLoading }?.currentStep ?: return phone?.let { phoneTurn(it) }
     return NextTurn(
         icon = step.maneuver?.icon,
         distance = routing.currentDistance.display(),
         road = step.road.text().ifEmpty { step.cue.text() },
     )
+}
+
+/** Google Maps' or Waze's own arrow, and the distance as the app wrote it. */
+@Composable
+private fun phoneTurn(turn: PhoneNavigation.Turn): NextTurn {
+    val icon = remember(turn.arrow) {
+        turn.arrow?.let { CarIcon.Builder(androidx.core.graphics.drawable.IconCompat.createWithBitmap(it)).build() }
+    }
+    return NextTurn(icon, turn.distance?.display() ?: turn.distanceText, turn.road, fromPhone = true)
 }
 
 /** The next turn in the nav bar: arrow, how far, onto what. Tapping goes back to the map. */
