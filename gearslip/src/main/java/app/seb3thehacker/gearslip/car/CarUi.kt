@@ -125,7 +125,12 @@ fun CarUi() {
     val colors = (if (dark) dynamicDarkColorScheme(appContext) else dynamicLightColorScheme(appContext)).withTintedSurfaces(dark, darkStyle)
     val base = LocalDensity.current
     val insets by CarEnvironment.insets.collectAsState()
-    val navigator = remember { CarNavigator(CarSettings.openOnConnect.value) }
+    val navigator = remember {
+        // A start screen picked for the car may be one launcher mode hides, like Screen sharing.
+        val start = CarSettings.openOnConnect.value
+        val shown = CarApps.shown(LauncherMode.active.value, LauncherMode.canCall(appContext)).any { it.id == start }
+        CarNavigator(if (shown) start else CarSettings.HOME)
+    }
     val controlsWake = remember { MapControlsWake() }
     LaunchedEffect(controlsWake) {
         while (true) {

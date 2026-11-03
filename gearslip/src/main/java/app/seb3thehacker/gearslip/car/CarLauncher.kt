@@ -185,10 +185,13 @@ private fun tilesFor(
 internal fun rememberAllEntries(): List<Entry> {
     val context = LocalContext.current
     val installed by LauncherCache.state.collectAsState()
+    val launcher by LauncherMode.active.collectAsState()
     LaunchedEffect(context) {
         if (LauncherCache.entries == null) withContext(Dispatchers.IO) { LauncherCache.load(context) }
     }
-    return remember(installed) { BuiltInApps.entries + installed.orEmpty() }
+    return remember(installed, launcher) {
+        BuiltInApps.entries(launcher, LauncherMode.canCall(context)) + installed.orEmpty()
+    }
 }
 
 /** The launcher's groups, in the order they're laid out. */
@@ -240,7 +243,7 @@ internal fun launcherOrder(all: List<Entry>, showVehicleData: Boolean, custom: L
 
 /** An app by the id a pin or the running list knows it by, built-in or installed. */
 internal fun findEntry(id: String): Entry? =
-    BuiltInApps.entries.find { it.componentId == id } ?: LauncherCache.entries?.find { it.componentId == id }
+    BuiltInApps.everyEntry.find { it.componentId == id } ?: LauncherCache.entries?.find { it.componentId == id }
 
 /** Rescans the car and media apps now, replacing the cached list; the launcher keeps showing the old one meanwhile. */
 fun warmLauncherApps(context: Context) { LauncherCache.load(context, force = true) }

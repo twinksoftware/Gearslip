@@ -28,6 +28,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,6 +36,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import app.seb3thehacker.gearslip.car.AppTheme
 import app.seb3thehacker.gearslip.car.CarApps
+import app.seb3thehacker.gearslip.car.LauncherMode
 import app.seb3thehacker.gearslip.car.CarSettings
 import app.seb3thehacker.gearslip.car.NavBarMode
 import app.seb3thehacker.gearslip.car.NightMode
@@ -73,7 +75,11 @@ private fun navBarChoices() = listOf(
     NavBarMode.HIDE to stringResource(R.string.choice_nav_hide),
 )
 @Composable
-private fun openChoices() = listOf(CarSettings.HOME to stringResource(R.string.choice_open_home)) + CarApps.all.filter { it.id != "settings" }.map { it.id to stringResource(it.labelRes) }
+private fun openChoices(): List<Pair<String, String>> {
+    val context = LocalContext.current
+    val apps = remember(context) { CarApps.shown(LauncherMode.enabled(context), LauncherMode.canCall(context)) }
+    return listOf(CarSettings.HOME to stringResource(R.string.choice_open_home)) + apps.map { it.id to stringResource(it.labelRes) }
+}
 
 /**
  * The car's settings on the phone's home screen: one card per group with a summary of where it

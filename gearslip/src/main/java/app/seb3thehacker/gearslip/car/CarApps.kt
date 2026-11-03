@@ -3,6 +3,7 @@ package app.seb3thehacker.gearslip.car
 import androidx.annotation.StringRes
 import app.seb3thehacker.gearslip.R
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Share
@@ -38,7 +39,16 @@ object CarApps {
         CarApp("settings", "Settings", R.string.settings_title, Icons.Filled.Settings) {
             CarSettingsScreen()
         },
+        CarApp("allapps", "All apps", R.string.app_all_apps, Icons.Filled.List) {
+            AllAppsScreen()
+        },
     )
 
     fun find(id: String): CarApp? = all.firstOrNull { it.id == id }
+
+    /** The screens [BuiltInApps.entries] offers here, so a choice list never names a hidden one. */
+    fun shown(launcher: Boolean, canCall: Boolean): List<CarApp> {
+        val ids = BuiltInApps.entries(launcher, canCall).mapNotNull { (it.builtIn?.screen as? CarScreen.App)?.id }.toSet()
+        return all.filter { it.id in ids }
+    }
 }

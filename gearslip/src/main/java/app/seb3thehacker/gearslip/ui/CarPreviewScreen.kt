@@ -24,6 +24,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -60,7 +61,6 @@ import app.seb3thehacker.gearslip.car.CarUi
 fun CarPreviewScreen(onBack: () -> Unit) {
     val context = LocalContext.current
     val frame by CarEnvironment.frame.collectAsStateWithLifecycle()
-    var viewSize by remember { mutableStateOf(0 to 0) }
     // Tied to how the phone itself is held, not a button: turn it sideways and the preview goes
     // fullscreen, turn it back and the phone's own chrome (the Back/title above the frame) returns.
     val fullscreen = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
@@ -68,8 +68,6 @@ fun CarPreviewScreen(onBack: () -> Unit) {
     val previewSize by app.seb3thehacker.gearslip.car.CarSettings.previewSize.collectAsStateWithLifecycle()
     val custom by app.seb3thehacker.gearslip.car.CarSettings.previewCustom.collectAsStateWithLifecycle()
     val (width, height, density) = previewFrame(context, frame, previewSize, custom)
-
-    val projector = remember { ScreenProjector(context) }
 
     // The preview is something to watch, like a map on a dash mount, so the phone stays awake on
     // it. Only here: the flag goes with this screen, and every other screen sleeps as usual.
@@ -79,64 +77,20 @@ fun CarPreviewScreen(onBack: () -> Unit) {
         onDispose { view.keepScreenOn = false }
     }
 
-    DisposableEffect(width, height, density) {
-        CarEnvironment.start(context)
-        // No surface yet: the SurfaceView below hands its own over once it exists, and the
-        // display draws straight into it. Copying each frame into a Bitmap instead cost two
-        // full-size allocations per frame on the main thread, and taps lagged with the size.
-        projector.start(null, width, height, density, name = "gearslip-preview") {
-            androidx.compose.runtime.CompositionLocalProvider(app.seb3thehacker.gearslip.car.LocalCarPreview provides true) { CarUi() }
-        }
-        onDispose { projector.stop() }
+    // A launcher already shows the car UI on this screen, and two of it can't run at once.
+    val launcher by app.seb3thehacker.gearslip.car.LauncherMode.active.collectAsStateWithLifecycle()
+
+    // Held here, not in the frame, so turning the phone between the two layouts keeps the car UI running.
+    val projector = if (launcher) null else rememberCarProjector(width, height, density, "gearslip-preview") {
+        CompositionLocalProvider(app.seb3thehacker.gearslip.car.LocalCarPreview provides true) { CarUi() }
     }
 
     // The frame is drawn the same way in both layouts; only what surrounds it differs.
     val frameContent: @Composable (Modifier) -> Unit = { modifier ->
-        Box(
-            modifier
-                .aspectRatio(width.toFloat() / height)
-                .background(Color.Black)
-                .onSizeChanged { viewSize = it.width to it.height }
-                .pointerInteropFilter { event ->
-                    val (viewWidth, viewHeight) = viewSize
-                    if (viewWidth > 0 && viewHeight > 0) {
-                        projector.dispatchTouch(
-                            event.actionMasked.toCarAction(),
-                            event.actionIndex,
-                            List(event.pointerCount) { i ->
-                                TouchPoint(
-                                    event.getPointerId(i),
-                                    event.getX(i) * width / viewWidth,
-                                    event.getY(i) * height / viewHeight,
-                                )
-                            },
-                        )
-                    }
-                    true
-                },
-            contentAlignment = Alignment.Center,
-        ) {
-            androidx.compose.runtime.key(width, height) {
-                androidx.compose.ui.viewinterop.AndroidView(
-                    factory = { viewContext ->
-                        android.view.SurfaceView(viewContext).apply {
-                            // The car's own size; the compositor scales it to the view.
-                            holder.setFixedSize(width, height)
-                            holder.addCallback(object : android.view.SurfaceHolder.Callback {
-                                override fun surfaceCreated(holder: android.view.SurfaceHolder) =
-                                    projector.setSurface(holder.surface)
-
-                                override fun surfaceChanged(holder: android.view.SurfaceHolder, format: Int, w: Int, h: Int) =
-                                    projector.setSurface(holder.surface)
-
-                                override fun surfaceDestroyed(holder: android.view.SurfaceHolder) =
-                                    projector.setSurface(null)
-                            })
-                        }
-                    },
-                    modifier = Modifier.fillMaxSize(),
-                )
-            }
+        if (projector == null) {
+            Text("Gearslip is this device's home screen, so the car UI is already showing there.", modifier)
+        } else {
+            CarFrame(projector, width, height, modifier.aspectRatio(width.toFloat() / height))
         }
     }
 
@@ -167,6 +121,80 @@ fun CarPreviewScreen(onBack: () -> Unit) {
             Row {
                 TextButton(onClick = onBack) { Text("Back") }
             }
+        }
+    }
+}
+
+/**
+ * Runs [content] on a virtual display [width] x [height] pixels big, the way the car gets it,
+ * until it leaves the composition. [CarFrame] shows it.
+ */
+@Composable
+internal fun rememberCarProjector(width: Int, height: Int, density: Int, name: String, content: @Composable () -> Unit): ScreenProjector {
+    val context = LocalContext.current
+    val projector = remember { ScreenProjector(context) }
+    val latestContent by androidx.compose.runtime.rememberUpdatedState(content)
+    DisposableEffect(width, height, density) {
+        CarEnvironment.start(context)
+        // No surface yet: the SurfaceView in CarFrame hands its own over once it exists, and the
+        // display draws straight into it. Copying each frame into a Bitmap instead cost two
+        // full-size allocations per frame on the main thread, and taps lagged with the size.
+        projector.start(null, width, height, density, name = name) { latestContent() }
+        onDispose { projector.stop() }
+    }
+    return projector
+}
+
+/**
+ * The [projector]'s display through a SurfaceView, with touches scaled back to the frame's own
+ * [width] x [height]. The car preview letterboxes it; launcher mode fills the screen with it.
+ */
+@Composable
+internal fun CarFrame(projector: ScreenProjector, width: Int, height: Int, modifier: Modifier) {
+    var viewSize by remember { mutableStateOf(0 to 0) }
+    Box(
+        modifier
+            .background(Color.Black)
+            .onSizeChanged { viewSize = it.width to it.height }
+            .pointerInteropFilter { event ->
+                val (viewWidth, viewHeight) = viewSize
+                if (viewWidth > 0 && viewHeight > 0) {
+                    projector.dispatchTouch(
+                        event.actionMasked.toCarAction(),
+                        event.actionIndex,
+                        List(event.pointerCount) { i ->
+                            TouchPoint(
+                                event.getPointerId(i),
+                                event.getX(i) * width / viewWidth,
+                                event.getY(i) * height / viewHeight,
+                            )
+                        },
+                    )
+                }
+                true
+            },
+        contentAlignment = Alignment.Center,
+    ) {
+        androidx.compose.runtime.key(width, height) {
+            androidx.compose.ui.viewinterop.AndroidView(
+                factory = { viewContext ->
+                    android.view.SurfaceView(viewContext).apply {
+                        // The car's own size; the compositor scales it to the view.
+                        holder.setFixedSize(width, height)
+                        holder.addCallback(object : android.view.SurfaceHolder.Callback {
+                            override fun surfaceCreated(holder: android.view.SurfaceHolder) =
+                                projector.setSurface(holder.surface)
+
+                            override fun surfaceChanged(holder: android.view.SurfaceHolder, format: Int, w: Int, h: Int) =
+                                projector.setSurface(holder.surface)
+
+                            override fun surfaceDestroyed(holder: android.view.SurfaceHolder) =
+                                projector.setSurface(null)
+                        })
+                    }
+                },
+                modifier = Modifier.fillMaxSize(),
+            )
         }
     }
 }

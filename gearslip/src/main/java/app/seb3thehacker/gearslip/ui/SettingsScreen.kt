@@ -3,6 +3,7 @@ package app.seb3thehacker.gearslip.ui
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import app.seb3thehacker.gearslip.R
+import app.seb3thehacker.gearslip.car.LauncherMode
 import androidx.compose.runtime.withFrameNanos
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -33,6 +34,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Warning
@@ -229,6 +231,20 @@ private fun ConnectionSection() {
             subtitle = stringResource(if (enabled) R.string.settings_use_in_car_on else R.string.settings_use_in_car_off),
             icon = Icons.Filled.Settings,
             trailing = { Switch(checked = enabled, onCheckedChange = null) },
+        )
+        // For a head unit or a tablet on the dash: the car UI becomes the device's home screen.
+        var launcher by remember { mutableStateOf(LauncherMode.enabled(context)) }
+        SettingsRow(
+            stringResource(R.string.settings_use_as_launcher),
+            Modifier.toggleable(launcher, role = Role.Switch) {
+                launcher = it
+                LauncherMode.setEnabled(context, it)
+                // Android doesn't switch home apps by itself; this is where the driver picks Gearslip.
+                if (it) LauncherMode.openHomeChoice(context)
+            },
+            subtitle = stringResource(if (launcher) R.string.settings_use_as_launcher_on else R.string.settings_use_as_launcher_off),
+            icon = Icons.Filled.Home,
+            trailing = { Switch(checked = launcher, onCheckedChange = null) },
         )
     }
 }

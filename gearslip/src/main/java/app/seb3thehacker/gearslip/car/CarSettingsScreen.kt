@@ -58,6 +58,7 @@ import kotlinx.coroutines.withContext
 fun CarSettingsScreen() {
     val scale by CarSettings.scale.collectAsState()
     val open by CarSettings.openOnConnect.collectAsState()
+    val launcher by LauncherMode.active.collectAsState()
     val night by CarSettings.nightMode.collectAsState()
     val units by CarSettings.units.collectAsState()
     val navBar by CarSettings.navBarMode.collectAsState()
@@ -109,7 +110,7 @@ fun CarSettingsScreen() {
             if (section == chosen) item {
                 ChoiceRow(
                     stringResource(R.string.car_open_on_connect),
-                    listOf(CarSettings.HOME to stringResource(R.string.choice_open_home)) + CarApps.all.filter { it.id != "settings" }.map { it.id to stringResource(it.labelRes) },
+                    listOf(CarSettings.HOME to stringResource(R.string.choice_open_home)) + CarApps.shown(launcher, LauncherMode.canCall(context)).map { it.id to stringResource(it.labelRes) },
                     open,
                 ) { CarSettings.setOpenOnConnect(it) }
             }

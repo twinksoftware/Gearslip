@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Search
@@ -83,11 +84,28 @@ internal object BuiltInApps {
     val VehicleData = BuiltInApp("vehicle", "Vehicle data", R.string.car_vehicle_data, Icons.Filled.Info, CarScreen.VehicleData) { it.vehicleData() }
     val Settings = BuiltInApp("settings", "Settings", R.string.settings_title, Icons.Filled.Settings, CarScreen.Settings) { it.settings() }
 
+    /** Launcher mode only: every app on the device, opened full screen. */
+    val AllApps = BuiltInApp("allapps", "All apps", R.string.app_all_apps, Icons.Filled.List, CarScreen.App("allapps")) { it.open("allapps") }
+
     /** Hands the screen back to the car's own interface, like Android Auto's Exit. */
     val Exit = BuiltInApp("exit", "Exit", R.string.app_exit, CarGlyph, screen = null) { CarFocus.exitToCar() }
 
-    val all = listOf(Web, ScreenSharing, Phone, VehicleData, Settings, Exit)
-    val entries: List<Entry> = all.map { Entry(it.label, icon = null, builtIn = it) }
+    val all = listOf(Web, ScreenSharing, Phone, VehicleData, Settings, Exit, AllApps)
+    private val byApp = all.associateWith { Entry(it.label, icon = null, builtIn = it) }
+    val everyEntry: List<Entry> = byApp.values.toList()
+
+    /**
+     * The ones that make sense where the car UI is showing. As a device's own home screen there
+     * is no car to share the screen with or exit to, and no phone line on most head units.
+     */
+    fun entries(launcher: Boolean, canCall: Boolean): List<Entry> = byApp.filterKeys { app ->
+        when (app) {
+            AllApps -> launcher
+            ScreenSharing, Exit -> !launcher
+            Phone -> !launcher || canCall
+            else -> true
+        }
+    }.values.toList()
 }
 
 /** The name a driver sees: translated for Gearslip's own apps, the app's own name otherwise. */

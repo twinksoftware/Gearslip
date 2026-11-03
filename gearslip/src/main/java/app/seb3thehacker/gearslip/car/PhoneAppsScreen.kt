@@ -106,7 +106,7 @@ private fun TouchRelayWarning() {
 }
 
 @Composable
-private fun PhoneAppTile(app: PhoneApp, onClick: () -> Unit) {
+internal fun PhoneAppTile(app: PhoneApp, onClick: () -> Unit) {
     GsIconBox(
         onClick = onClick,
         modifier = Modifier.height(120.dp),

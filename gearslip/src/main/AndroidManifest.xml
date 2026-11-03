@@ -161,6 +161,26 @@
         </activity>
 
         <!--
+          Launcher mode: the car UI as this device's home screen, for a head unit that runs Android
+          or a tablet on the dash. Off until Settings turns it on (LauncherMode), so phones never
+          list Gearslip as a home app.
+        -->
+        <activity
+            android:name=".LauncherActivity"
+            android:enabled="false"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:excludeFromRecents="true"
+            android:screenOrientation="sensorLandscape"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|uiMode|density|locale|layoutDirection|fontScale">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <!--
           Answers the car's USB connection on GearslipActivity's behalf. Kept apart from the
           activity so Settings can switch off just this (AppSettings.setGearslipEnabled) and leave
           the head unit to Android Auto, without disabling the screen the switch is on.

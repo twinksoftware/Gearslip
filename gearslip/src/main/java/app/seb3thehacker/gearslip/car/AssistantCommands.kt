@@ -61,7 +61,7 @@ object AssistantCommands {
 
     private suspend fun allEntries(context: Context): List<Entry> {
         val vehicleData = CarSettings.experimentalFeaturesEnabled.value && CarSettings.carSensorsEnabled.value
-        val builtIn = BuiltInApps.entries.filter { it.builtIn !== BuiltInApps.VehicleData || vehicleData }
+        val builtIn = BuiltInApps.entries(LauncherMode.active.value, LauncherMode.canCall(context)).filter { it.builtIn !== BuiltInApps.VehicleData || vehicleData }
         return builtIn + (LauncherCache.entries ?: withContext(Dispatchers.IO) { LauncherCache.load(context) })
     }
 

@@ -47,6 +47,8 @@ object GearslipLog {
     val version: StateFlow<Int> = liveVersion
 
     fun init(context: Context) {
+        // The phone app and the launcher both start here; one file per process.
+        if (file != null) return
         val dir = context.getExternalFilesDir(null) ?: return
         val name = SimpleDateFormat("yyyyMMdd-HHmmss", Locale.US).format(Date())
         file = File(dir, "gearslip-$name.log")
@@ -229,7 +231,11 @@ object GearslipLog {
      * Records an uncaught exception in the log file before the process dies, then lets the
      * system's own handler run. Without it the file ends mid-sentence and the reason is lost.
      */
+    @Volatile private var crashHandlerInstalled = false
+
     fun installCrashHandler() {
+        if (crashHandlerInstalled) return
+        crashHandlerInstalled = true
         val previous = Thread.getDefaultUncaughtExceptionHandler()
         Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
             runCatching {
