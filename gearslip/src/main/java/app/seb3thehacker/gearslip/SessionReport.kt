@@ -18,6 +18,7 @@ object SessionReport {
     enum class Category(val label: String) {
         NONE("none"),
         USB("USB transport"),
+        WIFI("Wi-Fi transport"),
         NO_HANDSHAKE("head unit never started talking"),
         TLS("TLS handshake failed"),
         CERTIFICATE("certificate rejected by the head unit"),
@@ -218,7 +219,7 @@ object SessionReport {
             // switching the car off at the end shows up as a USB or ByeBye "failure" that isn't one.
             val reached = carScreen.isNotEmpty()
             val outcome = when {
-                reached && category in setOf(Category.NONE, Category.USB, Category.BYEBYE) -> "connected"
+                reached && category in setOf(Category.NONE, Category.USB, Category.WIFI, Category.BYEBYE) -> "connected"
                 reached -> "connected, then ${category.label}"
                 category == Category.NONE -> "ended before video"
                 else -> category.label

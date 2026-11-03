@@ -160,7 +160,8 @@ class GearslipRunner(
         } catch (t: Throwable) {
             if (stopped) return
             log.e("transport failed in state $state", t)
-            SessionReport.fail(SessionReport.Category.USB, "transport failed", t, state.name)
+            val link = if (wireless) SessionReport.Category.WIFI else SessionReport.Category.USB
+            SessionReport.fail(link, "transport failed", t, state.name)
             reportDisconnect()
         } finally {
             running = false
