@@ -73,6 +73,9 @@ object WirelessLink {
     private const val LISTEN_MS = 120_000 // time to reconnect the phone from the car's Bluetooth menu
     private const val TCP_TRIES = 12 // about a minute: a car's projection listener can start well after its Wi-Fi
     private const val WIFI_WAIT_MS = 60_000
+    private const val KNOCK_MS = 8_000L // some cars publish their service only a while after Bluetooth connects
+    private const val START_RETRIES = 3
+    private const val RETRY_PAUSE_MS = 2_000L
 
     /** Set by the activity: starts a session on the car's socket. */
     @Volatile var onConnected: ((Socket) -> Unit)? = null
@@ -91,6 +94,10 @@ object WirelessLink {
     @Volatile private var activeSsid: String? = null
     /** Bumped on each Wi-Fi join and on stop, so an older run of TCP tries ends instead of racing the new one. */
     @Volatile private var tcpRun = 0
+    /** The socket reached the car's projection: whatever ends the start-up now, it isn't retried. */
+    @Volatile private var handedOver = false
+    /** A failure starting over can't fix, such as a VPN in the way. */
+    @Volatile private var noRetry = false
     private val writeLock = Any()
 
     /** Paired Bluetooth devices, cars or not: the driver picks theirs. Needs BLUETOOTH_CONNECT. */
@@ -109,7 +116,7 @@ object WirelessLink {
         worker = Thread({
             // A test feature: anything unexpected ends the attempt, not the app.
             try {
-                run(app, device)
+                startUp(app, device)
             } catch (e: Exception) {
                 log.e("wireless start-up failed", e)
                 SessionStatus.failed("Wireless start-up failed", "${e.javaClass.simpleName}: ${e.message}")
@@ -117,12 +124,56 @@ object WirelessLink {
         }, "gearslip-wireless").apply { isDaemon = true; start() }
     }
 
+    /**
+     * A step that fails after the car's Bluetooth channel opened (the channel closing, the Wi-Fi
+     * join, TCP) often works the second time, so the start-up begins again, up to
+     * [START_RETRIES] times. Waiting for a car that never called isn't repeated: that wait is
+     * two minutes already.
+     */
+    private fun startUp(context: Context, device: BluetoothDevice) {
+        val me = Thread.currentThread()
+        var tries = 0
+        while (true) {
+            handedOver = false
+            noRetry = false
+            val reached = run(context, device)
+            if (worker !== me || handedOver || noRetry || !reached) return
+            if (++tries > START_RETRIES) {
+                log.w("start-up failed ${tries} times; giving up")
+                return
+            }
+            log.i("start-up failed before the car's screen came up; starting over ($tries of $START_RETRIES)")
+            release(context)
+            SessionStatus.connecting("Starting over with ${name(device)} ($tries of $START_RETRIES)")
+            try {
+                Thread.sleep(RETRY_PAUSE_MS)
+            } catch (_: InterruptedException) {
+                return
+            }
+            if (worker !== me) return
+        }
+    }
+
+    /** Ends this try: the Bluetooth read loop stops, and [startUp] decides whether to go again. */
+    private fun endTry() {
+        runCatching { rfcomm?.close() }
+    }
+
     /** Closes the Bluetooth channel, the socket and the Wi-Fi request. Safe to call any time. */
     fun stop(context: Context) {
-        tcpRun++
         val starting = worker != null && SessionStatus.state.value.phase == SessionStatus.Phase.CONNECTING
         worker?.interrupt()
         worker = null
+        release(context)
+        // Stopped before the car's session began, so nothing else resets Home's card.
+        if (starting) {
+            log.i("wireless start-up stopped")
+            SessionStatus.disconnected()
+        }
+    }
+
+    private fun release(context: Context) {
+        tcpRun++
         runCatching { listener?.close() }
         listener = null
         runCatching { rfcomm?.close() }
@@ -134,11 +185,6 @@ object WirelessLink {
         }
         network = null
         activeSsid = null
-        // Stopped before the car's session began, so nothing else resets Home's card.
-        if (starting) {
-            log.i("wireless start-up stopped")
-            SessionStatus.disconnected()
-        }
     }
 
     /** A stable id for this phone as this app sees it, standing in for the serial a real phone sends. */
@@ -146,8 +192,9 @@ object WirelessLink {
     private fun deviceId(context: Context): String =
         Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID) ?: "gearslip"
 
+    /** One try. True if the car's Bluetooth channel opened, so that a failure after it is worth retrying. */
     @SuppressLint("MissingPermission")
-    private fun run(context: Context, device: BluetoothDevice) {
+    private fun run(context: Context, device: BluetoothDevice): Boolean {
         val name = name(device)
         log.i("--- wireless start-up with $name (${device.address}) ---")
         SessionStatus.connecting("Bluetooth: reaching $name")
@@ -163,12 +210,12 @@ object WirelessLink {
                 "Gearslip needs the Nearby devices permission to reach $name. Allow it in the app's " +
                     "settings, then try again.",
             )
-            return
+            return false
         } catch (e: IOException) {
             // Most factory head units publish no service of their own: they look for the phone's
             // and connect to it, so wait for the car instead.
             log.i("Bluetooth: $name has no Android Auto service to call (${e.message}); waiting for it to call us")
-            waitForCar(context, name) ?: return
+            waitForCar(context, device, name) ?: return false
         }
         rfcomm = socket
         log.i("Bluetooth: channel open")
@@ -261,6 +308,7 @@ object WirelessLink {
         } catch (e: IOException) {
             if (rfcomm != null) log.w("Bluetooth: channel closed (${e.message})")
         }
+        return true
     }
 
     /**
@@ -269,7 +317,7 @@ object WirelessLink {
      * Bluetooth, so the driver may have to reconnect the phone from the car's menu.
      */
     @SuppressLint("MissingPermission")
-    private fun waitForCar(context: Context, name: String): BluetoothSocket? {
+    private fun waitForCar(context: Context, device: BluetoothDevice, name: String): BluetoothSocket? {
         val adapter = context.getSystemService(BluetoothManager::class.java)?.adapter ?: return null
         val server = try {
             adapter.listenUsingRfcommWithServiceRecord("Android Auto", AA_UUID)
@@ -281,12 +329,40 @@ object WirelessLink {
         listener = server
         SessionStatus.connecting("Waiting for $name. If nothing happens, disconnect the phone in the car's Bluetooth menu and connect it again")
         log.i("Bluetooth: Android Auto service published, waiting ${LISTEN_MS / 1000}s for $name")
+        // Meanwhile, keep calling the car's own service: a car that publishes it late answers one
+        // of these instead of calling us. Whichever connects first is the channel.
+        val done = java.util.concurrent.atomic.AtomicBoolean(false)
+        val knocked = java.util.concurrent.atomic.AtomicReference<BluetoothSocket?>(null)
+        val knocker = Thread({
+            while (!done.get()) {
+                try {
+                    Thread.sleep(KNOCK_MS)
+                } catch (_: InterruptedException) {
+                    return@Thread
+                }
+                if (done.get()) return@Thread
+                val socket = runCatching { device.createRfcommSocketToServiceRecord(AA_UUID).also { it.connect() } }
+                    .getOrNull() ?: continue
+                if (done.compareAndSet(false, true)) {
+                    log.i("Bluetooth: $name's own Android Auto service answered")
+                    knocked.set(socket)
+                    runCatching { server.close() }
+                } else {
+                    runCatching { socket.close() }
+                }
+                return@Thread
+            }
+        }, "gearslip-wireless-knock").apply { isDaemon = true; start() }
         return try {
             server.accept(LISTEN_MS).also {
+                if (!done.compareAndSet(false, true)) runCatching { knocked.get()?.close() }
                 val from = runCatching { it.remoteDevice.name }.getOrNull() ?: "a device"
                 log.i("Bluetooth: $from connected to the Android Auto service")
             }
         } catch (e: IOException) {
+            knocker.join(500)
+            knocked.get()?.let { return it }
+            done.set(true)
             if (listener == null) return null // stopped
             log.w("Bluetooth: no car connected within ${LISTEN_MS / 1000}s (${e.message})")
             SessionStatus.failed(
@@ -296,6 +372,8 @@ object WirelessLink {
             )
             null
         } finally {
+            done.set(true)
+            knocker.interrupt()
             runCatching { server.close() }
             listener = null
         }
@@ -355,6 +433,7 @@ object WirelessLink {
                     "Android didn't connect to $name's network. If a \"Connect to device\" prompt " +
                         "appeared, it has to be accepted.",
                 )
+                endTry()
             }
 
             // Android can hold an app's traffic back on a network it has joined (battery or data
@@ -471,6 +550,7 @@ object WirelessLink {
                 socket.tcpNoDelay = true
                 socket.connect(InetSocketAddress(ip, port), 5_000)
                 tcp = socket
+                handedOver = true
                 log.i("TCP: connected to $ip:$port (try ${attempt + 1})")
                 val start = onConnected
                 if (start == null) {
@@ -498,11 +578,14 @@ object WirelessLink {
                 "Gearslip joined $name's network, but a VPN on this phone won't let it reach the car. " +
                     "Turn the VPN off, or exclude Gearslip in its settings, then try again.",
             )
+            noRetry = true
+            endTry()
             return
         }
         SessionStatus.failed(
             "Car's Wi-Fi joined, but no connection",
             "Gearslip joined $name's network but couldn't reach Android Auto at $ip:$port.",
         )
+        endTry()
     }
 }
