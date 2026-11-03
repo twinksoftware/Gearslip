@@ -325,6 +325,7 @@ fun CarUi() {
                             }
                         }
                         CarToastOverlay(Modifier.align(Alignment.BottomCenter).padding(bottom = homeInset))
+                        CarAlertOverlay(Modifier.align(Alignment.TopCenter))
                         CallPromptOverlay()
                         BluetoothPairOverlay()
                         PopupTimer()

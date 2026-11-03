@@ -659,8 +659,16 @@ class CarAppConnection(private val context: Context) {
         }
 
         override fun sendLocation(location: Location?) = Unit
-        override fun showAlert(alert: Bundleable?) = Unit
-        override fun dismissAlert(alertId: Int) = Unit
+        override fun showAlert(alert: Bundleable?) {
+            val shown = runCatching { alert?.get() as? androidx.car.app.model.Alert }
+                .onFailure { GearslipLog.w("host: couldn't read an alert: ${it.message}") }
+                .getOrNull() ?: return
+            main.post { if (toastOwner === owner) app.seb3thehacker.gearslip.car.CarAlerts.show(owner, shown) }
+        }
+
+        override fun dismissAlert(alertId: Int) {
+            main.post { app.seb3thehacker.gearslip.car.CarAlerts.dismiss(owner, alertId) }
+        }
         override fun openMicrophone(request: Bundleable?): Bundleable? = null
     }
 
@@ -839,6 +847,7 @@ class CarAppConnection(private val context: Context) {
 
     private fun clearToasts() {
         CarToasts.clear(toastOwner)
+        app.seb3thehacker.gearslip.car.CarAlerts.clear(toastOwner)
         toastOwner = Any()
     }
 
