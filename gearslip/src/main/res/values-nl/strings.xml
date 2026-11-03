@@ -831,4 +831,6 @@
     <string name="places_finding">Zoeken…</string>
     <string name="places_not_found">Gearslip kon je locatie niet vinden. Staat locatie aan?</string>
     <string name="places_clear">Wissen</string>
+    <string name="settings_language">Taal</string>
+    <string name="settings_language_phone">Zelfde als de telefoon</string>
 </resources>

@@ -831,4 +831,6 @@
     <string name="places_finding">Aranıyor…</string>
     <string name="places_not_found">Gearslip konumunuzu bulamadı. Konumun açık olduğundan emin olun.</string>
     <string name="places_clear">Temizle</string>
+    <string name="settings_language">Dil</string>
+    <string name="settings_language_phone">Telefonla aynı</string>
 </resources>

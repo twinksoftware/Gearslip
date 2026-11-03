@@ -831,4 +831,6 @@
     <string name="places_finding">Söker…</string>
     <string name="places_not_found">Gearslip hittade inte var du är. Kontrollera att platstjänster är på.</string>
     <string name="places_clear">Rensa</string>
+    <string name="settings_language">Språk</string>
+    <string name="settings_language_phone">Samma som telefonen</string>
 </resources>

@@ -823,4 +823,6 @@
     <string name="places_finding">正在定位…</string>
     <string name="places_not_found">Gearslip 找不到你的位置。请检查定位是否已开启。</string>
     <string name="places_clear">清除</string>
+    <string name="settings_language">语言</string>
+    <string name="settings_language_phone">与手机相同</string>
 </resources>

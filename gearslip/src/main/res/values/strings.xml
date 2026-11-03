@@ -875,4 +875,6 @@
     <string name="places_finding">Finding you…</string>
     <string name="places_not_found">Gearslip couldn’t find where you are. Check that location is on.</string>
     <string name="places_clear">Clear</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_language_phone">Same as the phone</string>
 </resources>

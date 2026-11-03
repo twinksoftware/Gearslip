@@ -863,4 +863,6 @@
     <string name="places_finding">جارٍ البحث…</string>
     <string name="places_not_found">لم يعثر Gearslip على موقعك. تأكد من تشغيل الموقع.</string>
     <string name="places_clear">مسح</string>
+    <string name="settings_language">اللغة</string>
+    <string name="settings_language_phone">مثل لغة الهاتف</string>
 </resources>

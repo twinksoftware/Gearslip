@@ -1,6 +1,7 @@
 package app.seb3thehacker.gearslip.ui
 
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import app.seb3thehacker.gearslip.R
 import androidx.compose.runtime.withFrameNanos
 import android.net.Uri
@@ -136,6 +137,7 @@ fun SettingsScreen(
                     icon = Icons.Filled.Star,
                     trailing = { Arrow() },
                 )
+                LanguageRow()
             }
             SettingsSection(
                 stringResource(R.string.settings_support),
@@ -166,6 +168,35 @@ private fun Arrow() = Icon(
     contentDescription = null,
     tint = MaterialTheme.colorScheme.onSurfaceVariant,
 )
+
+/**
+ * Android 13 and later choose an app's language in their own settings, from the languages
+ * Gearslip declares; this opens that page, which few people find on their own (issue #51).
+ */
+@Composable
+private fun LanguageRow() {
+    if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.TIRAMISU) return
+    val context = LocalContext.current
+    // A new choice arrives as a configuration change, since the manifest keeps the activity.
+    val chosen = remember(androidx.compose.ui.platform.LocalConfiguration.current) {
+        context.getSystemService(android.app.LocaleManager::class.java)?.applicationLocales?.get(0)
+    }
+    SettingsDivider()
+    SettingsRow(
+        stringResource(R.string.settings_language),
+        Modifier.clickable {
+            runCatching {
+                context.startActivity(
+                    android.content.Intent(android.provider.Settings.ACTION_APP_LOCALE_SETTINGS, Uri.fromParts("package", context.packageName, null)),
+                )
+            }
+        },
+        subtitle = chosen?.let { it.getDisplayName(it).replaceFirstChar { c -> c.titlecase(it) } }
+            ?: stringResource(R.string.settings_language_phone),
+        icon = androidx.compose.ui.graphics.vector.ImageVector.vectorResource(R.drawable.ic_language),
+        trailing = { Arrow() },
+    )
+}
 
 /** The setup guide replay, and where Gearslip lives outside the app. */
 @Composable

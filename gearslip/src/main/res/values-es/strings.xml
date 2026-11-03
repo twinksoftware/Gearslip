@@ -713,4 +713,6 @@
     <string name="cert_downloaded_footer">¿El coche no se conecta? Algunos coches de 2020 en adelante rechazan el certificado de aasdk, así que importa el tuyo. Los cambios se aplican en la próxima conexión.</string>
     <string name="car_cluster_video">Tarjeta de giro en la pantalla del cuadro</string>
     <string name="car_cluster_video_note">Para coches con una segunda pantalla en el cuadro de instrumentos: Gearslip muestra ahí el próximo giro. Se aplica en la próxima conexión.</string>
+    <string name="settings_language">Idioma</string>
+    <string name="settings_language_phone">El mismo que el teléfono</string>
 </resources>

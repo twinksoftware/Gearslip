@@ -823,4 +823,6 @@
     <string name="places_finding">찾는 중…</string>
     <string name="places_not_found">Gearslip이 현재 위치를 찾지 못했습니다. 위치가 켜져 있는지 확인하세요.</string>
     <string name="places_clear">지우기</string>
+    <string name="settings_language">언어</string>
+    <string name="settings_language_phone">휴대전화와 동일</string>
 </resources>

@@ -823,4 +823,6 @@
     <string name="places_finding">検索中…</string>
     <string name="places_not_found">現在地が見つかりませんでした。位置情報がオンになっているか確認してください。</string>
     <string name="places_clear">消去</string>
+    <string name="settings_language">言語</string>
+    <string name="settings_language_phone">スマートフォンと同じ</string>
 </resources>

@@ -839,4 +839,6 @@
     <string name="places_finding">Ricerca…</string>
     <string name="places_not_found">Gearslip non ha trovato la tua posizione. Controlla che la localizzazione sia attiva.</string>
     <string name="places_clear">Cancella</string>
+    <string name="settings_language">Lingua</string>
+    <string name="settings_language_phone">Come il telefono</string>
 </resources>

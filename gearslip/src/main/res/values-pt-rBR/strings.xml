@@ -839,4 +839,6 @@
     <string name="places_finding">Procurando…</string>
     <string name="places_not_found">O Gearslip não encontrou onde você está. Veja se a localização está ligada.</string>
     <string name="places_clear">Limpar</string>
+    <string name="settings_language">Idioma</string>
+    <string name="settings_language_phone">O mesmo do celular</string>
 </resources>

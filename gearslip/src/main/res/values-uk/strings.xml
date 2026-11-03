@@ -847,4 +847,6 @@
     <string name="places_finding">Шукаю…</string>
     <string name="places_not_found">Gearslip не знайшов, де ви. Перевірте, чи увімкнено геолокацію.</string>
     <string name="places_clear">Очистити</string>
+    <string name="settings_language">Мова</string>
+    <string name="settings_language_phone">Як на телефоні</string>
 </resources>
