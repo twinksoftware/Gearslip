@@ -825,4 +825,5 @@
     <string name="places_clear">지우기</string>
     <string name="settings_language">언어</string>
     <string name="settings_language_phone">휴대전화와 동일</string>
+    <string name="player_next_chapter">다음 챕터</string>
 </resources>

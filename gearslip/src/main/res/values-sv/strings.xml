@@ -833,4 +833,5 @@
     <string name="places_clear">Rensa</string>
     <string name="settings_language">Språk</string>
     <string name="settings_language_phone">Samma som telefonen</string>
+    <string name="player_next_chapter">Nästa kapitel</string>
 </resources>

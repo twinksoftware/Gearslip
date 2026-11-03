@@ -841,4 +841,5 @@
     <string name="places_clear">Cancella</string>
     <string name="settings_language">Lingua</string>
     <string name="settings_language_phone">Come il telefono</string>
+    <string name="player_next_chapter">Capitolo successivo</string>
 </resources>

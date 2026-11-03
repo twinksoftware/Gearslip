@@ -841,4 +841,5 @@
     <string name="places_clear">Limpar</string>
     <string name="settings_language">Idioma</string>
     <string name="settings_language_phone">O mesmo do celular</string>
+    <string name="player_next_chapter">Próximo capítulo</string>
 </resources>

@@ -849,4 +849,5 @@
     <string name="places_clear">Wyczyść</string>
     <string name="settings_language">Język</string>
     <string name="settings_language_phone">Taki sam jak w telefonie</string>
+    <string name="player_next_chapter">Następny rozdział</string>
 </resources>

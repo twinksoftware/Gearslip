@@ -849,4 +849,5 @@
     <string name="places_clear">Очистити</string>
     <string name="settings_language">Мова</string>
     <string name="settings_language_phone">Як на телефоні</string>
+    <string name="player_next_chapter">Наступний розділ</string>
 </resources>

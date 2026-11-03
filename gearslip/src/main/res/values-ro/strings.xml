@@ -2,4 +2,5 @@
 <resources>
     <string name="settings_language">Limbă</string>
     <string name="settings_language_phone">La fel ca pe telefon</string>
+    <string name="player_next_chapter">Capitolul următor</string>
 </resources>

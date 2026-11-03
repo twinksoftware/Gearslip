@@ -833,4 +833,5 @@
     <string name="places_clear">Wissen</string>
     <string name="settings_language">Taal</string>
     <string name="settings_language_phone">Zelfde als de telefoon</string>
+    <string name="player_next_chapter">Volgend hoofdstuk</string>
 </resources>

@@ -2,4 +2,5 @@
 <resources>
     <string name="settings_language">Sprog</string>
     <string name="settings_language_phone">Samme som telefonen</string>
+    <string name="player_next_chapter">Næste kapitel</string>
 </resources>

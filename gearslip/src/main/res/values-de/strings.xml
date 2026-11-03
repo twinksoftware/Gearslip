@@ -715,4 +715,5 @@
     <string name="car_cluster_video_note">Für Autos mit einem zweiten Bildschirm im Kombiinstrument: Gearslip zeigt dort das nächste Abbiegen. Gilt ab der nächsten Verbindung.</string>
     <string name="settings_language">Sprache</string>
     <string name="settings_language_phone">Wie auf dem Telefon</string>
+    <string name="player_next_chapter">Nächstes Kapitel</string>
 </resources>

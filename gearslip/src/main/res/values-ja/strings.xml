@@ -825,4 +825,5 @@
     <string name="places_clear">消去</string>
     <string name="settings_language">言語</string>
     <string name="settings_language_phone">スマートフォンと同じ</string>
+    <string name="player_next_chapter">次のチャプター</string>
 </resources>

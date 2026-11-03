@@ -849,4 +849,5 @@
     <string name="places_clear">Vymazat</string>
     <string name="settings_language">Jazyk</string>
     <string name="settings_language_phone">Stejný jako v telefonu</string>
+    <string name="player_next_chapter">Další kapitola</string>
 </resources>

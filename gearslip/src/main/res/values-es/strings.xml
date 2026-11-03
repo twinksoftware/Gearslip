@@ -715,4 +715,5 @@
     <string name="car_cluster_video_note">Para coches con una segunda pantalla en el cuadro de instrumentos: Gearslip muestra ahí el próximo giro. Se aplica en la próxima conexión.</string>
     <string name="settings_language">Idioma</string>
     <string name="settings_language_phone">El mismo que el teléfono</string>
+    <string name="player_next_chapter">Capítulo siguiente</string>
 </resources>

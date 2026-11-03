@@ -1,5 +1,6 @@
 package app.seb3thehacker.gearslip.media
 
+import app.seb3thehacker.gearslip.R
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -391,7 +392,7 @@ class CarMedia(private val context: Context) {
             speed = state?.playbackSpeed ?: 1f,
             updatedAt = state?.lastPositionUpdateTime ?: 0,
             actions = state?.actions ?: 0,
-            custom = state?.customActions.orEmpty().map { CustomAction(it.action, it.name.toString(), it.extras, it.icon, iconName(it.icon)) },
+            custom = withNextChapter(state?.customActions.orEmpty().map { CustomAction(it.action, it.name.toString(), it.extras, it.icon, iconName(it.icon)) }),
             error = state?.errorMessage?.toString(),
             activeQueueItemId = state?.activeQueueItemId ?: MediaSession.QueueItem.UNKNOWN_ID.toLong(),
             heart = if (controller?.ratingType == Rating.RATING_HEART) {
@@ -405,12 +406,28 @@ class CarMedia(private val context: Context) {
     private var appResources: Pair<String, android.content.res.Resources?>? = null
 
     /** The icon's resource name in the app's package, or "" when it can't be read. */
-    private fun iconName(icon: Int): String {
-        val pkg = controller?.packageName ?: return ""
+    /**
+     * AntennaPod takes a Next chapter command whenever it's playing, but offers the button only
+     * when the driver turns it on in its notification settings. Gearslip offers it either way,
+     * with AntennaPod's own icon; on an episode without chapters it does nothing.
+     */
+    private fun withNextChapter(actions: List<CustomAction>): List<CustomAction> {
+        if (controller?.packageName != ANTENNAPOD) return actions
+        if (actions.any { it.id in ANTENNAPOD_NEXT_CHAPTER }) return actions
+        val icon = resourcesOf(ANTENNAPOD)?.getIdentifier("ic_notification_next_chapter", "drawable", ANTENNAPOD) ?: 0
+        return actions + CustomAction(ANTENNAPOD_NEXT_CHAPTER.first(), context.getString(R.string.player_next_chapter), null, icon)
+    }
+
+    private fun resourcesOf(pkg: String): android.content.res.Resources? {
         if (appResources?.first != pkg) {
             appResources = pkg to runCatching { context.packageManager.getResourcesForApplication(pkg) }.getOrNull()
         }
-        val res = appResources?.second ?: return ""
+        return appResources?.second
+    }
+
+    private fun iconName(icon: Int): String {
+        val pkg = controller?.packageName ?: return ""
+        val res = resourcesOf(pkg) ?: return ""
         return runCatching { res.getResourceEntryName(icon) }.getOrDefault("")
     }
 
@@ -515,7 +532,15 @@ class CarMedia(private val context: Context) {
     fun next() = controller?.transportControls?.skipToNext()
     fun previous() = controller?.transportControls?.skipToPrevious()
     fun seek(ms: Long) = controller?.transportControls?.seekTo(ms)
-    fun custom(action: CustomAction) = controller?.transportControls?.sendCustomAction(action.id, action.extras)
+    fun custom(action: CustomAction) {
+        val controls = controller?.transportControls ?: return
+        // AntennaPod's media3 service and its older one each know only their own name for it.
+        if (controller?.packageName == ANTENNAPOD && action.id in ANTENNAPOD_NEXT_CHAPTER) {
+            ANTENNAPOD_NEXT_CHAPTER.forEach { controls.sendCustomAction(it, null) }
+        } else {
+            controls.sendCustomAction(action.id, action.extras)
+        }
+    }
     fun playQueueItem(track: QueueTrack) = controller?.transportControls?.skipToQueueItem(track.queueId)
 
     /**
@@ -798,6 +823,10 @@ class CarMedia(private val context: Context) {
 }
 
 /** Android Auto's browse layout hints, which any app built for it already sends. */
+private const val ANTENNAPOD = "de.danoeh.antennapod"
+/** The media3 service's name first: that's the one offered as the button's own. */
+private val ANTENNAPOD_NEXT_CHAPTER = listOf("next_chapter", "action.de.danoeh.antennapod.core.service.next_chapter")
+
 private const val STYLE_SUPPORTED = "android.media.browse.CONTENT_STYLE_SUPPORTED"
 private const val STYLE_BROWSABLE = "android.media.browse.CONTENT_STYLE_BROWSABLE_HINT"
 private const val STYLE_PLAYABLE = "android.media.browse.CONTENT_STYLE_PLAYABLE_HINT"
