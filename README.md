@@ -19,6 +19,16 @@ started as machine translations, so some read awkwardly.
 Questions, ideas?
 [Join the discussion on Matrix](https://matrix.to/#/!mf0_mgBd5KqKpc9FfX_wHp1jFCcwAtPrndIn_oGIyMk?via=matrix.org).
 
+> [!WARNING]
+> Gearslip is **alpha software**. It can drop the connection, freeze the car screen, or fail
+> to start, and a new release can break a car that worked before. Set it up while parked, and
+> keep another way to navigate.
+
+> [!WARNING]
+> On GrapheneOS, make sure **USB-C port control** isn't set to **Charging-only**. That setting
+> blocks USB data, so the car never sees the phone, even with a data cable. Set it to allow
+> data transfer.
+
 ## Which cars work
 
 Most cars work. Starting around 2020, some cars added newer security checks that reject
