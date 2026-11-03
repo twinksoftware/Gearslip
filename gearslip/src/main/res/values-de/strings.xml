@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <plurals name="storage_lyrics_detail">
-        <item quantity="one">%1$d Songs · %2$s. Gelöschte Songtexte werden erneut heruntergeladen, wenn du sie öffnest.</item>
+        <item quantity="one">%1$d Song · %2$s. Gelöschte Songtexte werden erneut heruntergeladen, wenn du sie öffnest.</item>
+        <item quantity="other">%1$d Songs · %2$s. Gelöschte Songtexte werden erneut heruntergeladen, wenn du sie öffnest.</item>
     </plurals>
     <string name="carset_theme">Design</string>
     <string name="carset_imperial">Imperial (mi, ft, °F)</string>
@@ -226,7 +227,7 @@
     <string name="call_answer">Annehmen</string>
     <string name="call_ringing">Es klingelt schon laut – nimm hier ab oder lass es klingeln.</string>
     <string name="phoneapps_touch_off">Touch ist aus. Aktiviere Gearslip auf dem Handy unter Einstellungen &gt; Bedienungshilfen.</string>
-    <string name="whatsnew_show_after">Nach den Aktualisierungen anzeigen</string>
+    <string name="whatsnew_show_after">Nach den Updates anzeigen</string>
     <string name="whatsnew_got_it">Verstanden</string>
     <string name="whatsnew_title">Neu in %1$s</string>
     <string name="keyboard_space">Leerzeichen</string>
@@ -241,7 +242,7 @@
     <string name="dir_slight_right">Biege leicht rechts ab</string>
     <string name="dir_slight_right_onto">Biege leicht rechts ab auf %1$s</string>
     <string name="dir_left">Biege links ab</string>
-    <string name="dir_left_onto">Biege links ab auf %1$s</string>
+    <string name="dir_left_onto">Biege auf %1$s links ab</string>
     <string name="dir_right">Biege rechts ab</string>
     <string name="dir_right_onto">Biege rechts ab auf %1$s</string>
     <string name="dir_sharp_left">Biege scharf links ab</string>
@@ -266,7 +267,7 @@
     <string name="dir_exit_right">Nimm die Ausfahrt rechts</string>
     <string name="dir_exit_right_toward">Nimm die Ausfahrt rechts Richtung %1$s</string>
     <string name="dir_merge_left">Fädle links ein</string>
-    <string name="dir_merge_left_onto">Fädle links ein auf %1$s</string>
+    <string name="dir_merge_left_onto">Fädle links auf %1$s ein</string>
     <string name="dir_merge_right">Fädle rechts ein</string>
     <string name="dir_merge_right_onto">Fädle rechts ein auf %1$s</string>
     <string name="dir_merge">Fädle ein</string>
@@ -323,7 +324,7 @@
     </plurals>
     <string name="touch_relay_description">Ermöglicht es Gearslip, Berührungen vom Autobildschirm während der Spiegelung auf das Handy zu übertragen. Gearslip liest keine Bildschirminhalte.</string>
     <string name="guide_usage_title">Hilf anderen Fahrern.</string>
-    <string name="guide_safety_title">Fahren Sie vorsichtig.</string>
+    <string name="guide_safety_title">Fahr vorsichtig.</string>
     <string name="guide_safety_body">Gearslip ist inoffiziell. Kein Autohersteller hat es entwickelt oder geprüft, und es kann ohne Vorwarnung ausfallen. Richte es ein, bevor du losfährst, und behalte dann die Straße im Blick.</string>
     <string name="guide_mic_title">Mikrofon.</string>
     <string name="guide_mic_body">Gearslip nutzt es, um deine Musik ans Auto zu senden und dich zu hören, wenn du nach etwas fragst oder auf eine Nachricht antwortest. Was du sagst, bleibt auf dem Handy.</string>
@@ -339,7 +340,7 @@
     <string name="guide_notifications_body">Solange Gearslip verbunden ist, zeigt es eine Benachrichtigung mit einer Stopp-Taste an. Ohne diese Berechtigung blendet Android sie aus.</string>
     <string name="guide_messages_title">Nachrichten.</string>
     <string name="guide_messages_body">Das Auto zeigt deine Nachrichten an, liest sie vor und lässt dich antworten. Aktiviere Gearslip in der Liste, die sich jetzt öffnet.</string>
-    <string name="guide_android_auto_title">Schalten Sie Android Auto aus.</string>
+    <string name="guide_android_auto_title">Schalte Android Auto aus.</string>
     <string name="guide_android_auto_body">Android Auto ist noch installiert und konkurriert mit Gearslip um die USB-Verbindung des Autos. Deaktiviere oder deinstalliere es auf dem Bildschirm, der sich jetzt öffnet.</string>
     <string name="guide_default_title">Gearslip auswählen.</string>
     <string name="guide_default_body">Wenn dein Handy beim Anschließen ans Auto fragt, welche App geöffnet werden soll, wähle Gearslip und tippe auf „Immer“.</string>
@@ -396,7 +397,7 @@
     <string name="worked_body">Möchtest du das teilen, damit der nächste Fahrer weiß, dass es funktioniert? Kein Name, kein Konto, kein Standort.</string>
     <string name="worked_not_now">Nicht jetzt</string>
     <string name="worked_share">Teilen</string>
-    <string name="recommended_intro">Diese kostenlosen Apps laufen auf dem Autobildschirm von Gearslip. Jede Schaltfläche öffnet die Seite der App auf GitHub.</string>
+    <string name="recommended_intro">Diese kostenlosen Apps laufen auf dem Autobildschirm von Gearslip. Jede Taste öffnet die Seite der App auf GitHub.</string>
     <string name="recommended_title">Empfohlene Apps</string>
     <string name="back">Zurück</string>
     <string name="recommended_installed">Installiert</string>
@@ -415,8 +416,8 @@
     <string name="settings_support">Gearslip unterstützen</string>
     <string name="settings_support_footer">Gearslip ist kostenlos, ohne Werbung und ohne Tracking. Deine Unterstützung hält es am Laufen.</string>
     <string name="settings_usage_notes">Nutzungsnotizen</string>
-    <string name="settings_updates">Aktualisierungen</string>
-    <string name="settings_about">Über uns</string>
+    <string name="settings_updates">Updates</string>
+    <string name="settings_about">Über</string>
     <string name="settings_replay">Einrichtungsassistent erneut starten</string>
     <string name="settings_replay_sub">Die ersten Schritte noch einmal durchgehen</string>
     <string name="settings_connection">Verbindung</string>
@@ -436,7 +437,7 @@
     <string name="cert_download">Von aasdk herunterladen</string>
     <string name="cert_downloaded">Zertifikat heruntergeladen.</string>
     <string name="cert_download_failed">Download fehlgeschlagen: %1$s</string>
-    <string name="cert_download_sub">Das Zertifikat, dass das Open-Source-Projekt aasdk auf GitHub veröffentlicht. Die meisten Autos akzeptieren es, aber manche ab etwa Baujahr 2020 lehnen es ab</string>
+    <string name="cert_download_sub">Das Open-Source-Projekt aasdk veröffentlicht auf GitHub ein Zertifikat, das von den meisten Autos akzeptiert wird; manche Modelle ab etwa Baujahr 2020 lehnen es jedoch ab.</string>
     <string name="cert_import">Eigene Datei importieren</string>
     <string name="cert_import_sub">Eine .p12-Datei mit dem zugehörigen privaten Schlüssel. Nutze deine eigene, wenn dein Auto das aasdk-Zertifikat ablehnt</string>
     <string name="cert_remove_imported">Importiertes Zertifikat entfernen</string>
@@ -463,7 +464,7 @@
     <string name="choice_size_normal">Normal</string>
     <string name="choice_size_large">Groß</string>
     <string name="choice_size_xlarge">Extra groß</string>
-    <string name="choice_theme_phone">Folgen Sie dem Telefon</string>
+    <string name="choice_theme_phone">Wie das Telefon</string>
     <string name="choice_theme_light">Hell</string>
     <string name="choice_theme_dark">Dunkel</string>
     <string name="choice_dark_black">Schwarz</string>
@@ -483,7 +484,7 @@
     <string name="summary_player_right">Player rechts</string>
     <string name="summary_usb_audio">Ton über Gearslip</string>
     <string name="summary_bluetooth_audio">Bluetooth-Audio</string>
-    <string name="summary_directions_on">Ansagen an</string>
+    <string name="summary_directions_on">Navigation an</string>
     <string name="summary_directions_off">Navigation aus</string>
     <string name="summary_bluetooth_on">Bluetooth an</string>
     <string name="summary_bluetooth_off">Bluetooth aus</string>
@@ -502,7 +503,7 @@
     <string name="car_map_day_night">Karte Tag/Nacht</string>
     <string name="car_units">Einheiten</string>
     <string name="car_nav_bar">Navigationsleiste</string>
-    <string name="car_player_nav_bar">Wiedergabe in der Navigationsleiste</string>
+    <string name="car_player_nav_bar">Player in der Navigationsleiste</string>
     <string name="car_skip_buttons">Tasten zum Überspringen</string>
     <string name="car_song_title">Songtitel</string>
     <string name="car_player_beside_map">Player neben der Karte</string>
@@ -510,7 +511,7 @@
     <string name="car_left">Links</string>
     <string name="car_autoplay">Automatisch abspielen beim Verbinden</string>
     <string name="car_more_lyrics">Weitere Songtext-Quellen</string>
-    <string name="car_more_lyrics_note">Fragt außerdem BetterLyrics und KuGou ab, um den Titel und den Interpreten des Songs zu ermitteln. Mit „Off“ wird nur LRCLIB abgefragt.</string>
+    <string name="car_more_lyrics_note">Fragt außerdem bei BetterLyrics und KuGou an, die dabei Titel und Interpret des Songs erfahren. Bei „Aus“ wird nur LRCLIB gefragt.</string>
     <string name="car_spoken_directions">Gesprochene Navigationsansagen</string>
     <string name="car_spoken_directions_note">Schalte das aus, wenn die Sprachansage deiner Karten-App bereits im Auto zu hören ist.</string>
     <string name="car_phone_speech">Spracherkennung des Handys verwenden</string>
@@ -630,7 +631,7 @@
     <string name="storage_measuring">Wird berechnet …</string>
     <string name="storage_lyrics">Songtexte</string>
     <string name="storage_clear">Leeren</string>
-    <string name="storage_voice">Stimmmodelle</string>
+    <string name="storage_voice">Sprachmodelle</string>
     <string name="storage_remove">Entfernen</string>
     <string name="storage_logs">Alte Protokolle</string>
     <string name="storage_other">Andere temporäre Dateien</string>
@@ -695,7 +696,7 @@
     <string name="status_disconnected">Getrennt</string>
     <string name="status_disconnected_detail">Das Infotainment-System ist nicht mehr verbunden.</string>
     <string name="places_title">Gespeicherte Orte</string>
-    <string name="places_sub">Sag „navigate home“ in einer beliebigen Karten-App</string>
+    <string name="places_sub">Sag in jeder beliebigen Karten-App „Navigiere nach Hause“</string>
     <string name="places_intro">Sag „Navigiere nach Hause“, „Bring mich zur Arbeit“ oder „Navigiere zu“ und einen Namen, den du selbst vergeben hast, dann schickt Gearslip diese Adresse an deine Karten-App.</string>
     <string name="places_home">Zuhause</string>
     <string name="places_work">Arbeit</string>
