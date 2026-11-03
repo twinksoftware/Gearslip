@@ -3,6 +3,9 @@ package app.seb3thehacker.gearslip.car
 import app.seb3thehacker.gearslip.R
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.SystemClock
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import androidx.car.app.model.CarText
@@ -40,7 +43,10 @@ object DirectionsVoice {
     private var appContext: Context? = null
     private var tts: TextToSpeech? = null
     @Volatile private var ttsReady = false
+    /** When the engine was last started; one not ready by [RESTART_MS] later gets another try. */
+    @Volatile private var ttsStartedAt = 0L
     private val pending = ConcurrentHashMap<String, CountDownLatch>()
+    private val main = Handler(Looper.getMainLooper())
 
     @Volatile private var link: AudioLink? = null
     @Volatile private var running = false
@@ -56,7 +62,16 @@ object DirectionsVoice {
     fun init(context: Context) {
         if (tts != null) return
         appContext = context.applicationContext
-        tts = TextToSpeech(appContext) { status -> ttsReady = status == TextToSpeech.SUCCESS }.apply {
+        start()
+    }
+
+    private fun start() {
+        ttsReady = false
+        ttsStartedAt = SystemClock.elapsedRealtime()
+        tts = TextToSpeech(appContext) { status ->
+            ttsReady = status == TextToSpeech.SUCCESS
+            if (!ttsReady) GearslipLog.w("guidance: text-to-speech didn't start (status $status)")
+        }.apply {
             setOnUtteranceProgressListener(object : UtteranceProgressListener() {
                 override fun onStart(utteranceId: String?) {}
                 override fun onDone(utteranceId: String?) { pending.remove(utteranceId)?.countDown() }
@@ -232,6 +247,16 @@ object DirectionsVoice {
         val sink = link ?: return
         if (!ttsReady) {
             GearslipLog.w("guidance: text-to-speech isn't ready, a turn went unspoken")
+            // A failed or unanswered start was final, so one bad start silenced a whole drive
+            // (issue #35). Try again, once the last try has had its time.
+            if (SystemClock.elapsedRealtime() - ttsStartedAt > RESTART_MS) {
+                ttsStartedAt = SystemClock.elapsedRealtime()
+                GearslipLog.i("guidance: starting text-to-speech again")
+                main.post {
+                    runCatching { engine.shutdown() }
+                    start()
+                }
+            }
             return
         }
         val file = File(context.cacheDir, "directions.wav")
@@ -360,6 +385,7 @@ object DirectionsVoice {
     private const val LEAD_MS = 100L
     private const val HOLD_MS = 2_000L
     private const val SYNTH_TIMEOUT_S = 10L
+    private const val RESTART_MS = 30_000L
     private val ORDINALS = listOf(
         R.string.dir_ordinal_1, R.string.dir_ordinal_2, R.string.dir_ordinal_3, R.string.dir_ordinal_4,
         R.string.dir_ordinal_5, R.string.dir_ordinal_6, R.string.dir_ordinal_7, R.string.dir_ordinal_8,
