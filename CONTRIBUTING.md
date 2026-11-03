@@ -40,9 +40,14 @@ branch on `experimental`, and open your pull request against it.
 
 ## Translating
 
-Translations happen on [Weblate](https://hosted.weblate.org/engage/gearslip/), not in pull
+Translations happen on [Weblate](https://hosted.weblate.org/engage/gearslip/), never in pull
 requests. Pick your language, or start a new one, and translate in the browser. Weblate
 sends the finished work to this repository as a pull request.
+
+Don't edit the translated `values-*/strings.xml` files by hand. Weblate keeps its own copy of
+every language, so a change made in git collides with Weblate's next update, and the pull
+request that made it gets closed. If a code change adds or rewords text, change only the
+English file, `values/strings.xml`; Weblate picks up the new strings for translators.
 
 Keep the tone of the English: short, plain, and friendly. Leave placeholders such as `%1$s`
 and `%1$d` in place; Gearslip fills them with names and numbers. Untranslated strings show

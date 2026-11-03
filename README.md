@@ -11,10 +11,11 @@ An Android Auto alternative built for everyone.
 
 [![Translation status](https://hosted.weblate.org/widget/gearslip/app/svg-badge.svg)](https://hosted.weblate.org/engage/gearslip/)
 
-Gearslip speaks English, Arabic, Chinese, Czech, Dutch, French, German, Italian, Japanese,
-Korean, Polish, Portuguese, Russian, Spanish, Swedish, Turkish, and Ukrainian. Most of these
-started as machine translations, so some read awkwardly.
+Gearslip speaks English, Arabic, Chinese, Czech, Danish, Dutch, French, German, Italian,
+Japanese, Korean, Polish, Portuguese, Romanian, Russian, Spanish, Swedish, Turkish, and
+Ukrainian. Most of these started as machine translations, so some read awkwardly.
 [Fix or add your language on Weblate](https://hosted.weblate.org/engage/gearslip/).
+Translations go through Weblate only; pull requests that edit them get closed.
 
 Questions, ideas?
 [Join the discussion on Matrix](https://matrix.to/#/!mf0_mgBd5KqKpc9FfX_wHp1jFCcwAtPrndIn_oGIyMk?via=matrix.org).
@@ -173,7 +174,9 @@ Bug reports from real cars help most, and pull requests are welcome.
 on, and the one-time agreement you sign before your first pull request merges.
 
 To help translate Gearslip into your language, join
-[Gearslip on Weblate](https://hosted.weblate.org/engage/gearslip/). No coding needed.
+[Gearslip on Weblate](https://hosted.weblate.org/engage/gearslip/). No coding needed. Please
+don't send translations as pull requests: Weblate holds its own copy of every language, and
+changes made in git collide with it.
 
 ## Building
 
