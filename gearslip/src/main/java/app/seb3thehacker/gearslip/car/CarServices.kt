@@ -2,6 +2,7 @@ package app.seb3thehacker.gearslip.car
 
 import android.content.ComponentName
 import android.content.Context
+import android.media.session.MediaController
 import android.media.session.MediaSessionManager
 import android.media.session.PlaybackState
 import app.seb3thehacker.gearslip.audio.CarAudio
@@ -254,7 +255,41 @@ object CarServices {
      * just the one Gearslip opened: anything the car was playing was going through the car.
      */
     fun pausePhoneMedia(why: String = "the car left") {
-        val ctx = context ?: return
+        pausedForNow = null
+        pausedOwnForNow = false
+        pause(why)
+    }
+
+    /** What [pausePhoneMediaForNow] paused, for [resumePhoneMedia] to play again. */
+    @Volatile private var pausedForNow: List<MediaController>? = null
+    /** Without notification access, whether it paused the app Gearslip drives itself. */
+    @Volatile private var pausedOwnForNow = false
+
+    /** The car wants the speakers for a moment: pause, and remember what to play after. */
+    fun pausePhoneMediaForNow() {
+        pausedOwnForNow = false
+        pausedForNow = pause("the car needs the speakers for a moment")
+    }
+
+    /** The car handed the speakers back: play what it paused, unless the driver has since. */
+    fun resumePhoneMedia() {
+        val paused = pausedForNow ?: return
+        pausedForNow = null
+        if (pausedOwnForNow) {
+            pausedOwnForNow = false
+            mediaOrNull()?.let { if (!it.now.value.playing) it.togglePlay() }
+            return
+        }
+        val waiting = paused.filter { it.playbackState?.state == PlaybackState.STATE_PAUSED }
+        waiting.forEach { runCatching { it.transportControls.play() } }
+        if (waiting.isNotEmpty()) {
+            app.seb3thehacker.gearslip.GearslipLog.i("media: playing ${waiting.joinToString { it.packageName }} again: the car gave the speakers back")
+        }
+    }
+
+    /** What it paused. Without notification access it can only reach the app Gearslip drives itself. */
+    private fun pause(why: String): List<MediaController> {
+        val ctx = context ?: return emptyList()
         val manager = ctx.getSystemService(MediaSessionManager::class.java)
         val listener = ComponentName(ctx, GearslipNotificationListener::class.java)
         val playing = try {
@@ -264,13 +299,19 @@ object CarServices {
         }
         if (playing == null) {
             // No notification access: the app Gearslip itself is driving is all it can reach.
-            mediaOrNull()?.let { if (it.now.value.playing) it.togglePlay() }
-            return
+            mediaOrNull()?.let {
+                if (it.now.value.playing) {
+                    it.togglePlay()
+                    pausedOwnForNow = true
+                }
+            }
+            return emptyList()
         }
         playing.forEach { runCatching { it.transportControls.pause() } }
         if (playing.isNotEmpty()) {
             app.seb3thehacker.gearslip.GearslipLog.i("media: paused ${playing.joinToString { it.packageName }}: $why")
         }
+        return playing
     }
 
     /** The car went away: nothing should keep running for a screen that no longer exists. */

@@ -36,6 +36,9 @@ class AudioLink(
     private val onClose: (AudioLink) -> Unit = { CarAudio.detach(it) },
     /** The car took the sound back after giving it, as when the driver switches to the radio. */
     private val onTakenBack: () -> Unit = {},
+    /** The car wants the speakers for a moment (a call, its own voice), and then [onGivenBack]. */
+    private val onPausedForNow: () -> Unit = {},
+    private val onGivenBack: () -> Unit = {},
 ) : CarAudio.Link {
 
     private var configIndex = 0
@@ -43,6 +46,8 @@ class AudioLink(
     @Volatile private var started = false
     @Volatile private var focusGranted = false
     @Volatile private var focusRequested = false
+    /** The car took the speakers for a moment, and we paused the phone's music until it's done. */
+    @Volatile private var pausedForNow = false
     @Volatile private var inFlight = 0
     // The Uconnect asks for 4 on its video channel; assume the same until its Config says otherwise.
     @Volatile private var maxUnacked = 4
@@ -222,9 +227,32 @@ class AudioLink(
         val had = focusGranted
         focusGranted = state == FOCUS_STATE_GAIN || state == FOCUS_STATE_GAIN_TRANSIENT ||
             state == FOCUS_STATE_GAIN_MEDIA_ONLY
-        if (focusGranted) startStream() else stop()
-        // A ducking request leaves the music playing; a loss means another source has the speakers.
-        if (had && (state == FOCUS_STATE_LOSS || state == FOCUS_STATE_LOSS_TRANSIENT)) onTakenBack()
+        when {
+            focusGranted -> {
+                startStream()
+                if (pausedForNow) {
+                    pausedForNow = false
+                    onGivenBack()
+                }
+            }
+            // A call or the car's own voice. Releasing focus here meant the car never handed it
+            // back, so the music stayed paused after the call: keep the claim and wait for GAIN.
+            state == FOCUS_STATE_LOSS_TRANSIENT -> {
+                synchronized(startLock) { stopLocked(release = false) }
+                if (had) {
+                    pausedForNow = true
+                    onPausedForNow()
+                }
+            }
+            else -> {
+                stop()
+                // A ducking request leaves the music playing; a loss means another source has the speakers.
+                if (state == FOCUS_STATE_LOSS && (had || pausedForNow)) {
+                    pausedForNow = false
+                    onTakenBack()
+                }
+            }
+        }
     }
 
     /**
@@ -299,19 +327,20 @@ class AudioLink(
         synchronized(startLock) { stopLocked() }
     }
 
-    private fun stopLocked() {
+    /** [release] false keeps our claim on the speakers, so the car hands them back on its own. */
+    private fun stopLocked(release: Boolean = true) {
         if (!started) return
         started = false
         synchronized(ackLock) { ackLock.notifyAll() }
         runCatching {
             sendOnChannel(MSG_STOP, Protobuf.varintField(1, sessionId.toLong()))
-            if (focusRequested) sendControl(MSG_FOCUS_REQUEST, Protobuf.varintField(1, FOCUS_RELEASE.toLong()))
+            if (release && focusRequested) sendControl(MSG_FOCUS_REQUEST, Protobuf.varintField(1, FOCUS_RELEASE.toLong()))
         }
-        focusRequested = false
+        if (release) focusRequested = false
         focusGranted = false
         aac?.release()
         aac = null
-        GearslipLog.i("$tag: -> Stop, AudioFocusRequest(RELEASE) after $chunks chunks / $bytes bytes")
+        GearslipLog.i("$tag: -> Stop${if (release) ", AudioFocusRequest(RELEASE)" else ""} after $chunks chunks / $bytes bytes")
         chunks = 0
         bytes = 0
         // A new stream starts with the car's buffer empty again: earn the lead back if it's needed.
