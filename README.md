@@ -9,13 +9,10 @@ An Android Auto alternative built for everyone.
 
 [<img src="https://raw.githubusercontent.com/ImranR98/Obtainium/main/assets/graphics/badge_obtainium.png" alt="Get it on Obtainium" height="80">](https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/twinksoftware/gearslip)
 
-[![Translation status](https://hosted.weblate.org/widget/gearslip/app/svg-badge.svg)](https://hosted.weblate.org/engage/gearslip/)
-
-Gearslip speaks English, Arabic, Chinese, Czech, Danish, Dutch, French, German, Italian,
-Japanese, Korean, Polish, Portuguese, Romanian, Russian, Spanish, Swedish, Turkish, and
-Ukrainian. Most of these started as machine translations, so some read awkwardly.
 [Fix or add your language on Weblate](https://hosted.weblate.org/engage/gearslip/).
 Translations go through Weblate only; pull requests that edit them get closed.
+
+[![Translation status by language](https://hosted.weblate.org/widget/gearslip/app/multi-auto.svg)](https://hosted.weblate.org/engage/gearslip/)
 
 Questions, ideas?
 [Join the discussion on Matrix](https://matrix.to/#/!mf0_mgBd5KqKpc9FfX_wHp1jFCcwAtPrndIn_oGIyMk?via=matrix.org).
