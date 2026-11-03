@@ -54,9 +54,65 @@ object GearslipLog {
         SessionReport.init(context)
         // One file per launch adds up; the newest are the ones anyone asks for.
         io.execute { logFiles(dir).drop(KEEP_FILES).forEach { it.delete() } }
+        lastExit(context, dir)
     }
 
     private const val KEEP_FILES = 30
+    private const val KEY_EXIT_SEEN = "log_exit_seen"
+
+    /**
+     * Why Android ended the last run, when the crash handler can't have seen it: a native crash,
+     * a freeze (ANR), or the memory killer. Written here and onto the end of that run's own log,
+     * which is the one a driver shares after a drive that went wrong.
+     */
+    private fun lastExit(context: Context, dir: File) {
+        val am = context.getSystemService(android.app.ActivityManager::class.java) ?: return
+        val seen = AppSettings.getString(context, KEY_EXIT_SEEN, "0").toLongOrNull() ?: 0L
+        val exits = runCatching { am.getHistoricalProcessExitReasons(null, 0, 5) }.getOrDefault(emptyList())
+            .filter { it.timestamp > seen }
+        exits.firstOrNull()?.let { AppSettings.putString(context, KEY_EXIT_SEEN, it.timestamp.toString()) }
+        val parse = SimpleDateFormat("yyyyMMdd-HHmmss", Locale.US)
+        for (exit in exits.reversed()) {
+            val why = EXIT_REASONS[exit.reason] ?: continue
+            val at = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US).format(Date(exit.timestamp))
+            val detail = buildString {
+                append("$at, $why")
+                exit.description?.takeIf { it.isNotBlank() }?.let { append(" ($it)") }
+                append(", memory ${exit.pss / 1024} MB")
+                if (exit.reason == android.app.ApplicationExitInfo.REASON_ANR) {
+                    anrMainThread(exit)?.let { append("\n").append(it) }
+                }
+            }
+            w("Android ended an earlier run at $detail")
+            // The run that died: the newest log that started before it ended.
+            val run = logFiles(dir).filter { it != file }.firstOrNull { f ->
+                val started = runCatching { parse.parse(f.name.removePrefix("gearslip-").removeSuffix(".log")) }.getOrNull()
+                started != null && started.time <= exit.timestamp
+            } ?: continue
+            io.execute { runCatching { run.appendText("--- $EXIT_MARK $detail\n") } }
+        }
+    }
+
+    /** The main thread's stack from an ANR trace: what Gearslip was stuck doing. */
+    private fun anrMainThread(exit: android.app.ApplicationExitInfo): String? = runCatching {
+        exit.traceInputStream?.bufferedReader()?.useLines { lines ->
+            lines.dropWhile { !it.startsWith("\"main\"") }.take(ANR_LINES).joinToString("\n")
+        }?.takeIf { it.isNotBlank() }
+    }.getOrNull()
+
+    private const val ANR_LINES = 25
+    private const val EXIT_MARK = "Android ended this run:"
+
+    /** Exit reasons worth a line; leaving, updating and Java crashes (already logged) aren't. */
+    private val EXIT_REASONS = mapOf(
+        android.app.ApplicationExitInfo.REASON_CRASH_NATIVE to "a native crash",
+        android.app.ApplicationExitInfo.REASON_ANR to "the app stopped responding (ANR)",
+        android.app.ApplicationExitInfo.REASON_LOW_MEMORY to "the phone ran low on memory",
+        android.app.ApplicationExitInfo.REASON_EXCESSIVE_RESOURCE_USAGE to "it used too much of the phone's resources",
+        android.app.ApplicationExitInfo.REASON_INITIALIZATION_FAILURE to "it failed to start",
+        android.app.ApplicationExitInfo.REASON_SIGNALED to "the system killed it",
+        android.app.ApplicationExitInfo.REASON_DEPENDENCY_DIED to "something it depends on died",
+    )
 
     private fun logFiles(dir: File): List<File> =
         dir.listFiles { f -> f.isFile && f.name.startsWith("gearslip-") && f.name.endsWith(".log") }
@@ -77,7 +133,7 @@ object GearslipLog {
             PastLog(
                 file = f,
                 started = runCatching { parse.parse(f.name.removePrefix("gearslip-").removeSuffix(".log")) }.getOrNull(),
-                crashed = "FATAL uncaught" in text,
+                crashed = "FATAL uncaught" in text || EXIT_MARK in text,
                 car = Regex("""car="([^"]+)"""").findAll(text).lastOrNull()?.groupValues?.get(1),
             )
         }
