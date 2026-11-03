@@ -11,7 +11,10 @@ import javax.net.ssl.SSLEngineResult
 import javax.net.ssl.SSLEngineResult.HandshakeStatus
 import javax.net.ssl.X509ExtendedTrustManager
 
-/** Checks mutual TLS and an encrypted data round trip with an in-process head-unit peer. */
+/**
+ * Checks mutual TLS and an encrypted data round trip with an in-process head-unit peer. Test code
+ * only: the peer trusts any certificate, which is the point here and must never ship in the app.
+ */
 object TlsSelfTest {
     private val log = GearslipLog.tagged("TLS")
 
