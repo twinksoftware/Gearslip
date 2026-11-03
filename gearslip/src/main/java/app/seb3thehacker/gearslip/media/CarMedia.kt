@@ -415,7 +415,10 @@ class CarMedia(private val context: Context) {
         if (controller?.packageName != ANTENNAPOD) return actions
         if (actions.any { it.id in ANTENNAPOD_NEXT_CHAPTER }) return actions
         val icon = resourcesOf(ANTENNAPOD)?.getIdentifier("ic_notification_next_chapter", "drawable", ANTENNAPOD) ?: 0
-        return actions + CustomAction(ANTENNAPOD_NEXT_CHAPTER.first(), context.getString(R.string.player_next_chapter), null, icon)
+        val nextChapter = CustomAction(ANTENNAPOD_NEXT_CHAPTER.first(), context.getString(R.string.player_next_chapter), null, icon)
+        // The player shows only the first two of an app's own buttons, and AntennaPod's are
+        // Rewind and Fast-forward: second place keeps Rewind beside it.
+        return actions.toMutableList().apply { add(minOf(1, size), nextChapter) }
     }
 
     private fun resourcesOf(pkg: String): android.content.res.Resources? {
