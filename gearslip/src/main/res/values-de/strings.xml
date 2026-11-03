@@ -296,7 +296,7 @@
     <string name="dir_ordinal_6">sechste</string>
     <string name="dir_ordinal_7">siebte</string>
     <string name="dir_ordinal_8">achte</string>
-    <string name="dir_in_distance">In %1$s %2$s</string>
+    <string name="dir_in_distance">In %1$s, %2$s</string>
     <plurals name="dir_km">
         <item quantity="one">%1$s Kilometer</item>
         <item quantity="other">%1$s Kilometer</item>
