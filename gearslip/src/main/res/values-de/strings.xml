@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <plurals name="storage_lyrics_detail">
-        <item quantity="one">%1$d Song · %2$s. Gelöschte Songtexte werden erneut heruntergeladen, wenn du sie öffnest.%1$d Songs · %2$s. Gelöschte Songtexte werden erneut heruntergeladen, wenn du sie öffnest.</item>
+        <item quantity="one">%1$d Songs · %2$s. Gelöschte Songtexte werden erneut heruntergeladen, wenn du sie öffnest.</item>
     </plurals>
     <string name="carset_theme">Design</string>
     <string name="carset_imperial">Imperial (mi, ft, °F)</string>
@@ -32,7 +32,7 @@
     <string name="carset_directions_note">Gearslip liest jedes Abbiegen laut über die Lautsprecher des Autos vor und senkt dabei die Musiklautstärke. Schalte es aus, wenn die Sprachansage deiner Karten-App bereits im Auto zu hören ist.</string>
     <string name="carset_phone_speech_note">Hört über den Sprachdienst des Handys zu statt über den von Gearslip. Auf den meisten Handys ist das der von Google, der deine Stimme an Google senden kann. GrapheneOS hat keinen, deshalb nutzt Gearslip dort weiter seinen eigenen.</string>
     <string name="carset_vehicle_data_note">Fügt eine Kachel „Fahrzeugdaten“ hinzu: ein roher Live-Mitschnitt des Sensorkanals des Infotainment-Systems. Die Feldbezeichnungen (Geschwindigkeit, Drehzahl, Kraftstoff …) stammen aus anderen Reverse-Engineering-Projekten und wurden für dieses Auto nicht überprüft – betrachte sie als Vermutung, nicht als Tatsache, bis du selbst gesehen hast, wie sich ein Wert ändert.</string>
-    <string name="carset_adaptive_note">Senkt die Bildqualität, wenn das Auto oder sein WLAN nicht mithalten kann, und erhöht sie wieder, sobald es geht. Gilt ab der nächsten Verbindung.</string>
+    <string name="carset_adaptive_note">Senkt die Bildqualität, wenn das Auto oder sein WLAN nicht mithalten kann und erhöht sie wieder, sobald es geht. Gilt ab der nächsten Verbindung.</string>
     <string name="carset_usable_height">Nutzbare Höhe: %1$d px von 480</string>
     <string name="carset_saved_to">Gespeichert unter %1$s</string>
     <string name="carset_save_failed">Speichern fehlgeschlagen</string>
@@ -116,7 +116,8 @@
     <string name="msg_send_now">Jetzt senden</string>
     <string name="msg_type">Eintippen</string>
     <plurals name="msg_burst">
-        <item quantity="one">%1$s · %2$d neue%1$s · %2$d neue</item>
+        <item quantity="one">%1$s · %2$d neu</item>
+        <item quantity="other">%1$s · %2$d neue</item>
     </plurals>
     <string name="msg_reply_to">Antwort an %1$s</string>
     <string name="msg_listening">Hört zu</string>
@@ -203,7 +204,8 @@
     <string name="msg_messages">Nachrichten</string>
     <string name="msg_none_recent">Keine neuen Nachrichten. Neue Nachrichten von %1$s erscheinen hier, sobald sie auf dem Handy ankommen.</string>
     <plurals name="msg_earlier">
-        <item quantity="one">%1$d frühere%1$d frühere</item>
+        <item quantity="one">%1$d ältere</item>
+        <item quantity="other">%1$d ältere</item>
     </plurals>
     <string name="msg_hide_quick">Schnellantworten ausblenden</string>
     <string name="msg_quick">Schnellantwort</string>
@@ -295,24 +297,29 @@
     <string name="dir_ordinal_8">achte</string>
     <string name="dir_in_distance">In %1$s %2$s</string>
     <plurals name="dir_km">
-        <item quantity="one">%1$s Kilometer%1$s Kilometern</item>
+        <item quantity="one">%1$s Kilometer</item>
+        <item quantity="other">%1$s Kilometer</item>
     </plurals>
     <string name="dir_km_decimal">%1$s Kilometern</string>
     <string name="dir_quarter_mile">einer Viertelmeile</string>
     <string name="dir_half_mile">einer halben Meile</string>
     <string name="dir_three_quarter_mile">einer Dreiviertelmeile</string>
     <plurals name="dir_miles">
-        <item quantity="one">%1$s Meile%1$s Meilen</item>
+        <item quantity="one">%1$s Meile</item>
+        <item quantity="other">%1$s Meilen</item>
     </plurals>
     <string name="dir_miles_decimal">%1$s Meilen</string>
     <plurals name="dir_feet">
-        <item quantity="one">%1$s Fuß%1$s Fuß</item>
+        <item quantity="one">%1$s Fuß</item>
+        <item quantity="other">%1$s Fuß</item>
     </plurals>
     <plurals name="dir_yards">
-        <item quantity="one">%1$s Yard%1$s Yards</item>
+        <item quantity="one">%1$s Yard</item>
+        <item quantity="other">%1$s Yards</item>
     </plurals>
     <plurals name="dir_meters">
-        <item quantity="one">%1$d Meter%1$d Metern</item>
+        <item quantity="one">%1$d Meter</item>
+        <item quantity="other">%1$d Meter</item>
     </plurals>
     <string name="touch_relay_description">Ermöglicht es Gearslip, Berührungen vom Autobildschirm während der Spiegelung auf das Handy zu übertragen. Gearslip liest keine Bildschirminhalte.</string>
     <string name="guide_usage_title">Hilf anderen Fahrern.</string>
@@ -429,7 +436,7 @@
     <string name="cert_download">Von aasdk herunterladen</string>
     <string name="cert_downloaded">Zertifikat heruntergeladen.</string>
     <string name="cert_download_failed">Download fehlgeschlagen: %1$s</string>
-    <string name="cert_download_sub">Das Zertifikat, das das Open-Source-Projekt aasdk auf GitHub veröffentlicht. Die meisten Autos akzeptieren es, aber manche ab etwa Baujahr 2020 lehnen es ab</string>
+    <string name="cert_download_sub">Das Zertifikat, dass das Open-Source-Projekt aasdk auf GitHub veröffentlicht. Die meisten Autos akzeptieren es, aber manche ab etwa Baujahr 2020 lehnen es ab</string>
     <string name="cert_import">Eigene Datei importieren</string>
     <string name="cert_import_sub">Eine .p12-Datei mit dem zugehörigen privaten Schlüssel. Nutze deine eigene, wenn dein Auto das aasdk-Zertifikat ablehnt</string>
     <string name="cert_remove_imported">Importiertes Zertifikat entfernen</string>
@@ -514,7 +521,7 @@
     <string name="car_vehicle_data">Fahrzeugdaten</string>
     <string name="car_vehicle_data_note">Fügt eine Kachel „Fahrzeugdaten“ hinzu: ein Live-Mitschnitt der Sensoren des Autos. Die Feldnamen sind Vermutungen, bis du selbst gesehen hast, wie sich ein Wert ändert.</string>
     <string name="car_adaptive_video">Adaptive Videoqualität</string>
-    <string name="car_adaptive_video_note">Verringert die Bildqualität, wenn das Auto oder dessen WLAN überlastet ist, und erhöht sie wieder, sobald die Verbindung stabil ist. Wirkt ab der nächsten Verbindung.</string>
+    <string name="car_adaptive_video_note">Senkt die Bildqualität, wenn das Auto oder sein WLAN nicht mithalten kann und erhöht sie wieder, sobald es geht. Gilt ab der nächsten Verbindung.</string>
     <string name="web_page_note">Wird von der Browser-App im Auto angezeigt. Wenn leer, öffnet sich DuckDuckGo. Gilt ab der nächsten Verbindung.</string>
     <string name="car_audio">Auto-Audio</string>
     <string name="car_audio_bt">Bluetooth (empfohlen)</string>
@@ -611,7 +618,7 @@
     <string name="about_voice_credits_sub">Spracherkennung mit sherpa-onnx (Apache 2.0), Kroko ASR von Banafo (CC BY-SA 4.0) sowie Parakeet und Canary von NVIDIA (CC BY 4.0)</string>
     <string name="certsetup_title">Zertifikat einrichten</string>
     <string name="certsetup_installed">Zertifikat installiert.</string>
-    <string name="certsetup_continue">Weiter</string>
+    <string name="certsetup_continue">Fortsetzen</string>
     <string name="certsetup_failed">Download fehlgeschlagen</string>
     <string name="certsetup_retry">Erneut versuchen</string>
     <string name="certsetup_import_sub">Eine .p12-Datei mit dem zugehörigen privaten Schlüssel. Nutze deine eigene, wenn dein Auto das aasdk-Zertifikat ablehnt.</string>
