@@ -421,6 +421,7 @@ class GearslipActivity : ComponentActivity(), Projection {
         )
         this.runner = runner
         worker = Thread { runner.run() }.apply { name = "gearslip"; start() }
+        holdLocation()
     }
 
     /** A wireless session: the same runner, on the socket [WirelessLink] opened to the car. */
@@ -444,6 +445,21 @@ class GearslipActivity : ComponentActivity(), Projection {
         )
         this.runner = runner
         worker = Thread { runner.run() }.apply { name = "gearslip"; start() }
+        holdLocation()
+    }
+
+    /** Whether this session holds [app.seb3thehacker.gearslip.host.LocationKeepAlive]. */
+    private var holdingLocation = false
+
+    /**
+     * Android lets a foreground service started from the background use location only in the few
+     * seconds after one of the app's screens opens. The car just opened this one, so take the
+     * location service now: a map bound later, with the phone already locked, got no position.
+     */
+    private fun holdLocation() {
+        if (holdingLocation) return
+        holdingLocation = true
+        app.seb3thehacker.gearslip.host.LocationKeepAlive.acquire(this) {}
     }
 
     private fun describe(accessory: UsbAccessory) {
@@ -463,6 +479,10 @@ class GearslipActivity : ComponentActivity(), Projection {
         wirelessSocket = null
         if (stopWireless) app.seb3thehacker.gearslip.wireless.WirelessLink.stop(this)
         runner = null
+        if (holdingLocation) {
+            holdingLocation = false
+            app.seb3thehacker.gearslip.host.LocationKeepAlive.release(this)
+        }
     }
 
     // --- Projection ---------------------------------------------------------------------
