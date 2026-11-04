@@ -205,6 +205,7 @@ private fun GroupRows(group: CarGroup) {
     val units by CarSettings.units.collectAsState()
     val navBar by CarSettings.navBarMode.collectAsState()
     val pipeAudio by CarSettings.pipeAudio.collectAsState()
+    val directionsOverMusic by CarSettings.directionsOverMusic.collectAsState()
     val speakDirections by CarSettings.speakDirections.collectAsState()
     val systemSpeech by CarSettings.systemSpeech.collectAsState()
     val bluetoothWarning by CarSettings.bluetoothWarning.collectAsState()
@@ -262,6 +263,15 @@ private fun GroupRows(group: CarGroup) {
                 CarSettings::setSpeakDirections,
                 note = stringResource(R.string.car_spoken_directions_note),
             )
+            if (speakDirections) {
+                SettingsDivider()
+                Toggle(
+                    stringResource(R.string.car_directions_over_music),
+                    directionsOverMusic,
+                    CarSettings::setDirectionsOverMusic,
+                    note = stringResource(R.string.car_directions_over_music_note),
+                )
+            }
             SettingsDivider()
             Toggle(
                 stringResource(R.string.car_phone_speech),

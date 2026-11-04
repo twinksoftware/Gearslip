@@ -14,6 +14,7 @@ import androidx.car.app.navigation.model.Maneuver
 import androidx.car.app.navigation.model.Step
 import app.seb3thehacker.gearslip.GearslipLog
 import app.seb3thehacker.gearslip.audio.AudioLink
+import app.seb3thehacker.gearslip.audio.CarAudio
 import java.io.File
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -51,6 +52,8 @@ object DirectionsVoice {
     @Volatile private var link: AudioLink? = null
     @Volatile private var running = false
     @Volatile private var musicIsOurs: () -> Boolean = { false }
+    /** The car's music sink once it's set up, for [CarSettings.directionsOverMusic]. */
+    @Volatile private var musicSink: () -> AudioLink? = { null }
     private val speaker = Executors.newSingleThreadScheduledExecutor { Thread(it, "gearslip-directions").apply { isDaemon = true } }
     /** Counts announcements, so a hand-back scheduled after one is dropped if another has begun. */
     private var spoken = 0
@@ -95,9 +98,10 @@ object DirectionsVoice {
     }
 
     /** The car opened its directions sink: start following the map app's turns. */
-    fun attach(link: AudioLink, musicIsOurs: () -> Boolean) {
+    fun attach(link: AudioLink, musicIsOurs: () -> Boolean, musicSink: () -> AudioLink? = { null }) {
         this.link = link
         this.musicIsOurs = musicIsOurs
+        this.musicSink = musicSink
         GearslipLog.i("guidance: the car offered a directions sink at ${link.sampleRate}Hz x${link.channels}")
         if (running) return
         running = true
@@ -285,10 +289,16 @@ object DirectionsVoice {
             GearslipLog.w("guidance: text-to-speech took too long, a turn went unspoken")
             return
         }
-        val pcm = Wav.read(file)?.let { Wav.convert(it, sink.sampleRate, sink.channels) } ?: run {
+        val wav = Wav.read(file) ?: run {
             GearslipLog.w("guidance: text-to-speech gave audio Gearslip can't read")
             return
         }
+        val music = musicSink()
+        if (CarSettings.directionsOverMusic.value && music != null) {
+            speakOverMusic(music, Wav.convert(wav, music.sampleRate, music.channels))
+            return
+        }
+        val pcm = Wav.convert(wav, sink.sampleRate, sink.channels)
         // Logged before speaking too, so a car that dies mid-announcement shows what it was doing.
         GearslipLog.i("guidance: speaking a turn")
         // Held through back-to-back prompts rather than asked for and given back each time.
@@ -302,18 +312,44 @@ object DirectionsVoice {
         GearslipLog.i("guidance: spoke a turn (${pcm.size / (2 * sink.channels) * 1000 / sink.sampleRate} ms)")
     }
 
+    /**
+     * A 2025 Nissan's Bosch unit drops the link about a second after any turn on its directions
+     * channel while its music channel is open, and plays music through nothing else (issue #35).
+     * So the directions channel is left alone: the turn rides in the music, or, with no music
+     * playing, goes out on the music channel by itself.
+     */
+    private fun speakOverMusic(music: AudioLink, pcm: ByteArray) {
+        GearslipLog.i("guidance: speaking a turn over the music channel")
+        if (!CarAudio.speakOverMusic(pcm)) {
+            music.startForTurn()
+            try {
+                stream(music, pcm, alive = { musicSink() === music }, startAndStop = false)
+            } finally {
+                music.stopForTurn()
+                // Music that started during the turn found the stream running and didn't start its own.
+                if (CarAudio.capture.value == CarAudio.Capture.ON) music.start()
+            }
+        }
+        GearslipLog.i("guidance: spoke a turn over the music channel (${pcm.size / (2 * music.channels) * 1000 / music.sampleRate} ms)")
+    }
+
     /** Start, the words in 20 ms chunks at about real time, a little silence, Stop. */
-    private fun stream(sink: AudioLink, pcm: ByteArray) {
+    private fun stream(
+        sink: AudioLink,
+        pcm: ByteArray,
+        alive: () -> Boolean = { link === sink },
+        startAndStop: Boolean = true,
+    ) {
         val frame = 2 * sink.channels
         val chunk = sink.sampleRate / 50 * frame
         val chunkMs = 20L
         val padded = pcm + ByteArray(sink.sampleRate / 5 * frame) // 200 ms tail so the last word isn't clipped
-        sink.start()
+        if (startAndStop) sink.start()
         try {
             val began = System.currentTimeMillis()
             var offset = 0
             var sent = 0
-            while (offset < padded.size && link === sink) {
+            while (offset < padded.size && alive()) {
                 val size = minOf(chunk, padded.size - offset)
                 sink.write(padded.copyOfRange(offset, offset + size), size)
                 offset += size
@@ -324,7 +360,7 @@ object DirectionsVoice {
             // Let the car play what it has before closing the stream on it.
             Thread.sleep(LEAD_MS)
         } finally {
-            sink.stop()
+            if (startAndStop) sink.stop()
         }
     }
 

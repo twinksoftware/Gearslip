@@ -67,6 +67,7 @@ fun CarSettingsScreen() {
     val whatsNew by CarSettings.whatsNewAfterUpdates.collectAsState()
     val pipeAudio by CarSettings.pipeAudio.collectAsState()
     val speakDirections by CarSettings.speakDirections.collectAsState()
+    val directionsOverMusic by CarSettings.directionsOverMusic.collectAsState()
     val bluetoothWarning by CarSettings.bluetoothWarning.collectAsState()
     val locationWarning by CarSettings.locationWarning.collectAsState()
     val autoplay by CarSettings.autoplay.collectAsState()
@@ -282,6 +283,22 @@ fun CarSettingsScreen() {
             if (section == chosen) item {
                 Text(
                     stringResource(R.string.carset_directions_note),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+
+            if (section == chosen && speakDirections) item {
+                ChoiceRow(
+                    stringResource(R.string.car_directions_over_music),
+                    listOf(false to stringResource(R.string.off), true to stringResource(R.string.on)),
+                    directionsOverMusic,
+                ) { CarSettings.setDirectionsOverMusic(it) }
+            }
+
+            if (section == chosen && speakDirections) item {
+                Text(
+                    stringResource(R.string.car_directions_over_music_note),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )

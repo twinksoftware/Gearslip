@@ -75,6 +75,9 @@ class AudioLink(
     /** Sending audio now, which for media means the car has handed us the speakers. */
     val streaming get() = started
 
+    /** The car has set the sink up, so a stream can start. */
+    val isReady get() = ready
+
     @Volatile private var holdsSpeakers = false
     @Volatile private var focusAnswer: CountDownLatch? = null
     @Volatile private var answerDueBy = 0L
@@ -111,6 +114,21 @@ class AudioLink(
         answerDueBy = System.currentTimeMillis() + FOCUS_WAIT_MS
         runCatching { sendControl(MSG_FOCUS_REQUEST, Protobuf.varintField(1, FOCUS_RELEASE.toLong())) }
         GearslipLog.i("$tag: -> AudioFocusRequest(RELEASE)")
+    }
+
+    /**
+     * A spoken turn on the music channel while no music plays (see DirectionsVoice): the stream
+     * runs for the turn only, under ducking focus like the directions channel's, so the radio
+     * comes back after it rather than giving way to Android Auto for good.
+     */
+    fun startForTurn() {
+        askForSpeakers()
+        startStream()
+    }
+
+    fun stopForTurn() {
+        synchronized(startLock) { stopLocked(release = false) }
+        handBackSpeakers()
     }
 
     fun opened(status: Int) {
@@ -218,7 +236,7 @@ class AudioLink(
     fun onFocus(state: Int) {
         val name = FOCUS_STATES[state] ?: "unknown($state)"
         GearslipLog.i("$tag: <- AudioFocusResponse state=$name")
-        if (!asksFocus) {
+        if (!asksFocus || expectsFocusAnswer()) {
             // Directions speak whatever the answer: a lost turn is worse than a loud one.
             answerDueBy = 0L
             focusAnswer?.countDown()

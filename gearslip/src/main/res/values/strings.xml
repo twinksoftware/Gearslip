@@ -468,6 +468,8 @@
 
     <!--  -->
     <string name="carset_audio_note">Through Gearslip sends the phone\'s sound over the car connection, cable or wireless. Android asks to share your screen each drive, and a few apps block it. Bluetooth plays as the phone normally would, and Android never asks.</string>
+    <string name="car_directions_over_music">Directions over the music channel</string>
+    <string name="car_directions_over_music_note">For a car that drops the connection or restarts after a spoken turn. Gearslip mixes each turn into the music instead of using the car\'s directions channel.</string>
     <string name="carset_directions_note">Gearslip reads each turn aloud through the car\'s speakers, and the music dips while it speaks. Turn it off if your map app\'s own voice already plays in the car.</string>
     <string name="carset_phone_speech_note">Listens through the phone\'s own speech service instead of Gearslip\'s. On most phones that\'s Google\'s, which may send your voice to Google. GrapheneOS has none, so Gearslip keeps using its own.</string>
     <string name="carset_vehicle_data_note">Adds a Vehicle data tile: a live, raw dump of the head unit\'s sensor channel. Field labels (speed, RPM, fuel...) are carried over from other reverse-engineering projects and unverified against this car - treat them as a guess, not a fact, until you\'ve watched one change for yourself.</string>

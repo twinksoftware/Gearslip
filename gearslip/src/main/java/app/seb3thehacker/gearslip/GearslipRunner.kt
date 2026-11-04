@@ -648,7 +648,9 @@ class GearslipRunner(
             tag = "guidance",
             sessionId = GUIDANCE_SESSION_ID,
             asksFocus = false,
-            onReady = { DirectionsVoice.attach(it) { audioLink?.streaming == true } },
+            onReady = {
+                DirectionsVoice.attach(it, musicIsOurs = { audioLink?.streaming == true }, musicSink = { audioLink?.takeIf { link -> link.isReady } })
+            },
             onClose = { DirectionsVoice.detach(it) },
         )
         openChannel(guidance.serviceId)

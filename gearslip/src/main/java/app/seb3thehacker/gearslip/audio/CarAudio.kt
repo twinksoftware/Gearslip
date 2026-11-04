@@ -137,6 +137,59 @@ object CarAudio {
 
     internal fun deliver(pcm: ByteArray, size: Int, peak: Float) {
         _level.value = peak
-        link?.write(pcm, size)
+        val voice = synchronized(voiceLock) { spoken }
+        if (voice == null) link?.write(pcm, size) else link?.write(mixVoice(pcm, size), size)
     }
+
+    private val voiceLock = Any()
+    private var spoken: ByteArray? = null
+    private var spokenAt = 0
+    private var spokenDone: java.util.concurrent.CountDownLatch? = null
+
+    /**
+     * Mixes a spoken turn into the music from the next chunk on, with the music turned down
+     * under it, and waits until it has all gone out. [pcm] is 16-bit, in the sink's own format.
+     * False when no music is flowing to carry it, so the caller sends it some other way.
+     */
+    fun speakOverMusic(pcm: ByteArray): Boolean {
+        if (_capture.value != Capture.ON || (link as? AudioLink)?.streaming != true) return false
+        val done = java.util.concurrent.CountDownLatch(1)
+        synchronized(voiceLock) {
+            spokenDone?.countDown()
+            spoken = pcm
+            spokenAt = 0
+            spokenDone = done
+        }
+        val ms = pcm.size * 1000L / (2 * channels * sampleRate)
+        if (!done.await(ms + VOICE_SLACK_MS, java.util.concurrent.TimeUnit.MILLISECONDS)) {
+            // Capture stopped mid-turn; the rest of it is dropped rather than played late.
+            synchronized(voiceLock) { if (spokenDone === done) spoken = null }
+        }
+        return true
+    }
+
+    private fun mixVoice(pcm: ByteArray, size: Int): ByteArray = synchronized(voiceLock) {
+        val voice = spoken ?: return pcm
+        val out = pcm.copyOf(size)
+        var i = 0
+        while (i + 1 < size) {
+            val music = (out[i].toInt() and 0xFF) or (out[i + 1].toInt() shl 8)
+            val word = if (spokenAt + 1 < voice.size) (voice[spokenAt].toInt() and 0xFF) or (voice[spokenAt + 1].toInt() shl 8) else 0
+            val mixed = (music * DUCK_PERCENT / 100 + word).coerceIn(Short.MIN_VALUE.toInt(), Short.MAX_VALUE.toInt())
+            out[i] = mixed.toByte()
+            out[i + 1] = (mixed shr 8).toByte()
+            i += 2
+            spokenAt += 2
+        }
+        if (spokenAt >= voice.size) {
+            spoken = null
+            spokenDone?.countDown()
+            spokenDone = null
+        }
+        out
+    }
+
+    /** How loud the music stays under a spoken turn. */
+    private const val DUCK_PERCENT = 30
+    private const val VOICE_SLACK_MS = 2_000L
 }

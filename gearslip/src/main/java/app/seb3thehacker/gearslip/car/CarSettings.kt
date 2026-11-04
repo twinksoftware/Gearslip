@@ -57,6 +57,7 @@ object CarSettings {
     private const val KEY_NIGHT = "car_night_mode"
     private const val KEY_PIPE_AUDIO = "car_pipe_audio"
 private const val KEY_SPEAK_DIRECTIONS = "car_speak_directions"
+private const val KEY_DIRECTIONS_OVER_MUSIC = "car_directions_over_music"
 private const val KEY_BLUETOOTH_WARNING = "car_bluetooth_warning"
 private const val KEY_LOCATION_WARNING = "car_location_warning"
     private const val KEY_AUDIO_CHOICE_ASKED = "car_audio_choice_asked"
@@ -101,6 +102,7 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
     private val nightFlow = MutableStateFlow(NightMode.AUTO)
     private val pipeAudioFlow = MutableStateFlow(true)
     private val speakDirectionsFlow = MutableStateFlow(true)
+    private val directionsOverMusicFlow = MutableStateFlow(false)
     private val bluetoothWarningFlow = MutableStateFlow(true)
     private val locationWarningFlow = MutableStateFlow(true)
     private val lastNavFlow = MutableStateFlow<String?>(null)
@@ -253,6 +255,9 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
     /** Gearslip reads the map app's turns aloud on the car's directions channel; see DirectionsVoice. */
     val speakDirections: StateFlow<Boolean> = speakDirectionsFlow
 
+    /** The turns go out on the music channel instead, for cars the directions channel upsets. */
+    val directionsOverMusic: StateFlow<Boolean> = directionsOverMusicFlow
+
     /** With Bluetooth audio, warn when the phone isn't connected to the car; see BluetoothAudioCheck. */
     val bluetoothWarning: StateFlow<Boolean> = bluetoothWarningFlow
 
@@ -344,6 +349,7 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
         // Until the driver sets it, on for USB audio and off for Bluetooth, where the map app's
         // own voice already reaches the car.
         speakDirectionsFlow.value = AppSettings.getString(app, KEY_SPEAK_DIRECTIONS, pipeAudioFlow.value.toString()) == "true"
+        directionsOverMusicFlow.value = AppSettings.getString(app, KEY_DIRECTIONS_OVER_MUSIC, "false") == "true"
         bluetoothWarningFlow.value = AppSettings.getString(app, KEY_BLUETOOTH_WARNING, "true") == "true"
         locationWarningFlow.value = AppSettings.getString(app, KEY_LOCATION_WARNING, "true") == "true"
         nightFlow.value = runCatching {
@@ -449,6 +455,11 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
     fun setSpeakDirections(on: Boolean) {
         speakDirectionsFlow.value = on
         AppSettings.putString(app, KEY_SPEAK_DIRECTIONS, on.toString())
+    }
+
+    fun setDirectionsOverMusic(on: Boolean) {
+        directionsOverMusicFlow.value = on
+        AppSettings.putString(app, KEY_DIRECTIONS_OVER_MUSIC, on.toString())
     }
 
     fun setBluetoothWarning(on: Boolean) {
