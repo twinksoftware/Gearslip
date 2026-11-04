@@ -24,6 +24,12 @@ interface Projection {
     fun onTouch(action: Int, actionIndex: Int, points: List<TouchPoint>)
 
     fun onProjectionStopped()
+
+    /**
+     * The screen has been still for a moment and the encoder has sent nothing since. Draw it once
+     * more, so the car gets a fresh frame (see [VideoSource]'s onStill).
+     */
+    fun onStill() {}
 }
 
 /** One finger on the car's screen: a stable [id] for as long as it stays down, and where it is. */

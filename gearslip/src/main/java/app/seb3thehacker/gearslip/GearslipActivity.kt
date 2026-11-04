@@ -526,6 +526,10 @@ class GearslipActivity : ComponentActivity(), Projection {
         }
     }
 
+    override fun onStill() {
+        screenProjector?.redraw()
+    }
+
     override fun onProjectionStopped() {
         // Before the car UI goes, while the media connection is still up.
         app.seb3thehacker.gearslip.car.CarServices.pausePhoneMedia()

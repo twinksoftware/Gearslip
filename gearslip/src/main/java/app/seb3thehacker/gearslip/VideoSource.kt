@@ -27,6 +27,12 @@ class VideoSource(
     private val wireless: Boolean = false,
     private val onCodecConfig: (ByteArray) -> Unit,
     private val onFrame: (data: ByteArray, presentationTimeUs: Long, keyFrame: Boolean) -> Unit,
+    /**
+     * SURFACE mode, nothing encoded for [STILL_MS]. The repeat setting below should cover a still
+     * screen, but on a Pixel 10 it didn't: a LuChi box got 11 frames, then none, and stayed black
+     * (issue #58). Whoever draws the screen can draw it again, and that is a frame.
+     */
+    private val onStill: () -> Unit = {},
 ) {
     private val log = GearslipLog.tagged("VIDEO")
 
@@ -170,6 +176,8 @@ class VideoSource(
     private fun pump(encoder: MediaCodec) {
         val info = MediaCodec.BufferInfo()
         val frameIntervalUs = 1_000_000L / frameRate
+        var lastOutputAt = 0L
+        var lastNudgeAt = 0L
 
         while (running) {
             // SURFACE mode has no input buffers to fill - frames arrive from the display.
@@ -208,7 +216,15 @@ class VideoSource(
                     }
                 }
                 encoder.releaseOutputBuffer(outIndex, false)
+                lastOutputAt = System.currentTimeMillis()
                 outIndex = encoder.dequeueOutputBuffer(info, 0)
+            }
+            if (mode == Mode.SURFACE && lastOutputAt > 0) {
+                val now = System.currentTimeMillis()
+                if (now - lastOutputAt > STILL_MS && now - lastNudgeAt > STILL_MS) {
+                    lastNudgeAt = now
+                    onStill()
+                }
             }
 
             if (mode != Mode.SURFACE) Thread.sleep(maxOf(1L, frameIntervalUs / 2000))
@@ -256,6 +272,7 @@ class VideoSource(
         const val MIME = MediaFormat.MIMETYPE_VIDEO_AVC
         const val TIMEOUT_US = 10_000L
         const val SURFACE_TIMEOUT_US = 100_000L
+        private const val STILL_MS = 1_000L
 
         /**
          * 800x480 at 30fps gets 8 Mbps: about the most that size can show, enough that a moving

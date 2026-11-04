@@ -1189,6 +1189,7 @@ class GearslipRunner(
             onFrame = { data, presentationTimeUs, keyFrame ->
                 sendVideoFrame(data, presentationTimeUs, keyFrame)
             },
+            onStill = { projection?.onStill() },
         ).also { source ->
             runCatching {
                 source.start()

@@ -223,6 +223,11 @@ class ScreenProjector(private val context: Context) {
      * Points the display at another surface, or none, without restarting what it shows. The
      * preview's SurfaceView comes and goes as the phone turns; the car UI on it carries on.
      */
+    /** Draws the screen again as it is, which hands the display's consumer a new frame. */
+    fun redraw() {
+        root?.let { it.post { it.invalidate() } }
+    }
+
     fun setSurface(surface: Surface?) {
         virtualDisplay?.surface = surface
     }
