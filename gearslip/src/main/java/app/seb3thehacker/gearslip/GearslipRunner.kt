@@ -289,6 +289,7 @@ class GearslipRunner(
             MSG_AUTH_COMPLETE -> onAuthComplete(body)
             MSG_SERVICE_DISCOVERY_RESPONSE -> onServiceDiscoveryResponse(body)
             MSG_PING_REQUEST -> onPingRequest(body)
+            MSG_PING_RESPONSE -> onPingResponse()
             MSG_BYEBYE_REQUEST -> onByeByeRequest(body)
             MSG_UNEXPECTED_MESSAGE, MSG_FRAMING_ERROR -> onProtocolError(messageId)
             AudioLink.MSG_FOCUS_RESPONSE -> {
@@ -507,6 +508,7 @@ class GearslipRunner(
                 "possible against THIS unit - portability to newer units is still unproven.",
         )
         state = State.DONE
+        startPhonePings()
         val info = ServiceDiscovery.findHeadUnitInfo(body)
         log.i("head unit: $info")
         SessionReport.headUnit(info.toString())
@@ -1377,6 +1379,38 @@ class GearslipRunner(
         log.i("touch -> frame: ${draw + encode}ms (draw ${draw}ms, encode and wait ${encode}ms)")
     }
 
+    /**
+     * Android Auto pings the car too, not only answers its pings; either side may. A 2021 Bolt
+     * hangs up 25 seconds into every drive while its own pings get answered and GM's channel is
+     * open (issue #18), so the one thing left that a real phone sends and Gearslip didn't is this.
+     */
+    private fun startPhonePings() {
+        Thread({
+            while (running && state == State.DONE) {
+                runCatching {
+                    send(MSG_PING_REQUEST, Protobuf.varintField(1, System.nanoTime() / 1_000), encrypted = true)
+                }.onFailure { return@Thread }
+                pingsSent++
+                if (pingsSent == 1) log.i("-> PingRequest (Gearslip pings the car once a second)")
+                try {
+                    Thread.sleep(PHONE_PING_MS)
+                } catch (e: InterruptedException) {
+                    return@Thread
+                }
+            }
+        }, "gearslip-ping").apply { isDaemon = true }.start()
+    }
+
+    @Volatile private var pingsSent = 0
+    private var pingsAnswered = 0
+
+    private fun onPingResponse() {
+        pingsAnswered++
+        if (pingsAnswered == 1 || pingsAnswered % PING_LOG_EVERY == 0) {
+            log.i("<- PingResponse ($pingsAnswered of $pingsSent answered)")
+        }
+    }
+
     private fun onPingRequest(body: ByteArray) {
         // The timestamp is an int64 and has to come back unchanged. Read as an int32 it was cut
         // short, and a car that checks the echo (an Audi MIB2+) gave up at its second ping.
@@ -1593,6 +1627,8 @@ class GearslipRunner(
         const val MSG_SERVICE_DISCOVERY_RESPONSE = 6
         const val MSG_PING_REQUEST = 11
         const val MSG_PING_RESPONSE = 12
+        private const val PHONE_PING_MS = 1_000L
+        private const val PING_LOG_EVERY = 60
         const val MSG_BYEBYE_REQUEST = 15
         const val MSG_BYEBYE_RESPONSE = 16
         const val MSG_VOICE_SESSION_NOTIFICATION = 17
