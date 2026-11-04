@@ -294,7 +294,8 @@ internal fun AppMenu(navigator: CarNavigator, running: Map<String, RunningSlot>)
 @Composable
 private fun MoveButtons(id: String) {
     val custom by CarSettings.appOrder.collectAsState()
-    val order = launcherOrder(rememberAllEntries(), rememberVehicleDataShown(), custom).mapNotNull { it.componentId }
+    val hidden by CarSettings.hiddenApps.collectAsState()
+    val order = launcherOrder(rememberAllEntries(), rememberVehicleDataShown(), custom, hidden).mapNotNull { it.componentId }
     val index = order.indexOf(id)
     if (index < 0) return
     fun move(by: Int) {

@@ -91,6 +91,7 @@ internal fun SettingsRow(
     icon: ImageVector? = null,
     tint: Color = MaterialTheme.colorScheme.primary,
     titleColor: Color = MaterialTheme.colorScheme.onSurface,
+    leading: (@Composable () -> Unit)? = null,
     trailing: (@Composable () -> Unit)? = null,
 ) {
     Row(
@@ -99,6 +100,7 @@ internal fun SettingsRow(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         if (icon != null) Icon(icon, contentDescription = null, tint = tint, modifier = Modifier.size(24.dp))
+        leading?.invoke()
         Column(Modifier.weight(1f)) {
             Text(title, style = MaterialTheme.typography.bodyLarge, color = titleColor)
             subtitle?.let {

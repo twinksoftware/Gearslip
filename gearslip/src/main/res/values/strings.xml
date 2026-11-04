@@ -148,6 +148,9 @@
     <string name="cert_kind_self">Self-signed: %1$s</string>
 
     <!-- Car settings on the phone -->
+    <string name="car_apps_sub">Choose which apps appear in the car</string>
+    <string name="car_apps_finding">Finding apps…</string>
+    <string name="car_apps_none">No car apps found</string>
     <string name="car_group_screen">Screen</string>
     <string name="car_group_nav_bar">Nav bar and player</string>
     <string name="car_group_sound">Sound and voice</string>

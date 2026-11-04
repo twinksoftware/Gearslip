@@ -72,6 +72,7 @@ private const val KEY_LOCATION_WARNING = "car_location_warning"
     private const val KEY_DARK_STYLE = "car_dark_style"
     private const val KEY_PINNED = "car_pinned_apps"
     private const val KEY_APP_ORDER = "car_app_order"
+    private const val KEY_HIDDEN_APPS = "car_hidden_apps"
     private const val KEY_EXPERIMENTAL_FEATURES = "car_experimental_features"
     private const val KEY_SYSTEM_SPEECH = "car_system_speech"
     private const val KEY_CAR_SENSORS = "car_sensors_enabled"
@@ -123,6 +124,7 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
     val uiTheme: StateFlow<String> = uiThemeFlow
     private val pinnedFlow = MutableStateFlow<Set<String>>(emptySet())
     private val appOrderFlow = MutableStateFlow<List<String>>(emptyList())
+    private val hiddenAppsFlow = MutableStateFlow<Set<String>>(emptySet())
     private val experimentalFeaturesFlow = MutableStateFlow(false)
     private val systemSpeechFlow = MutableStateFlow(false)
     private val carSensorsFlow = MutableStateFlow(false)
@@ -219,6 +221,9 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
 
     /** The launcher's order once the driver has moved a tile; empty keeps the grouped default. */
     val appOrder: StateFlow<List<String>> = appOrderFlow
+
+    /** The tiles left out of the car's app drawer, by [Entry.componentId]. */
+    val hiddenApps: StateFlow<Set<String>> = hiddenAppsFlow
 
     /** Flattened component names of the map and media apps used last, brought back on connect. */
     val lastNav: StateFlow<String?> = lastNavFlow
@@ -359,6 +364,8 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
             .split(",").filter { it.isNotEmpty() }.toSet()
         appOrderFlow.value = AppSettings.getString(app, KEY_APP_ORDER, "")
             .split(",").filter { it.isNotEmpty() }
+        hiddenAppsFlow.value = AppSettings.getString(app, KEY_HIDDEN_APPS, "")
+            .split(",").filter { it.isNotEmpty() }.toSet()
         experimentalFeaturesFlow.value = AppSettings.getString(app, KEY_EXPERIMENTAL_FEATURES, "false") == "true"
         systemSpeechFlow.value = AppSettings.getString(app, KEY_SYSTEM_SPEECH, "false") == "true"
         carSensorsFlow.value = AppSettings.getString(app, KEY_CAR_SENSORS, "false") == "true"
@@ -514,6 +521,12 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
         }
         pinnedFlow.value = next
         AppSettings.putString(app, KEY_PINNED, next.joinToString(","))
+    }
+
+    fun setAppHidden(id: String, hide: Boolean) {
+        val next = if (hide) hiddenAppsFlow.value + id else hiddenAppsFlow.value - id
+        hiddenAppsFlow.value = next
+        AppSettings.putString(app, KEY_HIDDEN_APPS, next.joinToString(","))
     }
 
     fun setAppOrder(ids: List<String>) {
