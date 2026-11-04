@@ -866,6 +866,10 @@
     <string name="status_no_car_graphene">The phone is charging, but no car has answered. Check that USB-C port control, under Security &amp; privacy, allows data and isn\'t set to Charging-only.</string>
     <string name="status_stuck_cable">The car hasn\'t shown Gearslip yet. Unplug the cable, wait a few seconds, and plug it back in. If it keeps happening, try another cable or USB port, and share the log in an issue.</string>
     <string name="status_stuck_wireless">The car hasn\'t shown Gearslip yet. Turn the car off and on again, or connect with a cable. If it keeps happening, share the log in an issue.</string>
+    <string name="settings_bt_address">Phone\'s Bluetooth address</string>
+    <string name="settings_bt_address_off">Not set. Only for a car that drops Bluetooth when Gearslip connects.</string>
+    <string name="settings_bt_address_hint">Copy it from Android\'s Settings, under About phone. Gearslip passes it to the car, so the car knows the phone on the cable is the one it\'s paired with.</string>
+    <string name="settings_bt_address_invalid">That isn\'t a Bluetooth address. It looks like 12:34:56:78:9A:BC.</string>
     <string name="settings_use_as_launcher">Use as launcher</string>
     <string name="settings_use_as_launcher_off">For a head unit or a tablet on the dash. Gearslip\'s car screen becomes this device\'s home screen.</string>
     <string name="settings_use_as_launcher_on">Gearslip can be this device\'s home screen. Pick it under Default home app.</string>

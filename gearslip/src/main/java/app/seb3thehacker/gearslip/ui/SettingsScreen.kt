@@ -20,6 +20,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import app.seb3thehacker.gearslip.car.CarBluetooth
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -246,7 +248,53 @@ private fun ConnectionSection() {
             icon = Icons.Filled.Home,
             trailing = { Switch(checked = launcher, onCheckedChange = null) },
         )
+        var address by remember { mutableStateOf(CarBluetooth.typedAddress(context)) }
+        var editing by remember { mutableStateOf(false) }
+        SettingsRow(
+            stringResource(R.string.settings_bt_address),
+            Modifier.clickable { editing = true },
+            subtitle = address ?: stringResource(R.string.settings_bt_address_off),
+            icon = Icons.Filled.Info,
+        )
+        if (editing) {
+            AddressDialog(
+                initial = address.orEmpty(),
+                onDismiss = { editing = false },
+                onSave = { typed ->
+                    CarBluetooth.setTypedAddress(context, typed).also { saved ->
+                        if (saved) {
+                            address = CarBluetooth.typedAddress(context)
+                            editing = false
+                        }
+                    }
+                },
+            )
+        }
     }
+}
+
+/** The phone's Bluetooth address, typed in by hand: Android doesn't let apps read it. */
+@Composable
+private fun AddressDialog(initial: String, onDismiss: () -> Unit, onSave: (String) -> Boolean) {
+    var text by remember { mutableStateOf(initial) }
+    var invalid by remember { mutableStateOf(false) }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.settings_bt_address)) },
+        text = {
+            OutlinedTextField(
+                value = text,
+                onValueChange = { text = it; invalid = false },
+                singleLine = true,
+                placeholder = { Text("12:34:56:78:9A:BC") },
+                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Characters, autoCorrectEnabled = false),
+                isError = invalid,
+                supportingText = { Text(stringResource(if (invalid) R.string.settings_bt_address_invalid else R.string.settings_bt_address_hint)) },
+            )
+        },
+        confirmButton = { TextButton(onClick = { invalid = !onSave(text) }) { Text(stringResource(R.string.save)) } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } },
+    )
 }
 
 /** Tools for testing a debug build; release builds never show this section. */
