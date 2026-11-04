@@ -66,6 +66,8 @@ enum class CarGroup(@param:StringRes val title: Int) {
 @Composable
 private fun sizeChoices() = listOf(1f to stringResource(R.string.choice_size_normal), 1.25f to stringResource(R.string.choice_size_large), 1.5f to stringResource(R.string.choice_size_xlarge))
 @Composable
+private fun densityChoices() = listOf(CarSettings.DENSITY_FROM_CAR to stringResource(R.string.choice_density_car)) + CarSettings.DENSITIES.map { it to stringResource(R.string.choice_density_dpi, it) }
+@Composable
 private fun themeChoices() = listOf(AppTheme.PHONE to stringResource(R.string.choice_theme_phone), AppTheme.LIGHT to stringResource(R.string.choice_theme_light), AppTheme.DARK to stringResource(R.string.choice_theme_dark))
 @Composable
 private fun darkChoices() = listOf(
@@ -212,6 +214,7 @@ internal fun CarGroupScreen(group: CarGroup, onBack: () -> Unit) {
 @Composable
 private fun GroupRows(group: CarGroup) {
     val scale by CarSettings.scale.collectAsState()
+    val density by CarSettings.carDensity.collectAsState()
     val open by CarSettings.openOnConnect.collectAsState()
     val night by CarSettings.nightMode.collectAsState()
     val units by CarSettings.units.collectAsState()
@@ -240,6 +243,8 @@ private fun GroupRows(group: CarGroup) {
             Choice(stringResource(R.string.car_open_on_connect), openChoices(), open, CarSettings::setOpenOnConnect)
             SettingsDivider()
             Choice(stringResource(R.string.car_size), sizeChoices(), scale, CarSettings::setScale)
+            SettingsDivider()
+            Choice(stringResource(R.string.car_density), densityChoices(), density, CarSettings::setCarDensity, note = stringResource(R.string.car_density_note))
             SettingsDivider()
             Choice(stringResource(R.string.car_app_theme), themeChoices(), theme, CarSettings::setAppTheme)
             SettingsDivider()
@@ -358,11 +363,12 @@ private fun <T> List<Pair<T, String>>.label(value: T): String = firstOrNull { it
 
 /** A setting with a few named choices: its current one shown, the rest a tap away. */
 @Composable
-private fun <T> Choice(title: String, choices: List<Pair<T, String>>, selected: T, onSelect: (T) -> Unit) {
+private fun <T> Choice(title: String, choices: List<Pair<T, String>>, selected: T, onSelect: (T) -> Unit, note: String? = null) {
     var menu by remember { mutableStateOf(false) }
     SettingsRow(
         title,
         Modifier.clickable { menu = true },
+        subtitle = note,
         trailing = {
             // The menu hangs from the value it changes, at the row's end.
             Box {

@@ -22,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
@@ -113,7 +114,11 @@ private fun LauncherScreen(onOpenGearslip: () -> Unit) {
         val (width, height) = px
         if (width <= 0 || height <= 0) return@BoxWithConstraints
         // Car-like text and buttons: 160dpi for every 480 pixels of height, as the car preview uses.
-        val density = (160 * height / 480).coerceIn(120, 640)
+        // This screen stands in for the car's, so hosted apps size to it and the density setting applies.
+        val density = remember(width, height) {
+            CarEnvironment.setDisplay(width, height, (160 * height / 480).coerceIn(120, 640))
+            CarEnvironment.frame.value.densityDpi
+        }
         // Before the projector starts, so the car UI's first screen already knows what to hide.
         DisposableEffect(Unit) {
             LauncherMode.setActive(true)

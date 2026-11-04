@@ -310,7 +310,8 @@ class GearslipActivity : ComponentActivity(), Projection {
         val target = surface ?: return
         if (screenProjector != null) return
         val projector = ScreenProjector(this).also { screenProjector = it }
-        projector.start(target, frameWidth, frameHeight, frameDensity) { CarUi() }
+        // The frame's density, not frameDensity: that stays the car's own, for the phone mirror.
+        projector.start(target, frameWidth, frameHeight, CarEnvironment.frame.value.densityDpi) { CarUi() }
     }
 
     /**

@@ -37,6 +37,9 @@ object CarEnvironment {
     private val frameFlow = MutableStateFlow(Frame(800, 480, 160))
     val frame: StateFlow<Frame> = frameFlow
 
+    /** The density the car reported; [frame] carries the one the car UI and its apps draw at. */
+    private var carDensityDpi = 160
+
     val phoneDark: StateFlow<Boolean> = phoneDarkFlow
     val darkOutside: StateFlow<Boolean> = darkOutsideFlow
     val battery: StateFlow<Battery> = batteryFlow
@@ -95,8 +98,18 @@ object CarEnvironment {
     }
 
     fun setDisplay(width: Int, height: Int, densityDpi: Int) {
-        displayFlow.value = "${width}x$height @ ${densityDpi}dpi"
-        frameFlow.value = Frame(width, height, densityDpi)
+        carDensityDpi = densityDpi
+        val dpi = CarSettings.effectiveDensity(densityDpi)
+        displayFlow.value = "${width}x$height @ ${dpi}dpi"
+        frameFlow.value = Frame(width, height, dpi)
+    }
+
+    /**
+     * Takes up the density setting. It's read only as a session starts, so the display and the
+     * apps on it can't disagree mid-drive; a session with no car behind it, the preview, asks here.
+     */
+    fun applyDensity() {
+        frameFlow.value = frameFlow.value.copy(densityDpi = CarSettings.effectiveDensity(carDensityDpi))
     }
 
     fun start(context: Context) {
