@@ -104,11 +104,11 @@ object WirelessLink {
     @SuppressLint("MissingPermission")
     fun pairedDevices(context: Context): List<BluetoothDevice> =
         context.getSystemService(BluetoothManager::class.java)?.adapter?.bondedDevices
-            ?.sortedBy { it.name ?: it.address }
+            ?.sortedBy { name(it) }
             .orEmpty()
 
     @SuppressLint("MissingPermission")
-    fun name(device: BluetoothDevice): String = device.name ?: device.address
+    fun name(device: BluetoothDevice): String = device.alias ?: device.name ?: device.address
 
     fun start(context: Context, device: BluetoothDevice) {
         stop(context)
