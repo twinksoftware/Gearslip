@@ -71,6 +71,9 @@ object DirectionsVoice {
         tts = TextToSpeech(appContext) { status ->
             ttsReady = status == TextToSpeech.SUCCESS
             if (!ttsReady) GearslipLog.w("guidance: text-to-speech didn't start (status $status)")
+            // The turns are worded in Gearslip's language; the engine's default voice may be
+            // another one, and read German words with an English voice (issue #70).
+            else speakIn(appContext?.resources?.configuration?.locales?.get(0))
         }.apply {
             setOnUtteranceProgressListener(object : UtteranceProgressListener() {
                 override fun onStart(utteranceId: String?) {}
@@ -78,6 +81,16 @@ object DirectionsVoice {
                 @Deprecated("Deprecated in Java, no replacement on this API level")
                 override fun onError(utteranceId: String?) { pending.remove(utteranceId)?.countDown() }
             })
+        }
+    }
+
+    /** Keeps the engine's own voice when it has none for [locale]. */
+    private fun speakIn(locale: java.util.Locale?) {
+        val engine = tts ?: return
+        locale ?: return
+        val result = engine.setLanguage(locale)
+        if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+            GearslipLog.w("guidance: the speech engine has no ${locale.displayLanguage} voice - using its default")
         }
     }
 
