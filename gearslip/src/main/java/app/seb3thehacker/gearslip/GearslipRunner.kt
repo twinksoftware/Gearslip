@@ -1317,15 +1317,20 @@ class GearslipRunner(
         }
     }
 
-    /** Asks the car for its screen; the answer comes to [onVideoFocus]. */
-    private fun requestProjectedFocus() {
-        // VideoFocusRequestNotification { mode = 2; reason = 3 }. Reason 1 means "the phone's
-        // screen is off", which a 2020 Civic may have taken as a reason to keep its own
-        // screen (issue #43); 0 is UNKNOWN.
-        val focus = Protobuf.varintField(2, VIDEO_FOCUS_PROJECTED.toLong()) +
+    /**
+     * Asks the car for its screen; the answer comes to [onVideoFocus]. [withDisplay] names the
+     * display's channel too, as the request for the car's own screen does (see [requestNativeFocus]):
+     * the field is deprecated, but a car older than that may ignore a request without it.
+     */
+    private fun requestProjectedFocus(withDisplay: Boolean = false) {
+        // VideoFocusRequestNotification { disp_channel_id = 1; mode = 2; reason = 3 }. Reason 1
+        // means "the phone's screen is off", which a 2020 Civic may have taken as a reason to
+        // keep its own screen (issue #43); 0 is UNKNOWN.
+        val display = if (withDisplay) Protobuf.varintField(1, videoChannelId.toLong()) else ByteArray(0)
+        val focus = display + Protobuf.varintField(2, VIDEO_FOCUS_PROJECTED.toLong()) +
             Protobuf.varintField(3, 0L)
         send(MSG_VIDEO_FOCUS_REQUEST, focus, encrypted = true, channel = videoChannelId)
-        log.i("-> VideoFocusRequest(mode=PROJECTED)")
+        log.i(if (withDisplay) "-> VideoFocusRequest(display=$videoChannelId, mode=PROJECTED)" else "-> VideoFocusRequest(mode=PROJECTED)")
     }
 
     /**
@@ -1335,17 +1340,23 @@ class GearslipRunner(
      * music over Bluetooth that channel waits for the car to switch source, so if the screen
      * hasn't come a few seconds after asking, open it and ask again. Cars that hand the screen
      * straight over keep their own source as before.
+     * The 2017 Pilot (protocol 1.0) still kept its screen with the channel open, so the second
+     * request also names the display's channel, as cars of the Pilot's age may need.
      */
     private fun watchForWithheldScreen() {
         Thread({
             Thread.sleep(WITHHELD_SCREEN_MS)
             if (!running || videoStarted) return@Thread
-            val open = CarAudio.openSink ?: return@Thread
-            log.w("no screen from the car after ${WITHHELD_SCREEN_MS / 1000}s - opening the media channel and asking again")
-            open()
-            // Give the car the channel's open response before it hears the request again.
-            Thread.sleep(1_000)
-            if (running && !videoStarted) requestProjectedFocus()
+            val open = CarAudio.openSink
+            if (open != null) {
+                log.w("no screen from the car after ${WITHHELD_SCREEN_MS / 1000}s - opening the media channel and asking again")
+                open()
+                // Give the car the channel's open response before it hears the request again.
+                Thread.sleep(1_000)
+            } else {
+                log.w("no screen from the car after ${WITHHELD_SCREEN_MS / 1000}s - asking again")
+            }
+            if (running && !videoStarted) requestProjectedFocus(withDisplay = true)
         }, "gearslip-focus-fallback").apply { isDaemon = true }.start()
     }
 
