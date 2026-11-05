@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
@@ -24,11 +25,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import app.seb3thehacker.gearslip.Insets
 import app.seb3thehacker.gearslip.host.clockTime
 import app.seb3thehacker.gearslip.host.display
 import app.seb3thehacker.gearslip.host.remainingTime
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.StateFlow
 
 /**
  * The instrument-cluster screen: the next turn, big enough to read in a glance past the wheel.
@@ -36,10 +40,13 @@ import kotlinx.coroutines.delay
  * along the bottom. With no route it shows what's playing, quietly, or nothing.
  *
  * Always dark, like the dials around it. [marginX] and [marginY] are the pixels the car crops off
- * the frame, kept clear.
+ * the frame, kept clear. Many cars also draw their own dials and bars over what's left, so the
+ * card keeps to [clearArea] when the car says where that is, and otherwise to the middle of a
+ * wide strip: on an Audi's virtual cockpit it ran under the rev counter and the bottom bar (#56).
  */
 @Composable
-internal fun ClusterScreen(marginX: Int, marginY: Int) {
+internal fun ClusterScreen(marginX: Int, marginY: Int, clearArea: StateFlow<Insets?>) {
+    val carInsets by clearArea.collectAsState()
     // The map app's turn changes a few times a minute: read it once a second.
     val turn by produceState<ClusterTurn?>(null) {
         while (true) {
@@ -52,48 +59,74 @@ internal fun ClusterScreen(marginX: Int, marginY: Int) {
         CompositionLocalProvider(LocalContentColor provides Color.White) {
             BoxWithConstraints(
                 Modifier.fillMaxSize().background(Color.Black).padding(
-                    horizontal = with(density) { (marginX / 2).toDp() } + 24.dp,
-                    vertical = with(density) { (marginY / 2).toDp() } + 16.dp,
+                    horizontal = with(density) { (marginX / 2).toDp() },
+                    vertical = with(density) { (marginY / 2).toDp() },
                 ),
-                contentAlignment = Alignment.CenterStart,
             ) {
-                // Sized off the height: clusters run from short strips to near squares.
-                val unit = maxHeight / 12
-                val t = turn
-                if (t == null) {
-                    NowPlayingLine(Modifier.align(Alignment.Center))
-                    return@BoxWithConstraints
-                }
-                Column(verticalArrangement = Arrangement.spacedBy(unit * 0.4f)) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        CarGlyph(t.icon, Modifier.size(unit * 3.4f))
-                        Spacer(Modifier.width(unit))
-                        Text(
-                            t.distance,
-                            fontSize = with(density) { (unit * 2.2f).toSp() },
-                            fontWeight = FontWeight.Bold,
-                            maxLines = 1,
-                        )
+                val clear = clearPadding(maxWidth, maxHeight, carInsets?.let { with(density) { toDp(it) } })
+                BoxWithConstraints(
+                    Modifier.fillMaxSize().padding(start = clear[0], top = clear[1], end = clear[2], bottom = clear[3]),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    // The card is about 8.5 units tall with two lines of directions, and 14 wide: fit both ways.
+                    val unit = minOf(maxHeight / 8.5f, maxWidth / 14)
+                    val t = turn
+                    if (t == null) {
+                        NowPlayingLine(Modifier.align(Alignment.Center))
+                        return@BoxWithConstraints
                     }
-                    if (t.what.isNotEmpty()) {
-                        Text(
-                            t.what,
-                            fontSize = with(density) { (unit * 1.1f).toSp() },
-                            fontWeight = FontWeight.SemiBold,
-                            maxLines = 2,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                    }
-                    if (t.trip.isNotEmpty()) {
-                        Text(
-                            t.trip,
-                            fontSize = with(density) { (unit * 0.85f).toSp() },
-                            color = Color.White.copy(alpha = 0.7f),
-                            maxLines = 1,
-                        )
-                    }
+                    TurnCard(t, unit)
                 }
             }
+        }
+    }
+}
+
+/**
+ * Start, top, end and bottom padding around the card inside the visible picture. The car's own
+ * insets win when they leave a usable area; a wide strip, where dials sit at both ends and a bar
+ * along the bottom, keeps to the upper middle; anything squarer just keeps off the edges.
+ */
+private fun clearPadding(width: Dp, height: Dp, car: List<Dp>?): List<Dp> {
+    if (car != null && width - car[0] - car[2] >= width * 0.3f && height - car[1] - car[3] >= height * 0.3f) return car
+    if (width >= height * 2) return listOf(width * 0.22f, height * 0.08f, width * 0.22f, height * 0.33f)
+    return listOf(24.dp, 16.dp, 24.dp, 16.dp)
+}
+
+/** Insets in frame pixels as start, top, end and bottom padding. */
+private fun androidx.compose.ui.unit.Density.toDp(insets: Insets): List<Dp> =
+    listOf(insets.left.toDp(), insets.top.toDp(), insets.right.toDp(), insets.bottom.toDp())
+
+@Composable
+private fun TurnCard(t: ClusterTurn, unit: Dp) {
+    val density = LocalDensity.current
+    Column(verticalArrangement = Arrangement.spacedBy(unit * 0.4f)) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            CarGlyph(t.icon, Modifier.size(unit * 3.4f))
+            Spacer(Modifier.width(unit))
+            Text(
+                t.distance,
+                fontSize = with(density) { (unit * 2.2f).toSp() },
+                fontWeight = FontWeight.Bold,
+                maxLines = 1,
+            )
+        }
+        if (t.what.isNotEmpty()) {
+            Text(
+                t.what,
+                fontSize = with(density) { (unit * 1.1f).toSp() },
+                fontWeight = FontWeight.SemiBold,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
+        if (t.trip.isNotEmpty()) {
+            Text(
+                t.trip,
+                fontSize = with(density) { (unit * 0.85f).toSp() },
+                color = Color.White.copy(alpha = 0.7f),
+                maxLines = 1,
+            )
         }
     }
 }

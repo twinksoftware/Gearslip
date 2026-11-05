@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import app.seb3thehacker.gearslip.car.ClusterScreen
+import kotlinx.coroutines.flow.MutableStateFlow
 
 /**
  * Gearslip's picture on the car's instrument-cluster screen: a second video sink, for a car that
@@ -50,6 +51,8 @@ internal class ClusterVideo(
     @Volatile private var maxUnacked = 1
     @Volatile private var lastAckAt = 0L
     private var frames = 0
+    /** The part of the picture the car's own gauges and bars leave clear, as the car last said. */
+    private val clearArea = MutableStateFlow<Insets?>(null)
 
     fun onMessage(messageId: Int, body: ByteArray) {
         when (messageId) {
@@ -90,6 +93,13 @@ internal class ClusterVideo(
                     lastAckAt = System.currentTimeMillis()
                     ackLock.notifyAll()
                 }
+            }
+
+            // UpdateUiConfigRequest { AdditionalVideoConfig { display_insets = 1 } }: an Audi's
+            // virtual cockpit sends one as the picture starts, and draws its dials over the frame.
+            GearslipRunner.MSG_VIDEO_UI_CONFIG -> {
+                log.i("<- UpdateUiConfigRequest (${body.size} bytes)\n${Protobuf.describe(body)}")
+                clearArea.value = insetsFrom(body)
             }
 
             else -> log.i("<- unhandled message id=$messageId (${body.size} bytes)")
@@ -158,7 +168,7 @@ internal class ClusterVideo(
             projector = ScreenProjector(context).also {
                 it.start(surface, width, height, density, name = "gearslip-cluster") {
                     // The margins the car crops off are kept clear, as on the main screen.
-                    ClusterScreen(config.widthMargin, config.heightMargin)
+                    ClusterScreen(config.widthMargin, config.heightMargin, clearArea)
                 }
             }
         }
@@ -183,6 +193,15 @@ internal class ClusterVideo(
         synchronized(ackLock) { inFlight++ }
         runCatching { send(GearslipRunner.MSG_MEDIA_DATA, timestamp + data) }.onFailure { running = false }
         if (++frames <= 2) log.i("-> Data frame #$frames (${data.size} bytes)")
+    }
+
+    /** VideoInsets { top = 1; bottom = 2; left = 3; right = 4 }, or null when the car sent none. */
+    private fun insetsFrom(body: ByteArray): Insets? {
+        val config = Wire.bytes(Wire.fields(body), 1) ?: return null
+        val insets = Wire.fields(Wire.bytes(Wire.fields(config), 1) ?: return null)
+        fun side(n: Int) = Wire.varint(insets, n)?.toInt() ?: 0
+        return Insets(top = side(1), bottom = side(2), left = side(3), right = side(4))
+            .also { log.i("the car keeps clear: $it") }
     }
 
     fun stop() {
