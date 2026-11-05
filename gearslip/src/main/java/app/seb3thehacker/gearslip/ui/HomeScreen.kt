@@ -108,6 +108,7 @@ fun HomeScreen(
                     Spacer(Modifier.height(16.dp))
                     StatusCard(status)
                     if (live) BluetoothMissingCard()
+                    BluetoothAddressCard()
                     VoiceDownloadCard()
                     // The first drive that worked asks once to share it, right under the result.
                     val car = workedCar

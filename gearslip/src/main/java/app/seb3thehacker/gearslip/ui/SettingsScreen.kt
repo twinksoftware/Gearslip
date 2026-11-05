@@ -275,7 +275,7 @@ private fun ConnectionSection() {
 
 /** The phone's Bluetooth address, typed in by hand: Android doesn't let apps read it. */
 @Composable
-private fun AddressDialog(initial: String, onDismiss: () -> Unit, onSave: (String) -> Boolean) {
+internal fun AddressDialog(initial: String, onDismiss: () -> Unit, onSave: (String) -> Boolean) {
     var text by remember { mutableStateOf(initial) }
     var invalid by remember { mutableStateOf(false) }
     AlertDialog(
@@ -307,6 +307,16 @@ private fun DebugSection() {
             Modifier.clickable { TestMessage.post(context) },
             subtitle = "Posts a message notification to read on the car",
             icon = Icons.AutoMirrored.Filled.Send,
+        )
+        SettingsDivider()
+        SettingsRow(
+            "Ask for the Bluetooth address",
+            Modifier.clickable {
+                CarBluetooth.setTypedAddress(context, "")
+                CarBluetooth.askForAddressNow(context)
+            },
+            subtitle = "Clears the saved address and shows Home's card",
+            icon = Icons.Filled.Info,
         )
         SettingsDivider()
         val badge by CarSettings.debugBadge.collectAsState()

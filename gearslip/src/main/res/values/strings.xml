@@ -875,6 +875,15 @@
     <string name="status_no_car_graphene">The phone is charging, but no car has answered. Check that USB-C port control, under Security &amp; privacy, allows data and isn\'t set to Charging-only.</string>
     <string name="status_stuck_cable">The car hasn\'t shown Gearslip yet. Unplug the cable, wait a few seconds, and plug it back in. If it keeps happening, try another cable or USB port, and share the log in an issue.</string>
     <string name="status_stuck_wireless">The car hasn\'t shown Gearslip yet. Turn the car off and on again, or connect with a cable. If it keeps happening, share the log in an issue.</string>
+    <string name="bt_address_card_title">Help %1$s know this phone</string>
+    <string name="bt_address_card_body">Some cars stay connected only once they know the phone\'s Bluetooth address. Android keeps it from apps, so copy it from About phone. Press and hold the Bluetooth address there, tap Copy, and come back.</string>
+    <string name="bt_address_open">Open About phone</string>
+    <string name="bt_address_not_now">Not now</string>
+    <string name="bt_address_use_title">Use this Bluetooth address?</string>
+    <string name="bt_address_use_body">Gearslip passes it to your car, so the car knows this is the phone it\'s paired with.</string>
+    <string name="bt_address_type">Type it instead</string>
+    <string name="bt_address_your_car">your car</string>
+    <string name="bt_address_car_note">Finish one setup step on your phone when you\'re parked.</string>
     <string name="settings_bt_address">Phone\'s Bluetooth address</string>
     <string name="settings_bt_address_off">Not set. Only for a car that drops Bluetooth when Gearslip connects.</string>
     <string name="settings_bt_address_hint">Copy it from Android\'s Settings, under About phone. Gearslip passes it to the car, so the car knows the phone on the cable is the one it\'s paired with.</string>
