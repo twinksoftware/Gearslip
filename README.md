@@ -61,7 +61,8 @@ screen-sharing mode.
 - **Navigation.** Gearslip hosts real Car App Library map apps on the car screen.
   Organic Maps, Vela, OsmAnd, Flitsmeister, MAPS.ME, and MapQuest work today. While you
   navigate, a big turn card on the left shows the arrow, the distance, and your lane, and
-  the map keeps the right side.
+  the map keeps the right side. Turns from Google Maps or Waze running on the phone show in
+  the nav bar, and on the instrument cluster in cars with a screen there.
 - **Music.** Browse, play, and queue tracks from a car-enabled media app, with a Now
   Playing view, an Up Next queue, and lyrics. Type a search, and apps that accept one
   play the best match.
@@ -78,11 +79,15 @@ screen-sharing mode.
 - **Notifications.** Only messages, missed calls, alarms, and reminders interrupt you.
   The rest wait on the dashboard.
 - **Your apps, your order.** The launcher groups apps by kind: phone, maps, music,
-  messaging, and the rest. Press and hold an app to move it.
+  messaging, and the rest. Press and hold an app to move it, and hide the ones you don't
+  use from the Apps card on the phone.
 - **Car controls.** Steering wheel buttons, control knobs, and D-pads all work.
 - **Your phone's colors.** The car screen and the phone app take their colors from your
   phone's Material You palette, and every card and button matches.
 - **Themes.** Choose flat buttons or skeuomorphic ones that look like real keys.
+- **Small screens.** Car display density makes text and buttons bigger in car apps.
+- **Your language.** Gearslip comes in 19 languages besides English, some only partly
+  translated. Pick one in Settings. Voice commands understand English only for now.
 - **Settings on the phone.** The car's settings sit on the phone's home screen too, so you
   can set things up before you drive. A change on either screen shows on both.
 
@@ -96,8 +101,12 @@ screen-sharing mode.
   then one permission at a time, each with a plain reason and an Allow or Skip. A help
   screen inside the car answers anything setup didn't cover.
 - **Templated apps work.** Gearslip renders the Car App Library's templates on the car
-  screen, and it draws its own keyboard for search, sign-in, and text fields. It has been
-  tested against several real navigation and media apps.
+  screen, and it draws its own keyboard for search, sign-in, and text fields. Alerts, such
+  as a map app asking whether a hazard is still there, show on the car screen too. It has
+  been tested against several real navigation and media apps.
+- **Gearslip can be a head unit's home screen.** On a head unit that runs Android, or a
+  spare phone or tablet on the dash, turn on Use as launcher in Settings > Connection. The
+  car screen fills the display, and an All apps page opens everything else.
 - **Gearslip works with [LIVI](https://github.com/f-io/LIVI),** the open-source head unit
   used in homemade car dashboards.
 - **Some apps refuse Gearslip.** Spotify, Waze, and Google Messages use a version of
