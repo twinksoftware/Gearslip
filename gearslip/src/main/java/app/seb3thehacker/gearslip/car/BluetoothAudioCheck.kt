@@ -11,6 +11,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
+import app.seb3thehacker.gearslip.R
 import android.os.Handler
 import android.os.Looper
 import app.seb3thehacker.gearslip.GearslipLog
@@ -25,6 +26,11 @@ import kotlinx.coroutines.flow.StateFlow
  *
  * When the car named its Bluetooth address, only that device counts. Otherwise any audio
  * connection does, since there's no telling which device is the car.
+ *
+ * Many cars switch Bluetooth music off while Android Auto runs and want it over Android Auto
+ * instead (a Skoda, a VW, an Audi, a Bolt). If the phone's Bluetooth audio to the car was up when
+ * the car showed Gearslip and drops after, that's what happened: this car's music goes through
+ * Gearslip from now on, and the car screen says so.
  */
 object BluetoothAudioCheck {
 
@@ -41,6 +47,8 @@ object BluetoothAudioCheck {
     private var appContext: Context? = null
     private var armed = false
     private var receiver: BroadcastReceiver? = null
+    /** Whether Bluetooth audio to the car was up when the car showed Gearslip; null until known. */
+    private var connectedAtStart: Boolean? = null
 
     fun init(context: Context) {
         appContext = context.applicationContext
@@ -50,11 +58,14 @@ object BluetoothAudioCheck {
     fun onProjecting() = main.post {
         if (armed) return@post
         armed = true
+        connectedAtStart = null
+        audioToCar { connectedAtStart = it }
         main.postDelayed(::start, WAIT_MS)
     }
 
     fun onCarDisconnected() = main.post {
         armed = false
+        connectedAtStart = null
         main.removeCallbacksAndMessages(null)
         stopWatching()
         _missing.value = false
@@ -97,36 +108,58 @@ object BluetoothAudioCheck {
     private fun check() {
         if (!armed) return
         val context = appContext ?: return
-        if (CarSettings.pipeAudio.value) {
+        if (CarSettings.pipesNow) {
             set(false, "audio goes through Gearslip")
             return
         }
-        if (!CarSettings.bluetoothWarning.value) {
-            set(false, "the warning is turned off")
-            return
+        audioToCar { ok ->
+            if (ok == null) return@audioToCar
+            if (!ok && connectedAtStart == true) return@audioToCar switchToGearslip()
+            if (!CarSettings.bluetoothWarning.value) {
+                set(false, "the warning is turned off")
+                return@audioToCar
+            }
+            set(!ok, if (ok) "connected to the car" else "not connected to the car")
         }
+    }
+
+    /** The car dropped Bluetooth music once Gearslip was up: send this car's music through Gearslip. */
+    private fun switchToGearslip() {
+        val car = CarBluetooth.carAddress ?: return
+        val context = appContext ?: return
+        if (!app.seb3thehacker.gearslip.audio.CarAudio.sinkOffered) return
+        log.i("Bluetooth audio: the car turned it off with Gearslip running, so this car's music goes through Gearslip")
+        CarSettings.rememberAudioCar(car)
+        set(false, "audio goes through Gearslip")
+        app.seb3thehacker.gearslip.audio.CarAudio.request()
+        CarToasts.show(this, context.getString(R.string.car_audio_switched), androidx.car.app.CarToast.LENGTH_LONG)
+    }
+
+    /**
+     * Whether the phone's Bluetooth audio is connected to the car, on the main thread: null when
+     * that can't be told (no permission). Bluetooth switched off counts as not connected.
+     */
+    @SuppressLint("MissingPermission")
+    private fun audioToCar(result: (Boolean?) -> Unit) {
+        val context = appContext ?: return result(null)
         if (context.checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
             log.i("can't check the audio connection: the Bluetooth permission isn't granted")
-            return
+            return result(null)
         }
-        val adapter = context.getSystemService(BluetoothManager::class.java)?.adapter ?: return
-        if (!adapter.isEnabled) {
-            set(true, "Bluetooth is off")
-            return
-        }
+        val adapter = context.getSystemService(BluetoothManager::class.java)?.adapter ?: return result(null)
+        if (!adapter.isEnabled) return result(false)
         val car = CarBluetooth.carAddress?.uppercase()
-        adapter.getProfileProxy(context, object : BluetoothProfile.ServiceListener {
+        val asked = adapter.getProfileProxy(context, object : BluetoothProfile.ServiceListener {
             override fun onServiceConnected(profile: Int, proxy: BluetoothProfile) {
                 val connected = runCatching { proxy.connectedDevices }.getOrDefault(emptyList())
                 adapter.closeProfileProxy(profile, proxy)
                 val ok = if (car != null) connected.any { it.address.uppercase() == car } else connected.isNotEmpty()
-                main.post {
-                    set(!ok, if (ok) "connected to the car" else "not connected to the car")
-                }
+                main.post { result(ok) }
             }
 
             override fun onServiceDisconnected(profile: Int) {}
         }, BluetoothProfile.A2DP)
+        if (!asked) result(null)
     }
 
     private fun set(missing: Boolean, why: String) {

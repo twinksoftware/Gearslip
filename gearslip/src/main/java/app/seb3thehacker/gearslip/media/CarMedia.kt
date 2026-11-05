@@ -418,6 +418,9 @@ class CarMedia(private val context: Context) {
         checkSearch()
     }
 
+    /** The package of the app Gearslip controls now, or null. */
+    val packageName: String? get() = controller?.packageName
+
     private var appResources: Pair<String, android.content.res.Resources?>? = null
 
     /**

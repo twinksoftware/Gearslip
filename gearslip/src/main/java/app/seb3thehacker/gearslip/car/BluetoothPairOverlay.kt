@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 internal fun BluetoothPairOverlay() {
     val prompt by CarBluetooth.prompt.collectAsState()
-    val bluetoothAudio = !CarSettings.pipeAudio.collectAsState().value
+    val bluetoothAudio = !CarSettings.pipeAudio.collectAsState().value && !CarSettings.thisCarPipes.collectAsState().value
     when (prompt) {
         CarBluetooth.Prompt.NONE -> {
             val missing by BluetoothAudioCheck.missing.collectAsState()

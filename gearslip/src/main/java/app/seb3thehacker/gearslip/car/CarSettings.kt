@@ -57,6 +57,7 @@ object CarSettings {
     private const val KEY_OPEN = "car_open_on_connect"
     private const val KEY_NIGHT = "car_night_mode"
     private const val KEY_PIPE_AUDIO = "car_pipe_audio"
+    private const val KEY_AUDIO_CARS = "car_audio_through_gearslip_cars"
 private const val KEY_SPEAK_DIRECTIONS = "car_speak_directions"
 private const val KEY_DIRECTIONS_OVER_MUSIC = "car_directions_over_music"
 private const val KEY_BLUETOOTH_WARNING = "car_bluetooth_warning"
@@ -269,6 +270,41 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
      */
     val pipeAudio: StateFlow<Boolean> = pipeAudioFlow
 
+    private val thisCarPipesFlow = MutableStateFlow(false)
+
+    /**
+     * The car connected now switches Bluetooth music off while Android Auto runs, so its music
+     * goes through Gearslip whatever [pipeAudio] says. Learned by [BluetoothAudioCheck] and
+     * remembered per car: a Skoda, a VW, an Audi and a Bolt all did this.
+     */
+    val thisCarPipes: StateFlow<Boolean> = thisCarPipesFlow
+
+    /** Whether music goes through Gearslip in this car: the driver's choice, or what the car needs. */
+    val pipesNow: Boolean get() = pipeAudioFlow.value || thisCarPipesFlow.value
+
+    /** A car connected: whether it's one that needs music through Gearslip. Null for none known. */
+    fun carConnected(carAddress: String?) {
+        thisCarPipesFlow.value = carAddress != null && carKey(carAddress) in audioCars()
+    }
+
+    fun carDisconnected() {
+        thisCarPipesFlow.value = false
+    }
+
+    /** This car turned Bluetooth music off: from now on its music goes through Gearslip. */
+    fun rememberAudioCar(carAddress: String) {
+        AppSettings.putString(app, KEY_AUDIO_CARS, (audioCars() + carKey(carAddress)).distinct().joinToString(","))
+        thisCarPipesFlow.value = true
+    }
+
+    private fun audioCars(): List<String> =
+        AppSettings.getString(app, KEY_AUDIO_CARS, "").split(",").filter { it.isNotEmpty() }
+
+    /** Settings keep a short hash, not the car's address. */
+    private fun carKey(address: String): String =
+        java.security.MessageDigest.getInstance("SHA-256").digest(address.uppercase().toByteArray())
+            .take(8).joinToString("") { "%02x".format(it) }
+
     /** Gearslip reads the map app's turns aloud on the car's directions channel; see DirectionsVoice. */
     val speakDirections: StateFlow<Boolean> = speakDirectionsFlow
 
@@ -471,6 +507,11 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
     fun setPipeAudio(on: Boolean) {
         // Saved even when unchanged, so picking the default still counts as a choice.
         AppSettings.putString(app, KEY_PIPE_AUDIO, on.toString())
+        // Choosing Bluetooth by hand overrules what Gearslip learned about each car.
+        if (!on) {
+            AppSettings.putString(app, KEY_AUDIO_CARS, "")
+            thisCarPipesFlow.value = false
+        }
         if (pipeAudioFlow.value == on) return
         pipeAudioFlow.value = on
         if (AppSettings.getString(app, KEY_SPEAK_DIRECTIONS, "") == "") speakDirectionsFlow.value = on

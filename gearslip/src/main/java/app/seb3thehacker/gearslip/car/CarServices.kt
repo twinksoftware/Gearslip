@@ -150,7 +150,7 @@ object CarServices {
         media.connect(app)
         // Not torn down and rebuilt per app: the capture covers whatever the phone plays, so
         // switching media apps never costs the driver another consent dialog.
-        if (CarSettings.pipeAudio.value) CarAudio.request()
+        if (CarSettings.pipesNow) CarAudio.request()
     }
 
     /**

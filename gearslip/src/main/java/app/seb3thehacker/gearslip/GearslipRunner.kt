@@ -200,6 +200,7 @@ class GearslipRunner(
         app.seb3thehacker.gearslip.car.CarData.clear()
         CarMic.current = null
         CarBluetooth.onCarDisconnected()
+        CarSettings.carDisconnected()
         BluetoothAudioCheck.onCarDisconnected()
         LocationCheck.onCarDisconnected()
         mediaStatus?.stop()
@@ -627,7 +628,10 @@ class GearslipRunner(
             onPausedForNow = { CarServices.pausePhoneMediaForNow() },
             onGivenBack = { CarServices.resumePhoneMedia() },
         )
-        if (CarSettings.pipeAudio.value) {
+        // A car known to switch Bluetooth music off gets it through Gearslip, whatever the setting.
+        CarSettings.carConnected(ServiceDiscovery.findBluetoothService(serviceDiscoveryResponse)?.carAddress)
+        if (CarSettings.pipesNow) {
+            if (!CarSettings.pipeAudio.value) log.i("this car turns Bluetooth music off, so music goes through Gearslip")
             openChannel(media.serviceId)
         } else {
             // Many cars switch their source to Android Auto the moment this channel opens, which

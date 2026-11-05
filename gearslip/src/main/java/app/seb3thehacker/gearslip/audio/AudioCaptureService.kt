@@ -157,6 +157,8 @@ class AudioCaptureService : Service() {
             val startedAt = heardAt
             var everHeard = false
             var warnedSilent = false
+            var lastSound = startedAt
+            var silenceReported = false
             try {
                 record.startRecording()
                 GearslipLog.i("audio: capturing media playback at ${rate}Hz x$channels")
@@ -174,6 +176,14 @@ class AudioCaptureService : Service() {
                     }
                     if (peak > 0) everHeard = true
                     val now = System.currentTimeMillis()
+                    // A stretch of silence: CarAudio says why on the car if a blocking app is playing.
+                    if (peak > 0) {
+                        lastSound = now
+                        silenceReported = false
+                    } else if (!silenceReported && now - lastSound >= SILENCE_MS) {
+                        silenceReported = true
+                        CarAudio.silent(this@AudioCaptureService)
+                    }
                     val level = peak / 32768f
                     if (now - heardAt >= LEVEL_LOG_MS) {
                         GearslipLog.i("audio: peak %.3f".format(level))

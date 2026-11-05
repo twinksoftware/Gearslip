@@ -47,6 +47,9 @@ object CarAudio {
     /** Opens the car's media channel, left closed while music went over Bluetooth; null once open. */
     @Volatile var openSink: (() -> Unit)? = null
 
+    /** The car offers a music channel, open or waiting to be. */
+    val sinkOffered: Boolean get() = link != null || openSink != null
+
     /** Rate and channel count the capture should use: the car's, or a sensible default. */
     val sampleRate get() = link?.sampleRate ?: 48_000
     val channels get() = link?.channels ?: 2
@@ -93,9 +96,29 @@ object CarAudio {
         }
     }
 
+    /**
+     * Capture has heard nothing for a while. If a media app that blocks capture is the one
+     * playing, the car screen says why the music is silent, once a drive: Spotify does this.
+     */
+    internal fun silent(context: android.content.Context) = android.os.Handler(android.os.Looper.getMainLooper()).post {
+        if (toldBlocked) return@post
+        val media = app.seb3thehacker.gearslip.car.CarServices.mediaOrNull() ?: return@post
+        if (!media.now.value.playing) return@post
+        val name = BLOCKS_CAPTURE[media.packageName] ?: return@post
+        toldBlocked = true
+        GearslipLog.i("audio: $name is playing and capture hears nothing: it blocks other apps from playing its sound")
+        app.seb3thehacker.gearslip.car.CarToasts.show(this, context.getString(app.seb3thehacker.gearslip.R.string.car_audio_blocked, name), androidx.car.app.CarToast.LENGTH_LONG)
+    }
+
+    @Volatile private var toldBlocked = false
+
+    /** Media apps known to keep other apps from capturing their sound, by package. */
+    private val BLOCKS_CAPTURE = mapOf("com.spotify.music" to "Spotify")
+
     /** The car went away. Everything is torn down; the next connection asks again. */
     fun release() {
         wanted = false
+        toldBlocked = false
         AudioCaptureService.stop()
         _capture.value = Capture.OFF
     }

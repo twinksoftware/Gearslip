@@ -146,7 +146,7 @@ fun CarUi() {
     // Ask for the phone's sound as soon as the car connects, not only when a media app opens:
     // a video in the web browser or a map's voice needs it too. Asks once, after the car offers
     // somewhere to play it.
-    LaunchedEffect(Unit) { if (CarSettings.pipeAudio.value) app.seb3thehacker.gearslip.audio.CarAudio.request() }
+    LaunchedEffect(Unit) { if (CarSettings.pipesNow) app.seb3thehacker.gearslip.audio.CarAudio.request() }
     // A new version gets one card in the top right, a few seconds in and only while parked.
     LaunchedEffect(Unit) { app.seb3thehacker.gearslip.update.UpdateChecker.onCarConnected(appContext) }
     // The map follows the light outside, whatever the app's own theme is set to.
