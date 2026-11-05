@@ -15,8 +15,12 @@ import app.seb3thehacker.gearslip.car.ClusterScreen
  *   -> VideoFocusRequest      <- VideoFocusNotification { projected }
  *   -> Start, CodecConfig, Data...   <- Ack
  *
- * No touch: a cluster has none. Experimental, behind [car.CarSettings.clusterVideoEnabled], and
- * untested in a car: none in the notes has a cluster sink.
+ * No touch: a cluster has none. Experimental, behind [car.CarSettings.clusterVideoEnabled].
+ *
+ * Gearslip holds the cluster only while there's a route, as the card has nothing else to show.
+ * Otherwise the car keeps its own picture there: an Audi's virtual cockpit went black instead of
+ * showing its map (issue #56). [watchRoute] asks for the screen when a route starts and hands it
+ * back once there has been none for [NO_ROUTE_MS].
  */
 internal class ClusterVideo(
     private val context: Context,
@@ -30,6 +34,13 @@ internal class ClusterVideo(
 
     private var configIndex = 0
     @Volatile private var started = false
+    /** Configured and ready for focus requests. */
+    @Volatile private var ready = false
+    /** The car shows Gearslip's picture now; frames aren't sent while it shows its own. */
+    @Volatile private var projected = false
+    /** Gearslip has asked for the screen and not handed it back since. */
+    private var wanted = false
+    private var noRouteSince = 0L
     @Volatile private var running = true
     @Volatile private var source: VideoSource? = null
     private var projector: ScreenProjector? = null
@@ -57,16 +68,19 @@ internal class ClusterVideo(
                 // The cluster gets the smallest picture it offers: a turn card needs no more.
                 configIndex = offered.minByOrNull { service.configs.getOrNull(it)?.pixelCount() ?: Int.MAX_VALUE } ?: 0
                 log.i("<- Config status=${Wire.varint(fields, 1)} max_unacked=$maxUnacked offered=$offered - using $configIndex")
-                val focus = Protobuf.varintField(2, GearslipRunner.VIDEO_FOCUS_PROJECTED.toLong()) + Protobuf.varintField(3, 1L)
-                send(GearslipRunner.MSG_VIDEO_FOCUS_REQUEST, focus)
-                log.i("-> VideoFocusRequest(mode=PROJECTED)")
+                ready = true
+                main.post(watchRoute)
             }
 
             GearslipRunner.MSG_VIDEO_FOCUS_NOTIFICATION -> {
                 val mode = Wire.varint(Wire.fields(body), 1)?.toInt() ?: GearslipRunner.VIDEO_FOCUS_PROJECTED
                 log.i("<- VideoFocusNotification: mode=$mode")
-                val projected = mode == GearslipRunner.VIDEO_FOCUS_PROJECTED || mode == GearslipRunner.VIDEO_FOCUS_PROJECTED_NO_INPUT
-                if (projected && !started) startStream()
+                val now = mode == GearslipRunner.VIDEO_FOCUS_PROJECTED || mode == GearslipRunner.VIDEO_FOCUS_PROJECTED_NO_INPUT
+                val back = now && !projected
+                projected = now
+                if (now && !started) startStream()
+                // Back from the car's own picture: a fresh key frame, so it doesn't start on a partial one.
+                else if (back) source?.requestSyncFrame()
             }
 
             GearslipRunner.MSG_MEDIA_ACK -> {
@@ -80,6 +94,31 @@ internal class ClusterVideo(
 
             else -> log.i("<- unhandled message id=$messageId (${body.size} bytes)")
         }
+    }
+
+    /** Once a second: the cluster follows whether there's a route. */
+    private val watchRoute = object : Runnable {
+        override fun run() {
+            if (!running || !ready) return
+            val route = app.seb3thehacker.gearslip.car.NavTurn.current() != null
+            val now = System.currentTimeMillis()
+            if (route) noRouteSince = 0L else if (noRouteSince == 0L) noRouteSince = now
+            when {
+                route && !wanted -> requestFocus(GearslipRunner.VIDEO_FOCUS_PROJECTED, "a route started")
+                !route && wanted && now - noRouteSince >= NO_ROUTE_MS -> requestFocus(GearslipRunner.VIDEO_FOCUS_NATIVE, "no route")
+            }
+            main.postDelayed(this, WATCH_MS)
+        }
+    }
+
+    private fun requestFocus(mode: Int, why: String) {
+        wanted = mode == GearslipRunner.VIDEO_FOCUS_PROJECTED
+        // VideoFocusRequestNotification { disp_channel_id = 1; mode = 2; reason = 3 }, as the main
+        // screen asks for its own picture back.
+        val reason = if (wanted) 1L else GearslipRunner.VIDEO_FOCUS_REASON_LAUNCH_NATIVE.toLong()
+        val body = Protobuf.varintField(1, channelId.toLong()) + Protobuf.varintField(2, mode.toLong()) + Protobuf.varintField(3, reason)
+        runCatching { send(GearslipRunner.MSG_VIDEO_FOCUS_REQUEST, body) }
+        log.i("-> VideoFocusRequest(mode=${if (wanted) "PROJECTED" else "NATIVE"}): $why")
     }
 
     private fun startStream() {
@@ -138,7 +177,7 @@ internal class ClusterVideo(
                 ackLock.wait(GearslipRunner.ACK_STALL_MS - since + 1)
             }
         }
-        if (!running) return
+        if (!running || !projected) return
         val timestamp = ByteArray(8)
         for (i in 0 until 8) timestamp[i] = ((presentationTimeUs shr ((7 - i) * 8)) and 0xFF).toByte()
         synchronized(ackLock) { inFlight++ }
@@ -148,6 +187,7 @@ internal class ClusterVideo(
 
     fun stop() {
         running = false
+        main.removeCallbacks(watchRoute)
         synchronized(ackLock) { ackLock.notifyAll() }
         main.post {
             projector?.stop()
@@ -160,5 +200,8 @@ internal class ClusterVideo(
     private companion object {
         // A turn card changes a few times a minute; the encoder repeats the last frame between.
         const val FRAME_RATE = 15
+        const val WATCH_MS = 1_000L
+        /** A gap in the turns this long is the route over, not a reroute or a moment between steps. */
+        const val NO_ROUTE_MS = 10_000L
     }
 }
