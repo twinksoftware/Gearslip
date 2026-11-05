@@ -5,9 +5,10 @@
 An Android Auto alternative built for everyone.
 
 [<img src="https://raw.githubusercontent.com/ImranR98/Obtainium/main/assets/graphics/badge_obtainium.png" alt="Get it on Obtainium" height="80">](https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/twinksoftware/gearslip)
-[![forthebadge](https://forthebadge.com/badges/compatibility-club-penguin.svg)](https://forthebadge.com)
 
 ![Vela Maps navigating on the car screen, with the music player beside the map](docs/screenshots/navigation.png)
+
+[![forthebadge](https://forthebadge.com/badges/compatibility-club-penguin.svg)](https://forthebadge.com)
 
 Gearslip speaks the Android Auto protocol straight to your car, over USB or wireless, with no
 Google software in the path. Map, music, and messaging apps draw their car screens through
