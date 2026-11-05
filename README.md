@@ -59,7 +59,7 @@ screen-sharing mode.
   call goes out. When a call comes in, answer or decline it on the car screen. During a
   call, the nav bar shows who you're talking to, and you mute or hang up from there.
 - **Navigation.** Gearslip hosts real Car App Library map apps on the car screen.
-  Organic Maps, Vela, OsmAnd, Flitsmeister, MAPS.ME, and MapQuest work today. While you
+  Organic Maps, Vela, OsmAnd, Waze, Flitsmeister, MAPS.ME, and MapQuest work today. While you
   navigate, a big turn card on the left shows the arrow, the distance, and your lane, and
   the map keeps the right side. Turns from Google Maps or Waze running on the phone show in
   the nav bar, and on the instrument cluster in cars with a screen there.
@@ -109,7 +109,7 @@ screen-sharing mode.
   car screen fills the display, and an All apps page opens everything else.
 - **Gearslip works with [LIVI](https://github.com/f-io/LIVI),** the open-source head unit
   used in homemade car dashboards.
-- **Some apps refuse Gearslip.** Spotify, Waze, and Google Messages use a version of
+- **Some apps refuse Gearslip.** Spotify and Google Messages use a version of
   Google's car library that accepts only Android Auto itself. Spotify still plays through
   Gearslip's own player. TIDAL lets only approved apps browse its library.
 - **Calls use the car's Bluetooth,** as they do in Android Auto. Pair the phone with the
