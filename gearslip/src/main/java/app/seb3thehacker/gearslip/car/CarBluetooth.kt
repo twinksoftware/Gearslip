@@ -105,6 +105,20 @@ object CarBluetooth {
         }
     }
 
+    /**
+     * Opens the car's Bluetooth channel though there's no pairing to do, as a real phone does on
+     * every connection. Issue #18: a 2021 Bolt hangs up about 20 seconds in, and this is one of
+     * the two channels it offers that Gearslip never opened. Without an address the driver typed,
+     * it only opens the channel: a made-up address could set the car pairing with the wrong phone.
+     */
+    fun announce(why: String) {
+        val c = car ?: return
+        if (pairing || announcing) return
+        announcing = true
+        log.i("-> ChannelOpenRequest on channel ${c.service.serviceId} ($why)")
+        c.open()
+    }
+
     fun onCarDisconnected() {
         car = null
         pairing = false
@@ -155,6 +169,10 @@ object CarBluetooth {
                 if (status != 0) {
                     if (announcing) log.i("the car wouldn't open its Bluetooth channel")
                     else main.post { startBond("the car wouldn't open its Bluetooth channel") }
+                    return
+                }
+                if (announcing && typedAddress() == null) {
+                    log.i("Bluetooth channel open; no address typed in Settings, so no PairingRequest")
                     return
                 }
                 val method = c.service.pairingMethods.firstOrNull { it == METHOD_NUMERIC_COMPARISON }

@@ -107,6 +107,8 @@ class GearslipRunner(
     @Volatile private var audioLink: AudioLink? = null
     @Volatile private var guidanceLink: AudioLink? = null
     @Volatile private var vendorChannelId = -1
+    /** The car's Wi-Fi projection channel, opened in GM cars only (see [startVendorChannel]); -1 when closed. */
+    @Volatile private var wifiChannelId = -1
     private var audioMessagesSeen = 0
     private var touchWidth = 0
     private var touchHeight = 0
@@ -260,6 +262,8 @@ class GearslipRunner(
                 CarBluetooth.onMessage(messageId, body)
             } else if (frame.channel == vendorChannelId) {
                 onVendorMessage(messageId, body)
+            } else if (frame.channel == wifiChannelId) {
+                onWifiProjectionMessage(messageId, body)
             } else if (frame.channel == CarMic.current?.channelId) {
                 CarMic.current?.onMessage(messageId, body)
             } else if (frame.channel == audioLink?.channelId) {
@@ -726,6 +730,23 @@ class GearslipRunner(
         vendorChannelId = gm.serviceId
         log.i("-> ChannelOpenRequest on GM's channel ${gm.serviceId}")
         openChannel(gm.serviceId)
+        // Opening GM's channel and pinging the car didn't stop the Bolt hanging up, so a GM car
+        // also gets the two channels Gearslip had never opened: Bluetooth and Wi-Fi projection.
+        // Only what arrives on them is logged, by message id and size, until one turns out to matter.
+        CarBluetooth.announce("a GM car, issue #18")
+        ServiceDiscovery.findWifiProjectionService(serviceDiscoveryResponse)?.let { channel ->
+            wifiChannelId = channel
+            log.i("-> ChannelOpenRequest on the Wi-Fi projection channel $channel (a GM car, issue #18)")
+            openChannel(channel)
+        }
+    }
+
+    private fun onWifiProjectionMessage(messageId: Int, body: ByteArray) {
+        if (messageId == MSG_CHANNEL_OPEN_RESPONSE) {
+            log.i("<- Wi-Fi projection channel open: status=${Protobuf.readInt32Field(body, 1) ?: 0}")
+        } else {
+            log.i("<- Wi-Fi projection message id=$messageId (${body.size} bytes)")
+        }
     }
 
     private fun onVendorMessage(messageId: Int, body: ByteArray) {

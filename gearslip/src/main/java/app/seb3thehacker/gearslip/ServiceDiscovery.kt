@@ -200,6 +200,13 @@ object ServiceDiscovery {
             VendorService(id, name)
         }
 
+    /** The channel of the car's Wi-Fi projection service (Service field 14), or null. */
+    fun findWifiProjectionService(response: ByteArray): Int? =
+        Wire.allBytes(Wire.fields(response), 1).firstNotNullOfOrNull { channel ->
+            val service = Wire.fields(channel)
+            if (Wire.bytes(service, 14) == null) null else Wire.varint(service, 1)?.toInt()
+        }
+
     fun findBluetoothService(response: ByteArray): BluetoothService? {
         for (channel in Wire.allBytes(Wire.fields(response), 1)) {
             val service = Wire.fields(channel)
