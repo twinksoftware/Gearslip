@@ -38,9 +38,9 @@ android {
         applicationId = "app.seb3thehacker.gearslip"
         minSdk = 31
         targetSdk = 37
-        versionCode = 14
+        versionCode = 15
         // -PgearslipVersionName=0.1.99-test makes a build that thinks it's older, to try the updater.
-        versionName = project.findProperty("gearslipVersionName")?.toString() ?: "0.3.39-alpha"
+        versionName = project.findProperty("gearslipVersionName")?.toString() ?: "0.3.40-alpha"
         manifestPlaceholders["appLabel"] = "Gearslip"
         // Where opted-in phones send their daily usage note: the stats-worker/ Worker's address,
         // set as gearslipStatsUrl in gradle.properties. Left empty, nothing is ever sent.

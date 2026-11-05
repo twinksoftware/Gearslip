@@ -11,6 +11,14 @@ object Changelog {
 
     val releases = listOf(
         Release(
+            15, "0.3.40-alpha",
+            listOf(
+                "A liked song lights up the whole like button, as shuffle and repeat do.",
+                "Music no longer carries on from the phone after you turn the car off.",
+                "Cars that hold back their screen are asked for it again in a way older cars understand.",
+            ),
+        ),
+        Release(
             14, "0.3.39-alpha",
             listOf(
                 "Turns from Google Maps or Waze on the phone show in the nav bar and on the car's cluster.",
