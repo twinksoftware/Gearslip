@@ -302,6 +302,10 @@
     <string name="update_check_now">Check now</string>
     <string name="update_check_auto">Check automatically</string>
     <string name="update_once_a_day">Once a day</string>
+    <string name="update_silent">Install updates by itself</string>
+    <string name="update_silent_sub">Finished releases only, on Wi-Fi, when no car is connected</string>
+    <string name="update_installed_title">Gearslip updated to %1$s</string>
+    <string name="update_installed_text">Installed on Wi-Fi while no car was connected.</string>
 
     <!--  -->
     <string name="update_unplug_first">Unplug from the car to install. Installing closes Gearslip.</string>

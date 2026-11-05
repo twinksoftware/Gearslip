@@ -171,6 +171,7 @@ private fun UpdateDialog(
 ) {
     val context = LocalContext.current
     var auto by remember { mutableStateOf(UpdateChecker.autoCheckEnabled(context)) }
+    var silent by remember { mutableStateOf(UpdateChecker.silentEnabled(context)) }
     val actionLabels = listOf(R.string.update_download, R.string.update_install, R.string.update_try_again, R.string.update_check_now).map { stringResource(it) }
     val action: Pair<String, () -> Unit>? = when (state) {
         State.Checking, is State.Downloading -> null
@@ -229,6 +230,29 @@ private fun UpdateDialog(
                         )
                     }
                     Switch(checked = auto, onCheckedChange = null)
+                }
+                // Silent installs ride on the automatic check, so the switch only shows with it on.
+                if (auto && !BuildConfig.DEBUG) {
+                    Row(
+                        Modifier
+                            .fillMaxWidth()
+                            .toggleable(silent, role = Role.Switch) {
+                                silent = it
+                                UpdateChecker.setSilentEnabled(context, it)
+                            }
+                            .padding(vertical = 4.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Column(Modifier.weight(1f)) {
+                            Text(stringResource(R.string.update_silent), style = MaterialTheme.typography.bodyLarge)
+                            Text(
+                                stringResource(R.string.update_silent_sub),
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                        Switch(checked = silent, onCheckedChange = null)
+                    }
                 }
             }
         },

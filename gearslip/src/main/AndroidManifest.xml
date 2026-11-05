@@ -5,6 +5,8 @@
     <!-- The projected WebView loads real pages; without this every load fails silently. -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <!-- Lets an update Gearslip installed itself skip Android's prompt. -->
+    <uses-permission android:name="android.permission.UPDATE_PACKAGES_WITHOUT_USER_ACTION" />
 
     <!--
       Phone mirroring. Android refuses to hand over a MediaProjection unless a foreground
@@ -215,6 +217,14 @@
         <receiver
             android:name=".notify.TestMessageReceiver"
             android:exported="false" />
+
+        <receiver
+            android:name=".update.UpdateReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
 
         <service
             android:name=".mirror.MirrorService"
