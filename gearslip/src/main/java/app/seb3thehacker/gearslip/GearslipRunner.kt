@@ -1099,6 +1099,16 @@ class GearslipRunner(
                 }
             }
 
+            // UpdateUiConfigRequest { AdditionalVideoConfig }: new margins or day/night. A LuChi
+            // box sent it as video began, showed our first frame, then black (issue #58), as if
+            // it rebuilt its decoder. A rebuilt decoder needs SPS/PPS and a keyframe again.
+            MSG_VIDEO_UI_CONFIG -> {
+                log.i("<- UpdateUiConfigRequest (${body.size} bytes) - sending the stream's start again")
+                log.hex("   ui config", body, limit = 64)
+                lastCodecConfig?.let { send(MSG_MEDIA_CODEC_CONFIG, it, encrypted = true, channel = videoChannelId) }
+                videoSource?.requestSyncFrame()
+            }
+
             else -> log.i("<- unhandled video message id=$messageId (${body.size} bytes)")
         }
     }
@@ -1688,6 +1698,7 @@ class GearslipRunner(
         const val MSG_MEDIA_ACK = 32772
         const val MSG_VIDEO_FOCUS_REQUEST = 32775
         const val MSG_VIDEO_FOCUS_NOTIFICATION = 32776
+        const val MSG_VIDEO_UI_CONFIG = 32777
 
         // aap_protobuf/service/sensor/... - same "first specific message on this channel type
         // starts at 0x8000" numbering as media/input above.
