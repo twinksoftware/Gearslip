@@ -31,6 +31,11 @@ object CarServices {
 
     private var context: Context? = null
 
+    /** Buffering counts as playing: an app between songs is about to make sound again. */
+    private val PLAYING_STATES = setOf(PlaybackState.STATE_PLAYING, PlaybackState.STATE_BUFFERING)
+    /** How long after pausing for the car leaving to look again for an app that started by itself. */
+    private const val REPAUSE_MS = 2_000L
+
     val nav: CarAppConnection by lazy { CarAppConnection(requireNotNull(context)) }
     val media: CarMedia by lazy { CarMedia(requireNotNull(context)) }
 
@@ -253,11 +258,22 @@ object CarServices {
      * the phone's speaker. Unplugging a USB accessory isn't "audio becoming noisy" the way
      * headphones are, so the apps won't pause themselves. Every playing session is paused, not
      * just the one Gearslip opened: anything the car was playing was going through the car.
+     * An app can start again on its own once the speaker is given back a moment later, which a
+     * Deezer driver heard after turning the car off (issue #39), so the ones it paused are
+     * looked at once more and paused again if they're playing.
      */
     fun pausePhoneMedia(why: String = "the car left") {
         pausedForNow = null
         pausedOwnForNow = false
-        pause(why)
+        val paused = pause(why)
+        if (paused.isEmpty()) return
+        android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
+            val again = paused.filter { it.playbackState?.state in PLAYING_STATES }
+            again.forEach { runCatching { it.transportControls.pause() } }
+            if (again.isNotEmpty()) {
+                app.seb3thehacker.gearslip.GearslipLog.i("media: paused ${again.joinToString { it.packageName }} again: it started by itself after $why")
+            }
+        }, REPAUSE_MS)
     }
 
     /** What [pausePhoneMediaForNow] paused, for [resumePhoneMedia] to play again. */
@@ -293,7 +309,7 @@ object CarServices {
         val manager = ctx.getSystemService(MediaSessionManager::class.java)
         val listener = ComponentName(ctx, GearslipNotificationListener::class.java)
         val playing = try {
-            manager.getActiveSessions(listener).filter { it.playbackState?.state == PlaybackState.STATE_PLAYING }
+            manager.getActiveSessions(listener).filter { it.playbackState?.state in PLAYING_STATES }
         } catch (e: SecurityException) {
             null
         }
