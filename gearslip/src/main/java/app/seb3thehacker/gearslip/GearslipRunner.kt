@@ -74,6 +74,9 @@ class GearslipRunner(
     @Volatile private var stopped = false
 
     @Volatile private var state = State.WAIT_VERSION
+
+    /** Connected, but the car hasn't sent its first message yet. */
+    val waitingForVersion: Boolean get() = running && state == State.WAIT_VERSION
     @Volatile private var lastProgress = System.currentTimeMillis()
     @Volatile private var running = true
 

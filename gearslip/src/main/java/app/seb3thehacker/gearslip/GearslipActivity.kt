@@ -151,6 +151,7 @@ class GearslipActivity : ComponentActivity(), Projection {
         app.seb3thehacker.gearslip.wireless.WirelessLink.onConnected = { socket ->
             runOnUiThread { startWireless(socket) }
         }
+        app.seb3thehacker.gearslip.wireless.WirelessLink.sessionWaiting = { runner?.waitingForVersion == true }
         app.seb3thehacker.gearslip.wireless.WirelessAuto.showApproval = { chooser, address ->
             runOnUiThread {
                 approvingCar = address
@@ -245,6 +246,7 @@ class GearslipActivity : ComponentActivity(), Projection {
     override fun onDestroy() {
         super.onDestroy()
         app.seb3thehacker.gearslip.wireless.WirelessLink.onConnected = null
+        app.seb3thehacker.gearslip.wireless.WirelessLink.sessionWaiting = null
         app.seb3thehacker.gearslip.wireless.WirelessAuto.showApproval = null
         runCatching { unregisterReceiver(detachReceiver) }
         PhoneMirror.onStartRequested = null

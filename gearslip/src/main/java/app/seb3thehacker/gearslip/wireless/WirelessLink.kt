@@ -80,6 +80,9 @@ object WirelessLink {
     /** Set by the activity: starts a session on the car's socket. */
     @Volatile var onConnected: ((Socket) -> Unit)? = null
 
+    /** Set by the activity: whether the session on the socket still waits for the car's first message. */
+    @Volatile var sessionWaiting: (() -> Boolean)? = null
+
     @Volatile private var rfcomm: BluetoothSocket? = null
     @Volatile private var listener: BluetoothServerSocket? = null
     @Volatile private var tcp: Socket? = null
@@ -92,6 +95,8 @@ object WirelessLink {
     @Volatile private var lostNetwork: Network? = null
     /** The car network asked for or joined, until Android says it's gone or never came. */
     @Volatile private var activeSsid: String? = null
+    /** The car's network once joined, for connecting again on it. */
+    @Volatile private var joinedNet: Network? = null
     /** Bumped on each Wi-Fi join and on stop, so an older run of TCP tries ends instead of racing the new one. */
     @Volatile private var tcpRun = 0
     /** The socket reached the car's projection: whatever ends the start-up now, it isn't retried. */
@@ -195,6 +200,7 @@ object WirelessLink {
         }
         network = null
         activeSsid = null
+        joinedNet = null
     }
 
     /** A stable id for this phone as this app sees it, standing in for the serial a real phone sends. */
@@ -272,6 +278,17 @@ object WirelessLink {
                         val port = Wire.varint(f, 2)?.toInt() ?: 0
                         log.i("<- StartRequest: projection at $ip:$port")
                         target = ip to port
+                        // The car asks again while the connection it got still hasn't heard from
+                        // it: it started its side over, and waits on a fresh connection. Issue #18:
+                        // a Bolt left Gearslip waiting 88 seconds on the old one, then hung up.
+                        // A session already under way is left alone.
+                        val net = joinedNet
+                        if (net != null && activeSsid != null && handedOver && sessionWaiting?.invoke() == true) {
+                            log.w("the car asked again while the connection still waits for it - connecting again")
+                            val run = ++tcpRun
+                            Thread({ connectTcp(context, output, name, net, ip, port, run) }, "gearslip-wireless-tcp").start()
+                            continue
+                        }
                         val join = waitingJoin
                         if (join != null) {
                             waitingJoin = null
@@ -423,6 +440,7 @@ object WirelessLink {
         val callback = object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(net: Network) {
                 log.i("Wi-Fi: joined \"$ssid\"")
+                joinedNet = net
                 // Real phones report the join over Bluetooth before opening TCP, and some cars
                 // only start listening once they hear it.
                 val phoneIp = manager.getLinkProperties(net)?.linkAddresses
@@ -463,6 +481,7 @@ object WirelessLink {
 
             override fun onLost(net: Network) {
                 lostNetwork = net
+                if (joinedNet == net) joinedNet = null
                 if (activeSsid == ssid) activeSsid = null
                 log.w(
                     "Wi-Fi: lost \"$ssid\" - Android dropped the car's network. Picking it by hand " +
