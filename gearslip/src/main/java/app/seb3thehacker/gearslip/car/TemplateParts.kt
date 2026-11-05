@@ -7,6 +7,8 @@ import app.seb3thehacker.gearslip.car.theme.*
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.foundation.focusGroup
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.luminance
@@ -249,7 +251,17 @@ internal fun RightEdgeControls(
     val pan by connection.panMode.collectAsState()
     // Kept up while the knob is on one of them, or the ring would fade out along with the button.
     var holdsFocus by remember { mutableStateOf(false) }
-    val visible = awake || pan || holdsFocus
+    // Pressing the knob on the map hands it to these buttons (see MapKnob).
+    val knobOpen by MapKnob.buttonsOpen.collectAsState()
+    val knobFocus = remember { androidx.compose.ui.focus.FocusRequester() }
+    androidx.compose.runtime.DisposableEffect(Unit) {
+        MapKnob.controls++
+        onDispose { MapKnob.controls-- }
+    }
+    androidx.compose.runtime.LaunchedEffect(knobOpen) {
+        if (knobOpen) runCatching { knobFocus.requestFocus() }
+    }
+    val visible = awake || pan || holdsFocus || knobOpen
     // With the player beside the map there is no room for the app's row and the map controls
     // both, so the app's own buttons fold behind one; opening it swaps them in for the map's.
     val folded = LocalSidePanelInset.current > 0.dp && actions.size > 1
@@ -263,6 +275,8 @@ internal fun RightEdgeControls(
     Column(
         modifier
             .alpha(alpha)
+            .focusRequester(knobFocus)
+            .focusGroup()
             .onFocusChanged { holdsFocus = it.hasFocus }
             .let { base ->
                 if (visible) base else base.pointerInput(Unit) {

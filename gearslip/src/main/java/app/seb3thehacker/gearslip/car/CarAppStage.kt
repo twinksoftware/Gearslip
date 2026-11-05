@@ -75,7 +75,7 @@ fun CarAppStage(
         // the template it described, laid over the top.
         androidx.compose.runtime.CompositionLocalProvider(LocalChromeCover provides cover, LocalCarAppConnection provides connection) {
             if (status.surfaceRequested) {
-                AppSurface(connection, frame, template, Modifier.fillMaxSize())
+                AppSurface(connection, frame, template, embedded, Modifier.fillMaxSize())
             }
             // The docked player floats over one side of the map: the chrome keeps clear of it,
             // and the app hears that side is covered, so its map centres in the rest.
@@ -116,6 +116,7 @@ private fun AppSurface(
     connection: CarAppConnection,
     frame: CarEnvironment.Frame,
     template: Template?,
+    embedded: Boolean,
     modifier: Modifier = Modifier,
 ) {
     var size by remember { mutableStateOf(0 to 0) }
@@ -125,6 +126,19 @@ private fun AppSurface(
     // The app lays its map out around whatever the host covers, so a template change or a card
     // changing size moves the visible area even though the surface itself hasn't changed.
     val (width, height) = size
+    // A full-screen map takes the knob: turn to zoom, nudge to pan, press for its buttons. The
+    // home screen's map pane leaves it alone, so the knob still moves between the cards there.
+    val focusManager = androidx.compose.ui.platform.LocalFocusManager.current
+    val isMap = !embedded && !isContentTemplate(template)
+    DisposableEffect(connection, isMap, width, height) {
+        if (!isMap || width == 0 || height == 0) return@DisposableEffect onDispose {}
+        val knob = MapKnob(connection, width, height) { focusManager.clearFocus() }
+        CarKeys.knobTaker = knob
+        onDispose {
+            knob.release()
+            if (CarKeys.knobTaker === knob) CarKeys.knobTaker = null
+        }
+    }
     val measured = bounds?.takeIf { width > 0 && height > 0 }?.let { cover?.visibleWithin(it, width, height) }
     // The card column moves the map's centre but isn't taken out of the stable area: apps size
     // their own overlays from it, and Vela's speedometer shrank to fit the strip right of the cards.

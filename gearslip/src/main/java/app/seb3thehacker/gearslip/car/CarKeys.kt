@@ -35,6 +35,24 @@ object CarKeys {
     /** Delivers an Android key event to the car display; set while the car UI is showing. */
     @Volatile var focusSink: ((keyCode: Int, down: Boolean) -> Unit)? = null
 
+    /** What a [KnobTaker] is offered: a turn of the knob, a focus key edge, or Back. */
+    sealed interface KnobEvent {
+        data class Turn(val steps: Int) : KnobEvent
+        data class Key(val keyCode: Int, val down: Boolean) : KnobEvent
+        data object Back : KnobEvent
+    }
+
+    /**
+     * Something on screen that wants the knob before focus moves: the full-screen map, which
+     * zooms and pans with it ([MapKnob]), and the app grid, which starts on the app opened last.
+     * Returns true for an event it kept. Called on the thread the keys arrive on, not the main one.
+     */
+    fun interface KnobTaker {
+        fun take(event: KnobEvent): Boolean
+    }
+
+    @Volatile var knobTaker: KnobTaker? = null
+
     private var appContext: Context? = null
     private val main = Handler(Looper.getMainLooper())
 
@@ -63,6 +81,7 @@ object CarKeys {
      */
     fun onKey(keyCode: Int, down: Boolean, longPress: Boolean): Boolean {
         if (keyCode in FOCUS_KEYS) {
+            if (knobTaker?.take(KnobEvent.Key(keyCode, down)) == true) return true
             _focusMoves.tryEmit(Unit)
             focusSink?.invoke(keyCode, down)
             return true
@@ -78,7 +97,7 @@ object CarKeys {
             KeyEvent.KEYCODE_SEARCH, KeyEvent.KEYCODE_VOICE_ASSIST -> voice()
             KeyEvent.KEYCODE_CALL -> call()
             KeyEvent.KEYCODE_ENDCALL -> endCall()
-            KeyEvent.KEYCODE_BACK -> screen(ScreenKey.BACK)
+            KeyEvent.KEYCODE_BACK -> if (knobTaker?.take(KnobEvent.Back) != true) screen(ScreenKey.BACK)
             KeyEvent.KEYCODE_HOME -> screen(ScreenKey.HOME)
             KEYCODE_NAVIGATION -> screen(ScreenKey.MAP)
             KEYCODE_MEDIA -> screen(ScreenKey.MEDIA)
@@ -92,6 +111,7 @@ object CarKeys {
     /** A turn of the rotary knob: each click moves focus one step, like Tab or Shift+Tab. */
     fun onRotate(delta: Int) {
         val sink = focusSink ?: return
+        if (knobTaker?.take(KnobEvent.Turn(delta)) == true) return
         _focusMoves.tryEmit(Unit)
         val code = if (delta > 0) KeyEvent.KEYCODE_TAB else KEYCODE_SHIFT_TAB
         repeat(kotlin.math.abs(delta).coerceAtMost(MAX_ROTARY_STEPS)) {
