@@ -4,7 +4,7 @@
         <item quantity="one">%1$d Song · %2$s. Gelöschte Songtexte werden erneut heruntergeladen, wenn du sie öffnest.</item>
         <item quantity="other">%1$d Songs · %2$s. Gelöschte Songtexte werden erneut heruntergeladen, wenn du sie öffnest.</item>
     </plurals>
-    <string name="carset_theme">Design</string>
+    <string name="carset_theme">Thema</string>
     <string name="carset_imperial">Imperial (mi, ft, °F)</string>
     <string name="carset_metric">Metrisch (km, m, °C)</string>
     <string name="carset_screen_size">Bildschirmgröße (nächste Verbindung)</string>
@@ -31,7 +31,7 @@
     <string name="carset_no_profile">Kein passendes Fahrzeugprofil gefunden</string>
     <string name="carset_audio_note">„Über Gearslip“ schickt den Ton des Handys über die Verbindung zum Auto, per Kabel oder kabellos. Android fragt bei jeder Fahrt, ob du deinen Bildschirm teilen möchtest, und ein paar Apps blockieren das. Bluetooth spielt wie sonst auch, und Android fragt nie.</string>
     <string name="carset_directions_note">Gearslip liest jedes Abbiegen laut über die Lautsprecher des Autos vor und senkt dabei die Musiklautstärke. Schalte es aus, wenn die Sprachansage deiner Karten-App bereits im Auto zu hören ist.</string>
-    <string name="carset_phone_speech_note">Hört über den Sprachdienst des Handys zu statt über den von Gearslip. Auf den meisten Handys ist das der von Google, der deine Stimme an Google senden kann. GrapheneOS hat keinen, deshalb nutzt Gearslip dort weiter seinen eigenen.</string>
+    <string name="carset_phone_speech_note">Nutzt den sprachbasierten Dienst des Handys selbst anstelle desjenigen von Gearslip. Bei den meisten Handys ist das der von Google, wodurch Ihre Stimme möglicherweise an Google weitergeleitet wird. GrapheneOS verfügt über keinen solchen Dienst, daher nutzt Gearslip weiterhin seinen eigenen.</string>
     <string name="carset_vehicle_data_note">Fügt eine Kachel „Fahrzeugdaten“ hinzu: ein roher Live-Mitschnitt des Sensorkanals des Infotainment-Systems. Die Feldbezeichnungen (Geschwindigkeit, Drehzahl, Kraftstoff …) stammen aus anderen Reverse-Engineering-Projekten und wurden für dieses Auto nicht überprüft – betrachte sie als Vermutung, nicht als Tatsache, bis du selbst gesehen hast, wie sich ein Wert ändert.</string>
     <string name="carset_adaptive_note">Senkt die Bildqualität, wenn das Auto oder sein WLAN nicht mithalten kann und erhöht sie wieder, sobald es geht. Gilt ab der nächsten Verbindung.</string>
     <string name="carset_usable_height">Nutzbare Höhe: %1$d px von 480</string>
@@ -172,7 +172,7 @@
     <string name="dialer_ask">Auf dem Handy fragen</string>
     <string name="dialer_enter_number">Nummer eingeben</string>
     <string name="dialer_call">Anrufen</string>
-    <string name="dialer_no_contacts">Keine Kontakte mit Telefonnummer gefunden.</string>
+    <string name="dialer_no_contacts">Es wurden keine Kontakte mit einer Telefonnummer gefunden.</string>
     <string name="dialer_search">Kontakte durchsuchen</string>
     <string name="dialer_needs_permission">Gearslip braucht die Berechtigungen „Telefon“ und „Kontakte“, um von hier aus zu wählen. Erlaube sie auf dem Handy, wenn du parkst.</string>
     <string name="dialer_no_match">Keine Kontakte passen zu „%1$s“.</string>
@@ -217,7 +217,7 @@
     <string name="nav_stop">Navigation beenden</string>
     <string name="nav_finding_routes">Routen werden gesucht …</string>
     <string name="nav_lane_recommended">Empfohlene Fahrspur</string>
-    <string name="nav_lane">Spur</string>
+    <string name="nav_lane">Fahrspur</string>
     <string name="nav_arrive">Ankunft %1$s</string>
     <string name="template_nothing_playing">Es läuft noch nichts.</string>
     <string name="template_search">Suchen</string>
@@ -249,7 +249,7 @@
     <string name="dir_sharp_left_onto">Biege auf %1$s scharf links ab</string>
     <string name="dir_sharp_right">Biege scharf rechts ab</string>
     <string name="dir_sharp_right_onto">Biege auf %1$s scharf rechts ab</string>
-    <string name="dir_u_turn">Wende</string>
+    <string name="dir_u_turn">Wenden</string>
     <string name="dir_keep_left">Halte dich links</string>
     <string name="dir_keep_left_toward">Halte dich links Richtung %1$s</string>
     <string name="dir_keep_right">Halte dich rechts</string>
@@ -576,7 +576,7 @@
     <string name="help_prompt">Stoppe die Audio-Abfrage bei jeder Fahrt.</string>
     <string name="help_prompt_detail">Verbinde das Handy mit einem Computer mit aktiviertem USB-Debugging und führe das hier einmal aus. Wenn du das überspringst, tippst du bei jeder Abfahrt auf „Starten“.</string>
     <string name="help_readable">Halte Benachrichtigungen lesbar.</string>
-    <string name="help_readable_detail">Android blendet den Inhalt von Benachrichtigungen aus, während es Audio teilt. Führe auch das hier aus, dann hebt Gearslip das auf, aber nur solange Musik ans Auto geht.</string>
+    <string name="help_readable_detail">Android blendet den Inhalt von Benachrichtigungen aus, solange Audioinhalte wiedergegeben werden. Wenn Du auch diese App ausführst, hebt Gearslip diese Einschränkung nur dann auf, solange Musik ins Auto übertragen wird.</string>
     <string name="help_which_cars_body">Die meisten Autos akzeptieren das aasdk-Zertifikat. Ab etwa 2020 haben manche Autos neuere Sicherheitsprüfungen eingeführt, die es ablehnen. In diesen Autos braucht Gearslip ein eigenes Zertifikat von dir.</string>
     <string name="update_downloaded_ask">Heruntergeladen. Android fragt vor der Installation nach.</string>
     <string name="update_install">Installieren</string>
@@ -592,13 +592,13 @@
     <string name="update_unplug_first">Trenne dein Handy vom Auto, um zu installieren. Die Installation schließt Gearslip.</string>
     <string name="update_card_title">Gearslip %1$s ist verfügbar</string>
     <string name="update_downloading">Wird heruntergeladen … %1$d %%</string>
-    <string name="update_debug_manual">Debug-Builds prüfen nur, wenn du auf „Jetzt prüfen“ tippst</string>
+    <string name="update_debug_manual">Bei Debug-Builds erfolgt die Überprüfung erst, wenn Du auf „Jetzt prüfen“ tippst</string>
     <string name="update_checks_daily">Gearslip prüft einmal am Tag</string>
     <string name="update_version_out">Version %1$s ist verfügbar</string>
     <string name="update_version_ready">Version %1$s ist bereit zur Installation</string>
     <string name="update_dialog_status">Version %1$s. %2$s.</string>
     <string name="about_give_regularly">Wöchentlich oder monatlich spenden</string>
-    <string name="about_bmac_sub" formatted="false">Einmalig oder monatlich per Karte spenden. Buy Me a Coffee behält 5 %</string>
+    <string name="about_bmac_sub" formatted="false">Einmalig oder monatlich per Karte spenden. „Buy Me a Coffee“ behält 5 % ein</string>
     <string name="about_give_once">Einmalig spenden</string>
     <string name="about_any_amount">Beliebiger Betrag, per Karte</string>
     <string name="about_monero_sub">Öffne deine Wallet oder kopiere die Adresse</string>
@@ -623,7 +623,7 @@
     <string name="certsetup_failed">Download fehlgeschlagen</string>
     <string name="certsetup_retry">Erneut versuchen</string>
     <string name="certsetup_import_sub">Eine .p12-Datei mit dem zugehörigen privaten Schlüssel. Nutze deine eigene, wenn dein Auto das aasdk-Zertifikat ablehnt.</string>
-    <string name="certsetup_skip">Einrichtung der Autoverbindung überspringen</string>
+    <string name="certsetup_skip">Einrichtung der Fahrzeugverbindung überspringen</string>
     <string name="certsetup_loaded">Autos akzeptieren nur von Google ausgestellte Zertifikate, und du hast eins geladen.</string>
     <string name="certsetup_choose">Autos akzeptieren nur von Google ausgestellte Zertifikate. Gearslip bringt keins mit, also wähle aus, woher deins kommen soll.</string>
     <string name="certsetup_aasdk_sub">Das Open-Source-Projekt aasdk veröffentlicht dieses Zertifikat unter github.com/opencardev/aasdk. Die meisten Autos akzeptieren es. Manche ab etwa Baujahr 2020 lehnen es ab, dann musst du dein eigenes importieren.</string>
@@ -679,7 +679,7 @@
     <string name="audio_keep_asking">Weiter fragen</string>
     <string name="audio_mic_title">Audio im Auto braucht die Mikrofonberechtigung</string>
     <string name="audio_open_settings">App-Einstellungen öffnen</string>
-    <string name="audio_bt_body">Android behandelt die Musik, die Gearslip ans Auto sendet, wie eine Bildschirmfreigabe und fragt deshalb bei jeder Fahrt nach, egal ob per Kabel oder kabellos. Über Bluetooth fragt es nie. Du kannst das später in den Einstellungen ändern.</string>
+    <string name="audio_bt_body">Android behandelt die Musik, die Gearslip an das Auto sendet, wie das Freigeben Ihres Bildschirms, weshalb bei jeder Fahrt eine Berechtigungsabfrage erfolgt – egal, ob über Kabel oder drahtlos. Über Bluetooth erfolgt keine solche Abfrage. Du kannst das später in den Einstellungen ändern.</string>
     <string name="audio_keep_usb">Oder lass den Ton weiter über Gearslip laufen und schalte die Abfrage dauerhaft ab: Schließ das Handy an einen Computer mit aktiviertem USB-Debugging an und führe das hier einmal aus.</string>
     <string name="audio_mic_body">Android lässt eine App den Ton anderer Apps nur dann ans Auto senden, wenn sie die Mikrofonberechtigung hat. Die ist für Gearslip ausgeschaltet, deshalb läuft die Musik auf dem Handy. Schalte sie unter „Berechtigungen“ und dann „Mikrofon“ ein.</string>
     <string name="typing_close">Autotastatur schließen</string>
@@ -705,7 +705,7 @@
     <string name="places_address">Adresse</string>
     <string name="places_here">Aktuellen Standort verwenden</string>
     <string name="places_finding">Standort wird ermittelt …</string>
-    <string name="places_not_found">Gearslip konnte deinen Standort nicht finden. Prüfe, ob der Standort eingeschaltet ist.</string>
+    <string name="places_not_found">Gearslip konnte deinen Standort nicht ermitteln. Überprüfe, ob die Standortfunktion aktiviert ist.</string>
     <string name="places_clear">Löschen</string>
     <string name="certsetup_installed_hint">Wenn sich dein Auto nicht verbindet, lehnt es dieses Zertifikat vielleicht ab. Importiere dein eigenes in den Einstellungen unter „Zertifikat“.</string>
     <string name="cert_downloaded_footer">Auto verbindet sich nicht? Manche Autos ab etwa Baujahr 2020 lehnen das aasdk-Zertifikat ab, importiere dann stattdessen dein eigenes. Änderungen gelten ab der nächsten Verbindung.</string>

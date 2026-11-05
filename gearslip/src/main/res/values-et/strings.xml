@@ -1,3 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="back">Tagasi</string>
+    <string name="recommended_installed">Paigaldatud</string>
+    <string name="recommended_maps">Kaardid</string>
+    <string name="recommended_music">Muusika</string>
+    <string name="recommended_podcasts">Taskuhäälingud</string>
+    <string name="recommended_other">Muud vahvad rakendused</string>
+    <string name="recommended_about_organic">Kaardid ja tee juhatamine, mis ei vaja võrguühendust.</string>
+    <string name="recommended_about_vela">Samm-sammult tee juhatamine ilma Google\'ita.</string>
+    <string name="recommended_about_ytm">Kuula muusikat teenusest YouTube Music.</string>
+    <string name="recommended_about_antennapod">Tasukuhäälingud ja kõik mis sellega kaasneb.</string>
+    <string name="recommended_about_rfsentinel">Tuvastab lähikonnast jälitajad ja kaamerad.</string>
+    <string name="settings_title">Seadistused</string>
+    <string name="settings_whats_new">Mida on meil uut</string>
+    <string name="settings_whats_new_sub">Loe GitHubist teavet %1$s versiooni kohta</string>
+    <string name="settings_support">Toeta Gearslipi arendust</string>
+    <string name="settings_support_footer">Gearslip on vaba ja tasuta tarkvara, milles pole reklaame ega jälitamist. Sinu rahaline tugi aitab arendajatel edasi tegutseda.</string>
 </resources>
