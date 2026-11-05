@@ -71,6 +71,8 @@ private fun inTheCar(grapheneOs: Boolean, onRequestCallScreening: () -> Unit) = 
         R.string.help_pair,
         R.string.help_pair_detail,
     ),
+    // A Renault Clio V wouldn't take Bluetooth audio when the cable went in first (#74).
+    Step(R.string.help_bluetooth_first, R.string.help_bluetooth_first_detail),
     Step(
         R.string.help_answer,
         R.string.help_answer_detail,

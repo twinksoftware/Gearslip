@@ -280,6 +280,8 @@
     <string name="help_usb_data_detail">GrapheneOS can block data on the USB port. If USB-C port control is set to Charging-only, the car never sees the phone, even with a data cable. Set it to allow data.</string>
     <string name="help_pair">Pair over Bluetooth for calls.</string>
     <string name="help_pair_detail">Calls play through the car once your phone and the car are paired. Gearslip offers to pair the first time you plug in.</string>
+    <string name="help_bluetooth_first">Connect Bluetooth before the cable.</string>
+    <string name="help_bluetooth_first_detail">If music over Bluetooth won\'t connect, let the car find the phone over Bluetooth first, then plug in. Some cars get confused when the cable comes first.</string>
     <string name="help_answer">Answer calls from the car screen.</string>
     <string name="help_answer_detail">Set Gearslip as your caller ID and spam app. Without it, calls still ring, but only the phone can answer them.</string>
     <string name="help_prompt">Stop the audio prompt each drive.</string>
