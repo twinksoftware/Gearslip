@@ -11,6 +11,18 @@ object Changelog {
 
     val releases = listOf(
         Release(
+            14, "0.3.39-alpha",
+            listOf(
+                "Turns from Google Maps or Waze on the phone show in the nav bar and on the car's cluster.",
+                "Alerts from car apps show here, such as Waze asking whether a hazard is still there.",
+                "Hide apps you don't use in the car from the Apps card on the phone.",
+                "Make text in car apps bigger with Car display density, under Screen.",
+                "Music playing through Gearslip comes back after a call.",
+                "Maps keep your position while the phone is locked.",
+                "Wireless keeps trying until the car answers.",
+            ),
+        ),
+        Release(
             9, "0.3.00-alpha",
             listOf(
                 "Wireless Android Auto: pair the phone with the car once, and leave the cable at home.",
