@@ -742,4 +742,17 @@
     <string name="launcher_in_car">Dieses Gerät ist mit einem Auto verbunden. Gearslip wird daher auf dem Autodisplay angezeigt.</string>
     <string name="launcher_open_gearslip">Gearslip öffnen</string>
     <string name="status_open_settings">Einstellungen öffnen</string>
+    <string name="privacy_policy">Datenschutzerklärung</string>
+    <string name="privacy_policy_sub">Was Gearslip sendet, an wen und warum</string>
+    <string name="car_audio_switched">Dieses Auto schaltet Bluetooth-Musik ab, während Gearslip läuft, sodass die Musik nun über Gearslip läuft. Bestätige die Abfrage auf deinem Handy.</string>
+    <string name="car_audio_blocked">%1$s lässt keine Sound-Wiedergabe durch andere Apps zu, weshalb die Musik nicht über Gearslip ans Auto übertragen werden kann. Bitte versuche eine andere Musik-App.</string>
+    <string name="bt_address_card_title">%1$s helfen, dieses Handy zu erkennen</string>
+    <string name="bt_address_card_body">Manche Autos bleiben erst verbunden, wenn sie deine Bluetooth-Adresse kennen. Android verbirgt sie vor Apps - bitte kopiere sie unter \"Über das Smartphone\". Halte die Adresse dort gedrückt, tippe auf Kopieren und komme hierher zurück.</string>
+    <string name="bt_address_open">„Über das Telefon“ öffnen</string>
+    <string name="bt_address_not_now">Nicht jetzt</string>
+    <string name="bt_address_use_title">Diese Bluetooth Adresse benutzen?</string>
+    <string name="bt_address_use_body">Gearslip leitet sie an dein Auto weiter, damit es weiß, dass dies das gekoppelte Handy ist.</string>
+    <string name="bt_address_type">Stattdessen eintippen</string>
+    <string name="bt_address_your_car">dein auto</string>
+    <string name="bt_address_car_note">Schließe einen Einrichtungsschritt auf deinem Handy ab, sobald du geparkt hast.</string>
 </resources>
