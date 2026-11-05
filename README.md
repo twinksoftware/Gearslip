@@ -4,133 +4,93 @@
 
 An Android Auto alternative built for everyone.
 
+[<img src="https://raw.githubusercontent.com/ImranR98/Obtainium/main/assets/graphics/badge_obtainium.png" alt="Get it on Obtainium" height="80">](https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/twinksoftware/gearslip)
+
+![Vela Maps navigating on the car screen, with the music player beside the map](docs/screenshots/navigation.png)
 
 [![forthebadge](https://forthebadge.com/badges/compatibility-club-penguin.svg)](https://forthebadge.com)
 
-[<img src="https://raw.githubusercontent.com/ImranR98/Obtainium/main/assets/graphics/badge_obtainium.png" alt="Get it on Obtainium" height="80">](https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/twinksoftware/gearslip)
-
-[Fix or add your language on Weblate](https://hosted.weblate.org/engage/gearslip/).
-Translations go through Weblate only; pull requests that edit them get closed.
-
-[![Translation status by language](https://hosted.weblate.org/widget/gearslip/app/multi-auto.svg)](https://hosted.weblate.org/engage/gearslip/)
-
-Questions, ideas?
-[Join the discussion on Matrix](https://matrix.to/#/!mf0_mgBd5KqKpc9FfX_wHp1jFCcwAtPrndIn_oGIyMk?via=matrix.org).
+Gearslip speaks the Android Auto protocol straight to your car, over USB or wireless, with no
+Google software in the path. Map, music, and messaging apps draw their car screens through
+Gearslip, and it adds a player, calls, voice, and a web browser of its own.
 
 > [!WARNING]
 > Gearslip is **alpha software**. It can drop the connection, freeze the car screen, or fail
 > to start, and a new release can break a car that worked before. Set it up while parked, and
 > keep another way to navigate.
 
-> [!WARNING]
-> On GrapheneOS, make sure **USB-C port control** isn't set to **Charging-only**. That setting
-> blocks USB data, so the car never sees the phone, even with a data cable. Set it to allow
-> data transfer.
+Questions, ideas? [Join the discussion on Matrix](https://matrix.to/#/!mf0_mgBd5KqKpc9FfX_wHp1jFCcwAtPrndIn_oGIyMk?via=matrix.org).
 
-## Which cars work
-
-Most cars work. Starting around 2020, some cars added newer security checks that reject
-the aasdk certificate, and in those cars Gearslip needs a certificate of your own. [CARS.md](CARS.md) lists the
-cars drivers have confirmed.
-
-## What Gearslip is
-
-Gearslip is an Android Auto client for the phone. It speaks the Android Auto protocol
-directly to a car head unit, over USB or wirelessly, with no Google software in the path.
-Gearslip acts as a Car App Library host: an app that ships a car interface hands Gearslip
-a template, and Gearslip renders that template natively on the car screen. Nothing is
-mirrored from the phone. For apps without a car interface, Gearslip offers a separate
-screen-sharing mode.
+## What works
 
 | | |
 |---|---|
-| ![The launcher, with every car app on the phone](docs/screenshots/launcher.png) | ![Vela Maps showing the route, with the music player beside the map](docs/screenshots/navigation.png) |
-| Your car apps in one place. | Vela Maps navigating, with the player beside it. |
-| ![Metrolist's song, art, and controls in Gearslip's player](docs/screenshots/music.png) | ![A new message card over Vela Maps](docs/screenshots/message.png) |
-| Metrolist in Gearslip's player. | A new message, read aloud at a tap, over the map. |
-| ![Synced lyrics beside the player, lit up to the word being sung](docs/screenshots/lyrics.png) | ![DuckDuckGo open in Gearslip's web browser](docs/screenshots/web.png) |
-| Lyrics light up word by word as the song plays. | Browse the web while parked. |
+| **Cars** | Most cars, over USB or wireless. Some cars from about 2020 on need a certificate of your own. [CARS.md](CARS.md) lists the cars drivers have confirmed. |
+| **Maps** | Organic Maps, Vela, OsmAnd, Waze, Flitsmeister, MAPS.ME, and MapQuest on the car screen, alerts included. Turns from Google Maps or Waze on the phone show in the nav bar and on the instrument cluster. |
+| **Music** | Any app built for car screens, with Now Playing, Up Next, search, and lyrics. Spotify plays through Gearslip's own player. |
+| **Calls** | Dial or search contacts, and answer or decline on the car screen. Calls use the car's Bluetooth. |
+| **Messages** | Read aloud on arrival, with a reply by voice or a quick reply. |
+| **Voice** | "Navigate to the nearest gas station", "play Daft Punk", "call Mom". Speech stays on the phone. Commands are in English for now. |
+| **Controls** | Touch, steering wheel buttons, control knobs, and D-pads. |
+| **Languages** | English and 19 more, some only partly translated. |
+| **Head units with Android** | Gearslip can be the home screen of an Android head unit, or of a spare phone or tablet on the dash. Turn on Use as launcher in Settings > Connection. |
+| **Doesn't work** | Spotify's and Google Messages' own car screens, which accept only Android Auto. TIDAL lets only approved apps browse its library. |
+
+## See it
+
+| | |
+|---|---|
+| ![The launcher, with every car app on the phone](docs/screenshots/launcher.png) | ![Metrolist's song, art, and controls in Gearslip's player](docs/screenshots/music.png) |
+| Your car apps in one place. | Metrolist in Gearslip's player. |
+| ![A new message card over Vela Maps](docs/screenshots/message.png) | ![Synced lyrics beside the player, lit up to the word being sung](docs/screenshots/lyrics.png) |
+| A new message, read aloud at a tap, over the map. | Lyrics light up word by word as the song plays. |
 | ![The voice assistant listening over Vela Maps](docs/screenshots/assistant.png) | ![Three routes to a coffee shop in Vela Maps, each with its time and distance](docs/screenshots/places.png) |
-| Ask for a place, a song, or an app. | Pick a route to a coffee shop. Each one shows its time and distance. |
+| Ask for a place, a song, or an app. | Pick a route. Each one shows its time and distance. |
+| ![DuckDuckGo open in Gearslip's web browser](docs/screenshots/web.png) | |
+| Browse the web while parked. | |
 
 ## Features
 
-- **Phone calls.** Dial from a keypad, or search your contacts, then confirm before the
-  call goes out. When a call comes in, answer or decline it on the car screen. During a
-  call, the nav bar shows who you're talking to, and you mute or hang up from there.
-- **Navigation.** Gearslip hosts real Car App Library map apps on the car screen.
-  Organic Maps, Vela, OsmAnd, Waze, Flitsmeister, MAPS.ME, and MapQuest work today. While you
-  navigate, a big turn card on the left shows the arrow, the distance, and your lane, and
-  the map keeps the right side. Turns from Google Maps or Waze running on the phone show in
-  the nav bar, and on the instrument cluster in cars with a screen there.
-- **Music.** Browse, play, and queue tracks from a car-enabled media app, with a Now
-  Playing view, an Up Next queue, and lyrics. Type a search, and apps that accept one
-  play the best match.
-- **The web.** A browser with an address bar, back and forward, and its own on-screen
-  keyboard, for anything that doesn't ship a car interface of its own.
-- **Weather and the day ahead.** A dashboard screen shows the week's calendar next to
-  the current and coming weather.
-- **Voice.** Tap the mic, or press the talk button on the wheel, and say "navigate to the
-  nearest gas station", "play Daft Punk", or "call Mom". Say "help" for the full list.
-  Speech turns into text on the phone, and nothing you say leaves it.
-- **Messages.** New messages appear as a small card on the car screen. Gearslip reads
-  each one aloud, and you reply by voice or with a quick reply. Music pauses while
-  Gearslip speaks or listens. Speech runs on the phone, so it needs no Google account.
-- **Notifications.** Only messages, missed calls, alarms, and reminders interrupt you.
-  The rest wait on the dashboard.
-- **Your apps, your order.** The launcher groups apps by kind: phone, maps, music,
-  messaging, and the rest. Press and hold an app to move it, and hide the ones you don't
-  use from the Apps card on the phone.
-- **Car controls.** Steering wheel buttons, control knobs, and D-pads all work.
-- **Your phone's colors.** The car screen and the phone app take their colors from your
-  phone's Material You palette, and every card and button matches.
-- **Themes.** Choose flat buttons or skeuomorphic ones that look like real keys.
-- **Small screens.** Car display density makes text and buttons bigger in car apps.
-- **Your language.** Gearslip comes in 19 languages besides English, some only partly
-  translated. Pick one in Settings. Voice commands understand English only for now.
-- **Settings on the phone.** The car's settings sit on the phone's home screen too, so you
-  can set things up before you drive. A change on either screen shows on both.
+- **Navigation.** Gearslip hosts real map apps on the car screen. While you navigate, a big
+  turn card shows the arrow, the distance, and your lane, and the map keeps the rest.
+- **Music.** Browse, play, and queue from any car-ready media app. Type a search, and apps
+  that accept one play the best match.
+- **Phone calls.** During a call, the nav bar shows who you're talking to, and you mute or
+  hang up from there.
+- **Messages and notifications.** Only messages, missed calls, alarms, and reminders
+  interrupt you. The rest wait on the dashboard. Music pauses while Gearslip speaks or
+  listens.
+- **Voice.** Tap the mic or press the talk button on the wheel. Say "help" for the full list.
+- **The web.** A browser with an address bar, back and forward, and its own keyboard.
+- **Weather and the day ahead.** A dashboard shows the week's calendar beside the weather.
+- **Your apps, your order.** Apps group by kind. Press and hold one to move it, and hide
+  the ones you don't use from the Apps card on the phone.
+- **Your look.** The car screen takes your phone's Material You colors. Choose flat
+  buttons or ones that look like real keys, and make text bigger on small screens.
+- **Settings on the phone.** Set things up before you drive. A change on either screen
+  shows on both.
 
-## Status
+## Install
 
-- **Wired or wireless.** Plug the phone into the car's USB port, or, in a car with wireless
-  Android Auto, tap Connect wirelessly and pick the car. Pair the phone with the car over
-  Bluetooth first. After the first wireless drive, Android asks once whether Gearslip may
-  watch for that car; from then on, Gearslip connects whenever the car's Bluetooth does.
-- **Setup walks you through it.** First launch asks for the Android Auto certificate,
-  then one permission at a time, each with a plain reason and an Allow or Skip. A help
-  screen inside the car answers anything setup didn't cover.
-- **Templated apps work.** Gearslip renders the Car App Library's templates on the car
-  screen, and it draws its own keyboard for search, sign-in, and text fields. Alerts, such
-  as a map app asking whether a hazard is still there, show on the car screen too. It has
-  been tested against several real navigation and media apps.
-- **Gearslip can be a head unit's home screen.** On a head unit that runs Android, or a
-  spare phone or tablet on the dash, turn on Use as launcher in Settings > Connection. The
-  car screen fills the display, and an All apps page opens everything else.
-- **Gearslip works with [LIVI](https://github.com/f-io/LIVI),** the open-source head unit
-  used in homemade car dashboards.
-- **Some apps refuse Gearslip.** Spotify and Google Messages use a version of
-  Google's car library that accepts only Android Auto itself. Spotify still plays through
-  Gearslip's own player. TIDAL lets only approved apps browse its library.
-- **Calls use the car's Bluetooth,** as they do in Android Auto. Pair the phone with the
-  car to hear calls through its speakers.
-- **Music reaches the car over Bluetooth or through Gearslip.** Setup asks which.
-  Bluetooth is the default: Android never asks for permission, and your map app's voice
-  reaches the car too. Through Gearslip, the sound travels over the car connection, cable
-  or wireless. It sounds a little clearer, with no delay, but each drive Android asks you
-  to share your screen, which lets Gearslip send the sound. Gearslip never reads the
-  screen; capturing playback is the only way an ordinary app can pass another app's audio
-  along.
-- **Gearslip needs no adb, root, or Shizuku.** Every feature relies on an ordinary
-  Android permission or an on-device consent dialog. For audio through Gearslip, setup offers two
-  optional adb commands: one removes the audio dialog for good, and the other keeps
-  notifications visible while audio plays.
-- **Updates come from GitHub.** Once a day, Gearslip checks this repository's latest
-  release. When a new version is out, it downloads the APK, checks it against GitHub's
-  SHA-256, and installs it through Android's own installer. Turn off automatic checks in
-  Settings.
+1. Install Gearslip from [the releases page](https://github.com/twinksoftware/Gearslip/releases)
+   or through Obtainium.
+2. Open it. Setup asks where your Android Auto certificate comes from, then for one
+   permission at a time, each with a plain reason. A help screen in the car answers the rest.
+3. Plug the phone into the car's USB port. In a car with wireless Android Auto, pair the
+   phone with the car over Bluetooth, then tap Connect wirelessly and pick the car.
 
-## Verify your download
+After the first wireless drive, Android asks once whether Gearslip may watch for that car.
+From then on, Gearslip connects whenever the car's Bluetooth does.
+
+> [!NOTE]
+> On GrapheneOS, make sure **USB-C port control** isn't set to **Charging-only**. That
+> setting blocks USB data, so the car never sees the phone, even with a data cable.
+
+Gearslip updates itself from this repository. Once a day it checks the latest release,
+downloads the APK, checks it against GitHub's SHA-256, and installs it through Android's
+own installer. Turn off automatic checks in Settings.
+
+### Verify your download
 
 Check that your copy of Gearslip is genuine with
 [AppVerifier](https://github.com/soupslurpr/AppVerifier): share this block to it, or compare it
@@ -140,6 +100,24 @@ with the output of `apksigner verify --print-certs`.
 app.seb3thehacker.gearslip
 4C:C5:6E:BD:D1:3A:54:D2:60:EC:A9:B7:E2:B2:AE:6B:30:E2:F2:25:BF:DA:8F:50:8F:07:09:ED:F0:84:94:8B
 ```
+
+## Good to know
+
+- **Music reaches the car over Bluetooth or through Gearslip.** Setup asks which.
+  Bluetooth is the default. Android never asks for permission, and your map app's voice
+  reaches the car too. Through Gearslip, the sound travels over the car connection, cable
+  or wireless. It sounds a little clearer, with no delay, but each drive Android asks you
+  to share your screen, which lets Gearslip send the sound. Gearslip never reads the
+  screen. Capturing playback is the only way an ordinary app can pass another app's audio
+  along.
+- **Gearslip needs no adb, root, or Shizuku.** Every feature relies on an ordinary
+  Android permission or an on-device consent dialog. For audio through Gearslip, setup
+  offers two optional adb commands. One removes the audio dialog for good, and the other
+  keeps notifications visible while audio plays.
+- **Apps without a car screen** can still reach the car through a separate screen-sharing
+  mode.
+- **Gearslip works with [LIVI](https://github.com/f-io/LIVI),** the open-source head unit
+  used in homemade car dashboards.
 
 ## Usage notes
 
@@ -152,9 +130,9 @@ turn them on, in setup or in Settings.
   those boxes cover: the Android version and whether the phone runs GrapheneOS, the phone
   model, whether a car connected that day, and each car's head unit, model, year, screen
   size, and connection result, with whether that drive used the cable or wireless and
-  whether music went through Gearslip or over Bluetooth. If you tick it, how each drive went: how far
-  the connection got, how long it lasted, and how it ended. Settings shows the exact note. Untick a phone detail, and
-  the server drops the copy it kept.
+  whether music went through Gearslip or over Bluetooth. If you tick it, how each drive
+  went: how far the connection got, how long it lasted, and how it ended. Settings shows
+  the exact note. Untick a phone detail, and the server drops the copy it kept.
 - **What they leave out.** Your name, accounts, location, contacts, messages, and
   anything you type or play.
 - **How phones are counted.** A random number counts each phone once. The server keeps
@@ -164,6 +142,19 @@ turn them on, in setup or in Settings.
 
 Turn the notes off, and they stop at once.
 
+## Help out
+
+Bug reports from real cars help most, and pull requests are welcome.
+[CONTRIBUTING.md](CONTRIBUTING.md) explains what to put in a report, which branch to work
+on, and the one-time agreement you sign before your first pull request merges.
+
+To translate Gearslip into your language, join
+[Gearslip on Weblate](https://hosted.weblate.org/engage/gearslip/). No coding needed.
+Translations go through Weblate only, since it holds its own copy of every language and
+changes made in git collide with it.
+
+[![Translation status by language](https://hosted.weblate.org/widget/gearslip/app/multi-auto.svg)](https://hosted.weblate.org/engage/gearslip/)
+
 ## How Gearslip is made
 
 Gearslip is my beloved child. I decide what it does and how it looks, and Claude writes nearly
@@ -172,17 +163,6 @@ GrapheneOS phone and a stock Android phone, and on [LIVI](https://github.com/f-i
 open-source head unit software. I watch the phone's temperature too, so a new feature doesn't
 cook it. Then I beg my friends to try it in their cars, so it works in as many makes, models,
 and years as possible. If something breaks, that's on me, so please open an issue.
-
-## Contributing
-
-Bug reports from real cars help most, and pull requests are welcome.
-[CONTRIBUTING.md](CONTRIBUTING.md) explains what to put in a report, which branch to work
-on, and the one-time agreement you sign before your first pull request merges.
-
-To help translate Gearslip into your language, join
-[Gearslip on Weblate](https://hosted.weblate.org/engage/gearslip/). No coding needed. Please
-don't send translations as pull requests: Weblate holds its own copy of every language, and
-changes made in git collide with it.
 
 ## Building
 
