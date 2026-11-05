@@ -145,7 +145,7 @@ internal fun PlayModeRow(
         // Gearslip's own stand in for apps that report a heart rating or shuffle and repeat modes.
         val likeAction = now.likeAction
         if (likeAction != null) {
-            CustomActionButton(likeAction, media, size, toggle = true)
+            CustomActionButton(likeAction, media, size, on = liked == true)
         } else {
             GsIconButton(
                 if (liked == true) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
@@ -158,7 +158,7 @@ internal fun PlayModeRow(
         }
         val shuffleAction = now.shuffleAction
         if (shuffleAction != null) {
-            CustomActionButton(shuffleAction, media, size, toggle = true)
+            CustomActionButton(shuffleAction, media, size, on = shuffleAction.on)
         } else {
             GsIconButton(
                 MediaIcons.Shuffle, stringResource(if (shuffleOn) R.string.player_shuffle_off else R.string.player_shuffle_on),
@@ -170,7 +170,7 @@ internal fun PlayModeRow(
         }
         val repeatAction = now.repeatAction
         if (repeatAction != null) {
-            CustomActionButton(repeatAction, media, size, toggle = true)
+            CustomActionButton(repeatAction, media, size, on = repeatAction.on)
         } else {
             GsIconButton(
                 if (modes.repeat == PlaybackStateCompat.REPEAT_MODE_ONE) MediaIcons.RepeatOne else MediaIcons.Repeat,
@@ -191,12 +191,12 @@ internal fun PlayModeRow(
  * not Gearslip's, so it's loaded from there. Its name stands in if the icon won't load.
  */
 @Composable
-private fun CustomActionButton(action: CustomAction, media: CarMedia, size: Dp, toggle: Boolean = false) {
+private fun CustomActionButton(action: CustomAction, media: CarMedia, size: Dp, on: Boolean = false) {
     val icon = rememberActionIcon(action)
     GsIconBox(
         onClick = { media.custom(action) },
         modifier = Modifier.size(size),
-        colors = gsColors(if (toggle && action.on) GsTone.Primary else GsTone.Neutral),
+        colors = gsColors(if (on) GsTone.Primary else GsTone.Neutral),
     ) {
         if (icon != null) {
             Icon(icon, action.name, Modifier.size(size * 0.52f))
