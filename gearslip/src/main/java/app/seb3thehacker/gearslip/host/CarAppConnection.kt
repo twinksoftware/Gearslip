@@ -18,6 +18,8 @@ import android.view.Surface
 import androidx.car.app.CarAppService
 import androidx.car.app.CarContext
 import androidx.car.app.HandshakeInfo
+import androidx.car.app.SessionInfo
+import androidx.car.app.SessionInfoIntentEncoder
 import androidx.car.app.IAppHost
 import androidx.car.app.IAppManager
 import androidx.car.app.ICarApp
@@ -56,8 +58,12 @@ import kotlinx.coroutines.flow.asStateFlow
  *
  * Every binder callback lands on a binder thread and is hopped to the main thread, because
  * the state here feeds Compose.
+ *
+ * With a cluster [session], this is the same app's second session, for the car's instrument
+ * cluster: a bind of its own, which the app answers with a session of its own. It leans on the
+ * main session for location, so it holds none itself.
  */
-class CarAppConnection(private val context: Context) {
+class CarAppConnection(private val context: Context, private val session: SessionInfo? = null) {
 
     enum class Phase { IDLE, BINDING, HANDSHAKE, RUNNING, REJECTED, FAILED }
 
@@ -126,6 +132,7 @@ class CarAppConnection(private val context: Context) {
         update { Status(phase = Phase.BINDING, app = app.label) }
 
         val intent = Intent(CarAppService.SERVICE_INTERFACE).setComponent(app.component)
+        session?.let { SessionInfoIntentEncoder.encode(it, intent) }
         val connection = object : ServiceConnection {
             override fun onServiceConnected(name: ComponentName, service: IBinder) {
                 main.post { onBound(service) }
@@ -179,7 +186,7 @@ class CarAppConnection(private val context: Context) {
         // BIND_INCLUDE_CAPABILITIES only lends the location capability Gearslip holds at bind
         // time, so the keep-alive has to be running first - a nav app that starts its own
         // location service before then is refused, and MapQuest crashes on that.
-        if (holdsLocation) {
+        if (holdsLocation || session != null) {
             bind()
         } else {
             holdsLocation = true

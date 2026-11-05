@@ -168,7 +168,7 @@ internal class ClusterVideo(
             projector = ScreenProjector(context).also {
                 it.start(surface, width, height, density, name = "gearslip-cluster") {
                     // The margins the car crops off are kept clear, as on the main screen.
-                    ClusterScreen(config.widthMargin, config.heightMargin, clearArea)
+                    ClusterScreen(config.widthMargin, config.heightMargin, density, clearArea)
                 }
             }
         }
