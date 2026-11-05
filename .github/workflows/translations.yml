@@ -3,6 +3,7 @@ name: Translations
 # Weblate is the only thing that writes translated strings: it pushes straight to experimental,
 # never through a pull request. A PR that edits them collides with Weblate's own copy, and
 # Weblate locks itself until someone resets it. Edit the English strings.xml only.
+# Weblate's own pull requests are the exception: they are the translations.
 on:
   pull_request:
     paths:
@@ -10,6 +11,7 @@ on:
 
 jobs:
   weblate-only:
+    if: github.event.pull_request.user.login != 'weblate'
     runs-on: ubuntu-latest
     steps:
       - name: Translations go through Weblate
