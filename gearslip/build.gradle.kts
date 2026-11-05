@@ -109,10 +109,15 @@ android {
     }
 
     defaultConfig {
-        // Speech-to-text (sherpa-onnx, in jniLibs) ships for 64-bit ARM only: every phone
-        // Gearslip runs on, and one copy of the native library instead of four.
-        ndk { abiFilters += "arm64-v8a" }
+        // Speech-to-text (sherpa-onnx 1.13.8, static-link-onnxruntime build, in jniLibs) is the
+        // only native code. One APK for all three, since the updater takes the release's only APK;
+        // 32-bit x86 is left out, nothing that drives a car runs it.
+        ndk { abiFilters += listOf("arm64-v8a", "armeabi-v7a", "x86_64") }
     }
+
+    // Compressed, the three copies cost a 33 MB download instead of 75 MB; the phone unpacks
+    // only its own at install.
+    packaging { jniLibs { useLegacyPackaging = true } }
 
     testOptions {
         // GearslipLog calls android.util.Log, which is a stub on the local JVM.
