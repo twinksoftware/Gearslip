@@ -326,6 +326,8 @@
     <string name="about_matrix_sub">Talk with other drivers about cars, apps, and Gearslip</string>
     <string name="about_translate">Help translate Gearslip</string>
     <string name="about_translate_sub">Fix or add your language on Weblate. Some translations started as machine translations.</string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="privacy_policy_sub">What Gearslip sends, to whom, and why</string>
     <string name="about_source">Source code</string>
     <string name="about_source_sub">Read or change Gearslip\'s code under the AGPL</string>
     <string name="about_voice_credits">Voice credits</string>

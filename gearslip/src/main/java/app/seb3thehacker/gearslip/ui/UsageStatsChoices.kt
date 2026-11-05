@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -138,6 +139,14 @@ internal fun ColumnScope.UsageStatsRows() {
             }
         }
     }
+    // Shown whether the notes are on or off, in setup and in Settings alike.
+    SettingsDivider()
+    SettingsRow(
+        stringResource(R.string.privacy_policy),
+        Modifier.clickable { GearslipLinks.open(context, GearslipLinks.PRIVACY) },
+        subtitle = stringResource(R.string.privacy_policy_sub),
+        icon = Icons.Filled.Lock,
+    )
 }
 
 /** A share choice: the label lines up with the rows' titles, the checkbox sits at the end. */
