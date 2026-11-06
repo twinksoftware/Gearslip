@@ -982,4 +982,14 @@
     <string name="summary_adblock_off">الإعلانات غير محظورة</string>
     <string name="car_nav_mic">زر الميكروفون</string>
     <string name="car_nav_mic_note">زر المساعد في شريط التنقل. يعمل زر الصوت في السيارة في كل الأحوال.</string>
+    <string name="car_apps_add">إضافة تطبيق</string>
+    <string name="car_apps_add_note">لتطبيق لا تعرضه السيارة: تُشغَّل موسيقاه عبر مشغّل Gearslip، أو تظهر رسائله في شاشة الرسائل.</string>
+    <string name="car_apps_add_pick">اختر تطبيقًا</string>
+    <string name="car_apps_add_as">عرض %1$s بوصفه</string>
+    <string name="car_apps_as_media">الموسيقى والصوت</string>
+    <string name="car_apps_as_media_note">ما يُشغَّل الآن، مع التشغيل والإيقاف المؤقت والتخطي. لا توجد مكتبة للتصفح.</string>
+    <string name="car_apps_as_messaging">الرسائل</string>
+    <string name="car_apps_as_messaging_note">إشعاراته، تُقرأ بصوت عالٍ، مع الردود.</string>
+    <string name="car_apps_added_by_you">أضفته أنت</string>
+    <string name="car_apps_remove">إزالة %1$s</string>
 </resources>

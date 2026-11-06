@@ -932,4 +932,14 @@
     <string name="summary_adblock_off">광고 차단 안 함</string>
     <string name="car_nav_mic">마이크 버튼</string>
     <string name="car_nav_mic_note">내비게이션 바의 어시스턴트 버튼입니다. 차량의 음성 버튼은 어느 쪽이든 작동합니다.</string>
+    <string name="car_apps_add">앱 추가</string>
+    <string name="car_apps_add_note">차량에 표시되지 않는 앱용입니다. 음악은 Gearslip 플레이어로 재생되거나 메시지가 메시지 화면에 표시됩니다.</string>
+    <string name="car_apps_add_pick">앱 선택</string>
+    <string name="car_apps_add_as">%1$s 표시 방식</string>
+    <string name="car_apps_as_media">음악 및 오디오</string>
+    <string name="car_apps_as_media_note">재생 중인 항목과 재생, 일시중지, 건너뛰기. 둘러볼 라이브러리는 없습니다.</string>
+    <string name="car_apps_as_messaging">메시지</string>
+    <string name="car_apps_as_messaging_note">알림을 소리 내어 읽고 답장할 수 있습니다.</string>
+    <string name="car_apps_added_by_you">직접 추가함</string>
+    <string name="car_apps_remove">%1$s 삭제</string>
 </resources>

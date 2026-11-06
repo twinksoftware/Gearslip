@@ -1,5 +1,7 @@
 package app.seb3thehacker.gearslip.media
 
+import app.seb3thehacker.gearslip.host.CustomCarApps
+
 import app.seb3thehacker.gearslip.host.AndroidAuto
 import app.seb3thehacker.gearslip.host.CarDescriptor
 import app.seb3thehacker.gearslip.host.KnownApps
@@ -15,6 +17,11 @@ class MediaApp(
     val label: String,
     /** Whose audio to capture: playback capture is scoped to one uid so nothing else leaks in. */
     val uid: Int,
+    /**
+     * Added by the driver rather than found (issue #84): there's no library to connect to, so
+     * the player goes straight to the app's playback session, as it does for Spotify.
+     */
+    val sessionOnly: Boolean = false,
 )
 
 /**
@@ -43,9 +50,28 @@ object MediaCatalog {
                 )
             }
             .distinctBy { it.component.packageName }
-            .sortedBy { it.label.lowercase() }
             .toList()
+            .let { found -> found + added(context, found.map { it.component.packageName }.toSet()) }
+            .sortedBy { it.label.lowercase() }
     }
+
+    /** The music apps the driver added by hand, unless the app has since become a car app itself. */
+    private fun added(context: Context, found: Set<String>): List<MediaApp> {
+        val manager = context.packageManager
+        return CustomCarApps.of(context, CustomCarApps.Kind.MEDIA).filter { it.packageName !in found }.mapNotNull { custom ->
+            val info = runCatching { manager.getApplicationInfo(custom.packageName, 0) }.getOrNull() ?: return@mapNotNull null
+            MediaApp(
+                // No service to bind: the class name only keeps the component unique and readable.
+                component = ComponentName(custom.packageName, SESSION_ONLY_CLASS),
+                label = info.loadLabel(manager).toString(),
+                uid = info.uid,
+                sessionOnly = true,
+            )
+        }
+    }
+
+    /** What an added app's component names, since it has no browser service. */
+    const val SESSION_ONLY_CLASS = "gearslip.session-only"
 
     /** A descriptor that can't be read keeps the app, rather than dropping a real player over an odd manifest. */
     private fun declaresMedia(manager: PackageManager, service: android.content.pm.ServiceInfo): Boolean {

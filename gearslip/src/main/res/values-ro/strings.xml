@@ -834,4 +834,14 @@
     <string name="summary_adblock_off">Reclame neblocate</string>
     <string name="car_nav_mic">Butonul microfonului</string>
     <string name="car_nav_mic_note">Butonul asistentului din bara de navigare. Butonul vocal al mașinii funcționează oricum.</string>
+    <string name="car_apps_add">Adaugă o aplicație</string>
+    <string name="car_apps_add_note">Pentru o aplicație pe care mașina n-o afișează: muzica ei merge prin playerul Gearslip, sau mesajele ei apar în Mesaje.</string>
+    <string name="car_apps_add_pick">Alege o aplicație</string>
+    <string name="car_apps_add_as">Afișează %1$s ca</string>
+    <string name="car_apps_as_media">Muzică și audio</string>
+    <string name="car_apps_as_media_note">Ce se redă, cu redare, pauză și salt. Nu există bibliotecă de răsfoit.</string>
+    <string name="car_apps_as_messaging">Mesaje</string>
+    <string name="car_apps_as_messaging_note">Notificările ei, citite cu voce tare, cu răspunsuri.</string>
+    <string name="car_apps_added_by_you">Adăugată de tine</string>
+    <string name="car_apps_remove">Elimină %1$s</string>
 </resources>

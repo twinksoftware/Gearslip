@@ -962,4 +962,14 @@
     <string name="summary_adblock_off">Реклама не блокується</string>
     <string name="car_nav_mic">Кнопка мікрофона</string>
     <string name="car_nav_mic_note">Кнопка асистента на панелі навігації. Голосова кнопка авто працює в будь-якому разі.</string>
+    <string name="car_apps_add">Додати застосунок</string>
+    <string name="car_apps_add_note">Для застосунку, якого немає в авто: його музика грає через плеєр Gearslip, або його повідомлення показуються в «Повідомленнях».</string>
+    <string name="car_apps_add_pick">Виберіть застосунок</string>
+    <string name="car_apps_add_as">Показувати %1$s як</string>
+    <string name="car_apps_as_media">Музика й аудіо</string>
+    <string name="car_apps_as_media_note">Зараз грає: відтворення, пауза й перемикання. Бібліотеки для перегляду немає.</string>
+    <string name="car_apps_as_messaging">Повідомлення</string>
+    <string name="car_apps_as_messaging_note">Його сповіщення, прочитані вголос, із відповідями.</string>
+    <string name="car_apps_added_by_you">Додано вами</string>
+    <string name="car_apps_remove">Видалити %1$s</string>
 </resources>

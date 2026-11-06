@@ -932,4 +932,14 @@
     <string name="summary_adblock_off">広告をブロックしない</string>
     <string name="car_nav_mic">マイクボタン</string>
     <string name="car_nav_mic_note">ナビゲーションバーのアシスタントボタンです。車の音声ボタンはどちらでも使えます。</string>
+    <string name="car_apps_add">アプリを追加</string>
+    <string name="car_apps_add_note">車に表示されないアプリ向けです。音楽は Gearslip のプレーヤーで再生され、メッセージはメッセージ画面に表示されます。</string>
+    <string name="car_apps_add_pick">アプリを選択</string>
+    <string name="car_apps_add_as">%1$s の表示方法</string>
+    <string name="car_apps_as_media">音楽とオーディオ</string>
+    <string name="car_apps_as_media_note">再生中の曲と、再生・一時停止・スキップ。ライブラリの閲覧はできません。</string>
+    <string name="car_apps_as_messaging">メッセージ</string>
+    <string name="car_apps_as_messaging_note">通知を読み上げ、返信できます。</string>
+    <string name="car_apps_added_by_you">自分で追加</string>
+    <string name="car_apps_remove">%1$s を削除</string>
 </resources>

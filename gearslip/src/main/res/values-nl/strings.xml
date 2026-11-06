@@ -942,4 +942,14 @@
     <string name="summary_adblock_off">Advertenties niet geblokkeerd</string>
     <string name="car_nav_mic">Microfoonknop</string>
     <string name="car_nav_mic_note">De assistentknop in de navigatiebalk. De spraakknop van de auto werkt hoe dan ook.</string>
+    <string name="car_apps_add">App toevoegen</string>
+    <string name="car_apps_add_note">Voor een app die de auto niet toont: de muziek speelt via de speler van Gearslip, of de berichten verschijnen in Berichten.</string>
+    <string name="car_apps_add_pick">Kies een app</string>
+    <string name="car_apps_add_as">%1$s tonen als</string>
+    <string name="car_apps_as_media">Muziek en audio</string>
+    <string name="car_apps_as_media_note">Wat er speelt, met afspelen, pauzeren en overslaan. Geen bibliotheek om door te bladeren.</string>
+    <string name="car_apps_as_messaging">Berichten</string>
+    <string name="car_apps_as_messaging_note">De meldingen, voorgelezen, met antwoorden.</string>
+    <string name="car_apps_added_by_you">Door jou toegevoegd</string>
+    <string name="car_apps_remove">%1$s verwijderen</string>
 </resources>

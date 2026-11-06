@@ -991,4 +991,14 @@
     <string name="summary_adblock_off">Ads not blocked</string>
     <string name="car_nav_mic">Mic button</string>
     <string name="car_nav_mic_note">The assistant\'s button in the nav bar. The car\'s own voice button works either way.</string>
+    <string name="car_apps_add">Add an app</string>
+    <string name="car_apps_add_note">For an app the car doesn\'t list: its music plays through Gearslip\'s player, or its messages show on the Messages screen.</string>
+    <string name="car_apps_add_pick">Choose an app</string>
+    <string name="car_apps_add_as">Show %1$s as</string>
+    <string name="car_apps_as_media">Music and audio</string>
+    <string name="car_apps_as_media_note">Now playing, with play, pause and skip. There\'s no library to browse.</string>
+    <string name="car_apps_as_messaging">Messages</string>
+    <string name="car_apps_as_messaging_note">Its notifications, read aloud, with replies.</string>
+    <string name="car_apps_added_by_you">Added by you</string>
+    <string name="car_apps_remove">Remove %1$s</string>
 </resources>

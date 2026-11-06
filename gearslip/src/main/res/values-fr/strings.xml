@@ -952,4 +952,14 @@
     <string name="summary_adblock_off">Pubs non bloquées</string>
     <string name="car_nav_mic">Bouton micro</string>
     <string name="car_nav_mic_note">Le bouton de l’assistant dans la barre de navigation. Le bouton vocal de la voiture fonctionne dans tous les cas.</string>
+    <string name="car_apps_add">Ajouter une appli</string>
+    <string name="car_apps_add_note">Pour une appli que la voiture n’affiche pas : sa musique passe par le lecteur de Gearslip, ou ses messages s’affichent dans Messages.</string>
+    <string name="car_apps_add_pick">Choisir une appli</string>
+    <string name="car_apps_add_as">Afficher %1$s comme</string>
+    <string name="car_apps_as_media">Musique et audio</string>
+    <string name="car_apps_as_media_note">Lecture en cours, avec lecture, pause et piste suivante. Pas de bibliothèque à parcourir.</string>
+    <string name="car_apps_as_messaging">Messages</string>
+    <string name="car_apps_as_messaging_note">Ses notifications, lues à voix haute, avec réponses.</string>
+    <string name="car_apps_added_by_you">Ajoutée par vous</string>
+    <string name="car_apps_remove">Retirer %1$s</string>
 </resources>

@@ -21,6 +21,12 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Checkbox
+import androidx.core.graphics.drawable.toBitmap
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.ui.graphics.asImageBitmap
+import kotlinx.coroutines.launch
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.TextButton
@@ -399,15 +405,130 @@ private fun AppRows() {
     LaunchedEffect(Unit) { withContext(Dispatchers.IO) { LauncherCache.load(context, force = true) } }
     val rows = apps.orEmpty().mapNotNull { entry -> entry.componentId?.let { it to entry } }
     if (rows.isEmpty()) SettingsRow(stringResource(if (apps == null) R.string.car_apps_finding else R.string.car_apps_none))
+    val custom by app.seb3thehacker.gearslip.host.CustomCarApps.state.collectAsState()
+    val scope = androidx.compose.runtime.rememberCoroutineScope()
+    var adding by remember { mutableStateOf(false) }
+    fun rescan() = scope.launch { withContext(Dispatchers.IO) { LauncherCache.load(context, force = true) } }
     rows.forEachIndexed { i, (id, entry) ->
         val shown = id !in hidden
+        val pkg = entry.media?.component?.packageName ?: entry.messaging?.packageName
+        val added = pkg != null && custom.orEmpty().any { it.packageName == pkg }
         if (i > 0) SettingsDivider()
         SettingsRow(
             entry.label,
             Modifier.toggleable(shown, role = Role.Checkbox) { CarSettings.setAppHidden(id, !it) },
+            subtitle = if (added) stringResource(R.string.car_apps_added_by_you) else null,
             leading = { entry.icon?.let { Image(it, contentDescription = null, Modifier.size(40.dp)) } },
-            trailing = { Checkbox(checked = shown, onCheckedChange = null) },
+            trailing = {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    if (added && pkg != null) {
+                        androidx.compose.material3.IconButton({
+                            app.seb3thehacker.gearslip.host.CustomCarApps.remove(context, pkg)
+                            rescan()
+                        }) { Icon(androidx.compose.material.icons.Icons.Filled.Delete, stringResource(R.string.car_apps_remove, entry.label)) }
+                    }
+                    Checkbox(checked = shown, onCheckedChange = null)
+                }
+            },
         )
+    }
+    if (apps != null) {
+        SettingsDivider()
+        SettingsRow(
+            stringResource(R.string.car_apps_add),
+            Modifier.clickable { adding = true },
+            subtitle = stringResource(R.string.car_apps_add_note),
+            icon = androidx.compose.material.icons.Icons.Filled.Add,
+        )
+    }
+    if (adding) {
+        AddCarAppDialog(
+            listed = rows.mapNotNull { (_, e) -> e.media?.component?.packageName ?: e.messaging?.packageName ?: e.template?.component?.packageName }.toSet(),
+            onDismiss = { adding = false },
+        ) { pkg, kind ->
+            app.seb3thehacker.gearslip.host.CustomCarApps.add(context, pkg, kind)
+            adding = false
+            rescan()
+        }
+    }
+}
+
+/**
+ * Picks an installed app the car doesn't list, then whether it's music or messages (issue #84).
+ * Music plays through Gearslip's player from the app's playback session; messages show from its
+ * notifications. Neither needs the app to support Android Auto.
+ */
+@Composable
+private fun AddCarAppDialog(
+    listed: Set<String>,
+    onDismiss: () -> Unit,
+    onAdd: (String, app.seb3thehacker.gearslip.host.CustomCarApps.Kind) -> Unit,
+) {
+    val context = androidx.compose.ui.platform.LocalContext.current
+    var picked by remember { mutableStateOf<Pair<String, String>?>(null) }
+    val candidates by androidx.compose.runtime.produceState<List<Triple<String, String, androidx.compose.ui.graphics.ImageBitmap?>>?>(null) {
+        value = withContext(Dispatchers.IO) {
+            val manager = context.packageManager
+            manager.queryIntentActivities(android.content.Intent(android.content.Intent.ACTION_MAIN).addCategory(android.content.Intent.CATEGORY_LAUNCHER), 0)
+                .map { it.activityInfo.packageName to it.loadLabel(manager).toString() }
+                .distinctBy { it.first }
+                .filter { (pkg, _) -> pkg != context.packageName && pkg !in listed }
+                .sortedBy { it.second.lowercase() }
+                .map { (pkg, label) ->
+                    val icon = runCatching { manager.getApplicationIcon(pkg).toBitmap(96, 96).asImageBitmap() }.getOrNull()
+                    Triple(pkg, label, icon)
+                }
+        }
+    }
+    androidx.compose.material3.AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(picked?.let { stringResource(R.string.car_apps_add_as, it.second) } ?: stringResource(R.string.car_apps_add_pick)) },
+        text = {
+            val choice = picked
+            if (choice == null) {
+                val list = candidates
+                if (list == null) {
+                    Text(stringResource(R.string.car_apps_finding))
+                } else {
+                    androidx.compose.foundation.lazy.LazyColumn(Modifier.heightIn(max = 420.dp)) {
+                        items(list.size) { i ->
+                            val (pkg, label, icon) = list[i]
+                            Row(
+                                Modifier.fillMaxWidth().clickable { picked = pkg to label }.padding(vertical = 8.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                            ) {
+                                icon?.let { Image(it, contentDescription = null, Modifier.size(36.dp)) }
+                                Text(label, style = MaterialTheme.typography.bodyLarge)
+                            }
+                        }
+                    }
+                }
+            } else {
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    KindRow(stringResource(R.string.car_apps_as_media), stringResource(R.string.car_apps_as_media_note)) {
+                        onAdd(choice.first, app.seb3thehacker.gearslip.host.CustomCarApps.Kind.MEDIA)
+                    }
+                    KindRow(stringResource(R.string.car_apps_as_messaging), stringResource(R.string.car_apps_as_messaging_note)) {
+                        onAdd(choice.first, app.seb3thehacker.gearslip.host.CustomCarApps.Kind.MESSAGING)
+                    }
+                }
+            }
+        },
+        confirmButton = {},
+        dismissButton = {
+            androidx.compose.material3.TextButton({ if (picked != null) picked = null else onDismiss() }) {
+                Text(stringResource(if (picked != null) R.string.back else R.string.cancel))
+            }
+        },
+    )
+}
+
+@Composable
+private fun KindRow(title: String, note: String, onClick: () -> Unit) {
+    Column(Modifier.fillMaxWidth().clickable(onClick = onClick).padding(vertical = 12.dp)) {
+        Text(title, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.primary)
+        Text(note, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }
 

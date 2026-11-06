@@ -952,4 +952,14 @@
     <string name="summary_adblock_off">Pubblicità non bloccata</string>
     <string name="car_nav_mic">Pulsante microfono</string>
     <string name="car_nav_mic_note">Il pulsante dell’assistente nella barra di navigazione. Il tasto vocale dell’auto funziona comunque.</string>
+    <string name="car_apps_add">Aggiungi un’app</string>
+    <string name="car_apps_add_note">Per un’app che l’auto non mostra: la sua musica passa dal lettore di Gearslip, oppure i suoi messaggi compaiono in Messaggi.</string>
+    <string name="car_apps_add_pick">Scegli un’app</string>
+    <string name="car_apps_add_as">Mostra %1$s come</string>
+    <string name="car_apps_as_media">Musica e audio</string>
+    <string name="car_apps_as_media_note">In riproduzione, con play, pausa e salto. Nessuna libreria da sfogliare.</string>
+    <string name="car_apps_as_messaging">Messaggi</string>
+    <string name="car_apps_as_messaging_note">Le sue notifiche, lette ad alta voce, con risposte.</string>
+    <string name="car_apps_added_by_you">Aggiunta da te</string>
+    <string name="car_apps_remove">Rimuovi %1$s</string>
 </resources>

@@ -942,4 +942,14 @@
     <string name="summary_adblock_off">Annonser blockeras inte</string>
     <string name="car_nav_mic">Mikrofonknapp</string>
     <string name="car_nav_mic_note">Assistentens knapp i navigeringsfältet. Bilens egen röstknapp fungerar oavsett.</string>
+    <string name="car_apps_add">Lägg till en app</string>
+    <string name="car_apps_add_note">För en app som bilen inte visar: musiken spelas i Gearslips spelare, eller så visas meddelandena under Meddelanden.</string>
+    <string name="car_apps_add_pick">Välj en app</string>
+    <string name="car_apps_add_as">Visa %1$s som</string>
+    <string name="car_apps_as_media">Musik och ljud</string>
+    <string name="car_apps_as_media_note">Det som spelas, med spela, pausa och hoppa. Inget bibliotek att bläddra i.</string>
+    <string name="car_apps_as_messaging">Meddelanden</string>
+    <string name="car_apps_as_messaging_note">Dess aviseringar, upplästa, med svar.</string>
+    <string name="car_apps_added_by_you">Tillagd av dig</string>
+    <string name="car_apps_remove">Ta bort %1$s</string>
 </resources>

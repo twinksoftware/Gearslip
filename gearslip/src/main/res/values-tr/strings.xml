@@ -942,4 +942,14 @@
     <string name="summary_adblock_off">Reklamlar engellenmiyor</string>
     <string name="car_nav_mic">Mikrofon düğmesi</string>
     <string name="car_nav_mic_note">Gezinme çubuğundaki asistan düğmesi. Aracın kendi ses düğmesi her durumda çalışır.</string>
+    <string name="car_apps_add">Uygulama ekle</string>
+    <string name="car_apps_add_note">Aracın listelemediği bir uygulama için: müziği Gearslip oynatıcısında çalar veya mesajları Mesajlar ekranında görünür.</string>
+    <string name="car_apps_add_pick">Bir uygulama seçin</string>
+    <string name="car_apps_add_as">%1$s şu şekilde gösterilsin</string>
+    <string name="car_apps_as_media">Müzik ve ses</string>
+    <string name="car_apps_as_media_note">Çalan içerik; oynat, duraklat ve atla. Göz atılacak bir kitaplık yok.</string>
+    <string name="car_apps_as_messaging">Mesajlar</string>
+    <string name="car_apps_as_messaging_note">Bildirimleri, sesli okunur ve yanıtlanabilir.</string>
+    <string name="car_apps_added_by_you">Sizin eklediğiniz</string>
+    <string name="car_apps_remove">%1$s kaldır</string>
 </resources>

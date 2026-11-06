@@ -932,4 +932,14 @@
     <string name="summary_adblock_off">不拦截广告</string>
     <string name="car_nav_mic">麦克风按钮</string>
     <string name="car_nav_mic_note">导航栏中的助理按钮。车辆自带的语音按钮始终可用。</string>
+    <string name="car_apps_add">添加应用</string>
+    <string name="car_apps_add_note">适用于车上没有列出的应用：其音乐通过 Gearslip 的播放器播放，或其消息显示在“消息”中。</string>
+    <string name="car_apps_add_pick">选择应用</string>
+    <string name="car_apps_add_as">将 %1$s 显示为</string>
+    <string name="car_apps_as_media">音乐和音频</string>
+    <string name="car_apps_as_media_note">正在播放的内容，可播放、暂停和跳过。没有可浏览的媒体库。</string>
+    <string name="car_apps_as_messaging">消息</string>
+    <string name="car_apps_as_messaging_note">朗读其通知，并可回复。</string>
+    <string name="car_apps_added_by_you">由你添加</string>
+    <string name="car_apps_remove">移除 %1$s</string>
 </resources>

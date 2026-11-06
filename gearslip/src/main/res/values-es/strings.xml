@@ -826,4 +826,14 @@
     <string name="summary_adblock_off">Anuncios sin bloquear</string>
     <string name="car_nav_mic">Botón del micrófono</string>
     <string name="car_nav_mic_note">El botón del asistente en la barra de navegación. El botón de voz del coche funciona igualmente.</string>
+    <string name="car_apps_add">Añadir una app</string>
+    <string name="car_apps_add_note">Para una app que el coche no muestra: su música suena con el reproductor de Gearslip, o sus mensajes aparecen en Mensajes.</string>
+    <string name="car_apps_add_pick">Elige una app</string>
+    <string name="car_apps_add_as">Mostrar %1$s como</string>
+    <string name="car_apps_as_media">Música y audio</string>
+    <string name="car_apps_as_media_note">Lo que suena, con reproducir, pausar y saltar. No hay biblioteca para explorar.</string>
+    <string name="car_apps_as_messaging">Mensajes</string>
+    <string name="car_apps_as_messaging_note">Sus notificaciones, leídas en voz alta, con respuestas.</string>
+    <string name="car_apps_added_by_you">Añadida por ti</string>
+    <string name="car_apps_remove">Quitar %1$s</string>
 </resources>

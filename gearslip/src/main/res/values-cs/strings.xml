@@ -962,4 +962,14 @@
     <string name="summary_adblock_off">Reklamy neblokovány</string>
     <string name="car_nav_mic">Tlačítko mikrofonu</string>
     <string name="car_nav_mic_note">Tlačítko asistenta na navigační liště. Hlasové tlačítko auta funguje tak jako tak.</string>
+    <string name="car_apps_add">Přidat aplikaci</string>
+    <string name="car_apps_add_note">Pro aplikaci, kterou auto nezobrazuje: její hudba hraje přes přehrávač Gearslip, nebo se její zprávy zobrazí ve Zprávách.</string>
+    <string name="car_apps_add_pick">Vyberte aplikaci</string>
+    <string name="car_apps_add_as">Zobrazit %1$s jako</string>
+    <string name="car_apps_as_media">Hudba a zvuk</string>
+    <string name="car_apps_as_media_note">Právě hraje, s přehráním, pozastavením a přeskočením. Bez knihovny k procházení.</string>
+    <string name="car_apps_as_messaging">Zprávy</string>
+    <string name="car_apps_as_messaging_note">Její oznámení, předčítaná nahlas, s odpověďmi.</string>
+    <string name="car_apps_added_by_you">Přidáno vámi</string>
+    <string name="car_apps_remove">Odebrat %1$s</string>
 </resources>

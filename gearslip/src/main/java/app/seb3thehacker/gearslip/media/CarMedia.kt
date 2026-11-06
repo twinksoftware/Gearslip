@@ -4,6 +4,7 @@ import app.seb3thehacker.gearslip.R
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.view.KeyEvent
 import android.graphics.Bitmap
 import android.media.MediaMetadata
 import android.media.Rating
@@ -281,6 +282,14 @@ class CarMedia(private val context: Context) {
             attachToSession(app)
             return
         }
+        // Added by hand: no library at all. Wake the app with its Play key if it isn't running,
+        // then wait for its session as after opening it.
+        if (app.sessionOnly) {
+            val running = hasSession(app)
+            if (!running) pressPlay(app)
+            if (running) attachToSession(app) else main.postDelayed({ attachToSession(app, launched = true) }, PLAY_WAKE_MS)
+            return
+        }
         val mb = MediaBrowser(context, app.component, object : MediaBrowser.ConnectionCallback() {
             override fun onConnected() = this@CarMedia.onConnected(app)
             override fun onConnectionFailed() {
@@ -344,7 +353,7 @@ class CarMedia(private val context: Context) {
                 GearslipLog.w("media: ${app.label} has no active session to control")
                 // A session-only app (Spotify) just isn't running - say so and offer to open it,
                 // rather than calling it unsupported.
-                _rejection.value = if (KnownApps.playerWorks(app.component.packageName)) {
+                _rejection.value = if (app.sessionOnly || KnownApps.playerWorks(app.component.packageName)) {
                     Rejection.NEEDS_APP_RUNNING
                 } else {
                     Rejection.REFUSED
@@ -834,6 +843,33 @@ class CarMedia(private val context: Context) {
         main.postDelayed({ attachToSession(app, launched = true) }, LAUNCH_WAIT_MS)
     }
 
+    private fun hasSession(app: MediaApp): Boolean = runCatching {
+        context.getSystemService(MediaSessionManager::class.java)
+            .getActiveSessions(ComponentName(context, GearslipNotificationListener::class.java))
+            .any { it.packageName == app.component.packageName }
+    }.getOrDefault(false)
+
+    /**
+     * Sends [app] a Play key press, as a headset button would. Most players start their service
+     * for it, even when closed, and pick up where they left off; one that doesn't is offered to
+     * open on the phone once the wait runs out.
+     */
+    private fun pressPlay(app: MediaApp) {
+        val pkg = app.component.packageName
+        val receiver = context.packageManager.queryBroadcastReceivers(Intent(Intent.ACTION_MEDIA_BUTTON).setPackage(pkg), 0)
+            .firstOrNull()?.activityInfo ?: run {
+            GearslipLog.i("media: ${app.label} takes no media keys, so it has to be opened on the phone")
+            return
+        }
+        GearslipLog.i("media: pressing Play for ${app.label}, which isn't running")
+        for (action in listOf(KeyEvent.ACTION_DOWN, KeyEvent.ACTION_UP)) {
+            val press = Intent(Intent.ACTION_MEDIA_BUTTON)
+                .setClassName(pkg, receiver.name)
+                .putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent(action, KeyEvent.KEYCODE_MEDIA_PLAY))
+            runCatching { context.sendBroadcast(press) }.onFailure { GearslipLog.w("media: Play for ${app.label} failed: ${it.message}") }
+        }
+    }
+
     /** Brings [app] to the foreground on the phone so it publishes its session. */
     private fun openApp(app: MediaApp): Boolean {
         val intent = context.packageManager.getLaunchIntentForPackage(app.component.packageName) ?: return false
@@ -853,6 +889,8 @@ class CarMedia(private val context: Context) {
         const val SESSION_RETRY_MS = 500L
         /** After opening a cold app, how long to wait before the first look for its session. */
         const val LAUNCH_WAIT_MS = 1_500L
+        /** How long a player woken by its Play key gets before its session is looked for. */
+        const val PLAY_WAKE_MS = 1_000L
         /** Retries once the app has been opened: a cold start can take a few seconds to publish. */
         const val SESSION_RETRIES_LAUNCHED = 16
         /** How long an app gets to start playing a search before Gearslip says it didn't. */
