@@ -129,21 +129,61 @@ internal fun CallPromptOverlay() {
     )
 }
 
-private const val TAB_CONTACTS = 0
-private const val TAB_KEYPAD = 1
+private const val TAB_RECENTS = 0
+private const val TAB_CONTACTS = 1
+private const val TAB_KEYPAD = 2
 
-/** Dialing a number or calling a contact from the car screen: a contacts tab and a keypad tab. */
+/** One number from the call log: its latest call, whether that was missed, and when. */
+private data class RecentCall(val contact: Contact, val missed: Boolean, val at: Long)
+
+/** The latest call to or from each number, newest first, as Android Auto lists them. */
+private fun loadRecents(context: Context): List<RecentCall>? {
+    if (context.checkSelfPermission(Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) return null
+    val out = mutableListOf<RecentCall>()
+    val seen = mutableSetOf<String>()
+    runCatching {
+        context.contentResolver.query(
+            android.provider.CallLog.Calls.CONTENT_URI,
+            arrayOf(
+                android.provider.CallLog.Calls.NUMBER,
+                android.provider.CallLog.Calls.CACHED_NAME,
+                android.provider.CallLog.Calls.TYPE,
+                android.provider.CallLog.Calls.DATE,
+            ),
+            null, null,
+            "${android.provider.CallLog.Calls.DATE} DESC",
+        )?.use { cursor ->
+            while (cursor.moveToNext() && out.size < RECENTS_SHOWN) {
+                val number = cursor.getString(0)?.takeIf { it.isNotBlank() } ?: continue
+                if (!seen.add(number)) continue
+                val name = cursor.getString(1)?.takeIf { it.isNotBlank() } ?: number
+                val type = cursor.getInt(2)
+                val missed = type == android.provider.CallLog.Calls.MISSED_TYPE || type == android.provider.CallLog.Calls.REJECTED_TYPE
+                out += RecentCall(Contact(name, number), missed, cursor.getLong(3))
+            }
+        }
+    }.onFailure { GearslipLog.w("calls: reading the call log failed: ${it.message}") }
+    return out
+}
+
+private const val RECENTS_SHOWN = 50
+
+/**
+ * Calling from the car screen, laid out as Android Auto's dialer: recent calls first, since
+ * calling back is the usual reason to open it, then contacts and a keypad.
+ */
 @Composable
 fun PhoneDialerScreen() {
     val context = LocalContext.current
     var hasPermissions by remember { mutableStateOf(hasCallPermissions(context)) }
-    var tab by remember { mutableStateOf(TAB_CONTACTS) }
+    var tab by remember { mutableStateOf(TAB_RECENTS) }
 
     Column(Modifier.fillMaxSize().padding(start = 16.dp, end = 16.dp, top = 16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
         // The tabs share the title's row, so the list and keypad get the height back.
         ScreenHeader(stringResource(R.string.carset_phone)) {
             if (hasPermissions) {
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    DialerTab(stringResource(R.string.dialer_recents), tab == TAB_RECENTS, Modifier.width(140.dp)) { tab = TAB_RECENTS }
                     DialerTab(stringResource(R.string.dialer_contacts), tab == TAB_CONTACTS, Modifier.width(140.dp)) { tab = TAB_CONTACTS }
                     DialerTab(stringResource(R.string.dialer_keypad), tab == TAB_KEYPAD, Modifier.width(140.dp)) { tab = TAB_KEYPAD }
                 }
@@ -156,7 +196,11 @@ fun PhoneDialerScreen() {
         }
 
         Box(Modifier.weight(1f).fillMaxWidth()) {
-            if (tab == TAB_CONTACTS) ContactsList(context) else Box(Modifier.padding(bottom = 16.dp)) { Keypad(context) }
+            when (tab) {
+                TAB_RECENTS -> RecentsList(context)
+                TAB_CONTACTS -> ContactsList(context)
+                else -> Box(Modifier.padding(bottom = 16.dp)) { Keypad(context) }
+            }
         }
     }
 }
@@ -257,6 +301,53 @@ private fun KeypadButton(digit: String, modifier: Modifier, onClick: () -> Unit)
         shape = MaterialTheme.shapes.large,
     ) {
         Text(digit, style = MaterialTheme.typography.titleLarge)
+    }
+}
+
+@Composable
+private fun RecentsList(context: Context) {
+    // Null until read, then null again only when the call log isn't allowed.
+    var loaded by remember { mutableStateOf(false) }
+    val recents by produceState<List<RecentCall>?>(null, context) {
+        value = withContext(Dispatchers.IO) { loadRecents(context) }
+        loaded = true
+    }
+    var pendingCall by remember { mutableStateOf<Contact?>(null) }
+    val list = recents
+
+    when {
+        !loaded -> Unit
+        list == null -> Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Text(
+                stringResource(R.string.dialer_recents_needs_permission),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            GsButton(tone = GsTone.Tonal, onClick = {
+                app.seb3thehacker.gearslip.PermissionActivity.ask(context, arrayOf(Manifest.permission.READ_CALL_LOG))
+            }) { Text(stringResource(R.string.dialer_ask)) }
+        }
+        list.isEmpty() -> Text(
+            stringResource(R.string.dialer_no_recents),
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        else -> LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(bottom = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            items(list) { call ->
+                val now = System.currentTimeMillis()
+                val ago = android.text.format.DateUtils.getRelativeTimeSpanString(call.at, now, android.text.format.DateUtils.MINUTE_IN_MILLIS).toString()
+                val detail = if (call.missed) stringResource(R.string.dialer_missed, ago) else ago
+                ContactRow(call.contact, detail = detail, alert = call.missed) { pendingCall = call.contact }
+            }
+        }
+    }
+
+    pendingCall?.let { contact ->
+        ConfirmCallOverlay(
+            contact = contact,
+            onConfirm = { placeCall(context, contact.number); pendingCall = null },
+            onDismiss = { pendingCall = null },
+        )
     }
 }
 
@@ -381,7 +472,7 @@ private fun ContactSearchField(query: String, active: Boolean, onToggle: () -> U
 }
 
 @Composable
-private fun ContactRow(contact: Contact, onClick: () -> Unit) {
+private fun ContactRow(contact: Contact, detail: String = contact.number, alert: Boolean = false, onClick: () -> Unit) {
     Surface(
         onClick = onClick,
         shape = MaterialTheme.shapes.large,
@@ -406,7 +497,11 @@ private fun ContactRow(contact: Contact, onClick: () -> Unit) {
             }
             Column(Modifier.weight(1f)) {
                 Text(contact.name, style = MaterialTheme.typography.titleMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                Text(contact.number, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(
+                    detail,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = if (alert) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
+                )
             }
             Icon(Icons.Filled.Call, contentDescription = stringResource(R.string.dialer_call), tint = MaterialTheme.colorScheme.primary)
         }

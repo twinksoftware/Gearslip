@@ -66,7 +66,8 @@
 
     <!--
         Phone calls on the car screen. READ_PHONE_STATE and READ_CALL_LOG together are what a
-        call's own state (ringing, in progress) and the incoming number need; READ_CONTACTS
+        call's own state (ringing, in progress) and the incoming number need, and READ_CALL_LOG
+        also lists recent calls on the car's Phone screen, read on the phone only; READ_CONTACTS
         turns that number into a name; ANSWER_PHONE_CALLS lets the driver pick up from here.
         Declining a call, and the caller ID itself, need Gearslip set as the phone's caller ID
         and spam app too - an on-device consent, not a permission declared here.
