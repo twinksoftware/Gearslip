@@ -454,7 +454,6 @@
     <string name="carset_px">%1$dpx</string>
 
     <!-- Car media app -->
-    <string name="media_open_on_phone">휴대전화에서 열기</string>
     <string name="media_now_playing">지금 재생 중</string>
     <string name="media_up_next">다음 곡</string>
     <string name="media_browse">둘러보기</string>

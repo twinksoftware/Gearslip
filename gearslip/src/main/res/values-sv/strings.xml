@@ -455,7 +455,6 @@
     <string name="carset_px">%1$dpx</string>
 
     <!-- Car media app -->
-    <string name="media_open_on_phone">Öppna på telefonen</string>
     <string name="media_now_playing">Spelas nu</string>
     <string name="media_up_next">Härnäst</string>
     <string name="media_browse">Bläddra</string>

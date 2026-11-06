@@ -401,7 +401,6 @@
     <string name="carset_saved_to">Salvat în %1$s</string>
     <string name="carset_save_failed">Nu s-a putut salva</string>
     <string name="carset_px">%1$dpx</string>
-    <string name="media_open_on_phone">Deschide pe telefon</string>
     <string name="media_now_playing">Se redă acum</string>
     <string name="media_up_next">Urmează</string>
     <string name="media_browse">Răsfoire</string>

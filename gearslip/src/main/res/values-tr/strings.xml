@@ -455,7 +455,6 @@
     <string name="carset_px">%1$dpx</string>
 
     <!-- Car media app -->
-    <string name="media_open_on_phone">Telefonda aç</string>
     <string name="media_now_playing">Şimdi çalıyor</string>
     <string name="media_up_next">Sıradaki</string>
     <string name="media_browse">Göz at</string>

@@ -454,7 +454,6 @@
     <string name="carset_px">%1$dpx</string>
 
     <!-- Car media app -->
-    <string name="media_open_on_phone">スマートフォンで開く</string>
     <string name="media_now_playing">再生中</string>
     <string name="media_up_next">次に再生</string>
     <string name="media_browse">ブラウズ</string>

@@ -36,7 +36,6 @@
     <string name="carset_saved_to">Gespeichert unter %1$s</string>
     <string name="carset_save_failed">Speichern fehlgeschlagen</string>
     <string name="carset_px">%1$d px</string>
-    <string name="media_open_on_phone">Auf dem Handy öffnen</string>
     <string name="media_now_playing">Läuft gerade</string>
     <string name="media_up_next">Als Nächstes</string>
     <string name="media_browse">Durchsuchen</string>

@@ -454,7 +454,6 @@
     <string name="carset_px">%1$dpx</string>
 
     <!-- Car media app -->
-    <string name="media_open_on_phone">在手机上打开</string>
     <string name="media_now_playing">正在播放</string>
     <string name="media_up_next">接下来播放</string>
     <string name="media_browse">浏览</string>

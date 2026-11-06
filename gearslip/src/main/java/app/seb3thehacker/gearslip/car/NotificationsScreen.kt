@@ -97,7 +97,8 @@ fun NotificationsSection() {
             }
         }
 
-        if (history.isEmpty()) {
+        // With access off, "nothing yet" would promise notifications that can't come.
+        if (history.isEmpty() && listening) {
             Text(
                 stringResource(R.string.notif_empty),
                 style = MaterialTheme.typography.bodyMedium,
@@ -113,10 +114,11 @@ fun NotificationsSection() {
 
 @Composable
 internal fun AccessBanner(onOpen: () -> Unit) {
+    // A setting left off, not a fault: a quiet card, as Android Auto shows one, rather than red.
     Surface(
         shape = MaterialTheme.shapes.large,
-        color = MaterialTheme.colorScheme.errorContainer,
-        contentColor = MaterialTheme.colorScheme.onErrorContainer,
+        color = MaterialTheme.colorScheme.surfaceContainerHigh,
+        contentColor = MaterialTheme.colorScheme.onSurface,
         modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
     ) {
         Row(
@@ -124,13 +126,13 @@ internal fun AccessBanner(onOpen: () -> Unit) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            Icon(Icons.Filled.Warning, contentDescription = null)
+            Icon(Icons.Filled.Notifications, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
             Text(
                 stringResource(R.string.notif_off),
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.weight(1f),
             )
-            GsButton(onClick = onOpen) { Text(stringResource(R.string.guide_open)) }
+            GsButton(onClick = onOpen, tone = GsTone.Tonal) { Text(stringResource(R.string.allow_on_phone)) }
         }
     }
 }

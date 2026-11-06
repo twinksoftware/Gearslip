@@ -459,7 +459,6 @@
     <string name="carset_px">%1$dpx</string>
 
     <!-- Car media app -->
-    <string name="media_open_on_phone">فتح على الهاتف</string>
     <string name="media_now_playing">قيد التشغيل</string>
     <string name="media_up_next">التالي</string>
     <string name="media_browse">تصفّح</string>

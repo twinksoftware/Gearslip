@@ -457,7 +457,6 @@
     <string name="carset_px">%1$dpx</string>
 
     <!-- Car media app -->
-    <string name="media_open_on_phone">Otevřít v telefonu</string>
     <string name="media_now_playing">Právě hraje</string>
     <string name="media_up_next">Další na řadě</string>
     <string name="media_browse">Procházet</string>

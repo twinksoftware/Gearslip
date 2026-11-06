@@ -497,7 +497,7 @@
     <string name="carset_px">%1$dpx</string>
 
     <!-- Car media app -->
-    <string name="media_open_on_phone">Open on phone</string>
+    <string name="allow_on_phone">Allow on phone</string>
     <string name="media_now_playing">Now playing</string>
     <string name="media_up_next">Up next</string>
     <string name="media_browse">Browse</string>
@@ -508,7 +508,7 @@
 
     <!--  -->
     <string name="media_keeps_library">%1$s keeps its library to itself.</string>
-    <string name="media_needs_access">Gearslip can still control it once it has Notification access on the phone. Allow it under Settings &gt; Notifications &gt; Notification access.</string>
+    <string name="media_needs_access">Gearslip can still play it once it has Notification access. Allow it on the phone when you\'re parked.</string>
     <string name="media_not_running">%1$s isn\'t running.</string>
     <string name="media_not_running_body">%1$s plays through Gearslip\'s own player, but only while it\'s open on the phone. Open it once and it keeps playing here in the car.</string>
     <string name="media_open_app">Open %1$s</string>
@@ -712,7 +712,7 @@
     <string name="notif_title">Notifications</string>
     <string name="notif_clear_all">Clear all</string>
     <string name="notif_empty">Nothing yet. New notifications from the phone will show up here.</string>
-    <string name="notif_off">Notifications are off. Allow Gearslip under Settings &gt; Notifications &gt; Notification access on the phone.</string>
+    <string name="notif_off">Gearslip needs Notification access to show them here. Allow it on the phone when you\'re parked.</string>
     <string name="notif_replied">Replied</string>
 
     <!-- Messages -->

@@ -303,7 +303,6 @@
     <string name="carset_phone">Teléfono</string>
     <string name="carset_vehicle">Vehículo</string>
     <string name="carset_video">Video</string>
-    <string name="media_open_on_phone">Abra el teléfono</string>
     <string name="media_now_playing">Ahora jugando</string>
     <string name="media_up_next">Siguiente</string>
     <string name="media_browse">Navega</string>
