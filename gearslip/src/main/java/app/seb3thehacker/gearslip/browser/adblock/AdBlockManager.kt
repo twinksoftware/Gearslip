@@ -71,6 +71,11 @@ object AdBlockManager {
     private val refreshRunning = AtomicBoolean(false)
     private val autoUpdateAttempted = AtomicBoolean(false)
     private val blockedCount = AtomicLong(0)
+    // Time spent deciding requests since the last page load, for the log line that tells whether
+    // the blocker is what makes a page or a video slow to start.
+    private val checkedCount = AtomicLong(0)
+    private val checkedNanos = AtomicLong(0)
+    private val blockedSincePage = AtomicLong(0)
 
     val isEngineReady: Boolean get() = engine != null
     val blockedRequestCount: Long get() = blockedCount.get()
@@ -275,6 +280,27 @@ object AdBlockManager {
      */
     fun response(request: WebResourceRequest, pageUrl: String?): WebResourceResponse? {
         if (!enabled) return null
+        // A ranged request is a video or audio stream fetching its next piece: ads never come
+        // that way, and a stream makes hundreds of them, so they skip the lists entirely.
+        if (request.requestHeaders?.keys?.any { it.equals("Range", ignoreCase = true) } == true) return null
+        val started = System.nanoTime()
+        try {
+            return decide(request, pageUrl)
+        } finally {
+            checkedCount.incrementAndGet()
+            checkedNanos.addAndGet(System.nanoTime() - started)
+        }
+    }
+
+    /** Logs what the blocker cost the page that just finished loading, and starts counting afresh. */
+    fun logPageCost(url: String?) {
+        val count = checkedCount.getAndSet(0)
+        val ms = checkedNanos.getAndSet(0) / 1_000_000
+        val blocked = blockedSincePage.getAndSet(0)
+        if (count > 0) GearslipLog.i("adblock: $count requests checked in ${ms}ms, $blocked blocked, for ${url?.substringBefore('?')}")
+    }
+
+    private fun decide(request: WebResourceRequest, pageUrl: String?): WebResourceResponse? {
         val current = engine ?: return null
 
         // Never interfere with top-level navigation: a mistake there costs the whole page.
@@ -296,6 +322,7 @@ object AdBlockManager {
         }.getOrNull() ?: return null
 
         blockedCount.incrementAndGet()
+        blockedSincePage.incrementAndGet()
         return blockedResponse(request, match.redirectResource)
     }
 

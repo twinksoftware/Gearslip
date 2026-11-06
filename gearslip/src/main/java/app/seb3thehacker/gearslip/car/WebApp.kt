@@ -192,6 +192,11 @@ fun WebApp(content: String) {
                     settings.domStorageEnabled = true
                     settings.loadWithOverviewMode = true
                     settings.useWideViewPort = true
+                    // A video starts when the page asks, as in a normal browser. Left at Android's
+                    // default, YouTube's player waits for a second tap before it will play.
+                    settings.mediaPlaybackRequiresUserGesture = false
+                    // Draws the page before it's on screen, so the first frame is ready sooner.
+                    settings.offscreenPreRaster = true
                     webViewClient = LoggingClient(ring, documentUrl, onStarted = { pageUrl = it }) { view ->
                         canGoForward = view.canGoForward()
                         pageUrl = view.url
@@ -339,6 +344,7 @@ private class LoggingClient(
     override fun onPageFinished(view: WebView?, url: String?) {
         documentUrl.set(url)
         GearslipLog.i("car web page loaded: $url")
+        AdBlockManager.logPageCost(url)
         view?.let(onLoaded)
         view?.evaluateJavascript(FOCUS_TRACKING_JS, null)
         view?.evaluateJavascript(focusRingJs(ring), null)
