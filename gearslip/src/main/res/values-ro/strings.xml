@@ -763,4 +763,27 @@
     <string name="bt_address_type">Tastează asta în schimb</string>
     <string name="bt_address_your_car">mașina ta</string>
     <string name="bt_address_car_note">Finalizează o etapă de configurare pe telefon atunci când ești parcat.</string>
+    <string name="help_bluetooth_first">Conectează prin Bluetooth înainte de a folosi cablul.</string>
+    <string name="help_bluetooth_first_detail">Dacă nu se stabilește conexiunea pentru redarea muzicii prin Bluetooth, lasă mai întâi mașina să detecteze telefonul prin Bluetooth, apoi conectează cablul. Unele mașini se „derutează” când cablul este conectat mai întâi.</string>
+    <string name="update_silent">Instalează actualizările în mod automat</string>
+    <string name="update_silent_sub">Numai versiuni finalizate, prin Wi-Fi, atunci când nu este conectată nicio mașină</string>
+    <string name="update_installed_title">Gearslip a fost actualizat la %1$s</string>
+    <string name="update_installed_text">S-a instalat prin Wi-Fi în timp ce nicio mașină nu era conectată.</string>
+    <plurals name="nav_lane_left">
+        <item quantity="one">Folosește banda din stânga</item>
+        <item quantity="few">Folosește %d benzi din stânga</item>
+        <item quantity="other">Folosește %d de benzi din stânga</item>
+    </plurals>
+    <plurals name="nav_lane_right">
+        <item quantity="one">Folosește banda din dreapta</item>
+        <item quantity="few">Folosește %d benzi din dreapta</item>
+        <item quantity="other">Folosește %d de benzi din dreapta</item>
+    </plurals>
+    <string name="nav_lane_middle">Folosește banda din mijloc</string>
+    <string name="nav_lane_middle_lanes">Folosește benzile din mijloc</string>
+    <string name="nav_lane_from_left">Folosește banda %1$d din stânga</string>
+    <string name="nav_lane_from_right">Folosește banda %1$d din dreapta</string>
+    <string name="nav_lane_any">Orice bandă</string>
+    <string name="nav_arrival">sosire</string>
+    <string name="nav_to_go">de parcurs</string>
 </resources>
