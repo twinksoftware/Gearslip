@@ -464,7 +464,7 @@
     <string name="media_press_play">Kaldığınız yerden devam etmek için oynat’a basın veya Göz at’ta bir şey bulun.</string>
 
     <string name="media_keeps_library">%1$s kitaplığını paylaşmıyor.</string>
-    <string name="media_needs_access">Gearslip, telefonda bildirim erişimi olduğunda yine de onu kontrol edebilir. Ayarlar &gt; Bildirimler &gt; Bildirim erişimi altında izin verin.</string>
+    <string name="media_needs_access">Gearslip bildirim erişimi alınca yine de oynatabilir. Park ettiğinde telefonda izin ver.</string>
     <string name="media_not_running">%1$s çalışmıyor.</string>
     <string name="media_not_running_body">%1$s, Gearslip’in kendi oynatıcısı üzerinden çalar, ama yalnızca telefonda açıkken. Bir kez açın, burada araçta çalmaya devam eder.</string>
     <string name="media_open_app">%1$s uygulamasını aç</string>
@@ -655,7 +655,7 @@
     <string name="notif_title">Bildirimler</string>
     <string name="notif_clear_all">Tümünü temizle</string>
     <string name="notif_empty">Henüz bir şey yok. Telefondan gelen yeni bildirimler burada görünür.</string>
-    <string name="notif_off">Bildirimler kapalı. Telefonda Ayarlar &gt; Bildirimler &gt; Bildirim erişimi altında Gearslip’e izin verin.</string>
+    <string name="notif_off">Gearslip\'in bildirimleri burada göstermesi için bildirim erişimi gerekir. Park ettiğinde telefonda izin ver.</string>
     <string name="notif_replied">Yanıtlandı</string>
 
     <!-- Messages -->
@@ -829,4 +829,75 @@
     <string name="settings_language">Dil</string>
     <string name="settings_language_phone">Telefonla aynı</string>
     <string name="player_next_chapter">Sonraki bölüm</string>
+    <string name="allow_on_phone">Telefonda izin ver</string>
+    <string name="app_all_apps">Tüm uygulamalar</string>
+    <string name="bt_address_car_note">Park ettiğinde telefonunda bir kurulum adımını bitir.</string>
+    <string name="bt_address_card_body">Bazı arabalar yalnızca telefonun Bluetooth adresini bildiklerinde bağlı kalır. Android bunu uygulamalardan saklar, bu yüzden Telefon hakkında bölümünden kopyala. Oradaki Bluetooth adresine basılı tut, Kopyala\'ya dokun ve geri dön.</string>
+    <string name="bt_address_card_title">%1$s bu telefonu tanısın</string>
+    <string name="bt_address_not_now">Şimdi değil</string>
+    <string name="bt_address_open">Telefon hakkında\'yı aç</string>
+    <string name="bt_address_type">Elle yaz</string>
+    <string name="bt_address_use_body">Gearslip bunu arabana iletir, böylece araba bunun eşlenen telefon olduğunu bilir.</string>
+    <string name="bt_address_use_title">Bu Bluetooth adresi kullanılsın mı?</string>
+    <string name="bt_address_your_car">Araban</string>
+    <string name="car_apps_finding">Uygulamalar aranıyor…</string>
+    <string name="car_apps_none">Araba uygulaması bulunamadı</string>
+    <string name="car_apps_sub">Arabada hangi uygulamaların görüneceğini seç</string>
+    <string name="car_audio_blocked">%1$s, sesini başka uygulamaların çalmasına izin vermiyor, bu yüzden Gearslip üzerinden arabaya ulaşamıyor. Başka bir müzik uygulaması dene.</string>
+    <string name="car_audio_switched">Bu araba Gearslip çalışırken Bluetooth müziği kapatıyor, bu yüzden müzik artık Gearslip üzerinden gidiyor. Telefonundaki isteğe izin ver.</string>
+    <string name="car_autoplay_note">Araba bağlanır bağlanmaz müziği kaldığı yerden sürdürür.</string>
+    <string name="car_density">Araba ekranı yoğunluğu</string>
+    <string name="car_density_note">Uygulamalar dahil daha büyük yazı ve düğmeler. Boyut Normal iken 200 DPI dene. Uygulamak için arabayı yeniden bağla ya da önizlemeyi yeniden aç. Düğmeler kesilirse daha düşük DPI veya Arabadan seç.</string>
+    <string name="car_directions_over_music">Yol tarifi müzik kanalından</string>
+    <string name="car_directions_over_music_note">Sesli bir yönlendirmeden sonra bağlantıyı kesen veya yeniden başlayan bir araba için. Gearslip her yönlendirmeyi arabanın navigasyon kanalı yerine müziğe karıştırır.</string>
+    <string name="car_experimental_note">Hâlâ test edilen özellikler. Her arabada çalışmayabilir.</string>
+    <string name="car_player_beside_map_note">Sabitleme düğmesine dokunduğunda oynatıcının sabitlendiği harita kenarı.</string>
+    <string name="carset_advanced">Gelişmiş</string>
+    <string name="carset_experimental_heading">Deneysel</string>
+    <string name="carset_fit_needs_car">Bu ayarı bir araba için kaydetmek üzere arabayı bağla.</string>
+    <string name="choice_density_car">Arabadan</string>
+    <string name="choice_density_dpi">%1$d DPI</string>
+    <string name="dialer_missed">Cevapsız · %1$s</string>
+    <string name="dialer_no_recents">Son arama yok.</string>
+    <string name="dialer_recents">Son aramalar</string>
+    <string name="dialer_recents_needs_permission">Gearslip son aramaları listelemek için Arama kayıtları iznine ihtiyaç duyar.</string>
+    <string name="help_bluetooth_first">Bluetooth\'u kablodan önce bağla.</string>
+    <string name="help_bluetooth_first_detail">Bluetooth üzerinden müzik bağlanmıyorsa, önce arabanın telefonu Bluetooth ile bulmasına izin ver, sonra kabloyu tak. Bazı arabalar kablo önce gelince karışıyor.</string>
+    <string name="help_usb_data">USB veri aktarımına izin ver.</string>
+    <string name="help_usb_data_detail">GrapheneOS USB bağlantı noktasında veriyi engelleyebilir. USB-C bağlantı noktası denetimi Yalnızca şarj olarak ayarlıysa, veri kablosuyla bile araba telefonu hiç görmez. Veriye izin verecek şekilde ayarla.</string>
+    <string name="launcher_in_car">Bu cihaz bir arabaya bağlı, bu yüzden Gearslip arabanın ekranında.</string>
+    <string name="launcher_open_gearslip">Gearslip\'i aç</string>
+    <string name="nav_arrival">varış</string>
+    <string name="nav_lane_any">Herhangi bir şerit</string>
+    <string name="nav_lane_from_left">Soldan %1$d. şeridi kullan</string>
+    <string name="nav_lane_from_right">Sağdan %1$d. şeridi kullan</string>
+    <plurals name="nav_lane_left">
+        <item quantity="one">Sol şeridi kullan</item>
+        <item quantity="other">Soldaki %d şeridi kullan</item>
+    </plurals>
+    <string name="nav_lane_middle">Orta şeridi kullan</string>
+    <string name="nav_lane_middle_lanes">Orta şeritleri kullan</string>
+    <plurals name="nav_lane_right">
+        <item quantity="one">Sağ şeridi kullan</item>
+        <item quantity="other">Sağdaki %d şeridi kullan</item>
+    </plurals>
+    <string name="nav_to_go">kaldı</string>
+    <string name="privacy_policy">Gizlilik politikası</string>
+    <string name="privacy_policy_sub">Gearslip ne gönderir, kime ve neden</string>
+    <string name="settings_bt_address">Telefonun Bluetooth adresi</string>
+    <string name="settings_bt_address_hint">Android Ayarlar\'da Telefon hakkında bölümünden kopyala. Gearslip bunu arabaya iletir, böylece araba kablodaki telefonun eşlenen telefon olduğunu bilir.</string>
+    <string name="settings_bt_address_invalid">Bu bir Bluetooth adresi değil. 12:34:56:78:9A:BC gibi görünür.</string>
+    <string name="settings_bt_address_off">Ayarlanmadı. Yalnızca Gearslip bağlanınca Bluetooth\'u kesen bir araba için.</string>
+    <string name="settings_use_as_launcher">Başlatıcı olarak kullan</string>
+    <string name="settings_use_as_launcher_off">Bir araç ünitesi veya torpidodaki bir tablet için. Gearslip\'in araba ekranı bu cihazın ana ekranı olur.</string>
+    <string name="settings_use_as_launcher_on">Gearslip bu cihazın ana ekranı olabilir. Varsayılan ana ekran uygulaması altında seç.</string>
+    <string name="status_no_car">Telefon şarj oluyor ama hiçbir araba yanıt vermedi. Bazı kablolar yalnızca şarj eder; veri taşıyan bir kablo dene.</string>
+    <string name="status_no_car_graphene">Telefon şarj oluyor ama hiçbir araba yanıt vermedi. Güvenlik ve gizlilik altındaki USB-C bağlantı noktası denetiminin veriye izin verdiğini ve Yalnızca şarj olmadığını kontrol et.</string>
+    <string name="status_open_settings">Ayarları aç</string>
+    <string name="status_stuck_cable">Araba henüz Gearslip\'i göstermedi. Kabloyu çıkar, birkaç saniye bekle ve yeniden tak. Sürerse başka bir kablo veya USB bağlantı noktası dene ve günlüğü bir issue\'da paylaş.</string>
+    <string name="status_stuck_wireless">Araba henüz Gearslip\'i göstermedi. Arabayı kapatıp yeniden aç ya da kabloyla bağlan. Sürerse günlüğü bir issue\'da paylaş.</string>
+    <string name="update_installed_text">Hiçbir araba bağlı değilken Wi-Fi üzerinden yüklendi.</string>
+    <string name="update_installed_title">Gearslip %1$s sürümüne güncellendi</string>
+    <string name="update_silent">Güncellemeleri kendisi yüklesin</string>
+    <string name="update_silent_sub">Yalnızca tamamlanmış sürümler, Wi-Fi üzerinden, araba bağlı değilken</string>
 </resources>

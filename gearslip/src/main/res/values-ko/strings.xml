@@ -463,7 +463,7 @@
     <string name="media_press_play">재생을 누르면 멈춘 곳부터 이어서 들을 수 있고, 둘러보기에서 다른 곡을 찾을 수도 있습니다.</string>
 
     <string name="media_keeps_library">%1$s은(는) 라이브러리를 공개하지 않습니다.</string>
-    <string name="media_needs_access">휴대전화에서 알림 액세스를 허용하면 Gearslip이 제어할 수 있습니다. 설정 &gt; 알림 &gt; 알림 액세스에서 허용하세요.</string>
+    <string name="media_needs_access">알림 액세스 권한이 있으면 Gearslip으로 재생할 수 있습니다. 주차했을 때 휴대전화에서 허용하세요.</string>
     <string name="media_not_running">%1$s이(가) 실행 중이 아닙니다.</string>
     <string name="media_not_running_body">%1$s은(는) Gearslip 플레이어로 재생되지만, 휴대전화에서 열려 있을 때만 가능합니다. 한 번 열면 차량에서 계속 재생됩니다.</string>
     <string name="media_open_app">%1$s 열기</string>
@@ -653,7 +653,7 @@
     <string name="notif_title">알림</string>
     <string name="notif_clear_all">모두 지우기</string>
     <string name="notif_empty">아직 아무것도 없습니다. 휴대전화의 새 알림이 여기에 표시됩니다.</string>
-    <string name="notif_off">알림이 꺼져 있습니다. 휴대전화의 설정 &gt; 알림 &gt; 알림 액세스에서 Gearslip을 허용하세요.</string>
+    <string name="notif_off">여기에 알림을 표시하려면 Gearslip에 알림 액세스 권한이 필요합니다. 주차했을 때 휴대전화에서 허용하세요.</string>
     <string name="notif_replied">답장함</string>
 
     <!-- Messages -->
@@ -821,4 +821,73 @@
     <string name="settings_language">언어</string>
     <string name="settings_language_phone">휴대전화와 동일</string>
     <string name="player_next_chapter">다음 챕터</string>
+    <string name="allow_on_phone">휴대전화에서 허용</string>
+    <string name="app_all_apps">모든 앱</string>
+    <string name="bt_address_car_note">주차했을 때 휴대전화에서 설정 단계 하나를 마쳐 주세요.</string>
+    <string name="bt_address_card_body">일부 차량은 휴대전화의 블루투스 주소를 알 때만 연결이 유지됩니다. Android는 앱에 이 주소를 숨기므로 휴대전화 정보에서 복사하세요. 그곳에서 블루투스 주소를 길게 누르고 복사를 탭한 다음 돌아오세요.</string>
+    <string name="bt_address_card_title">%1$s이(가) 이 휴대전화를 알아보게 하기</string>
+    <string name="bt_address_not_now">나중에</string>
+    <string name="bt_address_open">휴대전화 정보 열기</string>
+    <string name="bt_address_type">직접 입력</string>
+    <string name="bt_address_use_body">Gearslip이 이 주소를 차량에 전달해, 차량이 이 휴대전화가 페어링된 휴대전화임을 알 수 있습니다.</string>
+    <string name="bt_address_use_title">이 블루투스 주소를 사용할까요?</string>
+    <string name="bt_address_your_car">차량</string>
+    <string name="car_apps_finding">앱을 찾는 중…</string>
+    <string name="car_apps_none">차량용 앱을 찾을 수 없습니다</string>
+    <string name="car_apps_sub">차량에 표시할 앱을 선택하세요</string>
+    <string name="car_audio_blocked">%1$s은(는) 다른 앱이 소리를 재생하지 못하게 하므로 Gearslip을 통해 차량에 전달되지 않습니다. 다른 음악 앱을 사용해 보세요.</string>
+    <string name="car_audio_switched">이 차량은 Gearslip이 실행되는 동안 블루투스 음악을 끄므로 이제 음악이 Gearslip을 통해 재생됩니다. 휴대전화에 표시되는 요청을 허용하세요.</string>
+    <string name="car_autoplay_note">차량이 연결되면 멈춘 곳부터 음악을 다시 재생합니다.</string>
+    <string name="car_density">차량 화면 밀도</string>
+    <string name="car_density_note">앱을 포함해 글자와 버튼이 커집니다. 크기를 보통으로 두고 200 DPI를 사용해 보세요. 적용하려면 차량을 다시 연결하거나 미리보기를 다시 여세요. 버튼이 잘리면 더 낮은 DPI나 차량 기본값을 선택하세요.</string>
+    <string name="car_directions_over_music">음악 채널로 길 안내</string>
+    <string name="car_directions_over_music_note">음성 안내 후 연결이 끊기거나 다시 시작되는 차량용입니다. Gearslip은 차량의 길 안내 채널 대신 각 안내를 음악에 섞어 재생합니다.</string>
+    <string name="car_experimental_note">아직 테스트 중인 기능입니다. 모든 차량에서 작동하지 않을 수 있습니다.</string>
+    <string name="car_player_beside_map_note">도킹 버튼을 탭했을 때 플레이어가 붙는 지도 쪽입니다.</string>
+    <string name="carset_advanced">고급</string>
+    <string name="carset_experimental_heading">실험실</string>
+    <string name="carset_fit_needs_car">이 조정을 저장하려면 차량을 연결하세요.</string>
+    <string name="choice_density_car">차량 기본값</string>
+    <string name="choice_density_dpi">%1$d DPI</string>
+    <string name="dialer_missed">부재중 · %1$s</string>
+    <string name="dialer_no_recents">최근 통화가 없습니다.</string>
+    <string name="dialer_recents">최근 기록</string>
+    <string name="dialer_recents_needs_permission">최근 통화를 표시하려면 Gearslip에 통화 기록 권한이 필요합니다.</string>
+    <string name="help_bluetooth_first">케이블보다 블루투스를 먼저 연결하세요.</string>
+    <string name="help_bluetooth_first_detail">블루투스로 음악이 연결되지 않으면 차량이 먼저 블루투스로 휴대전화를 찾게 한 다음 케이블을 연결하세요. 케이블이 먼저 연결되면 혼란을 겪는 차량이 있습니다.</string>
+    <string name="help_usb_data">USB 데이터를 허용하세요.</string>
+    <string name="help_usb_data_detail">GrapheneOS는 USB 포트의 데이터를 차단할 수 있습니다. USB-C 포트 제어가 충전 전용으로 설정되어 있으면 데이터 케이블을 써도 차량이 휴대전화를 인식하지 못합니다. 데이터를 허용하도록 설정하세요.</string>
+    <string name="launcher_in_car">이 기기는 차량에 연결되어 있어 Gearslip이 차량 화면에 표시됩니다.</string>
+    <string name="launcher_open_gearslip">Gearslip 열기</string>
+    <string name="nav_arrival">도착</string>
+    <string name="nav_lane_any">아무 차로</string>
+    <string name="nav_lane_from_left">왼쪽에서 %1$d번째 차로 이용</string>
+    <string name="nav_lane_from_right">오른쪽에서 %1$d번째 차로 이용</string>
+    <plurals name="nav_lane_left">
+        <item quantity="other">왼쪽 %d개 차로 이용</item>
+    </plurals>
+    <string name="nav_lane_middle">가운데 차로 이용</string>
+    <string name="nav_lane_middle_lanes">가운데 차로들 이용</string>
+    <plurals name="nav_lane_right">
+        <item quantity="other">오른쪽 %d개 차로 이용</item>
+    </plurals>
+    <string name="nav_to_go">남음</string>
+    <string name="privacy_policy">개인정보처리방침</string>
+    <string name="privacy_policy_sub">Gearslip이 무엇을, 누구에게, 왜 보내는지</string>
+    <string name="settings_bt_address">휴대전화 블루투스 주소</string>
+    <string name="settings_bt_address_hint">Android 설정의 휴대전화 정보에서 복사하세요. Gearslip이 이 주소를 차량에 전달해, 케이블로 연결된 휴대전화가 페어링된 휴대전화임을 알립니다.</string>
+    <string name="settings_bt_address_invalid">블루투스 주소가 아닙니다. 12:34:56:78:9A:BC와 같은 형식입니다.</string>
+    <string name="settings_bt_address_off">설정 안 됨. Gearslip이 연결될 때 블루투스를 끊는 차량에만 필요합니다.</string>
+    <string name="settings_use_as_launcher">런처로 사용</string>
+    <string name="settings_use_as_launcher_off">헤드 유닛이나 대시보드 태블릿용입니다. Gearslip의 차량 화면이 이 기기의 홈 화면이 됩니다.</string>
+    <string name="settings_use_as_launcher_on">Gearslip을 이 기기의 홈 화면으로 쓸 수 있습니다. 기본 홈 앱에서 선택하세요.</string>
+    <string name="status_no_car">휴대전화가 충전 중이지만 응답한 차량이 없습니다. 충전만 되는 케이블도 있으니 데이터를 전송하는 케이블을 사용해 보세요.</string>
+    <string name="status_no_car_graphene">휴대전화가 충전 중이지만 응답한 차량이 없습니다. 보안 및 개인정보 보호의 USB-C 포트 제어가 데이터를 허용하고 충전 전용이 아닌지 확인하세요.</string>
+    <string name="status_open_settings">설정 열기</string>
+    <string name="status_stuck_cable">차량에 아직 Gearslip이 표시되지 않았습니다. 케이블을 뽑고 몇 초 기다린 다음 다시 꽂으세요. 계속 그러면 다른 케이블이나 USB 포트를 사용해 보고 이슈에 로그를 공유하세요.</string>
+    <string name="status_stuck_wireless">차량에 아직 Gearslip이 표시되지 않았습니다. 차량을 껐다가 다시 켜거나 케이블로 연결하세요. 계속 그러면 이슈에 로그를 공유하세요.</string>
+    <string name="update_installed_text">차량이 연결되지 않은 동안 Wi-Fi로 설치했습니다.</string>
+    <string name="update_installed_title">Gearslip이 %1$s(으)로 업데이트됨</string>
+    <string name="update_silent">업데이트 자동 설치</string>
+    <string name="update_silent_sub">정식 버전만, Wi-Fi에서, 차량이 연결되지 않았을 때</string>
 </resources>

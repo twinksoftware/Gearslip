@@ -464,7 +464,7 @@
     <string name="media_press_play">Tryck på spela för att fortsätta där du slutade, eller hitta något i Bläddra.</string>
 
     <string name="media_keeps_library">%1$s håller sitt bibliotek för sig själv.</string>
-    <string name="media_needs_access">Gearslip kan ändå styra den när den har aviseringsåtkomst på telefonen. Tillåt det under Inställningar &gt; Aviseringar &gt; Aviseringsåtkomst.</string>
+    <string name="media_needs_access">Gearslip kan ändå spela den när den har åtkomst till aviseringar. Tillåt det på telefonen när du har parkerat.</string>
     <string name="media_not_running">%1$s körs inte.</string>
     <string name="media_not_running_body">%1$s spelas via Gearslips egen spelare, men bara medan appen är öppen på telefonen. Öppna den en gång så fortsätter den spela här i bilen.</string>
     <string name="media_open_app">Öppna %1$s</string>
@@ -655,7 +655,7 @@
     <string name="notif_title">Aviseringar</string>
     <string name="notif_clear_all">Rensa alla</string>
     <string name="notif_empty">Inget än. Nya aviseringar från telefonen visas här.</string>
-    <string name="notif_off">Aviseringar är av. Tillåt Gearslip under Inställningar &gt; Aviseringar &gt; Aviseringsåtkomst på telefonen.</string>
+    <string name="notif_off">Gearslip behöver åtkomst till aviseringar för att visa dem här. Tillåt det på telefonen när du har parkerat.</string>
     <string name="notif_replied">Besvarad</string>
 
     <!-- Messages -->
@@ -829,4 +829,75 @@
     <string name="settings_language">Språk</string>
     <string name="settings_language_phone">Samma som telefonen</string>
     <string name="player_next_chapter">Nästa kapitel</string>
+    <string name="allow_on_phone">Tillåt på telefonen</string>
+    <string name="app_all_apps">Alla appar</string>
+    <string name="bt_address_car_note">Gör klart ett steg i inställningen på telefonen när du har parkerat.</string>
+    <string name="bt_address_card_body">Vissa bilar håller bara anslutningen om de känner till telefonens Bluetooth-adress. Android döljer den för appar, så kopiera den från Om telefonen. Håll ned Bluetooth-adressen där, tryck på Kopiera och kom tillbaka.</string>
+    <string name="bt_address_card_title">Hjälp %1$s att känna igen telefonen</string>
+    <string name="bt_address_not_now">Inte nu</string>
+    <string name="bt_address_open">Öppna Om telefonen</string>
+    <string name="bt_address_type">Skriv in den i stället</string>
+    <string name="bt_address_use_body">Gearslip skickar den till bilen så att den vet att det här är den parkopplade telefonen.</string>
+    <string name="bt_address_use_title">Använda den här Bluetooth-adressen?</string>
+    <string name="bt_address_your_car">din bil</string>
+    <string name="car_apps_finding">Letar efter appar…</string>
+    <string name="car_apps_none">Inga bilappar hittades</string>
+    <string name="car_apps_sub">Välj vilka appar som visas i bilen</string>
+    <string name="car_audio_blocked">%1$s låter inte andra appar spela upp dess ljud, så det når inte bilen via Gearslip. Prova en annan musikapp.</string>
+    <string name="car_audio_switched">Den här bilen stänger av Bluetooth-musik medan Gearslip körs, så musiken går nu via Gearslip. Godkänn frågan på telefonen.</string>
+    <string name="car_autoplay_note">Fortsätter musiken där den slutade så fort bilen ansluter.</string>
+    <string name="car_density">Bilskärmens täthet</string>
+    <string name="car_density_note">Större text och kontroller, även i appar. Prova 200 DPI med Storlek på Normal. Anslut bilen igen eller öppna förhandsvisningen igen för att tillämpa det. Om kontroller klipps av, välj lägre DPI eller Från bilen.</string>
+    <string name="car_directions_over_music">Vägbeskrivning via musikkanalen</string>
+    <string name="car_directions_over_music_note">För en bil som tappar anslutningen eller startar om efter en uppläst instruktion. Gearslip blandar in varje instruktion i musiken i stället för att använda bilens navigeringskanal.</string>
+    <string name="car_experimental_note">Funktioner som fortfarande testas. De kanske inte fungerar i alla bilar.</string>
+    <string name="car_player_beside_map_note">Den sida av kartan som spelaren dockas till när du trycker på dess dockningsknapp.</string>
+    <string name="carset_advanced">Avancerat</string>
+    <string name="carset_experimental_heading">Experimentellt</string>
+    <string name="carset_fit_needs_car">Anslut en bil för att spara den här justeringen för den.</string>
+    <string name="choice_density_car">Från bilen</string>
+    <string name="choice_density_dpi">%1$d DPI</string>
+    <string name="dialer_missed">Missat · %1$s</string>
+    <string name="dialer_no_recents">Inga senaste samtal.</string>
+    <string name="dialer_recents">Senaste</string>
+    <string name="dialer_recents_needs_permission">Gearslip behöver behörigheten Samtalsloggar för att visa senaste samtal.</string>
+    <string name="help_bluetooth_first">Anslut Bluetooth före kabeln.</string>
+    <string name="help_bluetooth_first_detail">Om musik över Bluetooth inte ansluter, låt bilen hitta telefonen via Bluetooth först och anslut sedan kabeln. Vissa bilar blir förvirrade när kabeln kommer först.</string>
+    <string name="help_usb_data">Tillåt USB-data.</string>
+    <string name="help_usb_data_detail">GrapheneOS kan blockera data på USB-porten. Om USB-C-portkontroll står på Endast laddning ser bilen aldrig telefonen, inte ens med en datakabel. Ställ in den så att data tillåts.</string>
+    <string name="launcher_in_car">Den här enheten är ansluten till en bil, så Gearslip visas på bilens skärm.</string>
+    <string name="launcher_open_gearslip">Öppna Gearslip</string>
+    <string name="nav_arrival">ankomst</string>
+    <string name="nav_lane_any">Valfritt körfält</string>
+    <string name="nav_lane_from_left">Använd körfält %1$d från vänster</string>
+    <string name="nav_lane_from_right">Använd körfält %1$d från höger</string>
+    <plurals name="nav_lane_left">
+        <item quantity="one">Använd vänster körfält</item>
+        <item quantity="other">Använd de %d vänstra körfälten</item>
+    </plurals>
+    <string name="nav_lane_middle">Använd mittenkörfältet</string>
+    <string name="nav_lane_middle_lanes">Använd mittenkörfälten</string>
+    <plurals name="nav_lane_right">
+        <item quantity="one">Använd höger körfält</item>
+        <item quantity="other">Använd de %d högra körfälten</item>
+    </plurals>
+    <string name="nav_to_go">kvar</string>
+    <string name="privacy_policy">Integritetspolicy</string>
+    <string name="privacy_policy_sub">Vad Gearslip skickar, till vem och varför</string>
+    <string name="settings_bt_address">Telefonens Bluetooth-adress</string>
+    <string name="settings_bt_address_hint">Kopiera den från Androids inställningar, under Om telefonen. Gearslip skickar den till bilen så att den vet att telefonen i kabeln är den parkopplade.</string>
+    <string name="settings_bt_address_invalid">Det är ingen Bluetooth-adress. Den ser ut som 12:34:56:78:9A:BC.</string>
+    <string name="settings_bt_address_off">Inte inställd. Bara för en bil som stänger av Bluetooth när Gearslip ansluter.</string>
+    <string name="settings_use_as_launcher">Använd som startprogram</string>
+    <string name="settings_use_as_launcher_off">För en bilstereo eller en surfplatta på instrumentbrädan. Gearslips bilskärm blir enhetens startskärm.</string>
+    <string name="settings_use_as_launcher_on">Gearslip kan vara enhetens startskärm. Välj den under Standardapp för startskärm.</string>
+    <string name="status_no_car">Telefonen laddas, men ingen bil har svarat. Vissa kablar laddar bara; prova en som för över data.</string>
+    <string name="status_no_car_graphene">Telefonen laddas, men ingen bil har svarat. Kontrollera att USB-C-portkontroll under Säkerhet och integritet tillåter data och inte står på Endast laddning.</string>
+    <string name="status_open_settings">Öppna inställningar</string>
+    <string name="status_stuck_cable">Bilen visar inte Gearslip än. Dra ur kabeln, vänta några sekunder och sätt i den igen. Om det fortsätter, prova en annan kabel eller USB-port och dela loggen i ett ärende.</string>
+    <string name="status_stuck_wireless">Bilen visar inte Gearslip än. Stäng av bilen och starta den igen, eller anslut med kabel. Om det fortsätter, dela loggen i ett ärende.</string>
+    <string name="update_installed_text">Installerad via wifi medan ingen bil var ansluten.</string>
+    <string name="update_installed_title">Gearslip uppdaterad till %1$s</string>
+    <string name="update_silent">Installera uppdateringar själv</string>
+    <string name="update_silent_sub">Bara färdiga versioner, via wifi, när ingen bil är ansluten</string>
 </resources>

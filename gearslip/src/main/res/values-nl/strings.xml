@@ -464,7 +464,7 @@
     <string name="media_press_play">Druk op afspelen om verder te gaan waar je was, of zoek iets in Bladeren.</string>
 
     <string name="media_keeps_library">%1$s houdt zijn bibliotheek voor zichzelf.</string>
-    <string name="media_needs_access">Gearslip kan het toch bedienen zodra het meldingstoegang heeft op de telefoon. Sta dat toe onder Instellingen &gt; Meldingen &gt; Meldingstoegang.</string>
+    <string name="media_needs_access">Gearslip kan het toch afspelen zodra het toegang tot meldingen heeft. Sta het toe op de telefoon als je geparkeerd staat.</string>
     <string name="media_not_running">%1$s draait niet.</string>
     <string name="media_not_running_body">%1$s speelt via de speler van Gearslip, maar alleen zolang het open is op de telefoon. Open het één keer en het blijft hier in de auto spelen.</string>
     <string name="media_open_app">%1$s openen</string>
@@ -655,7 +655,7 @@
     <string name="notif_title">Meldingen</string>
     <string name="notif_clear_all">Alles wissen</string>
     <string name="notif_empty">Nog niets. Nieuwe meldingen van de telefoon verschijnen hier.</string>
-    <string name="notif_off">Meldingen staan uit. Sta Gearslip toe onder Instellingen &gt; Meldingen &gt; Meldingstoegang op de telefoon.</string>
+    <string name="notif_off">Gearslip heeft toegang tot meldingen nodig om ze hier te tonen. Sta het toe op de telefoon als je geparkeerd staat.</string>
     <string name="notif_replied">Beantwoord</string>
 
     <!-- Messages -->
@@ -829,4 +829,75 @@
     <string name="settings_language">Taal</string>
     <string name="settings_language_phone">Zelfde als de telefoon</string>
     <string name="player_next_chapter">Volgend hoofdstuk</string>
+    <string name="allow_on_phone">Toestaan op telefoon</string>
+    <string name="app_all_apps">Alle apps</string>
+    <string name="bt_address_car_note">Rond één instelstap af op je telefoon als je geparkeerd staat.</string>
+    <string name="bt_address_card_body">Sommige auto\'s blijven alleen verbonden als ze het bluetooth-adres van de telefoon kennen. Android houdt het voor apps verborgen, dus kopieer het uit Over de telefoon. Houd daar het bluetooth-adres ingedrukt, tik op Kopiëren en kom terug.</string>
+    <string name="bt_address_card_title">Help %1$s deze telefoon te herkennen</string>
+    <string name="bt_address_not_now">Niet nu</string>
+    <string name="bt_address_open">Over de telefoon openen</string>
+    <string name="bt_address_type">Zelf typen</string>
+    <string name="bt_address_use_body">Gearslip geeft het door aan je auto, zodat die weet dat dit de gekoppelde telefoon is.</string>
+    <string name="bt_address_use_title">Dit bluetooth-adres gebruiken?</string>
+    <string name="bt_address_your_car">je auto</string>
+    <string name="car_apps_finding">Apps zoeken…</string>
+    <string name="car_apps_none">Geen auto-apps gevonden</string>
+    <string name="car_apps_sub">Kies welke apps in de auto verschijnen</string>
+    <string name="car_audio_blocked">%1$s laat andere apps zijn geluid niet afspelen, dus het bereikt de auto niet via Gearslip. Probeer een andere muziek-app.</string>
+    <string name="car_audio_switched">Deze auto zet bluetooth-muziek uit zolang Gearslip draait, dus de muziek gaat nu via Gearslip. Sta de melding op je telefoon toe.</string>
+    <string name="car_autoplay_note">Speelt de muziek verder waar die stopte zodra de auto verbindt.</string>
+    <string name="car_density">Schermdichtheid van de auto</string>
+    <string name="car_density_note">Grotere tekst en bediening, ook in apps. Probeer 200 DPI met Grootte op Normaal. Verbind de auto opnieuw of open de preview opnieuw om het toe te passen. Valt de bediening weg, kies dan minder DPI of Van de auto.</string>
+    <string name="car_directions_over_music">Aanwijzingen via het muziekkanaal</string>
+    <string name="car_directions_over_music_note">Voor een auto die de verbinding verbreekt of herstart na een gesproken aanwijzing. Gearslip mengt elke aanwijzing in de muziek in plaats van het navigatiekanaal van de auto te gebruiken.</string>
+    <string name="car_experimental_note">Functies die nog getest worden. Ze werken misschien niet in elke auto.</string>
+    <string name="car_player_beside_map_note">De kant van de kaart waar de speler aanmeert als je op de aanmeerknop tikt.</string>
+    <string name="carset_advanced">Geavanceerd</string>
+    <string name="carset_experimental_heading">Experimenteel</string>
+    <string name="carset_fit_needs_car">Verbind een auto om deze aanpassing ervoor op te slaan.</string>
+    <string name="choice_density_car">Van de auto</string>
+    <string name="choice_density_dpi">%1$d DPI</string>
+    <string name="dialer_missed">Gemist · %1$s</string>
+    <string name="dialer_no_recents">Geen recente oproepen.</string>
+    <string name="dialer_recents">Recent</string>
+    <string name="dialer_recents_needs_permission">Gearslip heeft de toestemming Gesprekslijsten nodig om recente oproepen te tonen.</string>
+    <string name="help_bluetooth_first">Verbind bluetooth vóór de kabel.</string>
+    <string name="help_bluetooth_first_detail">Als muziek via bluetooth niet verbindt, laat de auto de telefoon dan eerst via bluetooth vinden en steek daarna de kabel in. Sommige auto\'s raken in de war als de kabel eerst komt.</string>
+    <string name="help_usb_data">Sta USB-data toe.</string>
+    <string name="help_usb_data_detail">GrapheneOS kan data op de USB-poort blokkeren. Staat USB-C-poortbeheer op Alleen opladen, dan ziet de auto de telefoon nooit, zelfs niet met een datakabel. Zet het op data toestaan.</string>
+    <string name="launcher_in_car">Dit apparaat is met een auto verbonden, dus Gearslip staat op het scherm van de auto.</string>
+    <string name="launcher_open_gearslip">Gearslip openen</string>
+    <string name="nav_arrival">aankomst</string>
+    <string name="nav_lane_any">Elke rijstrook</string>
+    <string name="nav_lane_from_left">Neem rijstrook %1$d van links</string>
+    <string name="nav_lane_from_right">Neem rijstrook %1$d van rechts</string>
+    <plurals name="nav_lane_left">
+        <item quantity="one">Neem de linkerrijstrook</item>
+        <item quantity="other">Neem de linker %d rijstroken</item>
+    </plurals>
+    <string name="nav_lane_middle">Neem de middelste rijstrook</string>
+    <string name="nav_lane_middle_lanes">Neem de middelste rijstroken</string>
+    <plurals name="nav_lane_right">
+        <item quantity="one">Neem de rechterrijstrook</item>
+        <item quantity="other">Neem de rechter %d rijstroken</item>
+    </plurals>
+    <string name="nav_to_go">te gaan</string>
+    <string name="privacy_policy">Privacybeleid</string>
+    <string name="privacy_policy_sub">Wat Gearslip verstuurt, naar wie en waarom</string>
+    <string name="settings_bt_address">Bluetooth-adres van de telefoon</string>
+    <string name="settings_bt_address_hint">Kopieer het uit de Android-instellingen, onder Over de telefoon. Gearslip geeft het door aan de auto, zodat die weet dat de telefoon aan de kabel de gekoppelde is.</string>
+    <string name="settings_bt_address_invalid">Dat is geen bluetooth-adres. Het ziet eruit als 12:34:56:78:9A:BC.</string>
+    <string name="settings_bt_address_off">Niet ingesteld. Alleen voor een auto die bluetooth verbreekt als Gearslip verbindt.</string>
+    <string name="settings_use_as_launcher">Als launcher gebruiken</string>
+    <string name="settings_use_as_launcher_off">Voor een autoradio of een tablet op het dashboard. Het autoscherm van Gearslip wordt het startscherm van dit apparaat.</string>
+    <string name="settings_use_as_launcher_on">Gearslip kan het startscherm van dit apparaat zijn. Kies het onder Standaard startscherm-app.</string>
+    <string name="status_no_car">De telefoon laadt, maar geen auto heeft geantwoord. Sommige kabels laden alleen op; probeer er een die data doorgeeft.</string>
+    <string name="status_no_car_graphene">De telefoon laadt, maar geen auto heeft geantwoord. Controleer of USB-C-poortbeheer, onder Beveiliging en privacy, data toestaat en niet op Alleen opladen staat.</string>
+    <string name="status_open_settings">Instellingen openen</string>
+    <string name="status_stuck_cable">De auto toont Gearslip nog niet. Haal de kabel eruit, wacht een paar seconden en steek hem er weer in. Blijft het gebeuren, probeer dan een andere kabel of USB-poort en deel het logboek in een issue.</string>
+    <string name="status_stuck_wireless">De auto toont Gearslip nog niet. Zet de auto uit en weer aan, of verbind met een kabel. Blijft het gebeuren, deel dan het logboek in een issue.</string>
+    <string name="update_installed_text">Via wifi geïnstalleerd terwijl er geen auto verbonden was.</string>
+    <string name="update_installed_title">Gearslip bijgewerkt naar %1$s</string>
+    <string name="update_silent">Updates zelf installeren</string>
+    <string name="update_silent_sub">Alleen definitieve versies, via wifi, als er geen auto verbonden is</string>
 </resources>

@@ -463,7 +463,7 @@
     <string name="media_press_play">按播放键从上次停下的地方继续，或者在“浏览”中找点别的。</string>
 
     <string name="media_keeps_library">%1$s 不对外开放媒体库。</string>
-    <string name="media_needs_access">只要在手机上获得通知使用权，Gearslip 仍然可以控制它。请在“设置”&gt;“通知”&gt;“通知使用权”中允许。</string>
+    <string name="media_needs_access">Gearslip 获得通知使用权后仍可播放它。请在停车后到手机上允许。</string>
     <string name="media_not_running">%1$s 没有运行。</string>
     <string name="media_not_running_body">%1$s 通过 Gearslip 自己的播放器播放，但只在它在手机上打开时才行。打开一次，它就会在车上继续播放。</string>
     <string name="media_open_app">打开 %1$s</string>
@@ -653,7 +653,7 @@
     <string name="notif_title">通知</string>
     <string name="notif_clear_all">全部清除</string>
     <string name="notif_empty">暂时没有内容。手机上的新通知会显示在这里。</string>
-    <string name="notif_off">通知已关闭。请在手机的“设置”&gt;“通知”&gt;“通知使用权”中允许 Gearslip。</string>
+    <string name="notif_off">Gearslip 需要通知使用权才能在这里显示通知。请在停车后到手机上允许。</string>
     <string name="notif_replied">已回复</string>
 
     <!-- Messages -->
@@ -821,4 +821,73 @@
     <string name="settings_language">语言</string>
     <string name="settings_language_phone">与手机相同</string>
     <string name="player_next_chapter">下一章</string>
+    <string name="allow_on_phone">在手机上允许</string>
+    <string name="app_all_apps">所有应用</string>
+    <string name="bt_address_car_note">停车后，请在手机上完成一个设置步骤。</string>
+    <string name="bt_address_card_body">有些汽车只有知道手机的蓝牙地址才会保持连接。Android 不让应用读取它，所以请从“关于手机”中复制。在那里长按蓝牙地址，点按“复制”，然后返回。</string>
+    <string name="bt_address_card_title">让%1$s认出这部手机</string>
+    <string name="bt_address_not_now">以后再说</string>
+    <string name="bt_address_open">打开“关于手机”</string>
+    <string name="bt_address_type">改为手动输入</string>
+    <string name="bt_address_use_body">Gearslip 会把它传给你的汽车，让汽车知道这就是已配对的手机。</string>
+    <string name="bt_address_use_title">使用这个蓝牙地址？</string>
+    <string name="bt_address_your_car">你的汽车</string>
+    <string name="car_apps_finding">正在查找应用…</string>
+    <string name="car_apps_none">未找到车载应用</string>
+    <string name="car_apps_sub">选择在车上显示哪些应用</string>
+    <string name="car_audio_blocked">%1$s 不允许其他应用播放它的声音，所以无法通过 Gearslip 传到车上。请换一个音乐应用试试。</string>
+    <string name="car_audio_switched">这辆车在 Gearslip 运行时会关闭蓝牙音乐，所以现在音乐改由 Gearslip 传输。请在手机上允许弹出的请求。</string>
+    <string name="car_autoplay_note">汽车连接后，从上次停下的地方继续播放音乐。</string>
+    <string name="car_density">车载屏幕密度</string>
+    <string name="car_density_note">文字和控件更大，应用内也一样。试试在尺寸为“普通”时设为 200 DPI。重新连接汽车或重新打开预览即可生效。如果控件被裁切，请选择更低的 DPI 或“跟随汽车”。</string>
+    <string name="car_directions_over_music">通过音乐声道播报导航</string>
+    <string name="car_directions_over_music_note">适用于语音播报后会断开连接或重启的汽车。Gearslip 会把每条播报混入音乐，而不使用汽车的导航声道。</string>
+    <string name="car_experimental_note">仍在测试中的功能。不一定适用于所有汽车。</string>
+    <string name="car_player_beside_map_note">点按停靠按钮时播放器停靠到的地图一侧。</string>
+    <string name="carset_advanced">高级</string>
+    <string name="carset_experimental_heading">实验性功能</string>
+    <string name="carset_fit_needs_car">连接汽车后才能为它保存此调整。</string>
+    <string name="choice_density_car">跟随汽车</string>
+    <string name="choice_density_dpi">%1$d DPI</string>
+    <string name="dialer_missed">未接 · %1$s</string>
+    <string name="dialer_no_recents">没有最近通话。</string>
+    <string name="dialer_recents">最近</string>
+    <string name="dialer_recents_needs_permission">Gearslip 需要“通话记录”权限才能列出最近通话。</string>
+    <string name="help_bluetooth_first">先连蓝牙，再插线。</string>
+    <string name="help_bluetooth_first_detail">如果蓝牙音乐连不上，请先让汽车通过蓝牙找到手机，然后再插上数据线。有些汽车在先插线时会出错。</string>
+    <string name="help_usb_data">允许 USB 数据传输。</string>
+    <string name="help_usb_data_detail">GrapheneOS 可以阻止 USB 端口的数据传输。如果 USB-C 端口控制设为“仅充电”，即使使用数据线，汽车也永远看不到手机。请设为允许数据传输。</string>
+    <string name="launcher_in_car">此设备已连接到汽车，所以 Gearslip 显示在汽车屏幕上。</string>
+    <string name="launcher_open_gearslip">打开 Gearslip</string>
+    <string name="nav_arrival">到达</string>
+    <string name="nav_lane_any">任意车道</string>
+    <string name="nav_lane_from_left">走左起第 %1$d 条车道</string>
+    <string name="nav_lane_from_right">走右起第 %1$d 条车道</string>
+    <plurals name="nav_lane_left">
+        <item quantity="other">走左侧 %d 条车道</item>
+    </plurals>
+    <string name="nav_lane_middle">走中间车道</string>
+    <string name="nav_lane_middle_lanes">走中间几条车道</string>
+    <plurals name="nav_lane_right">
+        <item quantity="other">走右侧 %d 条车道</item>
+    </plurals>
+    <string name="nav_to_go">剩余</string>
+    <string name="privacy_policy">隐私政策</string>
+    <string name="privacy_policy_sub">Gearslip 发送什么、发给谁、为什么</string>
+    <string name="settings_bt_address">手机的蓝牙地址</string>
+    <string name="settings_bt_address_hint">从 Android 设置的“关于手机”中复制。Gearslip 会把它传给汽车，让汽车知道连着数据线的手机就是已配对的那部。</string>
+    <string name="settings_bt_address_invalid">这不是蓝牙地址。蓝牙地址形如 12:34:56:78:9A:BC。</string>
+    <string name="settings_bt_address_off">未设置。仅用于 Gearslip 连接时会断开蓝牙的汽车。</string>
+    <string name="settings_use_as_launcher">用作启动器</string>
+    <string name="settings_use_as_launcher_off">适用于车机或仪表台上的平板。Gearslip 的车载界面会成为此设备的主屏幕。</string>
+    <string name="settings_use_as_launcher_on">Gearslip 可以作为此设备的主屏幕。请在“默认主屏幕应用”中选择它。</string>
+    <string name="status_no_car">手机正在充电，但没有汽车响应。有些数据线只能充电；请换一根能传输数据的线。</string>
+    <string name="status_no_car_graphene">手机正在充电，但没有汽车响应。请检查“安全和隐私”中的 USB-C 端口控制是否允许数据传输，而不是设为“仅充电”。</string>
+    <string name="status_open_settings">打开设置</string>
+    <string name="status_stuck_cable">汽车还没有显示 Gearslip。拔下数据线，等几秒钟后重新插上。如果反复出现，请换一根数据线或 USB 接口，并在 issue 中分享日志。</string>
+    <string name="status_stuck_wireless">汽车还没有显示 Gearslip。请关闭汽车再重新启动，或改用数据线连接。如果反复出现，请在 issue 中分享日志。</string>
+    <string name="update_installed_text">已在未连接汽车时通过 Wi-Fi 安装。</string>
+    <string name="update_installed_title">Gearslip 已更新到 %1$s</string>
+    <string name="update_silent">自动安装更新</string>
+    <string name="update_silent_sub">仅正式版本，通过 Wi-Fi，在未连接汽车时安装</string>
 </resources>

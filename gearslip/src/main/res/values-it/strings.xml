@@ -465,7 +465,7 @@
     <string name="media_press_play">Premi play per riprendere da dove eri, o trova qualcosa in Sfoglia.</string>
 
     <string name="media_keeps_library">%1$s tiene la sua libreria per sé.</string>
-    <string name="media_needs_access">Gearslip può comunque controllarla se ha l’accesso alle notifiche sul telefono. Consentilo in Impostazioni &gt; Notifiche &gt; Accesso alle notifiche.</string>
+    <string name="media_needs_access">Gearslip può comunque riprodurlo appena ha l\'accesso alle notifiche. Consentilo sul telefono quando sei parcheggiato.</string>
     <string name="media_not_running">%1$s non è in esecuzione.</string>
     <string name="media_not_running_body">%1$s suona tramite il lettore di Gearslip, ma solo mentre è aperta sul telefono. Aprila una volta e continua a suonare qui in auto.</string>
     <string name="media_open_app">Apri %1$s</string>
@@ -657,7 +657,7 @@
     <string name="notif_title">Notifiche</string>
     <string name="notif_clear_all">Cancella tutto</string>
     <string name="notif_empty">Ancora niente. Le nuove notifiche del telefono compariranno qui.</string>
-    <string name="notif_off">Le notifiche sono disattivate. Consenti Gearslip in Impostazioni &gt; Notifiche &gt; Accesso alle notifiche sul telefono.</string>
+    <string name="notif_off">Gearslip ha bisogno dell\'accesso alle notifiche per mostrarle qui. Consentilo sul telefono quando sei parcheggiato.</string>
     <string name="notif_replied">Risposto</string>
 
     <!-- Messages -->
@@ -837,4 +837,77 @@
     <string name="settings_language">Lingua</string>
     <string name="settings_language_phone">Come il telefono</string>
     <string name="player_next_chapter">Capitolo successivo</string>
+    <string name="allow_on_phone">Consenti sul telefono</string>
+    <string name="app_all_apps">Tutte le app</string>
+    <string name="bt_address_car_note">Completa un passaggio di configurazione sul telefono quando sei parcheggiato.</string>
+    <string name="bt_address_card_body">Alcune auto restano connesse solo se conoscono l\'indirizzo Bluetooth del telefono. Android lo nasconde alle app, quindi copialo da Informazioni sul telefono. Tieni premuto l\'indirizzo Bluetooth, tocca Copia e torna qui.</string>
+    <string name="bt_address_card_title">Aiuta %1$s a riconoscere questo telefono</string>
+    <string name="bt_address_not_now">Non ora</string>
+    <string name="bt_address_open">Apri Informazioni sul telefono</string>
+    <string name="bt_address_type">Scrivilo a mano</string>
+    <string name="bt_address_use_body">Gearslip lo passa alla tua auto, così sa che questo è il telefono associato.</string>
+    <string name="bt_address_use_title">Usare questo indirizzo Bluetooth?</string>
+    <string name="bt_address_your_car">la tua auto</string>
+    <string name="car_apps_finding">Ricerca delle app…</string>
+    <string name="car_apps_none">Nessuna app per auto trovata</string>
+    <string name="car_apps_sub">Scegli quali app compaiono in auto</string>
+    <string name="car_audio_blocked">%1$s non lascia ad altre app riprodurre il suo audio, quindi non arriva all\'auto tramite Gearslip. Prova un\'altra app di musica.</string>
+    <string name="car_audio_switched">Quest\'auto spegne la musica Bluetooth mentre Gearslip è attivo, quindi ora la musica passa da Gearslip. Consenti la richiesta sul telefono.</string>
+    <string name="car_autoplay_note">Riprende la musica da dove si era fermata appena l\'auto si connette.</string>
+    <string name="car_density">Densità dello schermo dell\'auto</string>
+    <string name="car_density_note">Testo e comandi più grandi, anche nelle app. Prova 200 DPI con Dimensione su Normale. Ricollega l\'auto o riapri l\'anteprima per applicarlo. Se i comandi vengono tagliati, scegli meno DPI o Dall\'auto.</string>
+    <string name="car_directions_over_music">Indicazioni sul canale musica</string>
+    <string name="car_directions_over_music_note">Per un\'auto che si disconnette o si riavvia dopo un\'indicazione vocale. Gearslip mescola ogni indicazione nella musica invece di usare il canale di navigazione dell\'auto.</string>
+    <string name="car_experimental_note">Funzioni ancora in prova. Potrebbero non funzionare su tutte le auto.</string>
+    <string name="car_player_beside_map_note">Il lato della mappa a cui si aggancia il player quando tocchi il suo pulsante di aggancio.</string>
+    <string name="carset_advanced">Avanzate</string>
+    <string name="carset_experimental_heading">Sperimentale</string>
+    <string name="carset_fit_needs_car">Collega un\'auto per salvare questa regolazione per lei.</string>
+    <string name="choice_density_car">Dall\'auto</string>
+    <string name="choice_density_dpi">%1$d DPI</string>
+    <string name="dialer_missed">Persa · %1$s</string>
+    <string name="dialer_no_recents">Nessuna chiamata recente.</string>
+    <string name="dialer_recents">Recenti</string>
+    <string name="dialer_recents_needs_permission">Gearslip ha bisogno dell\'autorizzazione Registri chiamate per mostrare le chiamate recenti.</string>
+    <string name="help_bluetooth_first">Collega il Bluetooth prima del cavo.</string>
+    <string name="help_bluetooth_first_detail">Se la musica via Bluetooth non si collega, lascia che l\'auto trovi prima il telefono via Bluetooth, poi collega il cavo. Alcune auto si confondono quando il cavo arriva per primo.</string>
+    <string name="help_usb_data">Consenti i dati USB.</string>
+    <string name="help_usb_data_detail">GrapheneOS può bloccare i dati sulla porta USB. Se il controllo della porta USB-C è su Solo ricarica, l\'auto non vede mai il telefono, anche con un cavo dati. Impostalo per consentire i dati.</string>
+    <string name="launcher_in_car">Questo dispositivo è collegato a un\'auto, quindi Gearslip è sullo schermo dell\'auto.</string>
+    <string name="launcher_open_gearslip">Apri Gearslip</string>
+    <string name="nav_arrival">arrivo</string>
+    <string name="nav_lane_any">Qualsiasi corsia</string>
+    <string name="nav_lane_from_left">Usa la corsia %1$d da sinistra</string>
+    <string name="nav_lane_from_right">Usa la corsia %1$d da destra</string>
+    <plurals name="nav_lane_left">
+        <item quantity="one">Usa la corsia di sinistra</item>
+        <item quantity="many">Usa le %d corsie di sinistra</item>
+        <item quantity="other">Usa le %d corsie di sinistra</item>
+    </plurals>
+    <string name="nav_lane_middle">Usa la corsia centrale</string>
+    <string name="nav_lane_middle_lanes">Usa le corsie centrali</string>
+    <plurals name="nav_lane_right">
+        <item quantity="one">Usa la corsia di destra</item>
+        <item quantity="many">Usa le %d corsie di destra</item>
+        <item quantity="other">Usa le %d corsie di destra</item>
+    </plurals>
+    <string name="nav_to_go">mancanti</string>
+    <string name="privacy_policy">Informativa sulla privacy</string>
+    <string name="privacy_policy_sub">Cosa invia Gearslip, a chi e perché</string>
+    <string name="settings_bt_address">Indirizzo Bluetooth del telefono</string>
+    <string name="settings_bt_address_hint">Copialo dalle impostazioni di Android, in Informazioni sul telefono. Gearslip lo passa all\'auto, così sa che il telefono sul cavo è quello associato.</string>
+    <string name="settings_bt_address_invalid">Questo non è un indirizzo Bluetooth. Somiglia a 12:34:56:78:9A:BC.</string>
+    <string name="settings_bt_address_off">Non impostato. Solo per un\'auto che spegne il Bluetooth quando Gearslip si connette.</string>
+    <string name="settings_use_as_launcher">Usa come launcher</string>
+    <string name="settings_use_as_launcher_off">Per un\'autoradio o un tablet sul cruscotto. La schermata auto di Gearslip diventa la schermata Home di questo dispositivo.</string>
+    <string name="settings_use_as_launcher_on">Gearslip può essere la schermata Home di questo dispositivo. Sceglilo in App Home predefinita.</string>
+    <string name="status_no_car">Il telefono è in carica, ma nessuna auto ha risposto. Alcuni cavi caricano soltanto; prova un cavo che trasporta dati.</string>
+    <string name="status_no_car_graphene">Il telefono è in carica, ma nessuna auto ha risposto. Controlla che il controllo della porta USB-C, in Sicurezza e privacy, consenta i dati e non sia su Solo ricarica.</string>
+    <string name="status_open_settings">Apri impostazioni</string>
+    <string name="status_stuck_cable">L\'auto non mostra ancora Gearslip. Scollega il cavo, aspetta qualche secondo e ricollegalo. Se succede ancora, prova un altro cavo o porta USB e condividi il log in una issue.</string>
+    <string name="status_stuck_wireless">L\'auto non mostra ancora Gearslip. Spegni e riaccendi l\'auto, o collegati con un cavo. Se succede ancora, condividi il log in una issue.</string>
+    <string name="update_installed_text">Installato via Wi-Fi mentre nessuna auto era collegata.</string>
+    <string name="update_installed_title">Gearslip aggiornato a %1$s</string>
+    <string name="update_silent">Installa gli aggiornamenti da solo</string>
+    <string name="update_silent_sub">Solo versioni definitive, via Wi-Fi, quando nessuna auto è collegata</string>
 </resources>

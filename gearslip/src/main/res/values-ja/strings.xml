@@ -463,7 +463,7 @@
     <string name="media_press_play">再生を押すと続きから再生します。ブラウズから探すこともできます。</string>
 
     <string name="media_keeps_library">%1$s はライブラリを公開していません。</string>
-    <string name="media_needs_access">スマートフォンで通知へのアクセスを許可すれば、Gearslip で操作できます。［設定］&gt;［通知］&gt;［通知へのアクセス］で許可してください。</string>
+    <string name="media_needs_access">通知へのアクセスがあれば、Gearslip で再生できます。駐車中にスマホで許可してください。</string>
     <string name="media_not_running">%1$s が起動していません。</string>
     <string name="media_not_running_body">%1$s は Gearslip のプレーヤーで再生されますが、スマートフォンで開いている間だけです。一度開けば、車でそのまま再生が続きます。</string>
     <string name="media_open_app">%1$s を開く</string>
@@ -653,7 +653,7 @@
     <string name="notif_title">通知</string>
     <string name="notif_clear_all">すべて消去</string>
     <string name="notif_empty">まだ何もありません。スマートフォンの新しい通知がここに表示されます。</string>
-    <string name="notif_off">通知がオフです。スマートフォンの［設定］&gt;［通知］&gt;［通知へのアクセス］で Gearslip を許可してください。</string>
+    <string name="notif_off">ここに通知を表示するには、Gearslip に通知へのアクセスが必要です。駐車中にスマホで許可してください。</string>
     <string name="notif_replied">返信済み</string>
 
     <!-- Messages -->
@@ -821,4 +821,73 @@
     <string name="settings_language">言語</string>
     <string name="settings_language_phone">スマートフォンと同じ</string>
     <string name="player_next_chapter">次のチャプター</string>
+    <string name="allow_on_phone">スマホで許可</string>
+    <string name="app_all_apps">すべてのアプリ</string>
+    <string name="bt_address_car_note">駐車中に、スマホで設定を 1 つ済ませてください。</string>
+    <string name="bt_address_card_body">車によっては、スマホの Bluetooth アドレスを知っているときだけ接続が続きます。Android はアプリにこれを教えないため、「デバイス情報」からコピーしてください。そこで Bluetooth アドレスを長押しし、［コピー］をタップしてから戻ってきてください。</string>
+    <string name="bt_address_card_title">%1$s にこのスマホを覚えてもらう</string>
+    <string name="bt_address_not_now">後で</string>
+    <string name="bt_address_open">「デバイス情報」を開く</string>
+    <string name="bt_address_type">手入力する</string>
+    <string name="bt_address_use_body">Gearslip がこれを車に渡すので、車はこれがペア設定済みのスマホだとわかります。</string>
+    <string name="bt_address_use_title">この Bluetooth アドレスを使いますか？</string>
+    <string name="bt_address_your_car">車</string>
+    <string name="car_apps_finding">アプリを探しています…</string>
+    <string name="car_apps_none">車用アプリが見つかりません</string>
+    <string name="car_apps_sub">車に表示するアプリを選びます</string>
+    <string name="car_audio_blocked">%1$s は他のアプリに音声の再生を許可していないため、Gearslip 経由では車に届きません。別の音楽アプリをお試しください。</string>
+    <string name="car_audio_switched">この車は Gearslip の実行中に Bluetooth の音楽をオフにするため、音楽は Gearslip 経由で流れるようになりました。スマホに表示される確認を許可してください。</string>
+    <string name="car_autoplay_note">車がつながったら、止まったところから音楽を再開します。</string>
+    <string name="car_density">車の画面密度</string>
+    <string name="car_density_note">アプリ内も含めて文字やボタンを大きくします。サイズを標準にして 200 DPI をお試しください。反映するには車を再接続するか、プレビューを開き直してください。ボタンが切れる場合は、DPI を下げるか「車に合わせる」を選んでください。</string>
+    <string name="car_directions_over_music">音楽チャンネルで案内</string>
+    <string name="car_directions_over_music_note">音声案内のあとに接続が切れたり再起動したりする車向けです。Gearslip は車の案内チャンネルを使わず、案内を音楽に重ねて流します。</string>
+    <string name="car_experimental_note">テスト中の機能です。すべての車で動くとは限りません。</string>
+    <string name="car_player_beside_map_note">ドッキングボタンをタップしたときに、プレーヤーが付く地図の側です。</string>
+    <string name="carset_advanced">詳細設定</string>
+    <string name="carset_experimental_heading">試験運用</string>
+    <string name="carset_fit_needs_car">この調整を保存するには車を接続してください。</string>
+    <string name="choice_density_car">車に合わせる</string>
+    <string name="choice_density_dpi">%1$d DPI</string>
+    <string name="dialer_missed">不在着信 · %1$s</string>
+    <string name="dialer_no_recents">最近の通話はありません。</string>
+    <string name="dialer_recents">履歴</string>
+    <string name="dialer_recents_needs_permission">最近の通話を表示するには、Gearslip に通話履歴の権限が必要です。</string>
+    <string name="help_bluetooth_first">ケーブルより先に Bluetooth をつなぐ。</string>
+    <string name="help_bluetooth_first_detail">Bluetooth で音楽がつながらない場合は、先に車に Bluetooth でスマホを見つけさせてから、ケーブルを挿してください。ケーブルが先だと混乱する車があります。</string>
+    <string name="help_usb_data">USB データを許可する。</string>
+    <string name="help_usb_data_detail">GrapheneOS は USB ポートのデータをブロックできます。USB-C ポートの管理が「充電のみ」になっていると、データケーブルでも車はスマホを認識しません。データを許可する設定にしてください。</string>
+    <string name="launcher_in_car">このデバイスは車に接続されているので、Gearslip は車の画面に表示されています。</string>
+    <string name="launcher_open_gearslip">Gearslip を開く</string>
+    <string name="nav_arrival">到着</string>
+    <string name="nav_lane_any">どの車線でも可</string>
+    <string name="nav_lane_from_left">左から %1$d 番目の車線へ</string>
+    <string name="nav_lane_from_right">右から %1$d 番目の車線へ</string>
+    <plurals name="nav_lane_left">
+        <item quantity="other">左側の %d 車線へ</item>
+    </plurals>
+    <string name="nav_lane_middle">中央の車線へ</string>
+    <string name="nav_lane_middle_lanes">中央の車線へ</string>
+    <plurals name="nav_lane_right">
+        <item quantity="other">右側の %d 車線へ</item>
+    </plurals>
+    <string name="nav_to_go">残り</string>
+    <string name="privacy_policy">プライバシー ポリシー</string>
+    <string name="privacy_policy_sub">Gearslip が何を、誰に、なぜ送るか</string>
+    <string name="settings_bt_address">スマホの Bluetooth アドレス</string>
+    <string name="settings_bt_address_hint">Android の設定の「デバイス情報」からコピーしてください。Gearslip がこれを車に渡すので、車はケーブルにつながったスマホがペア設定済みのものだとわかります。</string>
+    <string name="settings_bt_address_invalid">Bluetooth アドレスではありません。12:34:56:78:9A:BC のような形式です。</string>
+    <string name="settings_bt_address_off">未設定。Gearslip の接続時に Bluetooth を切る車でのみ使います。</string>
+    <string name="settings_use_as_launcher">ランチャーとして使う</string>
+    <string name="settings_use_as_launcher_off">カーナビやダッシュボードのタブレット向けです。Gearslip の車画面がこのデバイスのホーム画面になります。</string>
+    <string name="settings_use_as_launcher_on">Gearslip をこのデバイスのホーム画面にできます。「デフォルトのホームアプリ」で選んでください。</string>
+    <string name="status_no_car">スマホは充電中ですが、車から応答がありません。充電専用のケーブルもあるので、データを通すケーブルをお試しください。</string>
+    <string name="status_no_car_graphene">スマホは充電中ですが、車から応答がありません。「セキュリティとプライバシー」の USB-C ポートの管理がデータを許可していて、「充電のみ」になっていないか確認してください。</string>
+    <string name="status_open_settings">設定を開く</string>
+    <string name="status_stuck_cable">車にまだ Gearslip が表示されていません。ケーブルを抜いて数秒待ち、挿し直してください。何度も起きる場合は、別のケーブルや USB ポートを試し、issue でログを共有してください。</string>
+    <string name="status_stuck_wireless">車にまだ Gearslip が表示されていません。車の電源を入れ直すか、ケーブルで接続してください。何度も起きる場合は、issue でログを共有してください。</string>
+    <string name="update_installed_text">車が接続されていないときに Wi-Fi でインストールしました。</string>
+    <string name="update_installed_title">Gearslip を %1$s に更新しました</string>
+    <string name="update_silent">アップデートを自動でインストール</string>
+    <string name="update_silent_sub">正式版のみ、Wi-Fi 接続時、車が接続されていないときに</string>
 </resources>

@@ -466,7 +466,7 @@
     <string name="media_press_play">Нажмите воспроизведение, чтобы продолжить с того места, где остановились, или найдите что-нибудь в «Обзоре».</string>
 
     <string name="media_keeps_library">%1$s не открывает свою библиотеку.</string>
-    <string name="media_needs_access">Gearslip всё равно может им управлять, если получит доступ к уведомлениям на телефоне. Разрешите его в Настройки &gt; Уведомления &gt; Доступ к уведомлениям.</string>
+    <string name="media_needs_access">Gearslip всё равно сможет его воспроизводить, когда получит доступ к уведомлениям. Разрешите его на телефоне, когда припаркуетесь.</string>
     <string name="media_not_running">%1$s не запущено.</string>
     <string name="media_not_running_body">%1$s играет через плеер Gearslip, но только пока открыто на телефоне. Откройте его один раз, и оно продолжит играть здесь, в машине.</string>
     <string name="media_open_app">Открыть %1$s</string>
@@ -659,7 +659,7 @@
     <string name="notif_title">Уведомления</string>
     <string name="notif_clear_all">Очистить все</string>
     <string name="notif_empty">Пока ничего. Новые уведомления с телефона появятся здесь.</string>
-    <string name="notif_off">Уведомления выключены. Разрешите Gearslip в Настройки &gt; Уведомления &gt; Доступ к уведомлениям на телефоне.</string>
+    <string name="notif_off">Gearslip нужен доступ к уведомлениям, чтобы показывать их здесь. Разрешите его на телефоне, когда припаркуетесь.</string>
     <string name="notif_replied">Отвечено</string>
 
     <!-- Messages -->
@@ -845,4 +845,79 @@
     <string name="settings_language">Язык</string>
     <string name="settings_language_phone">Как на телефоне</string>
     <string name="player_next_chapter">Следующая глава</string>
+    <string name="allow_on_phone">Разрешить на телефоне</string>
+    <string name="app_all_apps">Все приложения</string>
+    <string name="bt_address_car_note">Когда припаркуетесь, завершите один шаг настройки на телефоне.</string>
+    <string name="bt_address_card_body">Некоторые машины остаются на связи, только если знают Bluetooth-адрес телефона. Android скрывает его от приложений, поэтому скопируйте его в разделе «О телефоне». Нажмите и удерживайте там Bluetooth-адрес, нажмите «Копировать» и вернитесь.</string>
+    <string name="bt_address_card_title">Помогите %1$s узнать этот телефон</string>
+    <string name="bt_address_not_now">Не сейчас</string>
+    <string name="bt_address_open">Открыть «О телефоне»</string>
+    <string name="bt_address_type">Ввести вручную</string>
+    <string name="bt_address_use_body">Gearslip передаст его машине, чтобы она знала, что это сопряжённый телефон.</string>
+    <string name="bt_address_use_title">Использовать этот Bluetooth-адрес?</string>
+    <string name="bt_address_your_car">машине</string>
+    <string name="car_apps_finding">Поиск приложений…</string>
+    <string name="car_apps_none">Приложения для машины не найдены</string>
+    <string name="car_apps_sub">Выберите, какие приложения будут в машине</string>
+    <string name="car_audio_blocked">%1$s не даёт другим приложениям воспроизводить свой звук, поэтому он не дойдёт до машины через Gearslip. Попробуйте другое музыкальное приложение.</string>
+    <string name="car_audio_switched">Эта машина выключает музыку по Bluetooth, пока работает Gearslip, поэтому музыка теперь идёт через Gearslip. Разрешите запрос на телефоне.</string>
+    <string name="car_autoplay_note">Продолжает музыку с того места, где она остановилась, как только машина подключится.</string>
+    <string name="car_density">Плотность экрана машины</string>
+    <string name="car_density_note">Крупнее текст и элементы управления, в том числе в приложениях. Попробуйте 200 DPI с размером «Обычный». Чтобы применить, переподключите машину или заново откройте предпросмотр. Если элементы обрезаются, выберите меньше DPI или «От машины».</string>
+    <string name="car_directions_over_music">Подсказки через канал музыки</string>
+    <string name="car_directions_over_music_note">Для машины, которая теряет связь или перезагружается после голосовой подсказки. Gearslip подмешивает каждую подсказку в музыку вместо канала навигации машины.</string>
+    <string name="car_experimental_note">Функции, которые ещё тестируются. Они могут работать не в каждой машине.</string>
+    <string name="car_player_beside_map_note">Сторона карты, к которой прикрепляется плеер, когда вы нажимаете его кнопку закрепления.</string>
+    <string name="carset_advanced">Дополнительно</string>
+    <string name="carset_experimental_heading">Экспериментальное</string>
+    <string name="carset_fit_needs_car">Подключите машину, чтобы сохранить для неё эту подгонку.</string>
+    <string name="choice_density_car">От машины</string>
+    <string name="choice_density_dpi">%1$d DPI</string>
+    <string name="dialer_missed">Пропущенный · %1$s</string>
+    <string name="dialer_no_recents">Нет недавних вызовов.</string>
+    <string name="dialer_recents">Недавние</string>
+    <string name="dialer_recents_needs_permission">Gearslip нужно разрешение «Список вызовов», чтобы показать недавние вызовы.</string>
+    <string name="help_bluetooth_first">Подключите Bluetooth раньше кабеля.</string>
+    <string name="help_bluetooth_first_detail">Если музыка по Bluetooth не подключается, дайте машине сначала найти телефон по Bluetooth, а потом подключите кабель. Некоторые машины путаются, когда кабель первый.</string>
+    <string name="help_usb_data">Разрешите передачу данных по USB.</string>
+    <string name="help_usb_data_detail">GrapheneOS может блокировать данные на порту USB. Если управление портом USB-C стоит на «Только зарядка», машина никогда не увидит телефон, даже с кабелем для данных. Разрешите передачу данных.</string>
+    <string name="launcher_in_car">Это устройство подключено к машине, поэтому Gearslip на экране машины.</string>
+    <string name="launcher_open_gearslip">Открыть Gearslip</string>
+    <string name="nav_arrival">прибытие</string>
+    <string name="nav_lane_any">Любая полоса</string>
+    <string name="nav_lane_from_left">Займите %1$d-ю полосу слева</string>
+    <string name="nav_lane_from_right">Займите %1$d-ю полосу справа</string>
+    <plurals name="nav_lane_left">
+        <item quantity="one">Займите левую полосу</item>
+        <item quantity="few">Займите одну из %d левых полос</item>
+        <item quantity="many">Займите одну из %d левых полос</item>
+        <item quantity="other">Займите одну из %d левых полос</item>
+    </plurals>
+    <string name="nav_lane_middle">Займите среднюю полосу</string>
+    <string name="nav_lane_middle_lanes">Займите средние полосы</string>
+    <plurals name="nav_lane_right">
+        <item quantity="one">Займите правую полосу</item>
+        <item quantity="few">Займите одну из %d правых полос</item>
+        <item quantity="many">Займите одну из %d правых полос</item>
+        <item quantity="other">Займите одну из %d правых полос</item>
+    </plurals>
+    <string name="nav_to_go">осталось</string>
+    <string name="privacy_policy">Политика конфиденциальности</string>
+    <string name="privacy_policy_sub">Что Gearslip отправляет, кому и зачем</string>
+    <string name="settings_bt_address">Bluetooth-адрес телефона</string>
+    <string name="settings_bt_address_hint">Скопируйте его в настройках Android, в разделе «О телефоне». Gearslip передаст его машине, чтобы она знала, что телефон на кабеле — сопряжённый.</string>
+    <string name="settings_bt_address_invalid">Это не Bluetooth-адрес. Он выглядит так: 12:34:56:78:9A:BC.</string>
+    <string name="settings_bt_address_off">Не задан. Только для машины, которая отключает Bluetooth, когда Gearslip подключается.</string>
+    <string name="settings_use_as_launcher">Использовать как лаунчер</string>
+    <string name="settings_use_as_launcher_off">Для магнитолы или планшета на приборной панели. Экран машины Gearslip станет главным экраном этого устройства.</string>
+    <string name="settings_use_as_launcher_on">Gearslip может быть главным экраном этого устройства. Выберите его в разделе «Главный экран по умолчанию».</string>
+    <string name="status_no_car">Телефон заряжается, но ни одна машина не ответила. Некоторые кабели только заряжают; попробуйте кабель, который передаёт данные.</string>
+    <string name="status_no_car_graphene">Телефон заряжается, но ни одна машина не ответила. Проверьте, что управление портом USB-C в разделе «Безопасность и конфиденциальность» разрешает данные и не стоит на «Только зарядка».</string>
+    <string name="status_open_settings">Открыть настройки</string>
+    <string name="status_stuck_cable">Машина ещё не показала Gearslip. Отключите кабель, подождите несколько секунд и подключите снова. Если это повторяется, попробуйте другой кабель или порт USB и поделитесь журналом в issue.</string>
+    <string name="status_stuck_wireless">Машина ещё не показала Gearslip. Выключите и снова включите машину или подключитесь кабелем. Если это повторяется, поделитесь журналом в issue.</string>
+    <string name="update_installed_text">Установлено по Wi-Fi, пока машина не была подключена.</string>
+    <string name="update_installed_title">Gearslip обновлён до %1$s</string>
+    <string name="update_silent">Устанавливать обновления самостоятельно</string>
+    <string name="update_silent_sub">Только готовые версии, по Wi-Fi, когда машина не подключена</string>
 </resources>

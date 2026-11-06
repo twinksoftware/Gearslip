@@ -466,7 +466,7 @@
     <string name="media_press_play">Stiskněte přehrát a pokračujte, kde jste skončili, nebo něco najděte v Procházet.</string>
 
     <string name="media_keeps_library">%1$s si svou knihovnu nechává pro sebe.</string>
-    <string name="media_needs_access">Gearslip ji přesto může ovládat, jakmile bude mít v telefonu přístup k oznámením. Povolte ho v Nastavení &gt; Oznámení &gt; Přístup k oznámením.</string>
+    <string name="media_needs_access">Gearslip ho i tak dokáže přehrávat, jakmile bude mít přístup k oznámením. Povolte ho v telefonu, až zaparkujete.</string>
     <string name="media_not_running">%1$s neběží.</string>
     <string name="media_not_running_body">%1$s hraje přes přehrávač Gearslipu, ale jen když je otevřená v telefonu. Jednou ji otevřete a bude hrát dál tady v autě.</string>
     <string name="media_open_app">Otevřít %1$s</string>
@@ -659,7 +659,7 @@
     <string name="notif_title">Oznámení</string>
     <string name="notif_clear_all">Vymazat vše</string>
     <string name="notif_empty">Zatím nic. Nová oznámení z telefonu se objeví tady.</string>
-    <string name="notif_off">Oznámení jsou vypnutá. Povolte Gearslip v telefonu v Nastavení &gt; Oznámení &gt; Přístup k oznámením.</string>
+    <string name="notif_off">Gearslip potřebuje přístup k oznámením, aby je tu mohl zobrazit. Povolte ho v telefonu, až zaparkujete.</string>
     <string name="notif_replied">Odpovězeno</string>
 
     <!-- Messages -->
@@ -845,4 +845,79 @@
     <string name="settings_language">Jazyk</string>
     <string name="settings_language_phone">Stejný jako v telefonu</string>
     <string name="player_next_chapter">Další kapitola</string>
+    <string name="allow_on_phone">Povolit v telefonu</string>
+    <string name="app_all_apps">Všechny aplikace</string>
+    <string name="bt_address_car_note">Až zaparkujete, dokončete v telefonu jeden krok nastavení.</string>
+    <string name="bt_address_card_body">Některá auta zůstanou připojená, jen když znají adresu Bluetooth telefonu. Android ji před aplikacemi skrývá, proto ji zkopírujte v sekci Informace o telefonu. Podržte tam adresu Bluetooth, klepněte na Kopírovat a vraťte se.</string>
+    <string name="bt_address_card_title">Pomozte %1$s poznat tento telefon</string>
+    <string name="bt_address_not_now">Teď ne</string>
+    <string name="bt_address_open">Otevřít Informace o telefonu</string>
+    <string name="bt_address_type">Raději ji napsat</string>
+    <string name="bt_address_use_body">Gearslip ji předá vašemu autu, aby vědělo, že je to spárovaný telefon.</string>
+    <string name="bt_address_use_title">Použít tuto adresu Bluetooth?</string>
+    <string name="bt_address_your_car">vašemu autu</string>
+    <string name="car_apps_finding">Hledání aplikací…</string>
+    <string name="car_apps_none">Nenašly se žádné aplikace do auta</string>
+    <string name="car_apps_sub">Vyberte, které aplikace se v autě zobrazí</string>
+    <string name="car_audio_blocked">%1$s nedovolí jiným aplikacím přehrávat svůj zvuk, takže se přes Gearslip do auta nedostane. Zkuste jinou hudební aplikaci.</string>
+    <string name="car_audio_switched">Toto auto vypíná hudbu přes Bluetooth, když běží Gearslip, takže hudba teď jde přes Gearslip. Povolte výzvu v telefonu.</string>
+    <string name="car_autoplay_note">Jakmile se auto připojí, pustí hudbu tam, kde skončila.</string>
+    <string name="car_density">Hustota displeje auta</string>
+    <string name="car_density_note">Větší text a ovládací prvky, i v aplikacích. Zkuste 200 DPI s Velikostí na Normální. Pro použití auto znovu připojte nebo znovu otevřete náhled. Pokud se ovládací prvky ořezávají, zvolte méně DPI nebo Z auta.</string>
+    <string name="car_directions_over_music">Pokyny přes hudební kanál</string>
+    <string name="car_directions_over_music_note">Pro auto, které po hlasovém pokynu ztratí spojení nebo se restartuje. Gearslip každý pokyn přimíchá do hudby místo kanálu navigace auta.</string>
+    <string name="car_experimental_note">Funkce, které se ještě testují. Nemusí fungovat v každém autě.</string>
+    <string name="car_player_beside_map_note">Strana mapy, ke které se přehrávač ukotví, když klepnete na jeho tlačítko ukotvení.</string>
+    <string name="carset_advanced">Pokročilé</string>
+    <string name="carset_experimental_heading">Experimentální</string>
+    <string name="carset_fit_needs_car">Připojte auto, abyste pro něj tuto úpravu uložili.</string>
+    <string name="choice_density_car">Z auta</string>
+    <string name="choice_density_dpi">%1$d DPI</string>
+    <string name="dialer_missed">Zmeškaný · %1$s</string>
+    <string name="dialer_no_recents">Žádné nedávné hovory.</string>
+    <string name="dialer_recents">Nedávné</string>
+    <string name="dialer_recents_needs_permission">Gearslip potřebuje oprávnění Seznamy hovorů, aby mohl zobrazit nedávné hovory.</string>
+    <string name="help_bluetooth_first">Připojte Bluetooth dřív než kabel.</string>
+    <string name="help_bluetooth_first_detail">Pokud se hudba přes Bluetooth nepřipojí, nechte auto nejdřív najít telefon přes Bluetooth a pak zapojte kabel. Některá auta se zmatou, když je kabel první.</string>
+    <string name="help_usb_data">Povolte data přes USB.</string>
+    <string name="help_usb_data_detail">GrapheneOS může blokovat data na portu USB. Pokud je ovládání portu USB-C nastavené na Pouze nabíjení, auto telefon nikdy neuvidí, ani s datovým kabelem. Nastavte povolení dat.</string>
+    <string name="launcher_in_car">Toto zařízení je připojené k autu, takže Gearslip je na obrazovce auta.</string>
+    <string name="launcher_open_gearslip">Otevřít Gearslip</string>
+    <string name="nav_arrival">příjezd</string>
+    <string name="nav_lane_any">Libovolný pruh</string>
+    <string name="nav_lane_from_left">Jeďte %1$d. pruhem zleva</string>
+    <string name="nav_lane_from_right">Jeďte %1$d. pruhem zprava</string>
+    <plurals name="nav_lane_left">
+        <item quantity="one">Jeďte levým pruhem</item>
+        <item quantity="few">Jeďte jedním z %d levých pruhů</item>
+        <item quantity="many">Jeďte jedním z %d levých pruhů</item>
+        <item quantity="other">Jeďte jedním z %d levých pruhů</item>
+    </plurals>
+    <string name="nav_lane_middle">Jeďte prostředním pruhem</string>
+    <string name="nav_lane_middle_lanes">Jeďte prostředními pruhy</string>
+    <plurals name="nav_lane_right">
+        <item quantity="one">Jeďte pravým pruhem</item>
+        <item quantity="few">Jeďte jedním z %d pravých pruhů</item>
+        <item quantity="many">Jeďte jedním z %d pravých pruhů</item>
+        <item quantity="other">Jeďte jedním z %d pravých pruhů</item>
+    </plurals>
+    <string name="nav_to_go">zbývá</string>
+    <string name="privacy_policy">Zásady ochrany soukromí</string>
+    <string name="privacy_policy_sub">Co Gearslip odesílá, komu a proč</string>
+    <string name="settings_bt_address">Adresa Bluetooth telefonu</string>
+    <string name="settings_bt_address_hint">Zkopírujte ji z nastavení Androidu v sekci Informace o telefonu. Gearslip ji předá autu, aby vědělo, že telefon na kabelu je ten spárovaný.</string>
+    <string name="settings_bt_address_invalid">To není adresa Bluetooth. Vypadá takto: 12:34:56:78:9A:BC.</string>
+    <string name="settings_bt_address_off">Nenastaveno. Jen pro auto, které při připojení Gearslipu odpojí Bluetooth.</string>
+    <string name="settings_use_as_launcher">Používat jako spouštěč</string>
+    <string name="settings_use_as_launcher_off">Pro autorádio nebo tablet na palubní desce. Obrazovka auta z Gearslipu se stane domovskou obrazovkou tohoto zařízení.</string>
+    <string name="settings_use_as_launcher_on">Gearslip může být domovskou obrazovkou tohoto zařízení. Vyberte ho v Výchozí aplikace plochy.</string>
+    <string name="status_no_car">Telefon se nabíjí, ale žádné auto neodpovědělo. Některé kabely jen nabíjejí; zkuste kabel, který přenáší data.</string>
+    <string name="status_no_car_graphene">Telefon se nabíjí, ale žádné auto neodpovědělo. Zkontrolujte, že ovládání portu USB-C v sekci Zabezpečení a ochrana soukromí povoluje data a není nastavené na Pouze nabíjení.</string>
+    <string name="status_open_settings">Otevřít nastavení</string>
+    <string name="status_stuck_cable">Auto zatím Gearslip nezobrazilo. Odpojte kabel, počkejte pár sekund a zapojte ho znovu. Pokud se to opakuje, zkuste jiný kabel nebo port USB a sdílejte protokol v issue.</string>
+    <string name="status_stuck_wireless">Auto zatím Gearslip nezobrazilo. Vypněte a znovu zapněte auto, nebo se připojte kabelem. Pokud se to opakuje, sdílejte protokol v issue.</string>
+    <string name="update_installed_text">Nainstalováno přes Wi-Fi, když nebylo připojené žádné auto.</string>
+    <string name="update_installed_title">Gearslip aktualizován na %1$s</string>
+    <string name="update_silent">Instalovat aktualizace samo</string>
+    <string name="update_silent_sub">Jen hotová vydání, přes Wi-Fi, když není připojené žádné auto</string>
 </resources>
