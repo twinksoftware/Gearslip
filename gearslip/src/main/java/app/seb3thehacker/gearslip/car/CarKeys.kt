@@ -58,6 +58,12 @@ object CarKeys {
 
     fun init(context: Context) { appContext = context.applicationContext }
 
+    /** The keys that act on the media app. */
+    private val MEDIA_KEYS = setOf(
+        KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, KeyEvent.KEYCODE_MEDIA_PLAY, KeyEvent.KEYCODE_MEDIA_PAUSE,
+        KeyEvent.KEYCODE_MEDIA_STOP, KeyEvent.KEYCODE_MEDIA_NEXT, KeyEvent.KEYCODE_MEDIA_PREVIOUS,
+    )
+
     /**
      * Every key worth asking the head unit for. The binding request lists what the head unit
      * offered; when it offers nothing (some units leave the list empty and send keys anyway),
@@ -87,13 +93,20 @@ object CarKeys {
             return true
         }
         if (!down) return keyCode in WANTED
-        val media = CarServices.media
+        // Null until the car shows Gearslip's screen. A 2020 Civic sends Play as soon as it hears
+        // the phone's Bluetooth address, while still on its own screen, and reaching for media
+        // then ended the session (issue #43).
+        val media = CarServices.mediaOrNull()
+        if (media == null && keyCode in MEDIA_KEYS) {
+            GearslipLog.i("keys: $keyCode before the car shows Gearslip - no media app to send it to yet")
+            return true
+        }
         when (keyCode) {
-            KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE -> media.togglePlay()
-            KeyEvent.KEYCODE_MEDIA_PLAY -> if (!media.now.value.playing) media.togglePlay()
-            KeyEvent.KEYCODE_MEDIA_PAUSE, KeyEvent.KEYCODE_MEDIA_STOP -> if (media.now.value.playing) media.togglePlay()
-            KeyEvent.KEYCODE_MEDIA_NEXT -> media.next()
-            KeyEvent.KEYCODE_MEDIA_PREVIOUS -> media.previous()
+            KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE -> media?.togglePlay()
+            KeyEvent.KEYCODE_MEDIA_PLAY -> if (media != null && !media.now.value.playing) media.togglePlay()
+            KeyEvent.KEYCODE_MEDIA_PAUSE, KeyEvent.KEYCODE_MEDIA_STOP -> if (media != null && media.now.value.playing) media.togglePlay()
+            KeyEvent.KEYCODE_MEDIA_NEXT -> media?.next()
+            KeyEvent.KEYCODE_MEDIA_PREVIOUS -> media?.previous()
             KeyEvent.KEYCODE_SEARCH, KeyEvent.KEYCODE_VOICE_ASSIST -> voice()
             KeyEvent.KEYCODE_CALL -> call()
             KeyEvent.KEYCODE_ENDCALL -> endCall()
