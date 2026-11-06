@@ -14,6 +14,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
@@ -94,18 +98,65 @@ private fun WeatherCard(context: Context) {
                 is WeatherState.Ready -> {
                     val w = s.data
                     WeatherIcon(w.code, w.isDay, size = 44.dp)
-                    Column {
+                    Column(Modifier.weight(1f)) {
                         Text(
                             "${w.temp}${w.tempUnit}  ·  ${Weather.condition(w.code)}",
                             style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold,
+                            maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
                         )
-                        Text(w.place, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(w.place, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1)
                     }
+                    NextHours(w.hours, Modifier.weight(1.3f))
                 }
             }
         }
     }
 }
+
+/**
+ * The next few hours beside the weather now, in the same card, so a glance answers "will it rain
+ * on the way" without opening Weather. As many as fit, up to five; none if fewer than three would.
+ */
+@Composable
+private fun NextHours(all: List<HourForecast>, modifier: Modifier) {
+    val now = System.currentTimeMillis()
+    // The forecast is cached, so its first hours may already be past.
+    val hours = all.filter { it.time > now }
+    androidx.compose.foundation.layout.BoxWithConstraints(modifier) {
+        val fit = (maxWidth / HOUR_WIDTH).toInt().coerceAtMost(5)
+        if (fit < 3 || hours.size < 3) return@BoxWithConstraints
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Box(Modifier.width(1.dp).height(64.dp).background(MaterialTheme.colorScheme.outlineVariant))
+            hours.take(fit).forEach { h ->
+                Column(
+                    Modifier.weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(2.dp),
+                ) {
+                    Text(
+                        DateFormat.getTimeInstance(DateFormat.SHORT).format(Date(h.time)).replace(":00", ""),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1,
+                    )
+                    WeatherIcon(h.code, h.isDay, size = 24.dp)
+                    Text("${h.temp}°", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                    // Kept as a blank line when dry, so every column lines up.
+                    Text(
+                        if (h.rainChance >= RAIN_SHOWN) "${h.rainChance}%" else " ",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.primary,
+                    )
+                }
+            }
+        }
+    }
+}
+
+private val HOUR_WIDTH = 64.dp
+
+/** Below this a chance of rain is noise on a glance card; the Weather screen still shows it. */
+private const val RAIN_SHOWN = 20
 
 @Composable
 private fun AgendaCard(context: Context) {
