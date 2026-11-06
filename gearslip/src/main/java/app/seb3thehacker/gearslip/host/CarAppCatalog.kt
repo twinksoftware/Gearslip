@@ -44,7 +44,6 @@ object CarAppCatalog {
             .asSequence()
             .filter { it.serviceInfo.packageName != context.packageName }
             .filterNot { AndroidAuto.matches(it.serviceInfo.packageName, it.loadLabel(manager).toString()) }
-            .filterNot { KnownApps.isHidden(it.serviceInfo.packageName) }
             .map { resolved ->
                 val info = resolved.serviceInfo
                 TemplateApp(

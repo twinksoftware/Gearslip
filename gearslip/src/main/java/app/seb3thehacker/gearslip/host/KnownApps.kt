@@ -52,26 +52,33 @@ object KnownApps {
     fun screenBroken(packageName: String): Boolean = packageName in brokenScreen
 
     /**
-     * Registers a car template service but never gives Gearslip a usable screen - left off the
-     * launcher entirely rather than shown as a tile that goes nowhere.
+     * Google's own car apps, which never give Gearslip a usable screen. They used to be left off
+     * the launcher, which looked like a bug to anyone who had them; now they're listed like any
+     * other broken app, starting unticked (see [startsHidden]).
      */
-    private val hidden = setOf(
+    private val google = setOf(
         "com.google.android.dialer",               // Google Phone
         "com.google.android.googlequicksearchbox",  // Google Assistant driving surfaces
         "com.google.android.apps.maps",             // Google Maps: shows as a messenger, and its car UI is Android Auto's own
     )
 
-    fun isHidden(packageName: String): Boolean = packageName in hidden
-
-    /** Shown on the launcher with a red X: known broken, but expected enough that hiding it outright would look like a bug. */
-    private val broken = setOf(
+    /** Shown on the launcher with a red X, and unticked to start with. */
+    private val broken = google + setOf(
         "com.google.android.apps.messaging", // Google Messages
-        "com.waze",                          // Waze
+        "com.waze",                          // Waze: the official app refuses Gearslip; the Morphe-patched one works (see patched())
         "com.generalmagic.magicearth",       // Magic Earth: never gets past connecting
     )
 
     fun isBroken(context: Context, packageName: String): Boolean =
         packageName in broken && !patched(context, packageName)
+
+    /**
+     * Whether a tile starts unticked in the phone's list of apps to show, so the drawer opens
+     * with only what works. Gearslip's own Messages screen works for any messenger, so a broken
+     * app's messaging tile still shows, except Google Maps', which has no messages worth reading.
+     */
+    fun startsHidden(context: Context, packageName: String, messaging: Boolean): Boolean =
+        isBroken(context, packageName) && (!messaging || packageName in google)
 
     /**
      * The certificate each broken app's own publisher signs it with. A copy signed with another

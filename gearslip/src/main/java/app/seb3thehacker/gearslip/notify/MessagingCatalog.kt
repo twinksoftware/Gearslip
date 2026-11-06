@@ -25,7 +25,7 @@ object MessagingCatalog {
             .map { it.activityInfo.packageName to it.loadLabel(manager).toString() }
             .distinctBy { it.first }
             .filter { (pkg, _) -> pkg != context.packageName }
-            .filterNot { (pkg, label) -> AndroidAuto.matches(pkg, label) || KnownApps.isHidden(pkg) }
+            .filterNot { (pkg, label) -> AndroidAuto.matches(pkg, label) }
             .filter { (pkg, _) -> CarDescriptor.uses(manager, pkg)?.contains("notification") == true }
             .map { (pkg, _) ->
                 val label = runCatching {

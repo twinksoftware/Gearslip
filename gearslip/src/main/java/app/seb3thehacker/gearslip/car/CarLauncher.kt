@@ -149,6 +149,10 @@ internal object LauncherCache {
                 }
             }
         }
+        CarSettings.hideOnFirstSight(tiles.mapNotNull { entry ->
+            val pkg = (entry.template?.component ?: entry.media?.component)?.packageName ?: entry.messaging?.packageName
+            entry.componentId?.takeIf { pkg != null && KnownApps.startsHidden(context, pkg, entry.messaging != null) }
+        })
         return tiles.sortedBy { it.label.lowercase() }.also { flow.value = it }
     }
 }

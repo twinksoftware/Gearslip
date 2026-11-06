@@ -69,6 +69,7 @@ private const val KEY_LOCATION_WARNING = "car_location_warning"
     private const val KEY_PLAYER_TITLE = "car_player_title"
     private const val KEY_PLAYER_LEFT = "car_player_left"
     private const val KEY_NAV_MIC = "car_nav_mic"
+    private const val KEY_DEFAULT_HIDDEN = "car_default_hidden"
     private const val KEY_THEME = "car_app_theme"
     private const val KEY_UI_THEME = "car_ui_theme"
     private const val KEY_DARK_STYLE = "car_dark_style"
@@ -584,6 +585,21 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
         }
         pinnedFlow.value = next
         AppSettings.putString(app, KEY_PINNED, next.joinToString(","))
+    }
+
+    /**
+     * Unticks each of [ids] the first time it's seen, and never again: a known-broken app starts
+     * off the drawer, but once the driver ticks it back on it stays on.
+     */
+    fun hideOnFirstSight(ids: List<String>) {
+        if (!::app.isInitialized) return
+        val seen = AppSettings.getString(app, KEY_DEFAULT_HIDDEN, "").split(",").filter { it.isNotEmpty() }.toSet()
+        val fresh = ids.filter { it !in seen }
+        if (fresh.isEmpty()) return
+        AppSettings.putString(app, KEY_DEFAULT_HIDDEN, (seen + fresh).joinToString(","))
+        val next = hiddenAppsFlow.value + fresh
+        hiddenAppsFlow.value = next
+        AppSettings.putString(app, KEY_HIDDEN_APPS, next.joinToString(","))
     }
 
     fun setAppHidden(id: String, hide: Boolean) {
