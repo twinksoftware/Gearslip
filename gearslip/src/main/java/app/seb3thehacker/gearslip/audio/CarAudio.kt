@@ -54,7 +54,21 @@ object CarAudio {
     val sampleRate get() = link?.sampleRate ?: 48_000
     val channels get() = link?.channels ?: 2
 
+    private val main by lazy { android.os.Handler(android.os.Looper.getMainLooper()) }
+
+    /**
+     * The car left and none came back: stop capturing, which ends the screen sharing Android
+     * shows for it and gives the phone its speaker back. Nothing else stopped it once the drive
+     * was over; with a wireless dongle Gearslip's screen stays open, so it ran on (issue #43).
+     */
+    private val releaseWhenGone = Runnable {
+        if (link != null || _capture.value == Capture.OFF) return@Runnable
+        GearslipLog.i("audio: no car for ${CAR_GONE_MS / 1000}s - stopping the capture and screen sharing")
+        release()
+    }
+
     fun attach(link: Link) {
+        main.removeCallbacks(releaseWhenGone)
         this.link = link
         GearslipLog.i("audio: the car offered a sink at ${link.sampleRate}Hz x${link.channels}")
         when {
@@ -63,9 +77,19 @@ object CarAudio {
         }
     }
 
+    /**
+     * The car's music channel closed. A car that comes straight back (a cable that slips) keeps
+     * the capture it had, so the driver isn't asked again mid-drive.
+     */
     fun detach(link: Link) {
-        if (this.link === link) this.link = null
+        if (this.link !== link) return
+        this.link = null
+        main.removeCallbacks(releaseWhenGone)
+        main.postDelayed(releaseWhenGone, CAR_GONE_MS)
     }
+
+    /** How long after the car leaves the capture waits for it to come back: a cable that slips. */
+    private const val CAR_GONE_MS = 3_000L
 
     /**
      * The car wants sound. Safe to call as often as the session likes: the consent dialog appears
@@ -117,6 +141,7 @@ object CarAudio {
 
     /** The car went away. Everything is torn down; the next connection asks again. */
     fun release() {
+        main.removeCallbacks(releaseWhenGone)
         wanted = false
         toldBlocked = false
         AudioCaptureService.stop()
