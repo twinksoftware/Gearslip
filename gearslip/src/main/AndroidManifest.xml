@@ -189,6 +189,21 @@
           the head unit to Android Auto, without disabling the screen the switch is on.
         -->
         <!-- App info › Storage › Manage space: clears lyrics, voice models and logs one at a time. -->
+        <!-- "Share" a page from any browser to add it to the car browser's start page (issue #85). -->
+        <activity
+            android:name=".browser.ShareToBrowserActivity"
+            android:exported="true"
+            android:excludeFromRecents="true"
+            android:label="@string/browser_share_label"
+            android:noHistory="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".ui.ManageSpaceActivity"
             android:exported="true"

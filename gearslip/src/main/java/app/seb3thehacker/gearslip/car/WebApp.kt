@@ -10,6 +10,11 @@ import android.webkit.JavascriptInterface
 import android.webkit.WebChromeClient
 import android.widget.FrameLayout
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.size
+import app.seb3thehacker.gearslip.car.theme.GsIconBox
+import app.seb3thehacker.gearslip.car.theme.GsTone
+import app.seb3thehacker.gearslip.car.theme.gsColors
 import androidx.compose.runtime.LaunchedEffect
 import app.seb3thehacker.gearslip.car.theme.GsIconButton
 import android.webkit.WebResourceError
@@ -33,14 +38,29 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.viewinterop.AndroidView
 import app.seb3thehacker.gearslip.GearslipLog
 import org.json.JSONObject
+import android.graphics.Bitmap
+import androidx.car.app.CarToast
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.platform.LocalContext
+import app.seb3thehacker.gearslip.browser.BrowserSettings
+import app.seb3thehacker.gearslip.browser.SiteIcons
+import app.seb3thehacker.gearslip.browser.adblock.AdBlockManager
+import app.seb3thehacker.gearslip.browser.adblock.CosmeticFilterBridge
+import app.seb3thehacker.gearslip.browser.adblock.YouTubeAdBlock
+import java.util.concurrent.atomic.AtomicReference
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 
 /**
- * A browser inside the car UI. [content] is a URL, or raw HTML when it does not look like one.
- * The bottom bar's Back walks the page history first and only leaves the app at the start.
+ * A browser inside the car UI. [content] is a URL, or raw HTML when it does not look like one;
+ * blank opens [BrowserStartPage], the search bar and bookmark tiles. The bottom bar's Back walks
+ * the page history first, then returns to the start page, and only then leaves the app.
+ *
+ * Every request a page makes passes [AdBlockManager] first, and [CosmeticFilterBridge] hides the
+ * ad slots that are left (issue #85). Both are switched from the phone's browser settings.
  *
  * A page's own text inputs can't call up the phone's IME: the car UI lives in a Presentation on
  * a virtual display, and the platform's soft keyboard has nowhere sensible to appear there (see
@@ -67,6 +87,29 @@ fun WebApp(content: String) {
     var canGoForward by remember { mutableStateOf(false) }
     // The address being typed, or null while the header shows the page title.
     var address by remember { mutableStateOf<String?>(null) }
+    // An address being typed to save as a bookmark, from the start page's Add tile.
+    var newBookmark by remember { mutableStateOf<String?>(null) }
+    // The start page covers the WebView until something is opened.
+    var atStart by remember { mutableStateOf(content.isBlank()) }
+    var pageUrl by remember { mutableStateOf<String?>(null) }
+    val bookmarks by BrowserSettings.bookmarks.collectAsState()
+    val context = LocalContext.current
+    LaunchedEffect(Unit) {
+        AdBlockManager.ensureInitialized(context)
+        AdBlockManager.refreshIfDue(context)
+    }
+    val open: (String) -> Unit = { url ->
+        atStart = false
+        web?.loadUrl(url)
+    }
+    val goHome: () -> Unit = {
+        if (content.isBlank()) {
+            atStart = true
+            pageTitle = ""
+        } else {
+            web?.let { view -> loadContent(view, content) }
+        }
+    }
 
     // Leaving the browser ends full screen, whoever started it.
     DisposableEffect(Unit) { onDispose { CarFullscreen.exit() } }
@@ -78,14 +121,17 @@ fun WebApp(content: String) {
         }
     }
 
-    DisposableEffect(web) {
+    DisposableEffect(web, atStart) {
         navigator.backInterceptor = {
             val view = web
             if (CarFullscreen.active) {
                 CarFullscreen.exit()
                 true
-            } else if (view != null && view.canGoBack()) {
+            } else if (!atStart && view != null && view.canGoBack()) {
                 view.goBack()
+                true
+            } else if (!atStart && content.isBlank()) {
+                goHome()
                 true
             } else {
                 false
@@ -97,19 +143,39 @@ fun WebApp(content: String) {
     Column(Modifier.fillMaxSize()) {
         // Back steps through the page's history first (the interceptor above), then leaves.
         if (!fullscreen) {
-            ScreenHeader(pageTitle.ifEmpty { stringResource(R.string.app_browser) }, Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
+            ScreenHeader(pageTitle.takeUnless { atStart }.orEmpty().ifEmpty { stringResource(R.string.app_browser) }, Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
+                val url = pageUrl
+                if (!atStart && url != null && url.startsWith("http")) {
+                    val saved = remember(bookmarks, url) { BrowserSettings.isBookmarked(url) }
+                    GsIconBox(
+                        {
+                            if (saved) BrowserSettings.removeBookmark(url) else BrowserSettings.addBookmark(pageTitle, url)
+                            CarToasts.show(BrowserSettings, context.getString(if (saved) R.string.web_bookmark_removed else R.string.web_bookmark_added), CarToast.LENGTH_SHORT)
+                        },
+                        Modifier.size(48.dp),
+                        gsColors(if (saved) GsTone.Tonal else GsTone.Neutral),
+                        latched = saved,
+                    ) {
+                        androidx.compose.material3.Icon(
+                            androidx.compose.material.icons.Icons.Filled.Star,
+                            stringResource(if (saved) R.string.web_remove_this_bookmark else R.string.web_bookmark_this),
+                            Modifier.size(24.dp),
+                            tint = if (saved) MaterialTheme.colorScheme.primary else androidx.compose.material3.LocalContentColor.current.copy(alpha = 0.6f),
+                        )
+                    }
+                }
                 GsIconButton(androidx.compose.material.icons.Icons.Filled.Search, stringResource(R.string.web_search), {
                     fieldText = null
                     address = ""
                 })
-                if (canGoForward) {
+                if (canGoForward && !atStart) {
                     GsIconButton(androidx.compose.material.icons.Icons.AutoMirrored.Filled.ArrowForward, stringResource(R.string.web_forward), { web?.goForward() })
                 }
-                GsIconButton(androidx.compose.material.icons.Icons.Filled.Refresh, stringResource(R.string.web_reload), { web?.reload() })
-                GsIconButton(androidx.compose.material.icons.Icons.Filled.Home, stringResource(R.string.web_start_page), {
-                    web?.let { view -> loadContent(view, content) }
-                })
-                GsIconButton(MediaIcons.Fullscreen, stringResource(R.string.web_fullscreen), CarFullscreen::enter)
+                if (!atStart) {
+                    GsIconButton(androidx.compose.material.icons.Icons.Filled.Refresh, stringResource(R.string.web_reload), { web?.reload() })
+                    GsIconButton(androidx.compose.material.icons.Icons.Filled.Home, stringResource(R.string.web_start_page), goHome)
+                    GsIconButton(MediaIcons.Fullscreen, stringResource(R.string.web_fullscreen), CarFullscreen::enter)
+                }
             }
         }
         Box(Modifier.weight(1f).fillMaxSize()) {
@@ -117,17 +183,29 @@ fun WebApp(content: String) {
             modifier = Modifier.fillMaxSize(),
             factory = { context ->
                 WebView(context).apply {
+                    // The page a request belongs to, for telling first-party requests from
+                    // third-party ones: shouldInterceptRequest runs off the UI thread, where a
+                    // WebView's own url can't be read.
+                    val documentUrl = AtomicReference<String?>(null)
+                    CosmeticFilterBridge.attach(this)
                     settings.javaScriptEnabled = true
                     settings.domStorageEnabled = true
                     settings.loadWithOverviewMode = true
                     settings.useWideViewPort = true
-                    webViewClient = LoggingClient(ring) { view ->
+                    webViewClient = LoggingClient(ring, documentUrl, onStarted = { pageUrl = it }) { view ->
                         canGoForward = view.canGoForward()
+                        pageUrl = view.url
                         pageTitle = view.title.orEmpty().takeUnless { it.startsWith("http") || it == "about:blank" }.orEmpty()
                     }
                     webChromeClient = object : WebChromeClient() {
                         override fun onReceivedTitle(view: WebView?, title: String?) {
                             pageTitle = title.orEmpty().takeUnless { it.startsWith("http") || it == "about:blank" }.orEmpty()
+                        }
+
+                        // Kept for the start page's tiles, so a bookmark shows its own icon.
+                        override fun onReceivedIcon(view: WebView?, icon: Bitmap?) {
+                            val host = view?.url?.let { runCatching { android.net.Uri.parse(it).host }.getOrNull() }?.removePrefix("www.")
+                            if (icon != null && host != null) SiteIcons.save(view.context, host, icon)
                         }
 
                         override fun onShowCustomView(view: View, callback: CustomViewCallback) {
@@ -146,7 +224,7 @@ fun WebApp(content: String) {
                         FieldFocusBridge(onFocus = { fieldText = it }, onBlur = { fieldText = null }),
                         "GearslipField",
                     )
-                    loadContent(this, content)
+                    if (content.isNotBlank()) loadContent(this, content)
                     web = this
                 }
             },
@@ -154,6 +232,18 @@ fun WebApp(content: String) {
             update = { it.settings.isAlgorithmicDarkeningAllowed = darkOutside },
             onRelease = { it.destroy() },
         )
+        if (atStart) {
+            androidx.compose.foundation.layout.Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surface)) {
+                BrowserStartPage(
+                    onOpen = open,
+                    onSearch = {
+                        fieldText = null
+                        address = ""
+                    },
+                    onAdd = { newBookmark = "https://" },
+                )
+            }
+        }
         pageFullscreen?.let { (view, _) ->
             androidx.compose.runtime.key(view) {
                 AndroidView(
@@ -175,10 +265,30 @@ fun WebApp(content: String) {
                 text = typed,
                 onTextChange = { address = it },
                 onSubmit = {
-                    web?.loadUrl(addressToUrl(typed))
+                    open(BrowserSettings.addressToUrl(typed))
                     address = null
                 },
                 onDismiss = { address = null },
+            )
+        }
+        newBookmark?.let { typed ->
+            CarKeyboard(
+                text = typed,
+                onTextChange = { newBookmark = it },
+                onSubmit = {
+                    // Only an address: words typed here would otherwise save a search as a bookmark.
+                    val text = typed.trim()
+                    val url = when {
+                        text.startsWith("http://") || text.startsWith("https://") -> text
+                        ' ' !in text && '.' in text -> "https://$text"
+                        else -> null
+                    }
+                    if (url != null && BrowserSettings.addBookmark("", url)) {
+                        CarToasts.show(BrowserSettings, context.getString(R.string.web_bookmark_added), CarToast.LENGTH_SHORT)
+                    }
+                    newBookmark = null
+                },
+                onDismiss = { newBookmark = null },
             )
         }
         fieldText?.let { text ->
@@ -207,18 +317,27 @@ private fun loadContent(view: WebView, content: String) {
     }
 }
 
-/** Something that looks like an address opens as one; anything else is searched for. */
-private fun addressToUrl(typed: String): String {
-    val text = typed.trim()
-    return when {
-        text.startsWith("http://") || text.startsWith("https://") -> text
-        ' ' !in text && '.' in text -> "https://$text"
-        else -> "https://duckduckgo.com/?q=" + java.net.URLEncoder.encode(text, "UTF-8")
-    }
-}
+private class LoggingClient(
+    private val ring: String,
+    private val documentUrl: AtomicReference<String?>,
+    private val onStarted: (String?) -> Unit,
+    private val onLoaded: (WebView) -> Unit,
+) : WebViewClient() {
+    override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? =
+        request?.let { AdBlockManager.response(it, documentUrl.get()) }
 
-private class LoggingClient(private val ring: String, private val onLoaded: (WebView) -> Unit) : WebViewClient() {
+    override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+        documentUrl.set(url)
+        onStarted(url)
+        // Without document-start scripts, inject as early as this WebView allows.
+        if (CosmeticFilterBridge.needsPageStartFallback) {
+            view?.evaluateJavascript(CosmeticFilterBridge.INJECTION_JS, null)
+            view?.evaluateJavascript(YouTubeAdBlock.INJECTION_JS, null)
+        }
+    }
+
     override fun onPageFinished(view: WebView?, url: String?) {
+        documentUrl.set(url)
         GearslipLog.i("car web page loaded: $url")
         view?.let(onLoaded)
         view?.evaluateJavascript(FOCUS_TRACKING_JS, null)

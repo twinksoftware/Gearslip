@@ -162,6 +162,7 @@ class GearslipActivity : ComponentActivity(), Projection {
         // Before any car connects: CarServices only starts once the car shows Gearslip's screen,
         // and a car that waits to know the phone before it shows it would never hear (issue #43).
         app.seb3thehacker.gearslip.car.CarBluetooth.init(this)
+        app.seb3thehacker.gearslip.browser.BrowserSettings.init(this)
         AppSettings.applyGearslipEnabled(this)
         // A capture that died without tidying up would leave notifications exposed to every
         // later screen share. Nothing is capturing if the service is not running, so undo it.

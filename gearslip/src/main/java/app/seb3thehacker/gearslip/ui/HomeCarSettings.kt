@@ -64,6 +64,7 @@ enum class CarGroup(@param:StringRes val title: Int) {
     NAV_BAR(R.string.car_group_nav_bar),
     SOUND(R.string.car_group_sound),
     PLACES(R.string.places_title),
+    BROWSER(R.string.app_browser),
     WARNINGS(R.string.car_group_warnings),
     MORE(R.string.car_group_more),
 }
@@ -151,6 +152,8 @@ internal fun HomeCarSettings(onOpen: (CarGroup) -> Unit, modifier: Modifier = Mo
     val playerLeft by CarSettings.playerLeft.collectAsState()
     val theme by CarSettings.appTheme.collectAsState()
     val experimental by CarSettings.experimentalFeaturesEnabled.collectAsState()
+    val browserEngine by app.seb3thehacker.gearslip.browser.BrowserSettings.searchEngine.collectAsState()
+    val browserAdBlock by app.seb3thehacker.gearslip.browser.BrowserSettings.adBlock.collectAsState()
 
     val opens = openChoices()
     val sizes = sizeChoices()
@@ -180,8 +183,11 @@ internal fun HomeCarSettings(onOpen: (CarGroup) -> Unit, modifier: Modifier = Mo
             str(if (bluetoothWarning && !pipeAudio) R.string.summary_bluetooth_on else R.string.summary_bluetooth_off),
             str(if (locationWarning) R.string.summary_location_on else R.string.summary_location_off),
         )
+        CarGroup.BROWSER -> listOf(
+            browserEngine.label,
+            str(if (browserAdBlock) R.string.summary_adblock_on else R.string.summary_adblock_off),
+        )
         CarGroup.MORE -> listOf(
-            str(R.string.web_page),
             str(if (experimental) R.string.summary_experimental_shown else R.string.summary_experimental_hidden),
         )
     }.filter { it.isNotEmpty() }.joinToString(" · ")
@@ -350,9 +356,8 @@ private fun GroupRows(group: CarGroup) {
             }
             Toggle(stringResource(R.string.car_warn_location), locationWarning, CarSettings::setLocationWarning)
         }
+        CarGroup.BROWSER -> BrowserSettingsRows { WebPageRow() }
         CarGroup.MORE -> {
-            WebPageRow()
-            SettingsDivider()
             Toggle(stringResource(R.string.car_experimental), experimental, CarSettings::setExperimentalFeaturesEnabled, note = stringResource(R.string.car_experimental_note))
             if (experimental) {
                 SettingsDivider()

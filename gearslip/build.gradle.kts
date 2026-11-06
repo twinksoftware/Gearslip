@@ -196,6 +196,8 @@ dependencies {
     implementation(libs.androidx.car.app)
     implementation(libs.androidx.car.app.projected)
     implementation(libs.androidx.media)
+    // Document-start scripts, so the ad blocker hides ad slots before a page first paints.
+    implementation(libs.androidx.webkit)
     testImplementation(libs.junit)
 }
 
