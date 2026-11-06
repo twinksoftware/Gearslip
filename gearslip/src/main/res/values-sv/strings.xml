@@ -769,4 +769,16 @@
     <string name="car_apps_finding">Letar efter appar…</string>
     <string name="car_apps_none">Inga appar funna</string>
     <string name="help_usb_data">Tillåt USB-data.</string>
+    <string name="privacy_policy_sub">Information som Gearslip skickar, till vem och varför</string>
+    <string name="car_directions_over_music">Vägbeskrivning över musikuppspelning</string>
+    <plurals name="nav_lane_left">
+        <item quantity="one">Använd den vänstra filen</item>
+        <item quantity="other">Använd de %d vänstra filerna</item>
+    </plurals>
+    <plurals name="nav_lane_right">
+        <item quantity="one">Använd den högra filen</item>
+        <item quantity="other">Använd de %d högra filerna</item>
+    </plurals>
+    <string name="nav_lane_middle">Använd mittenfilen</string>
+    <string name="nav_lane_middle_lanes">Använd mittenfilerna</string>
 </resources>
