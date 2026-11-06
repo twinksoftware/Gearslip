@@ -248,8 +248,8 @@ internal fun RightEdgeControls(
     val hasPan = (actions + mapActions).any { it.type == Action.TYPE_PAN }
     androidx.compose.runtime.LaunchedEffect(hasPan) { if (!hasPan) connection.setPanMode(false) }
 
-    // Faded out when the screen has been left alone; then they are only a memory of buttons, so
-    // the first touch on one wakes them rather than pressing it.
+    // Faded out when the screen has been left alone, to leave the map clear, but still buttons:
+    // a tap on a faded one presses it straight away (and wakes the rest), as Android Auto's do.
     val awake = LocalMapControlsWake.current.awake
     val pan by connection.panMode.collectAsState()
     // Kept up while the knob is on one of them, or the ring would fade out along with the button.
@@ -280,16 +280,7 @@ internal fun RightEdgeControls(
             .alpha(alpha)
             .focusRequester(knobFocus)
             .focusGroup()
-            .onFocusChanged { holdsFocus = it.hasFocus }
-            .let { base ->
-                if (visible) base else base.pointerInput(Unit) {
-                    awaitPointerEventScope {
-                        while (true) {
-                            awaitPointerEvent(PointerEventPass.Initial).changes.forEach { it.consume() }
-                        }
-                    }
-                }
-            },
+            .onFocusChanged { holdsFocus = it.hasFocus },
         horizontalAlignment = alignment,
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
