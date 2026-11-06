@@ -55,6 +55,8 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Switch
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.drawable.IconCompat
+import androidx.compose.ui.graphics.drawscope.clipRect
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.pointer.PointerEventPass
@@ -470,16 +472,30 @@ internal fun AutoStartButton(action: Action, modifier: Modifier = Modifier) {
                         .background(background),
                 )
             }
-            androidx.compose.foundation.layout.Box(
-                Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 16.dp),
-                contentAlignment = Alignment.Center,
-            ) {
-                if (hasGlyph) CarGlyph(action.icon, Modifier.size(24.dp).align(Alignment.CenterStart))
-                Text(
-                    action.title.text().ifEmpty { stringResource(R.string.template_start) },
-                    style = ChromeType.title,
-                    maxLines = 1,
-                )
+            // The label twice, each clipped to its own side of the fill: dark on the filled part
+            // and light on the empty track. One colour for both was unreadable on the track until
+            // the fill reached it (Vela's Start).
+            val label = action.title.text().ifEmpty { stringResource(R.string.template_start) }
+            val trackContent = MaterialTheme.colorScheme.onSurface
+            for (filled in listOf(false, true)) {
+                androidx.compose.foundation.layout.Box(
+                    Modifier
+                        .fillMaxWidth()
+                        .drawWithContent {
+                            val edge = size.width * fraction
+                            if (filled) clipRect(right = edge) { this@drawWithContent.drawContent() }
+                            else clipRect(left = edge) { this@drawWithContent.drawContent() }
+                        }
+                        .padding(horizontal = 20.dp, vertical = 16.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    androidx.compose.runtime.CompositionLocalProvider(
+                        LocalContentColor provides if (filled) content else trackContent,
+                    ) {
+                        if (hasGlyph) CarGlyph(action.icon, Modifier.size(24.dp).align(Alignment.CenterStart))
+                        Text(label, style = ChromeType.title, maxLines = 1, color = LocalContentColor.current)
+                    }
+                }
             }
         }
     }
