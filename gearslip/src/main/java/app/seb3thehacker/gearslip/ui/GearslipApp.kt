@@ -72,8 +72,9 @@ fun GearslipApp(onDisconnect: () -> Unit, onRequestCallScreening: () -> Unit) {
     var carGroup by rememberSaveable { mutableStateOf(CarGroup.SCREEN) }
     BackHandler(enabled = screen != Screen.HOME) {
         screen = when (screen) {
-            Screen.RECOMMENDED_APPS, Screen.LOGS, Screen.CAR_PREVIEW -> Screen.SETTINGS
-            Screen.HELP, Screen.WHATS_NEW -> backTo
+            Screen.RECOMMENDED_APPS -> Screen.SETTINGS
+            // The same place their own back arrows go: Home or Settings, whichever opened them.
+            Screen.HELP, Screen.WHATS_NEW, Screen.LOGS, Screen.CAR_PREVIEW -> backTo
             else -> Screen.HOME
         }
     }
