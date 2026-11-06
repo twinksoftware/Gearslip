@@ -1,4 +1,5 @@
 [versions]
+maplibre = "13.7.1"
 agp = "9.1.1"
 kotlin = "2.4.0"
 coreKtx = "1.19.0"
@@ -20,6 +21,7 @@ webkit = "1.16.0"
 androidxMedia = "1.6.0"
 
 [libraries]
+maplibre-android = { group = "org.maplibre.gl", name = "android-sdk", version.ref = "maplibre" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

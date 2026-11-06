@@ -198,6 +198,8 @@ dependencies {
     implementation(libs.androidx.media)
     // Document-start scripts, so the ad blocker hides ad slots before a page first paints.
     implementation(libs.androidx.webkit)
+    // The map behind a place list (PlaceListMapTemplate), which the host draws, not the app.
+    implementation(libs.maplibre.android)
     testImplementation(libs.junit)
 }
 

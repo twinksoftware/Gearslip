@@ -74,7 +74,11 @@ fun CarAppStage(
         // The app's own drawing goes underneath; everything else is the host's rendering of
         // the template it described, laid over the top.
         androidx.compose.runtime.CompositionLocalProvider(LocalChromeCover provides cover, LocalCarAppConnection provides connection) {
-            if (status.surfaceRequested) {
+            // A place list's map is the host's to draw; any other map is the app's own surface.
+            val placeList = template as? androidx.car.app.model.PlaceListMapTemplate
+            if (placeList != null) {
+                HostPlaceMap(placeList, Modifier.fillMaxSize())
+            } else if (status.surfaceRequested) {
                 AppSurface(connection, frame, template, embedded, Modifier.fillMaxSize())
             }
             // The docked player floats over one side of the map: the chrome keeps clear of it,
