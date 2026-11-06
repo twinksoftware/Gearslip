@@ -226,11 +226,6 @@ private fun Fullscreen(
         onDispose { insets.show(WindowInsetsCompat.Type.systemBars()) }
     }
 
-    // Turning the phone back upright is what normally leaves fullscreen; back still leaves the
-    // preview screen entirely rather than doing nothing, in case the phone's own rotation lock
-    // is on and turning it sideways/back isn't an option.
-    BackHandler(onBack = onBack)
-
     androidx.compose.foundation.layout.BoxWithConstraints(
         Modifier.fillMaxSize().background(Color.Black),
         contentAlignment = Alignment.Center,
@@ -248,6 +243,14 @@ private fun Fullscreen(
             maxWidth - frameWidth >= room * 2 -> Alignment.BottomStart
             maxHeight - frameHeight >= room * 2 -> Alignment.TopStart
             else -> null
+        }
+        // Back steps back inside the car UI, as it does in a car, so one press no longer ends
+        // the preview and the drive's route with it. Leaving is the button beside the frame or
+        // turning the phone upright. A frame with no room for that button keeps back as the
+        // way out, in case the phone's rotation lock is on.
+        BackHandler {
+            if (corner == null) onBack()
+            else app.seb3thehacker.gearslip.car.CarKeys.onKey(android.view.KeyEvent.KEYCODE_BACK, down = true, longPress = false)
         }
         if (corner != null) {
             FilledTonalIconButton(
