@@ -200,8 +200,6 @@
     <string name="car_right">右</string>
     <string name="car_left">左</string>
     <string name="car_autoplay">接続時に自動再生</string>
-    <string name="car_more_lyrics">歌詞の取得元を増やす</string>
-    <string name="car_more_lyrics_note">BetterLyrics と KuGou にも問い合わせ、曲名とアーティスト名が送られます。オフにすると LRCLIB のみに問い合わせます。</string>
     <string name="car_spoken_directions">音声案内</string>
     <string name="car_spoken_directions_note">地図アプリ自身の音声がすでに車で流れている場合はオフにしてください。</string>
     <string name="car_phone_speech">スマートフォンの音声認識を使う</string>
@@ -428,8 +426,6 @@
     <string name="carset_fit">画面に合わせる</string>
     <string name="off">オフ</string>
     <string name="on">オン</string>
-    <string name="carset_lyrics_from">歌詞の取得元</string>
-    <string name="carset_more_sources">取得元を増やす</string>
     <string name="carset_hide">隠す</string>
     <string name="carset_show">表示</string>
     <string name="carset_phone">電話</string>

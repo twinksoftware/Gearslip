@@ -200,8 +200,6 @@
     <string name="car_right">Direita</string>
     <string name="car_left">Esquerda</string>
     <string name="car_autoplay">Tocar ao conectar</string>
-    <string name="car_more_lyrics">Mais fontes de letras</string>
-    <string name="car_more_lyrics_note">Também consulta o BetterLyrics e o KuGou, que recebem o nome e o artista da música. Desativado, consulta só o LRCLIB.</string>
     <string name="car_spoken_directions">Instruções faladas</string>
     <string name="car_spoken_directions_note">Desative se a voz do seu app de mapas já toca no carro.</string>
     <string name="car_phone_speech">Usar o reconhecimento de voz do celular</string>
@@ -430,8 +428,6 @@
     <string name="carset_fit">Ajustar à tela</string>
     <string name="off">Desativado</string>
     <string name="on">Ativado</string>
-    <string name="carset_lyrics_from">Letras de</string>
-    <string name="carset_more_sources">Mais fontes</string>
     <string name="carset_hide">Ocultar</string>
     <string name="carset_show">Mostrar</string>
     <string name="carset_phone">Celular</string>

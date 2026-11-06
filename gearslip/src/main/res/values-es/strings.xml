@@ -109,8 +109,6 @@
     <string name="car_right">Bien</string>
     <string name="car_left">Izquierda</string>
     <string name="car_autoplay">Autoplay en conexión</string>
-    <string name="car_more_lyrics">Más fuentes de letras</string>
-    <string name="car_more_lyrics_note">También pregunta BetterLyrics y KuGou, que luego consigue el nombre y artista de la canción. Fuera pide LRCLIB sólo.</string>
     <string name="car_spoken_directions">Instrucciones descritas</string>
     <string name="car_spoken_directions_note">Apágalo si la propia voz de su aplicación de mapa ya juega en el coche.</string>
     <string name="car_phone_speech">Use el reconocimiento del discurso del teléfono</string>
@@ -300,8 +298,6 @@
     <string name="carset_fit">Ajuste a la pantalla</string>
     <string name="off">Fuera</string>
     <string name="on">On</string>
-    <string name="carset_lyrics_from">Letras de</string>
-    <string name="carset_more_sources">Más fuentes</string>
     <string name="carset_hide">Oculto</string>
     <string name="carset_show">Show</string>
     <string name="carset_phone">Teléfono</string>

@@ -188,8 +188,6 @@
     <string name="car_right">Dreapta</string>
     <string name="car_left">Stânga</string>
     <string name="car_autoplay">Redare automată la conectare</string>
-    <string name="car_more_lyrics">Alte surse de versuri</string>
-    <string name="car_more_lyrics_note">De asemenea, interoghează BetterLyrics și KuGou, care obțin apoi numele melodiei și al artistului. Opțiunea „Oprit” interoghează doar LRCLIB.</string>
     <string name="car_spoken_directions">Instrucțiuni vocale</string>
     <string name="car_spoken_directions_note">Dezactivează dacă vocea aplicației de hărți se aude deja în mașină.</string>
     <string name="car_phone_speech">Folosește funcția de recunoaștere vocală a telefonului</string>
@@ -378,8 +376,6 @@
     <string name="carset_fit">Ajustare la ecran</string>
     <string name="off">Oprit</string>
     <string name="on">Pornit</string>
-    <string name="carset_lyrics_from">Versuri din</string>
-    <string name="carset_more_sources">Alte surse</string>
     <string name="carset_hide">Ascunde</string>
     <string name="carset_show">Afișează</string>
     <string name="carset_phone">Telefon</string>

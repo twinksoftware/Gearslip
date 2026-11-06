@@ -200,8 +200,6 @@
     <string name="car_right">오른쪽</string>
     <string name="car_left">왼쪽</string>
     <string name="car_autoplay">연결 시 자동 재생</string>
-    <string name="car_more_lyrics">가사 출처 더 보기</string>
-    <string name="car_more_lyrics_note">BetterLyrics와 KuGou에도 요청하며, 이때 노래 제목과 아티스트가 전달됩니다. 끄면 LRCLIB에만 요청합니다.</string>
     <string name="car_spoken_directions">음성 안내</string>
     <string name="car_spoken_directions_note">지도 앱 자체의 음성이 이미 차량에서 나온다면 끄세요.</string>
     <string name="car_phone_speech">휴대전화의 음성 인식 사용</string>
@@ -428,8 +426,6 @@
     <string name="carset_fit">화면에 맞추기</string>
     <string name="off">끄기</string>
     <string name="on">켜기</string>
-    <string name="carset_lyrics_from">가사 출처</string>
-    <string name="carset_more_sources">출처 더 보기</string>
     <string name="carset_hide">숨기기</string>
     <string name="carset_show">표시</string>
     <string name="carset_phone">휴대전화</string>

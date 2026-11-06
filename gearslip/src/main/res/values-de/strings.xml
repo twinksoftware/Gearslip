@@ -11,8 +11,6 @@
     <string name="carset_fit">An Bildschirm anpassen</string>
     <string name="off">Aus</string>
     <string name="on">An</string>
-    <string name="carset_lyrics_from">Songtexte von</string>
-    <string name="carset_more_sources">Weitere Quellen</string>
     <string name="carset_hide">Ausblenden</string>
     <string name="carset_show">Anzeigen</string>
     <string name="carset_phone">Handy</string>
@@ -510,8 +508,6 @@
     <string name="car_right">Rechts</string>
     <string name="car_left">Links</string>
     <string name="car_autoplay">Automatisch abspielen beim Verbinden</string>
-    <string name="car_more_lyrics">Weitere Songtext-Quellen</string>
-    <string name="car_more_lyrics_note">Fragt außerdem bei BetterLyrics und KuGou an, die dabei Titel und Interpret des Songs erfahren. Bei „Aus“ wird nur LRCLIB gefragt.</string>
     <string name="car_spoken_directions">Gesprochene Navigationsansagen</string>
     <string name="car_spoken_directions_note">Schalte das aus, wenn die Sprachansage deiner Karten-App bereits im Auto zu hören ist.</string>
     <string name="car_phone_speech">Spracherkennung des Handys verwenden</string>

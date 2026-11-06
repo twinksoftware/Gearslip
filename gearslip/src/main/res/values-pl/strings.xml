@@ -200,8 +200,6 @@
     <string name="car_right">Prawo</string>
     <string name="car_left">Lewo</string>
     <string name="car_autoplay">Odtwarzaj po połączeniu</string>
-    <string name="car_more_lyrics">Więcej źródeł tekstów</string>
-    <string name="car_more_lyrics_note">Pyta też BetterLyrics i KuGou, które dostają wtedy tytuł i wykonawcę utworu. Po wyłączeniu pyta tylko LRCLIB.</string>
     <string name="car_spoken_directions">Wskazówki głosowe</string>
     <string name="car_spoken_directions_note">Wyłącz, jeśli głos twojej aplikacji z mapami już gra w samochodzie.</string>
     <string name="car_phone_speech">Używaj rozpoznawania mowy telefonu</string>
@@ -431,8 +429,6 @@
     <string name="carset_fit">Dopasuj do ekranu</string>
     <string name="off">Wył.</string>
     <string name="on">Wł.</string>
-    <string name="carset_lyrics_from">Teksty z</string>
-    <string name="carset_more_sources">Więcej źródeł</string>
     <string name="carset_hide">Ukryj</string>
     <string name="carset_show">Pokaż</string>
     <string name="carset_phone">Telefon</string>

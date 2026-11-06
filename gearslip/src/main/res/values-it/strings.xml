@@ -200,8 +200,6 @@
     <string name="car_right">Destra</string>
     <string name="car_left">Sinistra</string>
     <string name="car_autoplay">Riproduci alla connessione</string>
-    <string name="car_more_lyrics">Più fonti per i testi</string>
-    <string name="car_more_lyrics_note">Chiede anche a BetterLyrics e KuGou, che ricevono così titolo e artista del brano. Se disattivato, chiede solo a LRCLIB.</string>
     <string name="car_spoken_directions">Indicazioni vocali</string>
     <string name="car_spoken_directions_note">Disattivale se la voce della tua app di navigazione si sente già in auto.</string>
     <string name="car_phone_speech">Usa il riconoscimento vocale del telefono</string>
@@ -430,8 +428,6 @@
     <string name="carset_fit">Adatta allo schermo</string>
     <string name="off">Off</string>
     <string name="on">On</string>
-    <string name="carset_lyrics_from">Testi da</string>
-    <string name="carset_more_sources">Più fonti</string>
     <string name="carset_hide">Nascondi</string>
     <string name="carset_show">Mostra</string>
     <string name="carset_phone">Telefono</string>

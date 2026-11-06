@@ -200,8 +200,6 @@
     <string name="car_right">Vpravo</string>
     <string name="car_left">Vlevo</string>
     <string name="car_autoplay">Přehrát po připojení</string>
-    <string name="car_more_lyrics">Více zdrojů textů</string>
-    <string name="car_more_lyrics_note">Ptá se také BetterLyrics a KuGou, které pak dostanou název a interpreta skladby. Vypnuto se ptá jen LRCLIB.</string>
     <string name="car_spoken_directions">Hlasové pokyny</string>
     <string name="car_spoken_directions_note">Vypněte je, pokud hlas vaší mapové aplikace už v autě hraje.</string>
     <string name="car_phone_speech">Používat rozpoznávání řeči telefonu</string>
@@ -431,8 +429,6 @@
     <string name="carset_fit">Přizpůsobit obrazovce</string>
     <string name="off">Vyp.</string>
     <string name="on">Zap.</string>
-    <string name="carset_lyrics_from">Texty z</string>
-    <string name="carset_more_sources">Více zdrojů</string>
     <string name="carset_hide">Skrýt</string>
     <string name="carset_show">Zobrazit</string>
     <string name="carset_phone">Telefon</string>

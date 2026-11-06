@@ -200,8 +200,6 @@
     <string name="car_right">Höger</string>
     <string name="car_left">Vänster</string>
     <string name="car_autoplay">Spela upp vid anslutning</string>
-    <string name="car_more_lyrics">Fler källor för låttexter</string>
-    <string name="car_more_lyrics_note">Frågar även BetterLyrics och KuGou, som då får låtens namn och artist. Av frågar bara LRCLIB.</string>
     <string name="car_spoken_directions">Röstvägledning</string>
     <string name="car_spoken_directions_note">Stäng av den om kartappens egen röst redan hörs i bilen.</string>
     <string name="car_phone_speech">Använd telefonens taligenkänning</string>
@@ -429,8 +427,6 @@
     <string name="carset_fit">Anpassa till skärmen</string>
     <string name="off">Av</string>
     <string name="on">På</string>
-    <string name="carset_lyrics_from">Låttexter från</string>
-    <string name="carset_more_sources">Fler källor</string>
     <string name="carset_hide">Dölj</string>
     <string name="carset_show">Visa</string>
     <string name="carset_phone">Telefon</string>

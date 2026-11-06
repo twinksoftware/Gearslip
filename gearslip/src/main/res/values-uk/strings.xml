@@ -200,8 +200,6 @@
     <string name="car_right">Праворуч</string>
     <string name="car_left">Ліворуч</string>
     <string name="car_autoplay">Відтворювати під час підключення</string>
-    <string name="car_more_lyrics">Більше джерел текстів</string>
-    <string name="car_more_lyrics_note">Також питає BetterLyrics і KuGou, які тоді отримують назву й виконавця пісні. Якщо вимкнено, питає лише LRCLIB.</string>
     <string name="car_spoken_directions">Голосові підказки</string>
     <string name="car_spoken_directions_note">Вимкніть, якщо голос вашого навігатора вже звучить в авто.</string>
     <string name="car_phone_speech">Розпізнавання мовлення телефона</string>
@@ -431,8 +429,6 @@
     <string name="carset_fit">Припасувати до екрана</string>
     <string name="off">Вимк.</string>
     <string name="on">Увімк.</string>
-    <string name="carset_lyrics_from">Тексти з</string>
-    <string name="carset_more_sources">Більше джерел</string>
     <string name="carset_hide">Сховати</string>
     <string name="carset_show">Показати</string>
     <string name="carset_phone">Телефон</string>

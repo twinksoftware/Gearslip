@@ -206,11 +206,11 @@
     <string name="car_skip_buttons">Skip buttons</string>
     <string name="car_song_title">Song title</string>
     <string name="car_player_beside_map">Player beside the map</string>
+    <string name="car_player_beside_map_note">The side of the map the player docks to when you tap its dock button.</string>
     <string name="car_right">Right</string>
     <string name="car_left">Left</string>
     <string name="car_autoplay">Autoplay on connect</string>
-    <string name="car_more_lyrics">More lyrics sources</string>
-    <string name="car_more_lyrics_note">Also asks BetterLyrics and KuGou, which then get the song\'s name and artist. Off asks LRCLIB only.</string>
+    <string name="car_autoplay_note">Picks the music up where it stopped once the car connects.</string>
     <string name="car_spoken_directions">Spoken directions</string>
     <string name="car_spoken_directions_note">Turn it off if your map app\'s own voice already plays in the car.</string>
     <string name="car_phone_speech">Use the phone\'s speech recognition</string>
@@ -218,6 +218,10 @@
     <string name="car_warn_bluetooth">Warn when Bluetooth isn\'t connected</string>
     <string name="car_warn_location">Warn when location is off</string>
     <string name="car_experimental">Experimental features</string>
+    <string name="car_experimental_note">Features still in testing. They may not work in every car.</string>
+    <string name="carset_experimental_heading">Experimental</string>
+    <string name="carset_advanced">Advanced</string>
+    <string name="carset_fit_needs_car">Connect to a car to save this fit for it.</string>
     <string name="car_vehicle_data">Vehicle data</string>
     <string name="car_vehicle_data_note">Adds a Vehicle data tile: a live dump of the car\'s sensors. The field names are guesses until you\'ve watched one change.</string>
     <string name="car_adaptive_video">Adaptive video quality</string>
@@ -462,8 +466,6 @@
     <string name="carset_fit">Fit to the screen</string>
     <string name="off">Off</string>
     <string name="on">On</string>
-    <string name="carset_lyrics_from">Lyrics from</string>
-    <string name="carset_more_sources">More sources</string>
     <string name="carset_hide">Hide</string>
     <string name="carset_show">Show</string>
     <string name="carset_phone">Phone</string>

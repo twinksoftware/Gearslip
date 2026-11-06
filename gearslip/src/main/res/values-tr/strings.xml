@@ -200,8 +200,6 @@
     <string name="car_right">Sağ</string>
     <string name="car_left">Sol</string>
     <string name="car_autoplay">Bağlanınca çal</string>
-    <string name="car_more_lyrics">Daha fazla şarkı sözü kaynağı</string>
-    <string name="car_more_lyrics_note">BetterLyrics ve KuGou’ya da sorar; bunlar şarkının adını ve sanatçısını alır. Kapalıyken yalnızca LRCLIB’ye sorar.</string>
     <string name="car_spoken_directions">Sesli yol tarifi</string>
     <string name="car_spoken_directions_note">Harita uygulamanızın kendi sesi araçta zaten çalıyorsa kapatın.</string>
     <string name="car_phone_speech">Telefonun konuşma tanımasını kullan</string>
@@ -429,8 +427,6 @@
     <string name="carset_fit">Ekrana sığdır</string>
     <string name="off">Kapalı</string>
     <string name="on">Açık</string>
-    <string name="carset_lyrics_from">Sözlerin kaynağı</string>
-    <string name="carset_more_sources">Daha fazla kaynak</string>
     <string name="carset_hide">Gizle</string>
     <string name="carset_show">Göster</string>
     <string name="carset_phone">Telefon</string>

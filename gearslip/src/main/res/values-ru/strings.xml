@@ -200,8 +200,6 @@
     <string name="car_right">Справа</string>
     <string name="car_left">Слева</string>
     <string name="car_autoplay">Воспроизводить при подключении</string>
-    <string name="car_more_lyrics">Больше источников текстов</string>
-    <string name="car_more_lyrics_note">Также спрашивает BetterLyrics и KuGou, которые тогда получают название и исполнителя песни. Если выключено, спрашивает только LRCLIB.</string>
     <string name="car_spoken_directions">Голосовые подсказки</string>
     <string name="car_spoken_directions_note">Выключите, если голос вашего навигатора уже звучит в машине.</string>
     <string name="car_phone_speech">Распознавание речи телефона</string>
@@ -431,8 +429,6 @@
     <string name="carset_fit">Подогнать под экран</string>
     <string name="off">Выкл.</string>
     <string name="on">Вкл.</string>
-    <string name="carset_lyrics_from">Тексты из</string>
-    <string name="carset_more_sources">Больше источников</string>
     <string name="carset_hide">Скрыть</string>
     <string name="carset_show">Показать</string>
     <string name="carset_phone">Телефон</string>

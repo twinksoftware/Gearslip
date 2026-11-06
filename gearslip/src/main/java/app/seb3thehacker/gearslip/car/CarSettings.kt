@@ -68,7 +68,6 @@ private const val KEY_LOCATION_WARNING = "car_location_warning"
     private const val KEY_AUTOPLAY = "car_autoplay"
     private const val KEY_PLAYER_TITLE = "car_player_title"
     private const val KEY_PLAYER_LEFT = "car_player_left"
-    private const val KEY_MORE_LYRICS = "car_more_lyrics"
     private const val KEY_THEME = "car_app_theme"
     private const val KEY_UI_THEME = "car_ui_theme"
     private const val KEY_DARK_STYLE = "car_dark_style"
@@ -114,7 +113,6 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
     private val autoplayFlow = MutableStateFlow(false)
     private val playerTitleFlow = MutableStateFlow(false)
     private val playerLeftFlow = MutableStateFlow(false)
-    private val moreLyricsFlow = MutableStateFlow(true)
     private val themeFlow = MutableStateFlow(AppTheme.PHONE)
     val appTheme: StateFlow<AppTheme> = themeFlow
     private val darkStyleFlow = MutableStateFlow(DarkStyle.BLACK)
@@ -245,7 +243,6 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
     val playerLeft: StateFlow<Boolean> = playerLeftFlow
 
     /** Lyrics from BetterLyrics and KuGou as well as LRCLIB; off sends song details to LRCLIB only. */
-    val moreLyrics: StateFlow<Boolean> = moreLyricsFlow
 
     val scale: StateFlow<Float> = scaleFlow
 
@@ -398,7 +395,6 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
         autoplayFlow.value = AppSettings.getString(app, KEY_AUTOPLAY, "false") == "true"
         playerTitleFlow.value = AppSettings.getString(app, KEY_PLAYER_TITLE, "false") == "true"
         playerLeftFlow.value = AppSettings.getString(app, KEY_PLAYER_LEFT, "false") == "true"
-        moreLyricsFlow.value = AppSettings.getString(app, KEY_MORE_LYRICS, "true") == "true"
         pipeAudioFlow.value = AppSettings.getString(app, KEY_PIPE_AUDIO, "true") == "true"
         // Until the driver sets it, on for USB audio and off for Bluetooth, where the map app's
         // own voice already reaches the car.
@@ -488,11 +484,6 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
     fun setPlayerLeft(on: Boolean) {
         playerLeftFlow.value = on
         AppSettings.putString(app, KEY_PLAYER_LEFT, on.toString())
-    }
-
-    fun setMoreLyrics(on: Boolean) {
-        moreLyricsFlow.value = on
-        AppSettings.putString(app, KEY_MORE_LYRICS, on.toString())
     }
 
     fun setAutoplay(on: Boolean) {

@@ -200,8 +200,6 @@
     <string name="car_right">يمين</string>
     <string name="car_left">يسار</string>
     <string name="car_autoplay">التشغيل التلقائي عند الاتصال</string>
-    <string name="car_more_lyrics">مصادر أكثر لكلمات الأغاني</string>
-    <string name="car_more_lyrics_note">يسأل أيضًا BetterLyrics وKuGou، فيحصلان على اسم الأغنية والفنان. عند الإيقاف يسأل LRCLIB فقط.</string>
     <string name="car_spoken_directions">الإرشادات الصوتية</string>
     <string name="car_spoken_directions_note">أوقفها إذا كان صوت تطبيق الخرائط نفسه يُسمع في السيارة بالفعل.</string>
     <string name="car_phone_speech">استخدام التعرّف على الكلام في الهاتف</string>
@@ -433,8 +431,6 @@
     <string name="carset_fit">ملاءمة الشاشة</string>
     <string name="off">متوقف</string>
     <string name="on">مفعّل</string>
-    <string name="carset_lyrics_from">الكلمات من</string>
-    <string name="carset_more_sources">مصادر أكثر</string>
     <string name="carset_hide">إخفاء</string>
     <string name="carset_show">إظهار</string>
     <string name="carset_phone">الهاتف</string>

@@ -200,8 +200,6 @@
     <string name="car_right">Droite</string>
     <string name="car_left">Gauche</string>
     <string name="car_autoplay">Lecture auto à la connexion</string>
-    <string name="car_more_lyrics">Plus de sources de paroles</string>
-    <string name="car_more_lyrics_note">Interroge aussi BetterLyrics et KuGou, qui reçoivent alors le titre et l’artiste du morceau. Désactivé, seul LRCLIB est interrogé.</string>
     <string name="car_spoken_directions">Guidage vocal</string>
     <string name="car_spoken_directions_note">Désactivez-le si la voix de votre appli de navigation passe déjà dans la voiture.</string>
     <string name="car_phone_speech">Utiliser la reconnaissance vocale du téléphone</string>
@@ -430,8 +428,6 @@
     <string name="carset_fit">Ajuster à l’écran</string>
     <string name="off">Désactivé</string>
     <string name="on">Activé</string>
-    <string name="carset_lyrics_from">Paroles depuis</string>
-    <string name="carset_more_sources">Plus de sources</string>
     <string name="carset_hide">Masquer</string>
     <string name="carset_show">Afficher</string>
     <string name="carset_phone">Téléphone</string>

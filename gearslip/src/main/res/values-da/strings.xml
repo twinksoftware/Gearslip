@@ -187,8 +187,6 @@
     <string name="car_right">Højre</string>
     <string name="car_left">Venstre</string>
     <string name="car_autoplay">Autoplay på forbindelse</string>
-    <string name="car_more_lyrics">Flere tekstkilder</string>
-    <string name="car_more_lyrics_note">Spørg også BetterLyrics og KuGou, som derefter får sangens navn og kunstner. Ellers spørges kun LRCLIB.</string>
     <string name="cert_import_button">Import</string>
     <string name="car_spoken_directions">Talte rutevejledniger</string>
     <string name="car_spoken_directions_note">Slå det fra, hvis dit navigations programs egen stemme allerede spiller i bilen.</string>

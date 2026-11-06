@@ -200,8 +200,6 @@
     <string name="car_right">右</string>
     <string name="car_left">左</string>
     <string name="car_autoplay">连接时自动播放</string>
-    <string name="car_more_lyrics">更多歌词来源</string>
-    <string name="car_more_lyrics_note">同时查询 BetterLyrics 和 KuGou，它们会收到歌曲名和歌手。关闭后只查询 LRCLIB。</string>
     <string name="car_spoken_directions">语音导航</string>
     <string name="car_spoken_directions_note">如果地图应用自己的语音已经在车上播放，请关闭此项。</string>
     <string name="car_phone_speech">使用手机的语音识别</string>
@@ -428,8 +426,6 @@
     <string name="carset_fit">适应屏幕</string>
     <string name="off">关</string>
     <string name="on">开</string>
-    <string name="carset_lyrics_from">歌词来源</string>
-    <string name="carset_more_sources">更多来源</string>
     <string name="carset_hide">隐藏</string>
     <string name="carset_show">显示</string>
     <string name="carset_phone">手机</string>

@@ -228,7 +228,6 @@ private fun GroupRows(group: CarGroup) {
     val autoplay by CarSettings.autoplay.collectAsState()
     val playerTitle by CarSettings.playerTitle.collectAsState()
     val playerLeft by CarSettings.playerLeft.collectAsState()
-    val moreLyrics by CarSettings.moreLyrics.collectAsState()
     val theme by CarSettings.appTheme.collectAsState()
     val uiTheme by CarSettings.uiTheme.collectAsState()
     val darkStyle by CarSettings.darkStyle.collectAsState()
@@ -263,16 +262,9 @@ private fun GroupRows(group: CarGroup) {
             SettingsDivider()
             Choice(stringResource(R.string.car_player_nav_bar), listOf(false to stringResource(R.string.car_skip_buttons), true to stringResource(R.string.car_song_title)), playerTitle, CarSettings::setPlayerTitle)
             SettingsDivider()
-            Choice(stringResource(R.string.car_player_beside_map), listOf(false to stringResource(R.string.car_right), true to stringResource(R.string.car_left)), playerLeft, CarSettings::setPlayerLeft)
+            Choice(stringResource(R.string.car_player_beside_map), listOf(false to stringResource(R.string.car_right), true to stringResource(R.string.car_left)), playerLeft, CarSettings::setPlayerLeft, note = stringResource(R.string.car_player_beside_map_note))
             SettingsDivider()
-            Toggle(stringResource(R.string.car_autoplay), autoplay, CarSettings::setAutoplay)
-            SettingsDivider()
-            Toggle(
-                stringResource(R.string.car_more_lyrics),
-                moreLyrics,
-                CarSettings::setMoreLyrics,
-                note = stringResource(R.string.car_more_lyrics_note),
-            )
+            Toggle(stringResource(R.string.car_autoplay), autoplay, CarSettings::setAutoplay, note = stringResource(R.string.car_autoplay_note))
         }
         CarGroup.SOUND -> {
             Toggle(
@@ -309,7 +301,7 @@ private fun GroupRows(group: CarGroup) {
         CarGroup.MORE -> {
             WebPageRow()
             SettingsDivider()
-            Toggle(stringResource(R.string.car_experimental), experimental, CarSettings::setExperimentalFeaturesEnabled)
+            Toggle(stringResource(R.string.car_experimental), experimental, CarSettings::setExperimentalFeaturesEnabled, note = stringResource(R.string.car_experimental_note))
             if (experimental) {
                 SettingsDivider()
                 Toggle(

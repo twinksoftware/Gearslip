@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.Base64
 import android.util.Xml
 import app.seb3thehacker.gearslip.GearslipLog
-import app.seb3thehacker.gearslip.car.CarSettings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -48,8 +47,7 @@ class LyricsResult(val lines: List<LyricLine>, val synced: Boolean, val source: 
  *
  * Media apps almost never publish lyrics in their session metadata, so these are the only general
  * source. Each lookup sends the track's title, artist, album and length to these services, which
- * is why it happens only when the driver opens the lyrics view, never in the background. With
- * [CarSettings.moreLyrics] off, only LRCLIB is asked.
+ * is why it happens only when the driver opens the lyrics view, never in the background.
  *
  * Results are cached twice over: in memory for the life of the process, and on disk under the
  * cache directory so a song looked up on a past drive doesn't need the network again on this one.
@@ -79,13 +77,12 @@ object Lyrics {
     private class Source(val name: String, val best: Int, val lookup: () -> LyricsResult?)
 
     private fun sources(title: String, artist: String, album: String, durationMs: Long): List<Source> {
-        val more = CarSettings.moreLyrics.value
         val seconds = (durationMs / 1000).toInt()
-        return buildList {
-            if (more) add(Source("BetterLyrics", BEST) { betterLyrics(title, artist, album, seconds) })
-            add(Source("LRCLIB", 2) { exact(title, artist, album, durationMs) ?: search(title, artist) })
-            if (more) add(Source("KuGou", 2) { kuGou(title, artist, album, seconds) })
-        }
+        return listOf(
+            Source("BetterLyrics", BEST) { betterLyrics(title, artist, album, seconds) },
+            Source("LRCLIB", 2) { exact(title, artist, album, durationMs) ?: search(title, artist) },
+            Source("KuGou", 2) { kuGou(title, artist, album, seconds) },
+        )
     }
 
     private fun key(title: String, artist: String, album: String, durationMs: Long) = "$title|$artist|$album|$durationMs"
@@ -93,8 +90,7 @@ object Lyrics {
     suspend fun find(context: Context, title: String, artist: String, album: String, durationMs: Long): LyricsResult? {
         if (title.isBlank()) return null
         val key = key(title, artist, album, durationMs)
-        // A miss with only LRCLIB isn't a miss once more sources are on, so the mode is part of it.
-        val memoryKey = "${CarSettings.moreLyrics.value}|$key"
+        val memoryKey = key
         synchronized(cache) { if (cache.containsKey(memoryKey)) return cache[memoryKey] }
 
         val fromDisk = withContext(Dispatchers.IO) { readDisk(context, key) }
@@ -129,7 +125,7 @@ object Lyrics {
         withContext(Dispatchers.IO) { writeDisk(context, key, better ?: current, System.currentTimeMillis()) }
         if (better == null) return null
         GearslipLog.i("lyrics: replaced ${current.source.ifEmpty { "cached" }} lyrics with ${better.source}'s")
-        synchronized(cache) { cache["${CarSettings.moreLyrics.value}|$key"] = better }
+        synchronized(cache) { cache[key] = better }
         return better
     }
 
