@@ -751,6 +751,10 @@
     <string name="nav_lane_from_right">Use lane %1$d from the right</string>
     <string name="nav_lane_any">Any lane</string>
     <string name="nav_arrive">Arrive %1$s</string>
+    <!-- Under the arrival time on the trip line: "4:30 p.m. / arrival" -->
+    <string name="nav_arrival">arrival</string>
+    <!-- Under the distance left on the trip line: "2.7 km / to go" -->
+    <string name="nav_to_go">to go</string>
 
     <!-- Car app screens -->
     <string name="template_nothing_playing">Nothing playing yet.</string>

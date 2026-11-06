@@ -17,7 +17,6 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
-import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.platform.LocalContext
@@ -112,54 +111,73 @@ internal fun LaneRoad(lanes: List<Lane>, modifier: Modifier, fill: Color, onFill
             drawLine(lerp(ground, line, 0.7f), Offset(x(i.toFloat(), 0f), 0f), Offset(x(i.toFloat(), h), h), edge, pathEffect = dashes)
         }
 
-        val top = h * 0.1f
+        val top = h * 0.12f
         val bottom = h * 0.9f
-        val half = minOf(bottomWidth / n * 0.34f, h * 0.4f)
+        // Half the room across a lane the arrows may use, as at the bottom: well inside the lines
+        // even where the lane narrows at the top.
+        val room = bottomWidth / n * 0.31f
         lanes.forEachIndexed { i, lane ->
-            // A point [u] across from the lane's middle, measured as at the bottom, at height [y].
-            val onRoad = { u: Float, y: Float -> Offset(x(i + 0.5f, y) + u * width(y) / bottomWidth, y) }
-            val stroke = half * 0.24f * width((top + bottom) / 2) / bottomWidth
             val directions = lane.directions.orEmpty().ifEmpty { listOf(null) }
+            // Faded first, so the one to take draws on top where they share a stem.
+            val arrows = directions.sortedBy { it?.isRecommended == true }
+                .map { it to laneArrow(it?.shape ?: LaneDirection.SHAPE_STRAIGHT, top, bottom) }
+            // The lane's arrows as one shape: centred in the lane, and shrunk toward the stem's
+            // foot when they'd reach past [room].
+            val xs = arrows.flatMap { (_, a) -> a.line.map { it.x } + a.head.map { it.x } }
+            val shift = -(xs.min() + xs.max()) / 2
+            val scale = minOf(1f, room / ((xs.max() - xs.min()) / 2))
+            val lift = (bottom - top) * (1 - scale) / 2
+            // Flat to the road: centred, scaled, then narrowed with the lane toward the top.
+            val onRoad = { p: Offset ->
+                val y = bottom - (bottom - p.y) * scale - lift
+                Offset(x(i + 0.5f, y) + (p.x + shift) * scale * width(y) / bottomWidth, y)
+            }
+            val stroke = (bottom - top) * 0.085f * scale * width((top + bottom) / 2) / bottomWidth
             val behind = if (lane.recommended()) fill else ground
             val on = if (lane.recommended()) onFill else line
-            // Solid colours, faded by mixing rather than transparency, so where a stem and a head
-            // overlap nothing shows through twice. Faded first, so the one to take draws on top.
-            directions.sortedBy { it?.isRecommended == true }.forEach { d ->
+            arrows.forEach { (d, arrow) ->
+                // Solid colours, faded by mixing rather than transparency, so where a stem runs
+                // into its head nothing shows through twice.
                 val color = if (d?.isRecommended == true) on else lerp(behind, on, 0.38f)
-                laneArrow(d?.shape ?: LaneDirection.SHAPE_STRAIGHT, onRoad, top, bottom, half, stroke, color)
+                val points = arrow.line.map(onRoad)
+                drawPath(
+                    Path().apply {
+                        moveTo(points[0].x, points[0].y)
+                        points.drop(1).forEach { lineTo(it.x, it.y) }
+                    },
+                    color,
+                    style = Stroke(stroke, cap = StrokeCap.Round, join = StrokeJoin.Round),
+                )
+                val corners = arrow.head.map(onRoad)
+                drawPath(
+                    Path().apply {
+                        moveTo(corners[0].x, corners[0].y)
+                        lineTo(corners[1].x, corners[1].y)
+                        lineTo(corners[2].x, corners[2].y)
+                        close()
+                    },
+                    color,
+                )
             }
         }
     }
 }
 
+/** An arrow laid out flat: the stem as points, and the head's tip and two back corners. */
+private class LaneArrow(val line: List<Offset>, val head: List<Offset>)
+
 /**
- * One direction's arrow inside a lane: a stem up from [bottom] that carries on straight, bends
- * off to a side, or loops back for a U-turn, with a head at the end. Laid out flat, [half] being
- * half the room across the lane, then put on the road by [onRoad]. A lane's arrows share a stem.
+ * One direction's arrow, flat, its stem rising from x 0 at [bottom]: on straight to [top], bending
+ * off to a side from a little above the middle, or looping back for a U-turn. A lane's arrows
+ * share the stem, so a straight-and-right lane reads as one fork.
  */
-private fun DrawScope.laneArrow(
-    shape: Int,
-    onRoad: (Float, Float) -> Offset,
-    top: Float,
-    bottom: Float,
-    half: Float,
-    stroke: Float,
-    color: Color,
-) {
-    val head = half * 0.24f * 1.9f
-    val path = Path()
-    fun Path.to(p: Offset) = onRoad(p.x, p.y).let { lineTo(it.x, it.y) }
-    fun Path.curve(c: Offset, p: Offset) {
-        val a = onRoad(c.x, c.y)
-        val b = onRoad(p.x, p.y)
-        quadraticTo(a.x, a.y, b.x, b.y)
-    }
-    onRoad(0f, bottom).let { path.moveTo(it.x, it.y) }
-    val tip: Offset
-    val dir: Offset
+private fun laneArrow(shape: Int, top: Float, bottom: Float): LaneArrow {
+    val tall = bottom - top
+    val head = tall * 0.17f
+    val start = Offset(0f, bottom)
     val degrees = when (shape) {
-        LaneDirection.SHAPE_SLIGHT_LEFT -> -40f
-        LaneDirection.SHAPE_SLIGHT_RIGHT -> 40f
+        LaneDirection.SHAPE_SLIGHT_LEFT -> -45f
+        LaneDirection.SHAPE_SLIGHT_RIGHT -> 45f
         LaneDirection.SHAPE_NORMAL_LEFT -> -90f
         LaneDirection.SHAPE_NORMAL_RIGHT -> 90f
         LaneDirection.SHAPE_SHARP_LEFT -> -135f
@@ -169,50 +187,47 @@ private fun DrawScope.laneArrow(
         else -> 0f
     }
     val side = if (degrees < 0) -1f else 1f
+    val line = mutableListOf(start)
+    val end: Offset
+    val dir: Offset
     when {
         degrees == 0f -> {
-            path.to(Offset(0f, top + head))
-            tip = Offset(0f, top)
+            end = Offset(0f, top + head)
+            line += end
             dir = Offset(0f, -1f)
         }
         abs(degrees) == 180f -> {
             // Up, over the top and back down beside the stem.
-            val r = half * 0.45f
-            val back = side * 2 * r
-            path.to(Offset(0f, top + r))
-            path.curve(Offset(0f, top), Offset(side * r, top))
-            path.curve(Offset(back, top), Offset(back, top + r))
-            val end = top + (bottom - top) * 0.55f
-            path.to(Offset(back, end))
-            tip = Offset(back, end + head)
+            val r = tall * 0.2f
+            line += Offset(0f, top + r)
+            line += curve(Offset(0f, top + r), Offset(0f, top), Offset(side * r, top))
+            line += curve(Offset(side * r, top), Offset(side * 2 * r, top), Offset(side * 2 * r, top + r))
+            end = Offset(side * 2 * r, top + tall * 0.5f)
+            line += end
             dir = Offset(0f, 1f)
         }
         else -> {
             val rad = degrees / 180f * PI.toFloat()
             val d = Offset(sin(rad), -cos(rad))
-            val fork = top + (bottom - top) * 0.5f
-            val length = minOf((bottom - top) * 0.42f, (half - head) / abs(d.x))
-            val bend = Offset(0f, fork - length * 0.45f)
-            val end = bend + d * length
-            path.to(Offset(0f, fork))
-            path.curve(bend, end)
-            tip = end + d * head
+            val length = tall * 0.32f
+            val fork = Offset(0f, top + tall * 0.6f)
+            val bend = Offset(0f, fork.y - length * 0.45f)
+            end = bend + d * length
+            line += fork
+            line += curve(fork, bend, end)
             dir = d
         }
     }
-    drawPath(path, color, style = Stroke(stroke, cap = StrokeCap.Round, join = StrokeJoin.Round))
-    val across = Offset(-dir.y, dir.x) * (head * 0.85f)
-    val base = tip - dir * (head * 1.6f)
-    val corners = listOf(tip, base + across, base - across).map { onRoad(it.x, it.y) }
-    drawPath(
-        Path().apply {
-            moveTo(corners[0].x, corners[0].y)
-            lineTo(corners[1].x, corners[1].y)
-            lineTo(corners[2].x, corners[2].y)
-            close()
-        },
-        color,
-    )
+    val tip = end + dir * head
+    val base = tip - dir * (head * 1.5f)
+    val across = Offset(-dir.y, dir.x) * (head * 0.9f)
+    return LaneArrow(line, listOf(tip, base + across, base - across))
+}
+
+/** Points along a quadratic curve from [a] to [c] bending toward [b], [a] itself left out. */
+private fun curve(a: Offset, b: Offset, c: Offset): List<Offset> = (1..10).map { k ->
+    val t = k / 10f
+    a * ((1 - t) * (1 - t)) + b * (2 * (1 - t) * t) + c * (t * t)
 }
 
 /**
