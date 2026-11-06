@@ -54,6 +54,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Switch
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.graphics.drawable.IconCompat
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.pointer.PointerEventPass
@@ -531,7 +532,11 @@ internal fun CarGlyph(icon: CarIcon?, modifier: Modifier = Modifier, standard: I
     // app's own process for a content:// icon, plus a bitmap decode - done synchronously on the
     // composition thread for every tile on screen, that's what made a shelf of ten covers feel
     // like it was hanging rather than loading.
-    val bitmapState by produceState<ImageBitmap?>(null, icon) {
+    // CarIcon.equals calls any two bitmap icons equal, so keyed on the CarIcon alone a turn arrow
+    // drawn as a bitmap (Vela's, Organic Maps' lanes) never replaced the first one of the drive.
+    // Those are keyed on the IconCompat itself, which every new template brings fresh.
+    val key: Any? = icon?.icon?.takeIf { it.type != IconCompat.TYPE_RESOURCE && it.type != IconCompat.TYPE_URI } ?: icon
+    val bitmapState by produceState<ImageBitmap?>(null, key) {
         value = withContext(Dispatchers.IO) { icon.image(context) }
     }
     val bitmap = bitmapState
