@@ -37,7 +37,13 @@ object CarServices {
     private const val REPAUSE_MS = 2_000L
 
     val nav: CarAppConnection by lazy { CarAppConnection(requireNotNull(context)) }
-    val media: CarMedia by lazy { CarMedia(requireNotNull(context)) }
+    val media: CarMedia by lazy {
+        CarMedia(requireNotNull(context)).also { m ->
+            // Remembered only once it connects: an app that refuses (NewPipe without Notification
+            // access) must not replace the one the driver was listening to on the next drive.
+            m.onReady = { app -> CarSettings.setLastMedia(app.component.flattenToString()) }
+        }
+    }
 
     /** [nav], or null before the car screen has set things up. */
     fun navOrNull(): CarAppConnection? = if (context != null) nav else null
@@ -67,7 +73,7 @@ object CarServices {
     private var autoplayPending = false
 
     /**
-     * The app that was playing when the driver opened another one. Opening an app is only a look
+     * The app that was playing, or paused with a track loaded, when the driver opened another one. Opening an app is only a look
      * at its library: until something plays there, the music carries on in this one, so leaving
      * the new app's screen goes back to it, as Android Auto does.
      */
@@ -138,13 +144,14 @@ object CarServices {
     // --- media ---------------------------------------------------------------------------
 
     fun openMedia(app: MediaApp, autoplay: Boolean = false) {
-        CarSettings.setLastMedia(app.component.flattenToString())
         val phase = media.phase.value
         val live = phase == CarMedia.Phase.READY || phase == CarMedia.Phase.CONNECTING
         if (_mediaApp.value?.component == app.component && live) return
 
         val previous = _mediaApp.value
-        stillPlaying = previous?.takeIf { it.component != app.component && media.now.value.playing && !autoplay }
+        // Paused counts too: a track loaded there is still the music the driver is listening to.
+        val loaded = media.now.value.let { it.playing || it.title.isNotEmpty() }
+        stillPlaying = previous?.takeIf { it.component != app.component && loaded && !autoplay }
         _mediaApp.value = app
         autoplayPending = autoplay
         media.connect(app)

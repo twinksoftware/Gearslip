@@ -188,6 +188,9 @@ class CarMedia(private val context: Context) {
     /** The music app Gearslip is attached to, for the assistant to name; null when there's none. */
     val appLabel: String? get() = connecting?.label?.takeIf { controller != null }
 
+    /** Called once an app is connected and can be played, library or not. */
+    var onReady: ((MediaApp) -> Unit)? = null
+
     private val _phase = MutableStateFlow(Phase.IDLE)
     val phase: StateFlow<Phase> = _phase.asStateFlow()
 
@@ -354,6 +357,7 @@ class CarMedia(private val context: Context) {
         attach(session)
         _browse.value = BrowseState(loading = false, unavailable = true)
         _phase.value = Phase.READY
+        onReady?.invoke(app)
     }
 
     private fun onConnected(app: MediaApp) {
@@ -366,6 +370,7 @@ class CarMedia(private val context: Context) {
         mb.extras?.let { childStyles[mb.root] = it.getInt(STYLE_BROWSABLE, 0) to it.getInt(STYLE_PLAYABLE, 0) }
         path.clear()
         _phase.value = Phase.READY
+        onReady?.invoke(app)
         open(mb.root)
     }
 
