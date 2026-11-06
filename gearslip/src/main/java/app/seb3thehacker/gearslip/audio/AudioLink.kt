@@ -52,6 +52,21 @@ class AudioLink(
     // The Uconnect asks for 4 on its video channel; assume the same until its Config says otherwise.
     @Volatile private var maxUnacked = 4
     @Volatile private var lastAckAt = 0L
+    /**
+     * Bytes of PCM per Data message, or 0 to send each capture read as it comes. Raised by
+     * [adaptChunkSize] for a car that acks fewer chunks than it plays.
+     */
+    @Volatile private var chunkBytes = 0
+    /** Capture reads gathered until they fill [chunkBytes]. Only the capture thread touches it. */
+    private val pending = java.io.ByteArrayOutputStream()
+    /** Set by a new stream, so the capture thread drops what an older one left in [pending]. */
+    @Volatile private var pendingStale = false
+    /** The size of the last chunk sent, for [adaptChunkSize] to know what each one holds. */
+    @Volatile private var lastPayloadBytes = 0
+    /** Acks that came while the window was full, and the time they took: the car's own pace. */
+    private var slowAcks = 0
+    private var slowAckMs = 0L
+    private var lastAckFull = false
     private var stalls = 0
     private var chunks = 0
     private var bytes = 0L
@@ -211,11 +226,21 @@ class AudioLink(
 
             MSG_ACK -> {
                 val acked = Wire.varint(Wire.fields(body), 2)?.toInt() ?: 1
+                val now = System.currentTimeMillis()
                 synchronized(ackLock) {
+                    // A full window means the sender is waiting on this ack. When it was waiting on
+                    // the one before too, the gap between them is the car's own pace.
+                    val full = inFlight >= maxUnacked
+                    if (full && lastAckFull) {
+                        slowAcks++
+                        slowAckMs += now - lastAckAt
+                    }
+                    lastAckFull = full
                     inFlight = maxOf(0, inFlight - maxOf(1, acked))
-                    lastAckAt = System.currentTimeMillis()
+                    lastAckAt = now
                     ackLock.notifyAll()
                 }
+                adaptChunkSize()
             }
 
             // Whatever else the head unit answers Setup with, we need its bytes to identify it.
@@ -290,6 +315,40 @@ class AudioLink(
         }
     }
 
+    /**
+     * A 2020 Civic acks a chunk about every 83 ms whatever the chunk holds, so 21 ms chunks
+     * reached it at a quarter of real time: a second of music, then silence, over and over
+     * (issue #43). When the car keeps the sender waiting and its acks come much further apart
+     * than the audio in each chunk, gather the capture into chunks that last at least that gap,
+     * rounded up to a power of two in frames: 83 ms is about 4096 frames at 48 kHz, which looks
+     * like the car's own buffer. A car that keeps up never fills the window, so it never gets here.
+     */
+    private fun adaptChunkSize() {
+        if (aac != null) return
+        val interval = synchronized(ackLock) {
+            if (slowAcks < ADAPT_ACKS) return
+            (slowAckMs.toDouble() / slowAcks).also {
+                slowAcks = 0
+                slowAckMs = 0
+            }
+        }
+        val frame = channels * 2
+        val bytesPerMs = sampleRate * frame / 1000.0
+        val current = if (chunkBytes > 0) chunkBytes else lastPayloadBytes
+        if (current <= 0 || current >= MAX_CHUNK_BYTES) return
+        val heldMs = current / bytesPerMs
+        if (interval < heldMs * SLOW_ACK_RATIO) return
+        val gapFrames = Math.ceil(interval * sampleRate / 1000.0).toInt().coerceAtLeast(1)
+        val frames = Integer.highestOneBit(gapFrames).let { if (it < gapFrames) it shl 1 else it }
+        val target = minOf(MAX_CHUNK_BYTES / frame * frame, frames * frame)
+        if (target <= current) return
+        chunkBytes = target
+        GearslipLog.i(
+            "$tag: the car acks a chunk every ${interval.toInt()}ms, but each holds ${heldMs.toInt()}ms - " +
+                "sending $target-byte chunks (${(target / bytesPerMs).toInt()}ms) from now on",
+        )
+    }
+
     /** Silence for [ms], whole frames of this sink's format. */
     private fun silence(ms: Int): ByteArray = ByteArray(sampleRate * ms / 1000 * channels * 2)
 
@@ -331,6 +390,12 @@ class AudioLink(
         }
         inFlight = 0
         lastAckAt = System.currentTimeMillis()
+        pendingStale = true
+        synchronized(ackLock) {
+            slowAcks = 0
+            slowAckMs = 0
+            lastAckFull = false
+        }
         if (aacSink && aac == null) {
             aac = runCatching { AacEncoder(sampleRate, channels, adts = service.codecType == ServiceDiscovery.CODEC_AAC_LC_ADTS) }
                 .onSuccess { GearslipLog.i("$tag: the car takes ${service.codecName} only - encoding to AAC") }
@@ -380,7 +445,20 @@ class AudioLink(
     private fun writeNow(pcm: ByteArray, size: Int) {
         val encoder = aac
         if (encoder == null) {
-            send(pcm.copyOf(size))
+            if (pendingStale) {
+                pendingStale = false
+                pending.reset()
+            }
+            val want = chunkBytes
+            if (want <= 0 && pending.size() == 0) {
+                send(pcm.copyOf(size))
+                return
+            }
+            pending.write(pcm, 0, size)
+            if (pending.size() >= want) {
+                send(pending.toByteArray())
+                pending.reset()
+            }
             return
         }
         val frames = try {
@@ -430,6 +508,7 @@ class AudioLink(
             return
         }
         synchronized(ackLock) { inFlight++ }
+        lastPayloadBytes = payload.size
         chunks++
         bytes += payload.size
         // The first chunk proves the whole path; after that, an occasional line is enough to show
@@ -478,6 +557,12 @@ class AudioLink(
         private const val FOCUS_STATE_LOSS_TRANSIENT = 5
         private const val SESSION_ID = 2
         private const val STALL_MS = 2_000L
+        /** Acks measured with the window full before the chunk size is judged. */
+        private const val ADAPT_ACKS = 20
+        /** Acks this much further apart than a chunk lasts mean the car is the one holding back. */
+        private const val SLOW_ACK_RATIO = 1.5
+        /** About 170 ms at 48 kHz stereo: the most delay a bigger chunk may add. */
+        private const val MAX_CHUNK_BYTES = 32_768
         private const val CHUNK_LOG_EVERY = 200 // about every four seconds
         private const val CONFIG_WAIT_MS = 1_000L
 
