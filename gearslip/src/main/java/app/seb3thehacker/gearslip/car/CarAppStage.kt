@@ -145,13 +145,18 @@ private fun AppSurface(
     val cardsAtEnd = LocalCardsAtEnd.current
     val cardEdge = cardEdge
     val measuredStable = bounds?.takeIf { width > 0 && height > 0 }?.let { cover?.visibleWithin(it, width, height, skip = cardEdge) }
-    LaunchedEffect(template, size, measured, measuredStable, cardsAtEnd) {
+    // A little room above whatever ends the map at the bottom (the nav bar, or the screen's edge):
+    // apps draw their own corner pieces (Waze's speedometer) right on the area's bottom edge,
+    // which left them sitting flush on the bar.
+    val bottomGap = with(androidx.compose.ui.platform.LocalDensity.current) { MAP_BOTTOM_GAP.roundToPx() }
+    LaunchedEffect(template, size, measured, measuredStable, cardsAtEnd, bottomGap) {
         if (width > 0 && height > 0) {
-            val visible = visibleAreaFor(template, width, height, measured, cardsAtEnd)
+            fun android.graphics.Rect.clearOfBar() = if (isEmpty) this else android.graphics.Rect(left, top, right, maxOf(top, bottom - bottomGap))
+            val visible = visibleAreaFor(template, width, height, measured, cardsAtEnd).clearOfBar()
             // Waze seems to centre its car in the stable area rather than the visible one, so it
             // gets the cards taken out of that too. Test: see whether its car moves out from under them.
             val stable = if (!isContentTemplate(template) && connection.appPackage != "com.waze") {
-                visibleAreaFor(template, width, height, measuredStable, cardsAtEnd)
+                visibleAreaFor(template, width, height, measuredStable, cardsAtEnd).clearOfBar()
             } else {
                 visible
             }
@@ -283,6 +288,9 @@ private fun ChromeBar(
         }
     }
 }
+
+/** How far above the bottom of the map the area an app may draw in stops. */
+private val MAP_BOTTOM_GAP = 12.dp
 
 /** Height of [ChromeBar]; the template's own chrome starts below it. */
 private val CHROME_BAR = 44.dp

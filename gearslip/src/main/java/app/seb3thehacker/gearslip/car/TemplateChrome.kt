@@ -540,6 +540,9 @@ private fun MapPaneLayout(
             if (pan) null else actionStrip,
             mapActionStrip,
             Modifier.align(if (atEnd) Alignment.TopStart else Alignment.TopEnd).padding(12.dp),
+            // Counted as covering the map, as in navigation, or Waze's speedometer slid under
+            // them and off the screen's edge whenever a card was up.
+            mapActionsModifier = Modifier.covers("pane-buttons", buttonEdge),
             alignment = if (atEnd) Alignment.Start else Alignment.End,
         )
     }
