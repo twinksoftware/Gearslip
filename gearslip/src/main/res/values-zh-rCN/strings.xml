@@ -930,4 +930,6 @@
     <string name="browser_share_label">Gearslip 起始页</string>
     <string name="summary_adblock_on">拦截广告</string>
     <string name="summary_adblock_off">不拦截广告</string>
+    <string name="car_nav_mic">麦克风按钮</string>
+    <string name="car_nav_mic_note">导航栏中的助理按钮。车辆自带的语音按钮始终可用。</string>
 </resources>

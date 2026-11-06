@@ -170,6 +170,7 @@ internal fun CarNavBar(navigator: CarNavigator) {
     // the screen above rather than a panel on it. Over the player it's see-through, so the
     // cover's glow carries on behind it.
     val overPlayer = navigator.current == CarScreen.Media
+    val navMic by CarSettings.navMic.collectAsState()
     Surface(color = if (overPlayer) androidx.compose.ui.graphics.Color.Transparent else MaterialTheme.colorScheme.background) {
         BoxWithConstraints(Modifier.fillMaxWidth().height(NAV_BAR_HEIGHT).padding(horizontal = 10.dp)) {
             Row(Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
@@ -180,8 +181,10 @@ internal fun CarNavBar(navigator: CarNavigator) {
                 NavHomeButton(navigator, entries, running)
                 Spacer(Modifier.width(6.dp))
                 NavItem(MediaIcons.Apps, navigator.current == CarScreen.Apps) { navigator.apps() }
-                Spacer(Modifier.width(6.dp))
-                NavAssistantIcon()
+                if (navMic) {
+                    Spacer(Modifier.width(6.dp))
+                    NavAssistantIcon()
+                }
 
                 // Pinned shortcuts, then whatever else is open right now. A pinned app that's also
                 // open stays in its pinned spot, marked with a dot, instead of showing up twice.

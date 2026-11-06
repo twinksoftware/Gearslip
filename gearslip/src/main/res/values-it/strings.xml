@@ -950,4 +950,6 @@
     <string name="browser_share_label">Pagina iniziale Gearslip</string>
     <string name="summary_adblock_on">Pubblicità bloccata</string>
     <string name="summary_adblock_off">Pubblicità non bloccata</string>
+    <string name="car_nav_mic">Pulsante microfono</string>
+    <string name="car_nav_mic_note">Il pulsante dell’assistente nella barra di navigazione. Il tasto vocale dell’auto funziona comunque.</string>
 </resources>

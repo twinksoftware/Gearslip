@@ -960,4 +960,6 @@
     <string name="browser_share_label">Úvodní stránka Gearslip</string>
     <string name="summary_adblock_on">Reklamy blokovány</string>
     <string name="summary_adblock_off">Reklamy neblokovány</string>
+    <string name="car_nav_mic">Tlačítko mikrofonu</string>
+    <string name="car_nav_mic_note">Tlačítko asistenta na navigační liště. Hlasové tlačítko auta funguje tak jako tak.</string>
 </resources>

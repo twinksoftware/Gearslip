@@ -832,4 +832,6 @@
     <string name="browser_share_label">Pagina de start Gearslip</string>
     <string name="summary_adblock_on">Reclame blocate</string>
     <string name="summary_adblock_off">Reclame neblocate</string>
+    <string name="car_nav_mic">Butonul microfonului</string>
+    <string name="car_nav_mic_note">Butonul asistentului din bara de navigare. Butonul vocal al mașinii funcționează oricum.</string>
 </resources>

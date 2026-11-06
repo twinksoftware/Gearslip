@@ -950,4 +950,6 @@
     <string name="browser_share_label">Página inicial do Gearslip</string>
     <string name="summary_adblock_on">Anúncios bloqueados</string>
     <string name="summary_adblock_off">Anúncios não bloqueados</string>
+    <string name="car_nav_mic">Botão do microfone</string>
+    <string name="car_nav_mic_note">O botão do assistente na barra de navegação. O botão de voz do carro funciona de qualquer jeito.</string>
 </resources>

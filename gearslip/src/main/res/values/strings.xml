@@ -989,4 +989,6 @@
     <string name="browser_share_label">Gearslip start page</string>
     <string name="summary_adblock_on">Ads blocked</string>
     <string name="summary_adblock_off">Ads not blocked</string>
+    <string name="car_nav_mic">Mic button</string>
+    <string name="car_nav_mic_note">The assistant\'s button in the nav bar. The car\'s own voice button works either way.</string>
 </resources>

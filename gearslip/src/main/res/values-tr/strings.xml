@@ -940,4 +940,6 @@
     <string name="browser_share_label">Gearslip başlangıç sayfası</string>
     <string name="summary_adblock_on">Reklamlar engelleniyor</string>
     <string name="summary_adblock_off">Reklamlar engellenmiyor</string>
+    <string name="car_nav_mic">Mikrofon düğmesi</string>
+    <string name="car_nav_mic_note">Gezinme çubuğundaki asistan düğmesi. Aracın kendi ses düğmesi her durumda çalışır.</string>
 </resources>

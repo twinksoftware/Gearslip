@@ -930,4 +930,6 @@
     <string name="browser_share_label">Gearslip 시작 페이지</string>
     <string name="summary_adblock_on">광고 차단 중</string>
     <string name="summary_adblock_off">광고 차단 안 함</string>
+    <string name="car_nav_mic">마이크 버튼</string>
+    <string name="car_nav_mic_note">내비게이션 바의 어시스턴트 버튼입니다. 차량의 음성 버튼은 어느 쪽이든 작동합니다.</string>
 </resources>

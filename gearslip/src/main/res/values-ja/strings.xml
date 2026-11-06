@@ -930,4 +930,6 @@
     <string name="browser_share_label">Gearslip スタートページ</string>
     <string name="summary_adblock_on">広告をブロック中</string>
     <string name="summary_adblock_off">広告をブロックしない</string>
+    <string name="car_nav_mic">マイクボタン</string>
+    <string name="car_nav_mic_note">ナビゲーションバーのアシスタントボタンです。車の音声ボタンはどちらでも使えます。</string>
 </resources>

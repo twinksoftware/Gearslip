@@ -960,4 +960,6 @@
     <string name="browser_share_label">Стартова сторінка Gearslip</string>
     <string name="summary_adblock_on">Реклама блокується</string>
     <string name="summary_adblock_off">Реклама не блокується</string>
+    <string name="car_nav_mic">Кнопка мікрофона</string>
+    <string name="car_nav_mic_note">Кнопка асистента на панелі навігації. Голосова кнопка авто працює в будь-якому разі.</string>
 </resources>

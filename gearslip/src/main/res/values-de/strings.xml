@@ -822,4 +822,6 @@
     <string name="browser_share_label">Gearslip-Startseite</string>
     <string name="summary_adblock_on">Werbung blockiert</string>
     <string name="summary_adblock_off">Werbung nicht blockiert</string>
+    <string name="car_nav_mic">Mikrofontaste</string>
+    <string name="car_nav_mic_note">Die Assistent-Taste in der Navigationsleiste. Die Sprachtaste des Autos funktioniert so oder so.</string>
 </resources>

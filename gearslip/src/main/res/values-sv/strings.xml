@@ -940,4 +940,6 @@
     <string name="browser_share_label">Gearslips startsida</string>
     <string name="summary_adblock_on">Annonser blockeras</string>
     <string name="summary_adblock_off">Annonser blockeras inte</string>
+    <string name="car_nav_mic">Mikrofonknapp</string>
+    <string name="car_nav_mic_note">Assistentens knapp i navigeringsfältet. Bilens egen röstknapp fungerar oavsett.</string>
 </resources>

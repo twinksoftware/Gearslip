@@ -68,6 +68,7 @@ private const val KEY_LOCATION_WARNING = "car_location_warning"
     private const val KEY_AUTOPLAY = "car_autoplay"
     private const val KEY_PLAYER_TITLE = "car_player_title"
     private const val KEY_PLAYER_LEFT = "car_player_left"
+    private const val KEY_NAV_MIC = "car_nav_mic"
     private const val KEY_THEME = "car_app_theme"
     private const val KEY_UI_THEME = "car_ui_theme"
     private const val KEY_DARK_STYLE = "car_dark_style"
@@ -113,6 +114,7 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
     private val autoplayFlow = MutableStateFlow(false)
     private val playerTitleFlow = MutableStateFlow(false)
     private val playerLeftFlow = MutableStateFlow(false)
+    private val navMicFlow = MutableStateFlow(true)
     private val themeFlow = MutableStateFlow(AppTheme.PHONE)
     val appTheme: StateFlow<AppTheme> = themeFlow
     private val darkStyleFlow = MutableStateFlow(DarkStyle.BLACK)
@@ -241,6 +243,9 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
 
     /** The home screen's player sits left of the map instead of right of it. */
     val playerLeft: StateFlow<Boolean> = playerLeftFlow
+
+    /** The assistant's mic button in the nav bar. Off hides only the button: the car's voice key still works. */
+    val navMic: StateFlow<Boolean> = navMicFlow
 
     /** Lyrics from BetterLyrics and KuGou as well as LRCLIB; off sends song details to LRCLIB only. */
 
@@ -397,6 +402,7 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
         autoplayFlow.value = AppSettings.getString(app, KEY_AUTOPLAY, "false") == "true"
         playerTitleFlow.value = AppSettings.getString(app, KEY_PLAYER_TITLE, "false") == "true"
         playerLeftFlow.value = AppSettings.getString(app, KEY_PLAYER_LEFT, "false") == "true"
+        navMicFlow.value = AppSettings.getString(app, KEY_NAV_MIC, "true") == "true"
         pipeAudioFlow.value = AppSettings.getString(app, KEY_PIPE_AUDIO, "true") == "true"
         // Until the driver sets it, on for USB audio and off for Bluetooth, where the map app's
         // own voice already reaches the car.
@@ -481,6 +487,11 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
     fun setPlayerTitle(on: Boolean) {
         playerTitleFlow.value = on
         AppSettings.putString(app, KEY_PLAYER_TITLE, on.toString())
+    }
+
+    fun setNavMic(on: Boolean) {
+        navMicFlow.value = on
+        AppSettings.putString(app, KEY_NAV_MIC, on.toString())
     }
 
     fun setPlayerLeft(on: Boolean) {

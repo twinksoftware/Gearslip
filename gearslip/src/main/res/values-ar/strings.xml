@@ -980,4 +980,6 @@
     <string name="browser_share_label">صفحة البدء في Gearslip</string>
     <string name="summary_adblock_on">الإعلانات محظورة</string>
     <string name="summary_adblock_off">الإعلانات غير محظورة</string>
+    <string name="car_nav_mic">زر الميكروفون</string>
+    <string name="car_nav_mic_note">زر المساعد في شريط التنقل. يعمل زر الصوت في السيارة في كل الأحوال.</string>
 </resources>

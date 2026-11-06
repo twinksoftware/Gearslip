@@ -69,6 +69,7 @@ fun CarSettingsScreen() {
     val autoplay by CarSettings.autoplay.collectAsState()
     val playerTitle by CarSettings.playerTitle.collectAsState()
     val playerLeft by CarSettings.playerLeft.collectAsState()
+    val navMic by CarSettings.navMic.collectAsState()
     val theme by CarSettings.appTheme.collectAsState()
     val uiTheme by CarSettings.uiTheme.collectAsState()
     val darkStyle by CarSettings.darkStyle.collectAsState()
@@ -185,6 +186,9 @@ fun CarSettingsScreen() {
                             ),
                             navBar,
                         ) { CarSettings.setNavBarMode(it) }
+                    }
+                    item {
+                        SwitchRow(stringResource(R.string.car_nav_mic), stringResource(R.string.car_nav_mic_note), navMic) { CarSettings.setNavMic(it) }
                     }
                     item {
                         ChoiceRow(

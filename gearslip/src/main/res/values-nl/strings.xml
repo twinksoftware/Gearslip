@@ -940,4 +940,6 @@
     <string name="browser_share_label">Gearslip-startpagina</string>
     <string name="summary_adblock_on">Advertenties geblokkeerd</string>
     <string name="summary_adblock_off">Advertenties niet geblokkeerd</string>
+    <string name="car_nav_mic">Microfoonknop</string>
+    <string name="car_nav_mic_note">De assistentknop in de navigatiebalk. De spraakknop van de auto werkt hoe dan ook.</string>
 </resources>

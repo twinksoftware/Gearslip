@@ -275,6 +275,7 @@ private fun GroupRows(group: CarGroup) {
     val autoplay by CarSettings.autoplay.collectAsState()
     val playerTitle by CarSettings.playerTitle.collectAsState()
     val playerLeft by CarSettings.playerLeft.collectAsState()
+    val navMic by CarSettings.navMic.collectAsState()
     val theme by CarSettings.appTheme.collectAsState()
     val uiTheme by CarSettings.uiTheme.collectAsState()
     val darkStyle by CarSettings.darkStyle.collectAsState()
@@ -317,6 +318,8 @@ private fun GroupRows(group: CarGroup) {
         }
         CarGroup.NAV_BAR -> {
             Choice(stringResource(R.string.car_nav_bar), navBarChoices(), navBar, CarSettings::setNavBarMode)
+            SettingsDivider()
+            Toggle(stringResource(R.string.car_nav_mic), navMic, CarSettings::setNavMic, note = stringResource(R.string.car_nav_mic_note))
             SettingsDivider()
             Choice(stringResource(R.string.car_player_nav_bar), listOf(false to stringResource(R.string.car_skip_buttons), true to stringResource(R.string.car_song_title)), playerTitle, CarSettings::setPlayerTitle)
             SettingsDivider()

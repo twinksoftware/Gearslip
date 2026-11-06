@@ -960,4 +960,6 @@
     <string name="browser_share_label">Strona startowa Gearslip</string>
     <string name="summary_adblock_on">Reklamy blokowane</string>
     <string name="summary_adblock_off">Reklamy nieblokowane</string>
+    <string name="car_nav_mic">Przycisk mikrofonu</string>
+    <string name="car_nav_mic_note">Przycisk asystenta na pasku nawigacji. Przycisk głosowy w samochodzie działa niezależnie od tego.</string>
 </resources>
