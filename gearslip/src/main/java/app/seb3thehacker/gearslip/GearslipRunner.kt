@@ -173,6 +173,10 @@ class GearslipRunner(
             reportDisconnect()
         } finally {
             running = false
+            // The car is gone, but nothing calls stop() when a wireless session drops: it waits
+            // for the next one. Close the music channel now, so the audio capture behind it,
+            // and the screen sharing Android shows for it, stop too (issue #43).
+            if (!stopped) audioLink?.close()
             writer.shutdown()
             if (drainWriterOnExit) writer.awaitTermination(2, TimeUnit.SECONDS)
             writer.shutdownNow()
