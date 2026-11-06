@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -53,6 +54,11 @@ import app.seb3thehacker.gearslip.car.theme.gsShape
 /** How wide a tile is, icon and label together; the grid fits as many as the screen allows. */
 private val TILE_WIDTH = 112.dp
 private val ICON_SIZE = 64.dp
+private val SEARCH_MAX_WIDTH = 560.dp
+/** Five tiles across at most, so a short list sits in the middle instead of along the left. */
+private val GRID_MAX_WIDTH = TILE_WIDTH * 5
+/** Room above each tile for the remove button, which sits on the icon's corner. */
+private val REMOVE_ROOM = 10.dp
 
 /**
  * What the browser shows before a page is open: a search bar, and the bookmarks as big tiles.
@@ -65,13 +71,20 @@ internal fun BrowserStartPage(onOpen: (String) -> Unit, onSearch: () -> Unit, on
     var editing by remember { mutableStateOf(false) }
     if (bookmarks.isEmpty()) editing = false
 
-    Column(Modifier.fillMaxSize().padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+    // A narrow, centred column: on a wide car screen a bar from edge to edge reads as a toolbar
+    // rather than a search box, and tiles spread across it look scattered.
+    Column(
+        Modifier.fillMaxSize().padding(horizontal = 16.dp).padding(top = 24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(20.dp),
+    ) {
         SearchBar(onSearch)
         LazyVerticalGrid(
             columns = GridCells.Adaptive(TILE_WIDTH),
             contentPadding = PaddingValues(bottom = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            modifier = Modifier.fillMaxSize(),
+            horizontalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.widthIn(max = GRID_MAX_WIDTH).fillMaxSize(),
         ) {
             items(bookmarks, key = { it.url }) { bookmark ->
                 BookmarkTile(
@@ -83,6 +96,7 @@ internal fun BrowserStartPage(onOpen: (String) -> Unit, onSearch: () -> Unit, on
                 )
             }
             item(key = "add") {
+                Box(Modifier.padding(top = REMOVE_ROOM)) {
                 if (editing) {
                     Tile(stringResource(R.string.web_done), onClick = { editing = false }) {
                         Icon(Icons.Filled.Close, null, Modifier.size(28.dp))
@@ -91,6 +105,7 @@ internal fun BrowserStartPage(onOpen: (String) -> Unit, onSearch: () -> Unit, on
                     Tile(stringResource(R.string.web_add_bookmark), onClick = onAdd) {
                         Icon(Icons.Filled.Add, null, Modifier.size(28.dp))
                     }
+                }
                 }
             }
         }
@@ -101,7 +116,7 @@ internal fun BrowserStartPage(onOpen: (String) -> Unit, onSearch: () -> Unit, on
 @Composable
 private fun SearchBar(onSearch: () -> Unit) {
     val colors = gsColors(GsTone.Neutral)
-    GsIconBox(onSearch, Modifier.fillMaxWidth().height(56.dp), colors, shape = CircleShape) {
+    GsIconBox(onSearch, Modifier.widthIn(max = SEARCH_MAX_WIDTH).fillMaxWidth().height(56.dp), colors, shape = CircleShape) {
         Row(Modifier.fillMaxWidth().padding(horizontal = 20.dp), verticalAlignment = Alignment.CenterVertically) {
             Icon(Icons.Filled.Search, null, Modifier.size(24.dp))
             Text(
@@ -122,7 +137,9 @@ private fun BookmarkTile(bookmark: Bookmark, editing: Boolean, onClick: () -> Un
     val version by SiteIcons.version.collectAsState()
     LaunchedEffect(host) { SiteIcons.fetch(context, host) }
     val icon = remember(host, version) { SiteIcons.icon(context, host) }
-    Box {
+    // The remove button overhangs the icon's corner, into the room left above it, so nothing
+    // clips it: neither the grid's edge nor the next row.
+    Box(Modifier.width(TILE_WIDTH).padding(top = REMOVE_ROOM)) {
         Tile(bookmark.title, onClick = onClick, onHold = onHold) {
             if (icon != null) {
                 Image(icon.asImageBitmap(), null, Modifier.size(40.dp).clip(gsShape()))
@@ -137,7 +154,7 @@ private fun BookmarkTile(bookmark: Bookmark, editing: Boolean, onClick: () -> Un
         if (editing) {
             GsIconBox(
                 onRemove,
-                Modifier.align(Alignment.TopEnd).offset(x = (-14).dp, y = (-6).dp).size(32.dp),
+                Modifier.align(Alignment.TopCenter).offset(x = ICON_SIZE / 2, y = -REMOVE_ROOM).size(28.dp),
                 gsColors(GsTone.Danger),
                 shape = CircleShape,
             ) {
