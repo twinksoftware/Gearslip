@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -103,7 +104,7 @@ internal fun ClusterScreen(marginX: Int, marginY: Int, densityDpi: Int, clearAre
                             if (t != null) {
                                 BoxWithConstraints(Modifier.weight(0.42f).fillMaxHeight(), contentAlignment = Alignment.CenterStart) {
                                     // Narrower than alone: the arrow and distance alone are about 12 units wide.
-                                    TurnCard(t, minOf(maxHeight / 8.5f, maxWidth / 12))
+                                    TurnCard(t, minOf(maxHeight / t.rows, maxWidth / 12))
                                 }
                                 Spacer(Modifier.width(12.dp))
                             }
@@ -111,13 +112,12 @@ internal fun ClusterScreen(marginX: Int, marginY: Int, densityDpi: Int, clearAre
                         }
                         return@BoxWithConstraints
                     }
-                    // The card is about 8.5 units tall with two lines of directions, and 14 wide: fit both ways.
-                    val unit = minOf(maxHeight / 8.5f, maxWidth / 14)
                     if (t == null) {
                         NowPlayingLine(Modifier.align(Alignment.Center))
                         return@BoxWithConstraints
                     }
-                    TurnCard(t, unit)
+                    // The card is t.rows units tall and about 14 wide: fit both ways.
+                    TurnCard(t, minOf(maxHeight / t.rows, maxWidth / 14))
                 }
             }
         }
@@ -187,6 +187,9 @@ private fun drawsOnCluster(context: Context, component: ComponentName): Boolean 
 private const val FEATURE_CLUSTER = "androidx.car.app.category.FEATURE_CLUSTER"
 private const val CLUSTER_SESSION = "gearslip-cluster"
 
+/** The lane to be in, on the cockpit: green, like the main screen's header, against the black. */
+private val LANE_FILL = Color(0xFF2F7D6D)
+
 /**
  * Start, top, end and bottom padding around the card inside the visible picture. The car's own
  * insets win when they leave a usable area; a wide strip, where dials sit at both ends and a bar
@@ -225,6 +228,20 @@ private fun TurnCard(t: ClusterTurn, unit: Dp) {
                 overflow = TextOverflow.Ellipsis,
             )
         }
+        if (t.lanes.isNotEmpty()) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                LaneRoad(t.lanes, Modifier.width(unit * 10).height(unit * 2.4f), LANE_FILL, Color.White, Color.Black)
+                laneHint(t.lanes)?.let {
+                    Text(
+                        it,
+                        Modifier.padding(top = unit * 0.3f),
+                        fontSize = with(density) { (unit * 0.8f).toSp() },
+                        color = Color.White.copy(alpha = 0.85f),
+                        maxLines = 1,
+                    )
+                }
+            }
+        }
         if (t.trip.isNotEmpty()) {
             Text(
                 t.trip,
@@ -256,7 +273,11 @@ private class ClusterTurn(
     val distance: String,
     val what: String,
     val trip: String,
+    val lanes: List<androidx.car.app.navigation.model.Lane>,
 ) {
+    /** How many units tall the card is: two lines of directions, and the lanes when there are some. */
+    val rows: Float get() = if (lanes.isEmpty()) 8.5f else 12f
+
     companion object {
         fun now(): ClusterTurn? {
             val turn = NavTurn.current() ?: return null
@@ -272,7 +293,7 @@ private class ClusterTurn(
                     e.arrivalTimeAtDestination.clockTime(),
                 ).filter { it.isNotEmpty() }.joinToString(" · ")
             }.orEmpty()
-            return ClusterTurn(step.maneuver?.icon, turn.distance.display(), what, trip)
+            return ClusterTurn(step.maneuver?.icon, turn.distance.display(), what, trip, step.lanes.orEmpty())
         }
     }
 }

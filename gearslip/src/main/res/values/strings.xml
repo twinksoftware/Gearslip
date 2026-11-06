@@ -737,6 +737,19 @@
     <!--  -->
     <string name="nav_lane_recommended">Recommended lane</string>
     <string name="nav_lane">Lane</string>
+    <plurals name="nav_lane_left">
+        <item quantity="one">Use the left lane</item>
+        <item quantity="other">Use the left %d lanes</item>
+    </plurals>
+    <plurals name="nav_lane_right">
+        <item quantity="one">Use the right lane</item>
+        <item quantity="other">Use the right %d lanes</item>
+    </plurals>
+    <string name="nav_lane_middle">Use the middle lane</string>
+    <string name="nav_lane_middle_lanes">Use the middle lanes</string>
+    <string name="nav_lane_from_left">Use lane %1$d from the left</string>
+    <string name="nav_lane_from_right">Use lane %1$d from the right</string>
+    <string name="nav_lane_any">Any lane</string>
     <string name="nav_arrive">Arrive %1$s</string>
 
     <!-- Car app screens -->

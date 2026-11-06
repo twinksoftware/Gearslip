@@ -30,7 +30,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -39,8 +38,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -49,8 +48,6 @@ import androidx.compose.ui.unit.dp
 import androidx.car.app.model.CarIcon
 import androidx.car.app.model.Template
 import androidx.car.app.model.PlaceListMapTemplate
-import androidx.car.app.navigation.model.Lane
-import androidx.car.app.navigation.model.LaneDirection
 import androidx.car.app.navigation.model.MapTemplate
 import androidx.car.app.navigation.model.MapWithContentTemplate
 import androidx.car.app.navigation.model.NavigationTemplate
@@ -228,8 +225,11 @@ private fun NavigationBars(
                     Modifier.width(column).fillMaxHeight().covers("nav-cards", cardEdge).padding(12.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
-                    routing?.let { RoutingCard(it, Modifier.fillMaxWidth()) }
-                    Spacer(Modifier.weight(1f))
+                    // The estimate always gets its full height; the turn card has what's left and
+                    // keeps its top, the part that matters, if it ever runs out of room.
+                    Box(Modifier.weight(1f).fillMaxWidth().clip(RoundedCornerShape(16.dp))) {
+                        routing?.let { RoutingCard(it, Modifier.fillMaxWidth()) }
+                    }
                     estimate?.let { TravelEstimateCard(it, Modifier.fillMaxWidth()) }
                 }
             }
@@ -267,9 +267,10 @@ private fun RoutingCard(info: RoutingInfo, modifier: Modifier = Modifier) {
     val step = info.currentStep ?: return
     val scheme = MaterialTheme.colorScheme
     ChromeSurface(modifier) {
-        Column {
+        // On a short screen the hint goes first, then the next turn, then the lanes; never the turn.
+        FitColumn {
             Column(
-                Modifier.fillMaxWidth().background(scheme.primaryContainer).padding(16.dp),
+                Modifier.layoutId(0).fillMaxWidth().background(scheme.primaryContainer).padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 androidx.compose.runtime.CompositionLocalProvider(
@@ -302,16 +303,22 @@ private fun RoutingCard(info: RoutingInfo, modifier: Modifier = Modifier) {
                             overflow = TextOverflow.Ellipsis,
                         )
                     }
-                    if (step.lanesImage != null || step.lanes.orEmpty().isNotEmpty()) {
-                        LaneGuidance(step, Modifier.fillMaxWidth().heightIn(max = 56.dp))
+                    // An app that sends only its own picture of the lanes gets it shown as it is.
+                    if (step.lanes.orEmpty().isEmpty()) {
+                        step.lanesImage?.let { JunctionImage(it, Modifier.heightIn(max = 56.dp)) }
                     }
                     // Rare, and only where an arrow can't explain the junction: worth the card growing for.
                     info.junctionImage?.let { JunctionImage(it) }
                 }
             }
+            // Drawn from the lane data whenever there is some, even beside the app's own picture.
+            step.lanes.orEmpty().takeIf { it.isNotEmpty() }?.let {
+                LaneBand(it, Modifier.layoutId(1).fillMaxWidth())
+                LaneHintLine(it, Modifier.layoutId(3).fillMaxWidth())
+            }
             info.nextStep?.let { next ->
                 Row(
-                    Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 10.dp),
+                    Modifier.layoutId(2).fillMaxWidth().padding(horizontal = 16.dp, vertical = 10.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(stringResource(R.string.nav_then), style = ChromeType.label, color = scheme.onSurfaceVariant)
@@ -328,6 +335,39 @@ private fun RoutingCard(info: RoutingInfo, modifier: Modifier = Modifier) {
     }
 }
 
+/**
+ * A column that leaves whole parts out when they don't all fit, rather than cutting the last one
+ * in half. Each part's layoutId is its rank: the lowest is kept first and always shown, then each
+ * next one if there's still room for it. What's kept stays in its written order.
+ */
+@Composable
+private fun FitColumn(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+    androidx.compose.ui.layout.Layout(content, modifier) { measurables, constraints ->
+        val loose = constraints.copy(minHeight = 0, maxHeight = androidx.compose.ui.unit.Constraints.Infinity)
+        val parts = measurables.map { it.measure(loose) }
+        val ranks = measurables.map { it.layoutId as? Int ?: 0 }
+        val kept = BooleanArray(parts.size)
+        var room = if (constraints.hasBoundedHeight) constraints.maxHeight else Int.MAX_VALUE
+        parts.indices.sortedBy { ranks[it] }.forEachIndexed { order, i ->
+            if (order == 0 || parts[i].height <= room) {
+                kept[i] = true
+                room -= parts[i].height
+            }
+        }
+        val width = (parts.maxOfOrNull { it.width } ?: 0).coerceIn(constraints.minWidth, constraints.maxWidth)
+        val height = parts.indices.filter { kept[it] }.sumOf { parts[it].height }
+        layout(width, height.coerceAtLeast(constraints.minHeight)) {
+            var y = 0
+            parts.forEachIndexed { i, part ->
+                if (kept[i]) {
+                    part.place(0, y)
+                    y += part.height
+                }
+            }
+        }
+    }
+}
+
 /** The zoomed-in intersection an app draws for a junction too complex for an arrow to explain. */
 @Composable
 private fun JunctionImage(icon: CarIcon, modifier: Modifier = Modifier) {
@@ -338,63 +378,6 @@ private fun JunctionImage(icon: CarIcon, modifier: Modifier = Modifier) {
         contentScale = ContentScale.Fit,
         modifier = modifier.fillMaxWidth().heightIn(max = 120.dp),
     )
-}
-
-/**
- * Which lane to be in before the manoeuvre, either as the app's own picture ([Step.getLanesImage])
- * or as a row of arrows built from its structured lane data - whichever it sent. The recommended
- * lane, or lanes, stand out in the theme's own colour; the rest sit on the same muted, solid tile
- * everything else uses, never dimmed by transparency.
- */
-@Composable
-private fun LaneGuidance(step: Step, modifier: Modifier = Modifier) {
-    step.lanesImage?.let {
-        JunctionImage(it, modifier)
-        return
-    }
-    val lanes = step.lanes.orEmpty()
-    if (lanes.isEmpty()) return
-    Row(modifier, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-        lanes.forEach { lane -> LaneTile(lane) }
-    }
-}
-
-@Composable
-private fun LaneTile(lane: Lane) {
-    val directions = lane.directions.orEmpty()
-    val shown = directions.firstOrNull { it.isRecommended } ?: directions.firstOrNull()
-    val recommended = shown?.isRecommended == true
-    Box(
-        Modifier
-            .size(36.dp)
-            .clip(RoundedCornerShape(8.dp))
-            .background(
-                if (recommended) MaterialTheme.colorScheme.primaryContainer
-                else MaterialTheme.colorScheme.surfaceContainerHighest,
-            ),
-        contentAlignment = Alignment.Center,
-    ) {
-        Icon(
-            Icons.Filled.KeyboardArrowUp,
-            contentDescription = stringResource(if (recommended) R.string.nav_lane_recommended else R.string.nav_lane),
-            tint = if (recommended) MaterialTheme.colorScheme.onPrimaryContainer
-            else MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.size(24.dp).rotate(shown.turnDegrees()),
-        )
-    }
-}
-
-/** The one arrow glyph this app draws, turned to stand in for every shape a lane can permit. */
-private fun LaneDirection?.turnDegrees(): Float = when (this?.shape) {
-    LaneDirection.SHAPE_SLIGHT_RIGHT -> 30f
-    LaneDirection.SHAPE_NORMAL_RIGHT -> 90f
-    LaneDirection.SHAPE_SHARP_RIGHT -> 135f
-    LaneDirection.SHAPE_U_TURN_RIGHT -> 170f
-    LaneDirection.SHAPE_SLIGHT_LEFT -> -30f
-    LaneDirection.SHAPE_NORMAL_LEFT -> -90f
-    LaneDirection.SHAPE_SHARP_LEFT -> -135f
-    LaneDirection.SHAPE_U_TURN_LEFT -> -170f
-    else -> 0f
 }
 
 /**
