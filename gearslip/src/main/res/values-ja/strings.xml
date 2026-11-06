@@ -849,6 +849,7 @@
     <string name="carset_fit_needs_car">この調整を保存するには車を接続してください。</string>
     <string name="choice_density_car">車に合わせる</string>
     <string name="choice_density_dpi">%1$d DPI</string>
+    <string name="choice_density_custom">カスタム…</string>
     <string name="dialer_missed">不在着信 · %1$s</string>
     <string name="dialer_no_recents">最近の通話はありません。</string>
     <string name="dialer_recents">履歴</string>
@@ -894,4 +895,7 @@
     <string name="assist_one_moment">少々お待ちください…</string>
     <string name="assist_examples">「navigate home」や「play」＋アーティスト名を試してください。「help」で一覧を表示します。</string>
     <string name="assist_grant">許可</string>
+    <string name="density_custom_title">カスタム密度</string>
+    <string name="density_custom_label">DPI</string>
+    <string name="density_custom_note">%1$d～%2$d の値を入力します。小さいほど画面に多く表示され、大きいほどすべてが大きくなります。</string>
 </resources>

@@ -857,6 +857,7 @@
     <string name="carset_fit_needs_car">Verbind een auto om deze aanpassing ervoor op te slaan.</string>
     <string name="choice_density_car">Van de auto</string>
     <string name="choice_density_dpi">%1$d DPI</string>
+    <string name="choice_density_custom">Aangepast…</string>
     <string name="dialer_missed">Gemist · %1$s</string>
     <string name="dialer_no_recents">Geen recente oproepen.</string>
     <string name="dialer_recents">Recent</string>
@@ -904,4 +905,7 @@
     <string name="assist_one_moment">Even geduld…</string>
     <string name="assist_examples">Probeer “navigate home” of “play” en een artiest. Zeg “help” voor meer.</string>
     <string name="assist_grant">Toestaan</string>
+    <string name="density_custom_title">Aangepaste dichtheid</string>
+    <string name="density_custom_label">DPI</string>
+    <string name="density_custom_note">Elke waarde van %1$d tot %2$d. Lager past meer op het scherm, hoger maakt alles groter.</string>
 </resources>

@@ -249,6 +249,8 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
     /** [carDensity] when it leaves the choice to the car. */
     const val DENSITY_FROM_CAR = 0
     val DENSITIES = listOf(160, 180, 200, 220, 240)
+    /** The range a typed-in density may take (issue #82): small enough for more on screen, big enough to read. */
+    val CUSTOM_DENSITIES = 60..480
 
     /** An absolute DPI for the car UI and its apps; the video's resolution doesn't change with it. */
     val carDensity: StateFlow<Int> = carDensityFlow
@@ -381,7 +383,7 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
     fun init(context: Context) {
         app = context.applicationContext
         scaleFlow.value = AppSettings.getString(app, KEY_SCALE, "1.0").toFloatOrNull() ?: 1f
-        carDensityFlow.value = AppSettings.getString(app, KEY_DENSITY, "").toIntOrNull()?.takeIf { it in DENSITIES } ?: DENSITY_FROM_CAR
+        carDensityFlow.value = AppSettings.getString(app, KEY_DENSITY, "").toIntOrNull()?.takeIf { it in DENSITIES || it in CUSTOM_DENSITIES } ?: DENSITY_FROM_CAR
         openFlow.value = AppSettings.getString(app, KEY_OPEN, HOME)
         lastNavFlow.value = AppSettings.getString(app, KEY_LAST_NAV, "").ifEmpty { null }
         lastMediaFlow.value = AppSettings.getString(app, KEY_LAST_MEDIA, "").ifEmpty { null }

@@ -196,6 +196,7 @@
     <string name="car_density_note">Larger text and controls, including in apps. Try 200 DPI with Size on Normal. Reconnect the car or reopen the preview to apply it. If controls clip, choose a lower DPI or From car.</string>
     <string name="choice_density_car">From car</string>
     <string name="choice_density_dpi">%1$d DPI</string>
+    <string name="choice_density_custom">Custom…</string>
     <string name="car_app_theme">App theme</string>
     <string name="car_dark_mode">Dark mode</string>
     <string name="car_buttons">Buttons</string>
@@ -953,4 +954,7 @@
     <string name="settings_language">Language</string>
     <string name="settings_language_phone">Same as the phone</string>
     <string name="player_next_chapter">Next chapter</string>
+    <string name="density_custom_title">Custom density</string>
+    <string name="density_custom_label">DPI</string>
+    <string name="density_custom_note">Any value from %1$d to %2$d. Lower fits more on the screen; higher makes everything bigger.</string>
 </resources>

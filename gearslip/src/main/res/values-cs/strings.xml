@@ -873,6 +873,7 @@
     <string name="carset_fit_needs_car">Připojte auto, abyste pro něj tuto úpravu uložili.</string>
     <string name="choice_density_car">Z auta</string>
     <string name="choice_density_dpi">%1$d DPI</string>
+    <string name="choice_density_custom">Vlastní…</string>
     <string name="dialer_missed">Zmeškaný · %1$s</string>
     <string name="dialer_no_recents">Žádné nedávné hovory.</string>
     <string name="dialer_recents">Nedávné</string>
@@ -924,4 +925,7 @@
     <string name="assist_one_moment">Okamžik…</string>
     <string name="assist_examples">Zkuste „navigate home“ nebo „play“ a interpreta. Pro víc řekněte „help“.</string>
     <string name="assist_grant">Povolit</string>
+    <string name="density_custom_title">Vlastní hustota</string>
+    <string name="density_custom_label">DPI</string>
+    <string name="density_custom_note">Libovolná hodnota od %1$d do %2$d. Nižší vejde víc na obrazovku, vyšší vše zvětší.</string>
 </resources>

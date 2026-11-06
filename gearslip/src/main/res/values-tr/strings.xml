@@ -857,6 +857,7 @@
     <string name="carset_fit_needs_car">Bu ayarı bir araba için kaydetmek üzere arabayı bağla.</string>
     <string name="choice_density_car">Arabadan</string>
     <string name="choice_density_dpi">%1$d DPI</string>
+    <string name="choice_density_custom">Özel…</string>
     <string name="dialer_missed">Cevapsız · %1$s</string>
     <string name="dialer_no_recents">Son arama yok.</string>
     <string name="dialer_recents">Son aramalar</string>
@@ -904,4 +905,7 @@
     <string name="assist_one_moment">Bir saniye…</string>
     <string name="assist_examples">“navigate home” ya da “play” ve bir sanatçı adı dene. Daha fazlası için “help” de.</string>
     <string name="assist_grant">İzin ver</string>
+    <string name="density_custom_title">Özel yoğunluk</string>
+    <string name="density_custom_label">DPI</string>
+    <string name="density_custom_note">%1$d ile %2$d arasında herhangi bir değer. Düşük değer ekrana daha çok sığdırır, yüksek değer her şeyi büyütür.</string>
 </resources>

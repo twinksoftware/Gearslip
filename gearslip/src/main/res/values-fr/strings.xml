@@ -865,6 +865,7 @@
     <string name="carset_fit_needs_car">Connectez une voiture pour enregistrer ce réglage pour elle.</string>
     <string name="choice_density_car">Selon la voiture</string>
     <string name="choice_density_dpi">%1$d DPI</string>
+    <string name="choice_density_custom">Personnalisé…</string>
     <string name="dialer_missed">Manqué · %1$s</string>
     <string name="dialer_no_recents">Aucun appel récent.</string>
     <string name="dialer_recents">Récents</string>
@@ -914,4 +915,7 @@
     <string name="assist_one_moment">Un instant…</string>
     <string name="assist_examples">Essayez « navigate home » ou « play » suivi d\'un artiste. Dites « help » pour en savoir plus.</string>
     <string name="assist_grant">Autoriser</string>
+    <string name="density_custom_title">Densité personnalisée</string>
+    <string name="density_custom_label">DPI</string>
+    <string name="density_custom_note">Toute valeur de %1$d à %2$d. Plus bas affiche plus de choses à l’écran, plus haut agrandit tout.</string>
 </resources>

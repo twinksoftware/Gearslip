@@ -889,6 +889,7 @@
     <string name="carset_fit_needs_car">وصّل سيارة لحفظ هذا الضبط لها.</string>
     <string name="choice_density_car">من السيارة</string>
     <string name="choice_density_dpi">%1$d DPI</string>
+    <string name="choice_density_custom">مخصص…</string>
     <string name="dialer_missed">فائتة · %1$s</string>
     <string name="dialer_no_recents">لا توجد مكالمات حديثة.</string>
     <string name="dialer_recents">الأخيرة</string>
@@ -944,4 +945,7 @@
     <string name="assist_one_moment">لحظة…</string>
     <string name="assist_examples">جرّب “navigate home” أو “play” ثم اسم فنان. قل “help” للمزيد.</string>
     <string name="assist_grant">منح الإذن</string>
+    <string name="density_custom_title">كثافة مخصصة</string>
+    <string name="density_custom_label">DPI</string>
+    <string name="density_custom_note">أي قيمة من %1$d إلى %2$d. القيمة الأقل تُظهر محتوى أكثر على الشاشة، والأعلى تُكبّر كل شيء.</string>
 </resources>

@@ -849,6 +849,7 @@
     <string name="carset_fit_needs_car">이 조정을 저장하려면 차량을 연결하세요.</string>
     <string name="choice_density_car">차량 기본값</string>
     <string name="choice_density_dpi">%1$d DPI</string>
+    <string name="choice_density_custom">사용자 지정…</string>
     <string name="dialer_missed">부재중 · %1$s</string>
     <string name="dialer_no_recents">최근 통화가 없습니다.</string>
     <string name="dialer_recents">최근 기록</string>
@@ -894,4 +895,7 @@
     <string name="assist_one_moment">잠시만요…</string>
     <string name="assist_examples">“navigate home” 또는 “play”와 아티스트 이름을 말해 보세요. 더 보려면 “help”라고 말하세요.</string>
     <string name="assist_grant">허용</string>
+    <string name="density_custom_title">사용자 지정 밀도</string>
+    <string name="density_custom_label">DPI</string>
+    <string name="density_custom_note">%1$d~%2$d 사이의 값을 입력하세요. 낮을수록 화면에 더 많이 표시되고, 높을수록 모든 것이 커집니다.</string>
 </resources>

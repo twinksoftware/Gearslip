@@ -21,6 +21,11 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Checkbox
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -65,8 +70,44 @@ enum class CarGroup(@param:StringRes val title: Int) {
 
 @Composable
 private fun sizeChoices() = listOf(1f to stringResource(R.string.choice_size_normal), 1.25f to stringResource(R.string.choice_size_large), 1.5f to stringResource(R.string.choice_size_xlarge))
+
+/** Marks the menu's Custom entry, which opens [CustomDensityDialog] instead of choosing. */
+private const val DENSITY_CUSTOM = -1
+
+/** The presets, a typed-in value when that's what's set, and Custom to type one. */
 @Composable
-private fun densityChoices() = listOf(CarSettings.DENSITY_FROM_CAR to stringResource(R.string.choice_density_car)) + CarSettings.DENSITIES.map { it to stringResource(R.string.choice_density_dpi, it) }
+private fun densityChoices(current: Int): List<Pair<Int, String>> {
+    val values = CarSettings.DENSITIES.let { if (current != CarSettings.DENSITY_FROM_CAR && current !in it) (it + current).sorted() else it }
+    return listOf(CarSettings.DENSITY_FROM_CAR to stringResource(R.string.choice_density_car)) +
+        values.map { it to stringResource(R.string.choice_density_dpi, it) } +
+        (DENSITY_CUSTOM to stringResource(R.string.choice_density_custom))
+}
+
+/** Types in any density in [CarSettings.CUSTOM_DENSITIES] (issue #82). */
+@Composable
+private fun CustomDensityDialog(current: Int, onDismiss: () -> Unit, onSave: (Int) -> Unit) {
+    var text by remember { mutableStateOf(current.takeIf { it != CarSettings.DENSITY_FROM_CAR }?.toString().orEmpty()) }
+    val value = text.toIntOrNull()?.takeIf { it in CarSettings.CUSTOM_DENSITIES }
+    val range = CarSettings.CUSTOM_DENSITIES
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.density_custom_title)) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Text(stringResource(R.string.density_custom_note, range.first, range.last))
+                OutlinedTextField(
+                    text, { text = it.filter(Char::isDigit).take(3) },
+                    label = { Text(stringResource(R.string.density_custom_label)) },
+                    singleLine = true,
+                    isError = text.isNotEmpty() && value == null,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                )
+            }
+        },
+        confirmButton = { TextButton(onClick = { value?.let(onSave) }, enabled = value != null) { Text(stringResource(R.string.save)) } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } },
+    )
+}
 @Composable
 private fun themeChoices() = listOf(AppTheme.PHONE to stringResource(R.string.choice_theme_phone), AppTheme.LIGHT to stringResource(R.string.choice_theme_light), AppTheme.DARK to stringResource(R.string.choice_theme_dark))
 @Composable
@@ -243,7 +284,18 @@ private fun GroupRows(group: CarGroup) {
             SettingsDivider()
             Choice(stringResource(R.string.car_size), sizeChoices(), scale, CarSettings::setScale)
             SettingsDivider()
-            Choice(stringResource(R.string.car_density), densityChoices(), density, CarSettings::setCarDensity, note = stringResource(R.string.car_density_note))
+            var customDensity by remember { mutableStateOf(false) }
+            Choice(
+                stringResource(R.string.car_density), densityChoices(density), density,
+                { if (it == DENSITY_CUSTOM) customDensity = true else CarSettings.setCarDensity(it) },
+                note = stringResource(R.string.car_density_note),
+            )
+            if (customDensity) {
+                CustomDensityDialog(density, onDismiss = { customDensity = false }) {
+                    CarSettings.setCarDensity(it)
+                    customDensity = false
+                }
+            }
             SettingsDivider()
             Choice(stringResource(R.string.car_app_theme), themeChoices(), theme, CarSettings::setAppTheme)
             SettingsDivider()

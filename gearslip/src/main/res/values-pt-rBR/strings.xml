@@ -865,6 +865,7 @@
     <string name="carset_fit_needs_car">Conecte um carro para salvar este ajuste para ele.</string>
     <string name="choice_density_car">Do carro</string>
     <string name="choice_density_dpi">%1$d DPI</string>
+    <string name="choice_density_custom">Personalizado…</string>
     <string name="dialer_missed">Perdida · %1$s</string>
     <string name="dialer_no_recents">Nenhuma chamada recente.</string>
     <string name="dialer_recents">Recentes</string>
@@ -914,4 +915,7 @@
     <string name="assist_one_moment">Um momento…</string>
     <string name="assist_examples">Tente “navigate home” ou “play” e um artista. Diga “help” para ver mais.</string>
     <string name="assist_grant">Permitir</string>
+    <string name="density_custom_title">Densidade personalizada</string>
+    <string name="density_custom_label">DPI</string>
+    <string name="density_custom_note">Qualquer valor de %1$d a %2$d. Menor cabe mais na tela; maior deixa tudo maior.</string>
 </resources>

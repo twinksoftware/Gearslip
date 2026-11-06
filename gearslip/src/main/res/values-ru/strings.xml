@@ -873,6 +873,7 @@
     <string name="carset_fit_needs_car">Подключите машину, чтобы сохранить для неё эту подгонку.</string>
     <string name="choice_density_car">От машины</string>
     <string name="choice_density_dpi">%1$d DPI</string>
+    <string name="choice_density_custom">Своё значение…</string>
     <string name="dialer_missed">Пропущенный · %1$s</string>
     <string name="dialer_no_recents">Нет недавних вызовов.</string>
     <string name="dialer_recents">Недавние</string>
@@ -924,4 +925,7 @@
     <string name="assist_one_moment">Секунду…</string>
     <string name="assist_examples">Попробуйте «navigate home» или «play» и исполнителя. Скажите «help», чтобы узнать больше.</string>
     <string name="assist_grant">Разрешить</string>
+    <string name="density_custom_title">Своя плотность</string>
+    <string name="density_custom_label">DPI</string>
+    <string name="density_custom_note">Любое значение от %1$d до %2$d. Меньше — больше помещается на экране, больше — всё крупнее.</string>
 </resources>

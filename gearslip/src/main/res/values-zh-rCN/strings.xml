@@ -849,6 +849,7 @@
     <string name="carset_fit_needs_car">连接汽车后才能为它保存此调整。</string>
     <string name="choice_density_car">跟随汽车</string>
     <string name="choice_density_dpi">%1$d DPI</string>
+    <string name="choice_density_custom">自定义…</string>
     <string name="dialer_missed">未接 · %1$s</string>
     <string name="dialer_no_recents">没有最近通话。</string>
     <string name="dialer_recents">最近</string>
@@ -894,4 +895,7 @@
     <string name="assist_one_moment">请稍候…</string>
     <string name="assist_examples">试试说“navigate home”，或“play”加歌手名。说“help”查看更多。</string>
     <string name="assist_grant">授权</string>
+    <string name="density_custom_title">自定义密度</string>
+    <string name="density_custom_label">DPI</string>
+    <string name="density_custom_note">输入 %1$d 到 %2$d 之间的任意值。数值越小，屏幕上显示的内容越多；越大，所有内容越大。</string>
 </resources>

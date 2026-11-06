@@ -873,6 +873,7 @@
     <string name="carset_fit_needs_car">Połącz samochód, aby zapisać dla niego to dopasowanie.</string>
     <string name="choice_density_car">Z samochodu</string>
     <string name="choice_density_dpi">%1$d DPI</string>
+    <string name="choice_density_custom">Własna…</string>
     <string name="dialer_missed">Nieodebrane · %1$s</string>
     <string name="dialer_no_recents">Brak ostatnich połączeń.</string>
     <string name="dialer_recents">Ostatnie</string>
@@ -924,4 +925,7 @@
     <string name="assist_one_moment">Chwileczkę…</string>
     <string name="assist_examples">Spróbuj „navigate home” albo „play” i wykonawcę. Powiedz „help”, aby zobaczyć więcej.</string>
     <string name="assist_grant">Zezwól</string>
+    <string name="density_custom_title">Własna gęstość</string>
+    <string name="density_custom_label">DPI</string>
+    <string name="density_custom_note">Dowolna wartość od %1$d do %2$d. Niższa mieści więcej na ekranie, wyższa wszystko powiększa.</string>
 </resources>

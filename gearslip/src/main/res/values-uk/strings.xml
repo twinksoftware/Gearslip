@@ -873,6 +873,7 @@
     <string name="carset_fit_needs_car">Підключіть авто, щоб зберегти для нього це припасування.</string>
     <string name="choice_density_car">Від авто</string>
     <string name="choice_density_dpi">%1$d DPI</string>
+    <string name="choice_density_custom">Своє значення…</string>
     <string name="dialer_missed">Пропущений · %1$s</string>
     <string name="dialer_no_recents">Немає недавніх дзвінків.</string>
     <string name="dialer_recents">Недавні</string>
@@ -924,4 +925,7 @@
     <string name="assist_one_moment">Хвилинку…</string>
     <string name="assist_examples">Спробуйте «navigate home» або «play» і виконавця. Скажіть «help», щоб дізнатися більше.</string>
     <string name="assist_grant">Дозволити</string>
+    <string name="density_custom_title">Своя щільність</string>
+    <string name="density_custom_label">DPI</string>
+    <string name="density_custom_note">Будь-яке значення від %1$d до %2$d. Менше — більше вміщується на екрані, більше — усе крупніше.</string>
 </resources>
