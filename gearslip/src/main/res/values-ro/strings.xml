@@ -792,4 +792,8 @@
     <string name="places_finding">Te caut…</string>
     <string name="places_not_found">Gearslip nu a găsit unde ești. Verifică dacă locația e pornită.</string>
     <string name="places_clear">Șterge</string>
+    <string name="assist_listening">Ascult…</string>
+    <string name="assist_one_moment">Un moment…</string>
+    <string name="assist_examples">Încearcă „navigate home” sau „play” și un artist. Spune „help” pentru mai multe.</string>
+    <string name="assist_grant">Permite</string>
 </resources>

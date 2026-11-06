@@ -39,6 +39,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import app.seb3thehacker.gearslip.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -69,7 +70,8 @@ fun AssistantOverlay(modifier: Modifier = Modifier) {
         modifier
             .fillMaxWidth()
             .drawBehind {
-                drawRect(Brush.verticalGradient(0f to Color.Transparent, 0.45f to Color.Black.copy(alpha = 0.6f), 1f to Color.Black.copy(alpha = 0.85f)))
+                // Dark enough by the text that nothing on the screen behind reads through it.
+                drawRect(Brush.verticalGradient(0f to Color.Transparent, 0.3f to Color.Black.copy(alpha = 0.8f), 1f to Color.Black.copy(alpha = 0.92f)))
                 // A wide, flat oval of light rising from the bottom edge.
                 scale(1f, 0.22f, Offset(size.width / 2, size.height)) {
                     drawCircle(
@@ -86,8 +88,12 @@ fun AssistantOverlay(modifier: Modifier = Modifier) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
             PulsingMic(listening)
             Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
+                val listeningText = stringResource(R.string.assist_listening)
+                val momentText = stringResource(R.string.assist_one_moment)
+                val waiting = state.heard.isBlank() &&
+                    (state.phase == CarAssistant.Phase.LISTENING || state.phase == CarAssistant.Phase.THINKING)
                 val (small, big) = when (state.phase) {
-                    CarAssistant.Phase.LISTENING -> "" to state.heard.ifBlank { if (state.ready) "Listening…" else "One moment…" }
+                    CarAssistant.Phase.LISTENING -> "" to state.heard.ifBlank { if (state.ready) listeningText else momentText }
                     CarAssistant.Phase.THINKING -> "" to state.heard.ifBlank { "…" }
                     else -> state.heard to state.reply
                 }
@@ -96,22 +102,33 @@ fun AssistantOverlay(modifier: Modifier = Modifier) {
                 }
                 Text(
                     big,
-                    color = if (big == "Listening…" || big == "One moment…" || big == "…") Color.White.copy(alpha = 0.7f) else Color.White,
+                    color = if (waiting) Color.White.copy(alpha = 0.7f) else Color.White,
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.SemiBold,
                     textAlign = TextAlign.Center,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                 )
+                // What to say, until the driver starts saying it.
+                if (state.phase == CarAssistant.Phase.LISTENING && state.ready && state.heard.isBlank()) {
+                    Text(
+                        stringResource(R.string.assist_examples),
+                        color = Color.White.copy(alpha = 0.6f),
+                        style = MaterialTheme.typography.bodyMedium,
+                        textAlign = TextAlign.Center,
+                        maxLines = 2,
+                        modifier = Modifier.padding(top = 4.dp),
+                    )
+                }
             }
             if (state.missingPermission) {
                 GsButton(tone = GsTone.Tonal, onClick = {
                     context.startActivity(
                         Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", context.packageName, null)),
                     )
-                }) { Text("Grant") }
+                }) { Text(stringResource(R.string.assist_grant)) }
             }
-            GsIconButton(Icons.Filled.Close, "Dismiss", CarAssistant::cancel)
+            GsIconButton(Icons.Filled.Close, stringResource(R.string.msg_dismiss), CarAssistant::cancel)
         }
     }
 }

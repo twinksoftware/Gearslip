@@ -890,4 +890,8 @@
     <string name="update_installed_title">Gearslip 已更新到 %1$s</string>
     <string name="update_silent">自动安装更新</string>
     <string name="update_silent_sub">仅正式版本，通过 Wi-Fi，在未连接汽车时安装</string>
+    <string name="assist_listening">正在聆听…</string>
+    <string name="assist_one_moment">请稍候…</string>
+    <string name="assist_examples">试试说“navigate home”，或“play”加歌手名。说“help”查看更多。</string>
+    <string name="assist_grant">授权</string>
 </resources>

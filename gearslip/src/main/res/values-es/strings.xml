@@ -784,4 +784,8 @@
     <string name="update_installed_title">Gearslip actualizado a %1$s</string>
     <string name="update_silent">Instalar actualizaciones solo</string>
     <string name="update_silent_sub">Solo versiones finales, por Wi-Fi, cuando no hay ningún coche conectado</string>
+    <string name="assist_listening">Escuchando…</string>
+    <string name="assist_one_moment">Un momento…</string>
+    <string name="assist_examples">Prueba “navigate home” o “play” y un artista. Di “help” para ver más.</string>
+    <string name="assist_grant">Permitir</string>
 </resources>

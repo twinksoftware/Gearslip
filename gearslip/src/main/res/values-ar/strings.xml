@@ -940,4 +940,8 @@
     <string name="update_installed_title">حُدّث Gearslip إلى %1$s</string>
     <string name="update_silent">تثبيت التحديثات تلقائيًا</string>
     <string name="update_silent_sub">الإصدارات النهائية فقط، عبر Wi-Fi، عندما لا تكون أي سيارة متصلة</string>
+    <string name="assist_listening">جارٍ الاستماع…</string>
+    <string name="assist_one_moment">لحظة…</string>
+    <string name="assist_examples">جرّب “navigate home” أو “play” ثم اسم فنان. قل “help” للمزيد.</string>
+    <string name="assist_grant">منح الإذن</string>
 </resources>

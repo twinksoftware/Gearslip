@@ -890,4 +890,8 @@
     <string name="update_installed_title">Gearslip이 %1$s(으)로 업데이트됨</string>
     <string name="update_silent">업데이트 자동 설치</string>
     <string name="update_silent_sub">정식 버전만, Wi-Fi에서, 차량이 연결되지 않았을 때</string>
+    <string name="assist_listening">듣는 중…</string>
+    <string name="assist_one_moment">잠시만요…</string>
+    <string name="assist_examples">“navigate home” 또는 “play”와 아티스트 이름을 말해 보세요. 더 보려면 “help”라고 말하세요.</string>
+    <string name="assist_grant">허용</string>
 </resources>

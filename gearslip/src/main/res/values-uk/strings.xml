@@ -920,4 +920,8 @@
     <string name="update_installed_title">Gearslip оновлено до %1$s</string>
     <string name="update_silent">Встановлювати оновлення самостійно</string>
     <string name="update_silent_sub">Лише готові версії, через Wi-Fi, коли авто не підключено</string>
+    <string name="assist_listening">Слухаю…</string>
+    <string name="assist_one_moment">Хвилинку…</string>
+    <string name="assist_examples">Спробуйте «navigate home» або «play» і виконавця. Скажіть «help», щоб дізнатися більше.</string>
+    <string name="assist_grant">Дозволити</string>
 </resources>

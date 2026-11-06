@@ -900,4 +900,8 @@
     <string name="update_installed_title">Gearslip uppdaterad till %1$s</string>
     <string name="update_silent">Installera uppdateringar själv</string>
     <string name="update_silent_sub">Bara färdiga versioner, via wifi, när ingen bil är ansluten</string>
+    <string name="assist_listening">Lyssnar…</string>
+    <string name="assist_one_moment">Ett ögonblick…</string>
+    <string name="assist_examples">Prova ”navigate home” eller ”play” och en artist. Säg ”help” för mer.</string>
+    <string name="assist_grant">Tillåt</string>
 </resources>

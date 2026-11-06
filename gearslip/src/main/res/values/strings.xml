@@ -603,6 +603,12 @@
     </plurals>
     <string name="msg_reply_to">Reply to %1$s</string>
     <string name="msg_listening">Listening</string>
+    <!-- The voice assistant, over the bottom of the car screen -->
+    <string name="assist_listening">Listening…</string>
+    <string name="assist_one_moment">One moment…</string>
+    <!-- The quoted phrases are commands the assistant understands only in English: keep them in English. -->
+    <string name="assist_examples">Try “navigate home” or “play” and an artist. Say “help” for more.</string>
+    <string name="assist_grant">Grant</string>
     <string name="msg_sending_to">Sending to %1$s</string>
     <string name="msg_sent_to">Sent to %1$s</string>
     <string name="msg_reply_failed">Couldn\'t reply</string>

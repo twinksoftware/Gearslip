@@ -920,4 +920,8 @@
     <string name="update_installed_title">Gearslip aktualizován na %1$s</string>
     <string name="update_silent">Instalovat aktualizace samo</string>
     <string name="update_silent_sub">Jen hotová vydání, přes Wi-Fi, když není připojené žádné auto</string>
+    <string name="assist_listening">Poslouchám…</string>
+    <string name="assist_one_moment">Okamžik…</string>
+    <string name="assist_examples">Zkuste „navigate home“ nebo „play“ a interpreta. Pro víc řekněte „help“.</string>
+    <string name="assist_grant">Povolit</string>
 </resources>

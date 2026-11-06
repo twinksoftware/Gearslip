@@ -900,4 +900,8 @@
     <string name="update_installed_title">Gearslip %1$s sürümüne güncellendi</string>
     <string name="update_silent">Güncellemeleri kendisi yüklesin</string>
     <string name="update_silent_sub">Yalnızca tamamlanmış sürümler, Wi-Fi üzerinden, araba bağlı değilken</string>
+    <string name="assist_listening">Dinliyorum…</string>
+    <string name="assist_one_moment">Bir saniye…</string>
+    <string name="assist_examples">“navigate home” ya da “play” ve bir sanatçı adı dene. Daha fazlası için “help” de.</string>
+    <string name="assist_grant">İzin ver</string>
 </resources>

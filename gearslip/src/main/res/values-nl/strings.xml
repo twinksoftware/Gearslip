@@ -900,4 +900,8 @@
     <string name="update_installed_title">Gearslip bijgewerkt naar %1$s</string>
     <string name="update_silent">Updates zelf installeren</string>
     <string name="update_silent_sub">Alleen definitieve versies, via wifi, als er geen auto verbonden is</string>
+    <string name="assist_listening">Ik luister…</string>
+    <string name="assist_one_moment">Even geduld…</string>
+    <string name="assist_examples">Probeer “navigate home” of “play” en een artiest. Zeg “help” voor meer.</string>
+    <string name="assist_grant">Toestaan</string>
 </resources>
