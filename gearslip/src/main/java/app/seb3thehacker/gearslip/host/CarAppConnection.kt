@@ -451,11 +451,18 @@ class CarAppConnection(private val context: Context, private val session: Sessio
                 return@call
             }
             GearslipLog.i("host: template = ${template.javaClass.simpleName}")
+            // The app's ScreenManager lists every screen on its stack; one or none is its first.
+            _atRoot.value = ((value as? TemplateWrapper)?.templateInfosForScreenStack?.size ?: 1) <= 1
             _template.value = template
             update { it.copy(template = template.javaClass.simpleName) }
             autoRoute.onTemplate(template)
         }) { manager.getTemplate(it) }
     }
+
+    private val _atRoot = MutableStateFlow(true)
+
+    /** True while the app shows its first screen, where its own back would only close it. */
+    val atRoot: StateFlow<Boolean> = _atRoot
 
     private val _panMode = MutableStateFlow(false)
 

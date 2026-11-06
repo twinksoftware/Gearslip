@@ -363,6 +363,10 @@ internal fun ActionButton(action: Action, large: Boolean = false, modifier: Modi
         AppIconBadge()
         return
     }
+    // On an app's first screen, opened from the launcher, Gearslip's own close button is already
+    // the way out; a back arrow beside it did the same thing twice. Deeper in, it stays.
+    val atRoot by connection.atRoot.collectAsState()
+    if (action.type == Action.TYPE_BACK && atRoot && connection === CarServices.browse) return
     val dark = MaterialTheme.colorScheme.surface.luminanceIsDark()
     val title = action.title.text()
     val panOn by connection.panMode.collectAsState()
