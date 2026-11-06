@@ -88,8 +88,12 @@ object CarAudio {
         main.postDelayed(releaseWhenGone, CAR_GONE_MS)
     }
 
-    /** How long after the car leaves the capture waits for it to come back: a cable that slips. */
-    private const val CAR_GONE_MS = 3_000L
+    /**
+     * How long after the car leaves the capture waits for it to come back: a cable that slips, or a
+     * wireless link that drops and reconnects, which can take well over 3 seconds. Stopping sooner
+     * would have Android ask the driver to share the screen again in the middle of a drive.
+     */
+    private const val CAR_GONE_MS = 30_000L
 
     /**
      * The car wants sound. Safe to call as often as the session likes: the consent dialog appears

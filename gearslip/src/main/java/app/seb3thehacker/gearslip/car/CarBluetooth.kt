@@ -106,14 +106,14 @@ object CarBluetooth {
     }
 
     /**
-     * Once per car: it waits on the phone, and the car screen says so once. [again] asks a car
-     * that was asked before, for one that keeps its screen until it knows the phone.
+     * Once per car: it waits on the phone, and the car screen says so once. A car that keeps its
+     * screen isn't asked again on every drive: plenty of cars just wait for a tap on their icon.
      */
     @SuppressLint("MissingPermission")
-    private fun askForAddress(device: BluetoothDevice, carAddress: String, again: Boolean = false) {
+    private fun askForAddress(device: BluetoothDevice, carAddress: String) {
         val context = appContext ?: return
         val asked = AppSettings.getString(context, KEY_ADDRESS_ASKED, "").split(",").filter { it.isNotEmpty() }
-        if (hash(carAddress) in asked && !again) return
+        if (hash(carAddress) in asked) return
         AppSettings.putString(context, KEY_ADDRESS_ASKED, (asked + hash(carAddress)).distinct().joinToString(","))
         val name = runCatching { device.alias ?: device.name }.getOrNull()?.takeIf { it.isNotBlank() }
             ?: context.getString(R.string.bt_address_your_car)
@@ -187,7 +187,7 @@ object CarBluetooth {
         val device = device() ?: return false
         return when {
             device.bondState == BluetoothDevice.BOND_BONDED -> {
-                askForAddress(device, c.service.carAddress, again = true)
+                askForAddress(device, c.service.carAddress)
                 announce("the car is keeping its screen")
                 true
             }
