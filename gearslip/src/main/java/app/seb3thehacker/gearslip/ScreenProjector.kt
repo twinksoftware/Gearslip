@@ -1,15 +1,18 @@
 package app.seb3thehacker.gearslip
 
 import android.app.ActivityOptions
+import android.app.LocaleManager
 import android.app.Presentation
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Color
 import android.hardware.display.DisplayManager
 import android.hardware.display.VirtualDisplay
 import android.os.SystemClock
 import android.view.MotionEvent
 import android.view.Surface
+import android.view.ContextThemeWrapper
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.runtime.Composable
@@ -96,7 +99,7 @@ class ScreenProjector(private val context: Context) {
         decor.setViewTreeViewModelStoreOwner(treeOwner)
         decor.setBackgroundColor(Color.BLACK)
 
-        show.setContentView(ComposeView(show.context).apply { setContent(content) })
+        show.setContentView(ComposeView(withAppLanguage(show.context)).apply { setContent(content) })
         show.show()
 
         presentation = show
@@ -104,6 +107,18 @@ class ScreenProjector(private val context: Context) {
         root = decor
 
         GearslipLog.i("projecting ${width}x$height @ ${densityDpi}dpi")
+    }
+
+    /**
+     * [context] in the language the driver picked for Gearslip, when it differs from the phone's
+     * (issue #80). Android builds a virtual display's context from the system locale and leaves
+     * the per-app one out, so the car screen stayed in the phone's language.
+     */
+    private fun withAppLanguage(context: Context): Context {
+        val locales = this.context.getSystemService(LocaleManager::class.java)?.applicationLocales
+        if (locales == null || locales.isEmpty) return context
+        val config = Configuration(context.resources.configuration).apply { setLocales(locales) }
+        return ContextThemeWrapper(context, context.theme).apply { applyOverrideConfiguration(config) }
     }
 
     /** The projected display's id, for placing other apps' activities on it. */
