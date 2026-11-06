@@ -24,6 +24,36 @@ val keystoreProperties = Properties().apply {
     ).firstOrNull { it.exists() }?.inputStream()?.use { load(it) }
 }
 
+// The version comes from the newest v* git tag, so a build can never disagree with its tag. A
+// build of the tagged commit is named after it ("0.4.0-beta"); anything later adds the commits
+// since and the commit ("0.4.0-beta+3.ba4374e"), so a test build can't pass for a release.
+// The version code is worked out from the numbers, ((major*100 + minor)*100 + patch)*10 + stage,
+// where stage is 1 for alpha, 2 for beta and 9 for a finished release. It only ever goes up as
+// long as minor and patch stay under 100. Changelog entries use the same number.
+class GitVersion(val name: String, val code: Int)
+
+val gitVersion: GitVersion = run {
+    val described = runCatching {
+        providers.exec {
+            commandLine("git", "describe", "--tags", "--match", "v*", "--abbrev=7")
+            isIgnoreExitValue = true
+        }.standardOutput.asText.get().trim()
+    }.getOrNull().orEmpty()
+    val match = Regex("""^v((\d+)\.(\d+)\.(\d+)(?:-([A-Za-z]+))?)(?:-(\d+)-g([0-9a-f]+))?$""").find(described)
+        ?: return@run GitVersion("0.0.0-dev", 1) // no git or no tags, e.g. a source download
+    val (base, major, minor, patch, suffix, since, commit) = match.destructured
+    val stage = when (suffix.lowercase()) {
+        "" -> 9
+        "beta" -> 2
+        "alpha" -> 1
+        else -> 0
+    }
+    GitVersion(
+        name = if (since.isEmpty()) base else "$base+$since.$commit",
+        code = ((major.toInt() * 100 + minor.toInt()) * 100 + patch.toInt()) * 10 + stage,
+    )
+}
+
 // Keeps build output out of the module folder: <root>/build/gearslip/... instead of
 // <root>/gearslip/build/..., so everything this project produces lands under one
 // root-level build/ directory. Set before android {}, which works out the path to R8's default
@@ -38,9 +68,9 @@ android {
         applicationId = "app.seb3thehacker.gearslip"
         minSdk = 31
         targetSdk = 37
-        versionCode = 15
+        versionCode = gitVersion.code
         // -PgearslipVersionName=0.1.99-test makes a build that thinks it's older, to try the updater.
-        versionName = project.findProperty("gearslipVersionName")?.toString() ?: "0.3.40-alpha"
+        versionName = project.findProperty("gearslipVersionName")?.toString() ?: gitVersion.name
         manifestPlaceholders["appLabel"] = "Gearslip"
         // Where opted-in phones send their daily usage note: the stats-worker/ Worker's address,
         // set as gearslipStatsUrl in gradle.properties. Left empty, nothing is ever sent.

@@ -12,6 +12,9 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          # The build names itself after the newest tag, which a shallow clone doesn't have.
+          fetch-depth: 0
 
       - uses: actions/setup-java@v4
         with:

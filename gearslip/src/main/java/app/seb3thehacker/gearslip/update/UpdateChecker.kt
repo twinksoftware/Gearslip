@@ -578,12 +578,14 @@ object UpdateChecker {
     /**
      * "0.2.00-alpha" beats "0.1.10-alpha": the numbers before the dash compare one by one. With the
      * same numbers, a plain release beats a beta, and a beta beats an alpha, so "0.3.0" reaches
-     * someone on "0.3.0-beta".
+     * someone on "0.3.0-beta". Anything after a "+" only says which commit a test build came from,
+     * so "0.3.0-beta+4.ba4374e" counts the same as "0.3.0-beta".
      */
     internal fun isNewer(candidate: String, installed: String): Boolean {
-        fun parts(v: String) = v.removePrefix("v").substringBefore('-').split('.').map { it.toIntOrNull() ?: 0 }
+        fun core(v: String) = v.removePrefix("v").substringBefore('+')
+        fun parts(v: String) = core(v).substringBefore('-').split('.').map { it.toIntOrNull() ?: 0 }
         fun stage(v: String): Int {
-            val tag = v.substringAfter('-', "").lowercase()
+            val tag = core(v).substringAfter('-', "").lowercase()
             return when {
                 tag.isEmpty() -> 3
                 "beta" in tag -> 2

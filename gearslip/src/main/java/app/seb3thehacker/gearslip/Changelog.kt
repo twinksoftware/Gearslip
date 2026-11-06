@@ -4,6 +4,10 @@ package app.seb3thehacker.gearslip
  * What changed in each release, newest first, shown on the car screen after an update (and on
  * the phone). Only the changes a driver would notice. Plain words, short lines: this is read in
  * a parked car.
+ *
+ * After 0.3.40, the version code is the one the build works out from the tag (see gitVersion in
+ * build.gradle.kts): ((major*100 + minor)*100 + patch)*10 + stage, so 0.4.0-beta is 4002. Older
+ * entries keep the hand-set codes they shipped with, which are all lower.
  */
 object Changelog {
 
