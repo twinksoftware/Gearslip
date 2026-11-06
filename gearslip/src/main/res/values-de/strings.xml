@@ -5,7 +5,7 @@
         <item quantity="other">%1$d Songs · %2$s. Gelöschte Liedtexte werden beim nächsten Öffnen erneut heruntergeladen.</item>
     </plurals>
     <string name="carset_theme">Design</string>
-    <string name="carset_imperial">Britisch/US (mi, ft, °F)</string>
+    <string name="carset_imperial">Imperial (Meilen, Fuß, °F)</string>
     <string name="carset_metric">Metrisch (km, m, °C)</string>
     <string name="carset_screen_size">Bildschirmgröße (nächste Verbindung)</string>
     <string name="carset_fit">An Bildschirm anpassen</string>
@@ -316,7 +316,7 @@
     </plurals>
     <plurals name="dir_yards">
         <item quantity="one">%1$s Yard</item>
-        <item quantity="other">%1$s Yard</item>
+        <item quantity="other">%1$s Yards</item>
     </plurals>
     <plurals name="dir_meters">
         <item quantity="one">%1$d Meter</item>
@@ -437,7 +437,7 @@
     <string name="cert_download">Von aasdk herunterladen</string>
     <string name="cert_downloaded">Zertifikat heruntergeladen.</string>
     <string name="cert_download_failed">Download fehlgeschlagen: %1$s</string>
-    <string name="cert_download_sub">Das Zertifikat, das das Open-Source-Projekt aasdk auf GitHub veröffentlicht. Die meisten Autos akzeptieren es, manche ab etwa 2020 jedoch nicht.</string>
+    <string name="cert_download_sub">Das Zertifikat, dass das Open-Source-Projekt aasdk auf GitHub veröffentlicht. Die meisten Autos akzeptieren es, manche ab etwa 2020 jedoch nicht.</string>
     <string name="cert_import">Eigene Datei importieren</string>
     <string name="cert_import_sub">Eine .p12-Datei mit privatem Schlüssel. Verwende ein eigenes Zertifikat, wenn dein Auto das aasdk-Zertifikat ablehnt.</string>
     <string name="cert_remove_imported">Importiertes Zertifikat entfernen</string>
@@ -474,7 +474,7 @@
     <string name="choice_auto">Automatisch</string>
     <string name="choice_night_day">Tag</string>
     <string name="choice_night_night">Nacht</string>
-    <string name="choice_units_imperial">Britische/US-Einheiten</string>
+    <string name="choice_units_imperial">Imperial</string>
     <string name="choice_units_metric">Metrisch</string>
     <string name="choice_nav_show">Immer anzeigen</string>
     <string name="choice_nav_hide_navigating">Während der Navigation ausblenden</string>
@@ -649,7 +649,7 @@
     <string name="donate_bmac">Auf einen Kaffee einladen</string>
     <string name="donate_card">Einmalig per Karte spenden</string>
     <string name="donate_body">Gearslip ist kostenlos, werbefrei und ohne Tracking. Wenn es dich auf die Straße bringt, hilft deine Unterstützung, das Projekt am Laufen zu halten.</string>
-    <string name="wireless_needs_permission">Gearslip benötigt dafür Zugriff auf Bluetooth und WLAN in der Nähe.</string>
+    <string name="wireless_needs_permission">Gearslip benötigt hierfür Bluetooth und einen WLAN-Zugang.</string>
     <string name="wireless_enable_permission">Berechtigung für Geräte in der Nähe aktivieren</string>
     <string name="wireless_connect">Drahtlos verbinden</string>
     <string name="wireless_which_car">Welches Auto?</string>
@@ -755,4 +755,25 @@
     <string name="bt_address_type">Stattdessen eintippen</string>
     <string name="bt_address_your_car">dein auto</string>
     <string name="bt_address_car_note">Schließe einen Einrichtungsschritt auf deinem Handy ab, sobald du geparkt hast.</string>
+    <string name="help_bluetooth_first">Stelle zuerst eine Bluetooth-Verbindung her, bevor Du das Kabel anschließt.</string>
+    <string name="help_bluetooth_first_detail">Wenn die Musikübertragung über Bluetooth nicht funktioniert, lass das Auto zunächst das Smartphone über Bluetooth erkennen und schließe dann das Kabel an. Manche Fahrzeuge kommen durcheinander, wenn das Kabel zuerst angeschlossen wird.</string>
+    <string name="update_silent">Updates automatisch installieren</string>
+    <string name="update_silent_sub">Nur fertige Veröffentlichungen, über WLAN, wenn kein Fahrzeug verbunden ist</string>
+    <string name="update_installed_title">Gearslip wurde auf %1$s aktualisiert</string>
+    <string name="update_installed_text">Die Installation erfolgte über WLAN, während kein Fahrzeug verbunden war.</string>
+    <plurals name="nav_lane_left">
+        <item quantity="one">Benutzen Sie die linke Spur</item>
+        <item quantity="other">Benutzen Sie die linken %d Fahrspuren</item>
+    </plurals>
+    <plurals name="nav_lane_right">
+        <item quantity="one">Fahren Sie auf der rechten Spur</item>
+        <item quantity="other">Verwenden Sie die rechten %d Fahrspuren</item>
+    </plurals>
+    <string name="nav_lane_middle">Benutze die mittlere Spur</string>
+    <string name="nav_lane_middle_lanes">Benutze die mittleren Fahrspuren</string>
+    <string name="nav_lane_from_left">Fahre auf der %1$d Spur von links</string>
+    <string name="nav_lane_from_right">Fahre auf der %1$d Spur von rechts</string>
+    <string name="nav_lane_any">Beliebige Fahrspur</string>
+    <string name="nav_arrival">Unter der Ankunftszeit in der Reisezeile: „16:30 Uhr / Ankunft“</string>
+    <string name="nav_to_go">zum Mitnehmen</string>
 </resources>
