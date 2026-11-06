@@ -785,4 +785,8 @@
     <string name="car_apps_none">Aucune application de voiture trouvée</string>
     <string name="privacy_policy">Politique de confidentialité</string>
     <string name="status_no_car_graphene">Le téléphone est en train de charger, mais aucune voiture n\'a répondu. Vérifiez que le contrôle de port USB-C, sous Sécurité et confidentialité, permet les données et n\'est pas réglé sur Charge seulement.</string>
+    <string name="car_apps_finding">Recherche d\'applications…</string>
+    <string name="car_density">Densité de l\'écran</string>
+    <string name="car_density_note">"Contrôles et texte plus larges. Essayez 200 DPi et Normale pour la Taille. Se reconnecter à la voiture ou rouvrir l\'aperçu pour appliquer les changements.  Si les contrôles sont tronqués, choisissez un DPI plus petit ou \'Depuis la voiture\'"</string>
+    <string name="help_usb_data_detail">Il se peut que GrapheneOS bloque les données sur le port USB. Si le paramètre de contrôle de l\'USB-C est sur \'Charger seulement\', la voiture ne verra jamais le téléphone, même avec un câble de données. Changer ce contrôle pour \'Autoriser les données\'.</string>
 </resources>
