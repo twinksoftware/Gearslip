@@ -174,9 +174,20 @@ internal fun GridTile(item: GridItem, modifier: Modifier = Modifier, iconSize: a
 /**
  * [autoStart] is for a pane floating over a map - a place or a route the app is proposing - where
  * a single action counts itself down rather than waiting to be pressed, on the theory that a
- * driver glancing at the car screen has already decided. It never applies to more than one
- * action: a pane offering a real choice (Start vs. something else) always waits to be tapped.
+ * driver glancing at the car screen has already decided. See [autoStartLead] for when: a pane
+ * offering a real choice (Start vs. something else) always waits to be tapped.
  */
+/**
+ * The action that counts itself down, if the pane is really proposing one thing: its only action,
+ * or the app's primary one when everything beside it is an icon with no words (Waze's "Go now"
+ * next to its routes button). Two worded choices ("New drive", "Add a stop") wait for a tap.
+ */
+internal fun autoStartLead(actions: List<Action>): Action? {
+    actions.singleOrNull()?.let { return it }
+    val primary = actions.filter { it.flags and Action.FLAG_PRIMARY != 0 }.singleOrNull() ?: return null
+    return primary.takeIf { actions.all { it === primary || it.title.text().isBlank() } }
+}
+
 @Composable
 internal fun PaneRows(pane: Pane?, modifier: Modifier = Modifier, autoStart: Boolean = false) {
     // Some apps pad a pane with a row of blank strings; drawn, it is just a gap.
@@ -186,8 +197,16 @@ internal fun PaneRows(pane: Pane?, modifier: Modifier = Modifier, autoStart: Boo
     Column(modifier) {
         card.heading?.let { PlaceHeading(it) }
         if (card.buttons.isNotEmpty()) RowButtons(card.buttons, Modifier.padding(horizontal = 14.dp, vertical = 6.dp))
-        if (autoStart && actions.size == 1) {
-            AutoStartButton(actions.single(), Modifier.padding(horizontal = 14.dp, vertical = 10.dp))
+        val lead = if (autoStart) autoStartLead(actions) else null
+        if (lead != null) {
+            Row(
+                Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 10.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                AutoStartButton(lead, Modifier.weight(1f))
+                actions.filter { it !== lead }.forEach { ActionButton(it, large = true, modifier = Modifier.weight(1f)) }
+            }
         } else {
             ActionRow(actions, Modifier.padding(horizontal = 14.dp, vertical = 10.dp), large = true)
         }
