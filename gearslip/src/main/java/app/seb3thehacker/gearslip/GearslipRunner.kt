@@ -85,6 +85,8 @@ class GearslipRunner(
     private var selectedConfigIndex: Int? = null
     private var vehicleProfile: VehicleProfile? = null
     @Volatile private var videoStarted = false
+    /** The car's screen has been asked for once, so asking again is in order. */
+    @Volatile private var focusAsked = false
     private var videoSource: VideoSource? = null
 
     /** Between the car UI and the encoder when the car squashes the frame (see [screenShape]). */
@@ -773,6 +775,13 @@ class GearslipRunner(
             bluetooth,
             open = { openChannel(bluetooth.serviceId) },
             send = { id, body -> send(id, body, encrypted = true, channel = bluetooth.serviceId) },
+            // A car keeping its screen until it knows the phone may give it up now; ask again.
+            answered = {
+                if (running && focusAsked && !videoStarted) {
+                    log.i("the car answered on Bluetooth while keeping its screen - asking for it again")
+                    requestProjectedFocus(withDisplay = true)
+                }
+            },
         )
     }
 
@@ -1068,7 +1077,7 @@ class GearslipRunner(
                         "(head unit offered ${offered.size}), max_unacked=$maxUnacked",
                 )
                 requestProjectedFocus()
-                if (CarAudio.openSink != null) watchForWithheldScreen()
+                watchForWithheldScreen()
             }
 
             MSG_VIDEO_FOCUS_NOTIFICATION -> {
@@ -1361,6 +1370,7 @@ class GearslipRunner(
      * the field is deprecated, but a car older than that may ignore a request without it.
      */
     private fun requestProjectedFocus(withDisplay: Boolean = false) {
+        focusAsked = true
         // VideoFocusRequestNotification { disp_channel_id = 1; mode = 2; reason = 3 }. Reason 1
         // means "the phone's screen is off", which a 2020 Civic may have taken as a reason to
         // keep its own screen (issue #43); 0 is UNKNOWN.
@@ -1380,6 +1390,10 @@ class GearslipRunner(
      * straight over keep their own source as before.
      * The 2017 Pilot (protocol 1.0) still kept its screen with the channel open, so the second
      * request also names the display's channel, as cars of the Pilot's age may need.
+     * This runs whether or not the media channel was open: a 2020 Civic with music through
+     * Gearslip opened it at connect, so on 0.3.40 it never heard the second request (issue #43).
+     * The car also hears which phone this is over Bluetooth (see [CarBluetooth.onScreenWithheld]),
+     * which Hondas may wait for; its answer asks for the screen once more.
      */
     private fun watchForWithheldScreen() {
         Thread({
@@ -1389,11 +1403,12 @@ class GearslipRunner(
             if (open != null) {
                 log.w("no screen from the car after ${WITHHELD_SCREEN_MS / 1000}s - opening the media channel and asking again")
                 open()
-                // Give the car the channel's open response before it hears the request again.
-                Thread.sleep(1_000)
             } else {
                 log.w("no screen from the car after ${WITHHELD_SCREEN_MS / 1000}s - asking again")
             }
+            val toldBluetooth = CarBluetooth.onScreenWithheld()
+            // Give the car the channels' open responses before it hears the request again.
+            if (open != null || toldBluetooth) Thread.sleep(1_000)
             if (running && !videoStarted) requestProjectedFocus(withDisplay = true)
         }, "gearslip-focus-fallback").apply { isDaemon = true }.start()
     }
