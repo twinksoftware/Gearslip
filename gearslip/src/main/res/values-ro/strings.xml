@@ -603,7 +603,7 @@
     <string name="nav_finding_routes">Căutarea traseelor…</string>
     <string name="nav_lane_recommended">Banda recomandată</string>
     <string name="nav_lane">Banda</string>
-    <string name="nav_arrive">Sosire %1$s</string>
+    <string name="nav_arrive">Sosești la %1$s</string>
     <string name="template_nothing_playing">Nu se redă nimic.</string>
     <string name="template_search">Căutare</string>
     <string name="template_start">Pornește</string>
@@ -750,4 +750,17 @@
     <string name="places_finding">Căutare…</string>
     <string name="places_not_found">Gearslip nu a putut să-ți localizeze poziția. Verifică dacă funcția de localizare este activată.</string>
     <string name="places_clear">Șterge</string>
+    <string name="privacy_policy">Politica de confidențialitate</string>
+    <string name="privacy_policy_sub">Ce trimite Gearslip, cui și de ce</string>
+    <string name="car_audio_switched">Această mașină dezactivează redarea muzicii prin Bluetooth cât timp aplicația Gearslip rulează, astfel încât muzica este redată acum prin Gearslip. Acceptă solicitarea de pe telefon.</string>
+    <string name="car_audio_blocked">%1$s nu permite altor aplicații să redea sunetul său, așa că nu poate fi redat în mașină prin Gearslip. Încearcă o altă aplicație de muzică.</string>
+    <string name="bt_address_card_title">Ajută %1$s să cunoască acest telefon</string>
+    <string name="bt_address_card_body">Unele mașini se conectează doar după ce află adresa Bluetooth a telefonului. Sistemul Android ascunde această adresă de aplicații, așa că trebuie să o copiezi din secțiunea „Despre telefon”. Ține apăsat pe adresa Bluetooth de acolo, atinge „Copiere” și revino.</string>
+    <string name="bt_address_open">Deschide secțiunea „Despre telefon”</string>
+    <string name="bt_address_not_now">Nu acum</string>
+    <string name="bt_address_use_title">Folosești această adresă Bluetooth?</string>
+    <string name="bt_address_use_body">Gearslip transmite această informație mașinii tale, astfel încât mașina să știe că acesta este telefonul cu care este conectată.</string>
+    <string name="bt_address_type">Tastează asta în schimb</string>
+    <string name="bt_address_your_car">mașina ta</string>
+    <string name="bt_address_car_note">Finalizează o etapă de configurare pe telefon atunci când ești parcat.</string>
 </resources>
