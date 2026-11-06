@@ -19,9 +19,9 @@ import androidx.compose.ui.unit.dp
 import app.seb3thehacker.gearslip.car.theme.GsIconButton
 
 /**
- * The top of every screen reached from Home: a back button in the current theme, the title, and
- * room on the right for the screen's own controls. A car touchscreen has no hardware back button,
- * so this is the way out of a screen.
+ * The top of every screen reached from Home: the title, room on the right for the screen's own
+ * controls, and a back button when the screen under this one is more than Home or the app grid -
+ * those the nav bar already reaches, so a back button there only repeated it.
  */
 @Composable
 fun ScreenHeader(title: String, modifier: Modifier = Modifier, trailing: @Composable RowScope.() -> Unit = {}) {
@@ -31,7 +31,7 @@ fun ScreenHeader(title: String, modifier: Modifier = Modifier, trailing: @Compos
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        GsIconButton(Icons.AutoMirrored.Filled.ArrowBack, stringResource(R.string.back), navigator::back)
+        if (navigator.backLeadsSomewhere) GsIconButton(Icons.AutoMirrored.Filled.ArrowBack, stringResource(R.string.back), navigator::back)
         Text(
             title,
             style = MaterialTheme.typography.headlineSmall,

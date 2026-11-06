@@ -259,10 +259,14 @@ fun MediaScreen(app: MediaApp, onExit: () -> Unit) {
 @Composable
 private fun AppIdentity(app: MediaApp, onExit: () -> Unit, modifier: Modifier = Modifier) {
     val icon = remember(app) { findEntry(app.component.flattenToString())?.icon }
+    val navigator = LocalCarNavigator.current
     Row(modifier, verticalAlignment = Alignment.CenterVertically) {
-        // The same back button as every other screen's header, in the same place.
-        GsIconButton(Icons.Filled.ArrowBack, stringResource(R.string.back), onExit)
-        Spacer(Modifier.width(12.dp))
+        // Shown on the same terms as every other screen's header: only when it leads somewhere
+        // the nav bar doesn't.
+        if (navigator.backLeadsSomewhere) {
+            GsIconButton(Icons.Filled.ArrowBack, stringResource(R.string.back), onExit)
+            Spacer(Modifier.width(12.dp))
+        }
         icon?.let {
             Image(it, null, Modifier.size(26.dp).clip(RoundedCornerShape(7.dp)))
             Spacer(Modifier.width(10.dp))

@@ -83,6 +83,14 @@ class CarNavigator(startId: String) {
         stack.add(Crumb(screen, label, labelRes))
     }
 
+    /**
+     * Whether a back button on this screen leads anywhere the nav bar doesn't: false when the
+     * screen under it is Home or the app grid, which the nav bar's own buttons already reach.
+     * Android Auto shows no back button on an app's first screen for the same reason.
+     */
+    val backLeadsSomewhere: Boolean
+        get() = stack.size >= 2 && stack[stack.size - 2].screen.let { it != CarScreen.Home && it != CarScreen.Apps }
+
     /** The one way back to a clean slate: resets the whole trail to just Home. */
     fun home() {
         stack.clear()
