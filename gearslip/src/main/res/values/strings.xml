@@ -96,6 +96,14 @@
     <string name="recommended_about_ytm">A YouTube Music player.</string>
     <string name="recommended_about_antennapod">Podcasts, chapters and all.</string>
     <string name="recommended_about_rfsentinel">Spots trackers and cameras nearby.</string>
+    <!-- The mark on apps that declare they work with Gearslip, and the list's heading for them. -->
+    <string name="works_with_gearslip">Works with Gearslip</string>
+    <!-- One app's page, opened from Recommended apps. %1$s is the app's name. -->
+    <string name="app_page_on_car">Gearslip shows it on the car screen.</string>
+    <string name="app_page_get_hint">Install it, and Gearslip shows it on the car screen.</string>
+    <string name="app_page_open">Open %1$s</string>
+    <string name="app_page_get">Get %1$s</string>
+    <string name="app_page_github">View on GitHub</string>
 
     <!-- Settings -->
     <string name="settings_title">Settings</string>

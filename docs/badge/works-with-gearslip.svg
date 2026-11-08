@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="147" height="20" role="img" aria-label="Works with Gearslip">
+  <title>Works with Gearslip</title>
+  <clipPath id="r"><rect width="147" height="20" rx="3" fill="#fff"/></clipPath>
+  <g clip-path="url(#r)">
+    <rect width="88" height="20" fill="#555"/>
+    <rect x="88" width="59" height="20" fill="#8C1F1F"/>
+  </g>
+  <g transform="translate(5 3.5) scale(0.228) translate(-29.5 -25.5)" fill="#fff">
+    <path fill-rule="evenodd" d="M54 36.18 58.64 30.7 67.2 34.24 66.6 41.4 71.82 54 77.3 58.64 73.76 67.2 66.6 66.6 67.2 73.76 58.64 77.3 54 71.82 49.36 77.3 40.8 73.76 41.4 66.6 34.24 67.2 30.7 58.64 36.18 54 30.7 49.36 34.24 40.8 41.4 41.4 40.8 34.24 49.36 30.7ZM54 46.08A7.92 7.92 0 1 1 53.99 46.08Z"/>
+    <path d="M78.61 40.7 85.31 43.29 84.74 52.55 77.78 54.31Z"/>
+  </g>
+  <g fill="#fff" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="11" text-rendering="geometricPrecision">
+    <text x="22" y="14" textLength="60">works with</text>
+    <text x="94" y="14" textLength="47">Gearslip</text>
+  </g>
+</svg>

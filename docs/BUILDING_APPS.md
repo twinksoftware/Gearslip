@@ -469,6 +469,44 @@ home-screen pane comes later. Anything that needs its own rendering belongs in a
 
 ---
 
+## Works with Gearslip
+
+Once your app runs well on Gearslip, say so in two places: your manifest and your README.
+
+### In your manifest
+
+Add these lines to `<application>`:
+
+```xml
+<meta-data
+    android:name="app.seb3thehacker.gearslip.works_with"
+    android:value="true" />
+<meta-data
+    android:name="app.seb3thehacker.gearslip.about"
+    android:resource="@string/gearslip_about" />
+```
+
+Gearslip then marks your app "Works with Gearslip" in its Recommended apps list and on your app's
+page in Gearslip. An installed app with the flag gets its own place at the top of the list.
+
+The second entry is optional. It gives your page one sentence on what your app does in the car,
+such as "Spots trackers and cameras nearby." Write it in place with `android:value` if you have no
+string resource for it.
+
+The flag is a label. Gearslip finds and runs your app the same way with or without it.
+
+### In your README
+
+Add the badge:
+
+```markdown
+[![Works with Gearslip](https://raw.githubusercontent.com/twinksoftware/gearslip/main/docs/badge/works-with-gearslip.svg)](https://github.com/twinksoftware/gearslip)
+```
+
+It matches the flat badges most READMEs already show.
+
+---
+
 ## Further reading
 
 - [README.md](../README.md) - what Gearslip is.

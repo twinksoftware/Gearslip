@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,7 +35,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -105,32 +109,60 @@ fun RecommendedAppsScreen(onBack: () -> Unit) {
 internal const val SHOW_RECOMMENDED_APPS = false
 
 /** The same green as the launcher's "works" check. */
-private val INSTALLED_GREEN = Color(0xFF43A047)
+internal val INSTALLED_GREEN = Color(0xFF43A047)
 
-/** The apps by section, each with a GitHub button. Installed ones say so in green. */
+/**
+ * The apps by section, each with a GitHub button; tapping the rest of a row opens the app's page.
+ * Installed ones say so in green. Installed apps that declare the Works with Gearslip flag come
+ * first, under their own heading, unless the list already has them.
+ */
 @Composable
 internal fun RecommendedAppsList(modifier: Modifier = Modifier) {
     val context = LocalContext.current
+    var page by remember { mutableStateOf<PageApp?>(null) }
+    val declared = remember {
+        val listed = recommended.flatMap { (_, apps) -> apps.map { it.packageName } }.toSet()
+        WorksWith.installed(context).filter { it.packageName !in listed }
+    }
     Column(modifier, verticalArrangement = Arrangement.spacedBy(20.dp)) {
-        for ((section, apps) in recommended) {
-            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Text(
-                    stringResource(section),
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.primary,
-                )
-                for (app in apps) AppRow(app) { openPage(context, app.url) }
+        if (declared.isNotEmpty()) {
+            Section(stringResource(R.string.works_with_gearslip)) {
+                for (app in declared) {
+                    AppRow(app.label, app.packageName, app.about, onPage = { page = PageApp(app.label, app.packageName, null, app.about) }, onGitHub = null)
+                }
             }
         }
+        for ((section, apps) in recommended) {
+            Section(stringResource(section)) {
+                for (app in apps) {
+                    val text = stringResource(app.about)
+                    AppRow(app.name, app.packageName, text, onPage = { page = PageApp(app.name, app.packageName, app.url, text) }, onGitHub = { openPage(context, app.url) })
+                }
+            }
+        }
+    }
+    page?.let { AppPage(it, onDismiss = { page = null }) }
+}
+
+@Composable
+private fun Section(title: String, content: @Composable () -> Unit) {
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Text(
+            title,
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.primary,
+        )
+        content()
     }
 }
 
 @Composable
-private fun AppRow(app: RecommendedApp, onOpen: () -> Unit) {
+private fun AppRow(name: String, packageName: String, about: String?, onPage: () -> Unit, onGitHub: (() -> Unit)?) {
     val context = LocalContext.current
-    val icon = remember(app.packageName) { installedIcon(context, app.packageName) }
-    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+    val icon = remember(packageName) { installedIcon(context, packageName) }
+    val declares = remember(packageName) { WorksWith.declares(context.packageManager, packageName) }
+    Row(Modifier.fillMaxWidth().clip(MaterialTheme.shapes.medium).clickable(onClick = onPage), verticalAlignment = Alignment.CenterVertically) {
         Box(
             Modifier.size(44.dp).clip(CircleShape).background(MaterialTheme.colorScheme.surfaceContainerHigh),
             contentAlignment = Alignment.Center,
@@ -138,14 +170,15 @@ private fun AppRow(app: RecommendedApp, onOpen: () -> Unit) {
             if (icon != null) {
                 Image(icon.toBitmap(96, 96).asImageBitmap(), contentDescription = null, Modifier.fillMaxSize())
             } else {
-                Text(app.name.take(1), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
+                Text(name.take(1), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
             }
         }
         Column(Modifier.weight(1f).padding(horizontal = 14.dp)) {
             // Colours set outright: the setup guide draws this on its own background, with no
             // Surface to hand down a content colour, and unset text came out dark on dark.
-            Text(app.name, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
-            Text(stringResource(app.about), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(name, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
+            if (about != null) Text(about, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            if (declares) WorksWithMark(Modifier.padding(top = 4.dp))
             if (icon != null) {
                 Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 4.dp)) {
                     Icon(Icons.Filled.CheckCircle, contentDescription = null, tint = INSTALLED_GREEN, modifier = Modifier.size(16.dp))
@@ -158,14 +191,14 @@ private fun AppRow(app: RecommendedApp, onOpen: () -> Unit) {
                 }
             }
         }
-        OutlinedButton(onClick = onOpen) { Text("GitHub") }
+        if (onGitHub != null) OutlinedButton(onClick = onGitHub) { Text("GitHub") }
     }
 }
 
 private fun installedIcon(context: Context, packageName: String): Drawable? =
     runCatching { context.packageManager.getApplicationIcon(packageName) }.getOrNull()
 
-private fun openPage(context: Context, url: String) {
+internal fun openPage(context: Context, url: String) {
     runCatching {
         context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
     }
