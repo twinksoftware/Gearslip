@@ -992,4 +992,17 @@
     <string name="car_apps_as_messaging_note">إشعاراته، تُقرأ بصوت عالٍ، مع الردود.</string>
     <string name="car_apps_added_by_you">أضفته أنت</string>
     <string name="car_apps_remove">إزالة %1$s</string>
+    <string name="cert_link">تنزيل من رابط</string>
+    <string name="cert_link_sub">ملف شهادة تثق به، من عنوان تلصقه</string>
+    <string name="cert_link_title">شهادة من رابط</string>
+    <string name="cert_link_note">الصق عنوان ملف ‎.p12، أو عنوان شهادة ومفتاحها بصيغة PEM أو DER. يحوّلها Gearslip إلى الصيغة التي تحتاجها السيارة.</string>
+    <string name="cert_link_label">رابط الشهادة أو ملف ‎.p12</string>
+    <string name="cert_link_key">رابط المفتاح الخاص</string>
+    <string name="cert_link_key_note">هذه شهادة بلا مفتاح. الصق رابط المفتاح أيضًا.</string>
+    <string name="cert_link_password">كلمة المرور</string>
+    <string name="cert_link_password_note">لهذا الملف كلمة مرور.</string>
+    <string name="cert_link_download">تنزيل</string>
+    <string name="cert_link_again">التنزيل مجددًا</string>
+    <string name="cert_link_done">نُزّلت وحُوّلت. تُستخدم من الاتصال التالي.</string>
+    <string name="cert_link_failed">تعذّر استخدامها. %1$s</string>
 </resources>

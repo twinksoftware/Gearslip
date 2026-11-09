@@ -1009,4 +1009,17 @@
     <string name="car_apps_as_messaging_note">Its notifications, read aloud, with replies.</string>
     <string name="car_apps_added_by_you">Added by you</string>
     <string name="car_apps_remove">Remove %1$s</string>
+    <string name="cert_link">Download from a link</string>
+    <string name="cert_link_sub">A certificate file you trust, at an address you paste</string>
+    <string name="cert_link_title">Certificate from a link</string>
+    <string name="cert_link_note">Paste the address of a .p12 file, or of a certificate and key in PEM or DER. Gearslip converts it to the form the car needs.</string>
+    <string name="cert_link_label">Certificate or .p12 link</string>
+    <string name="cert_link_key">Link to the private key</string>
+    <string name="cert_link_key_note">That\'s a certificate without its key. Paste the key\'s link too.</string>
+    <string name="cert_link_password">Password</string>
+    <string name="cert_link_password_note">This file has a password.</string>
+    <string name="cert_link_download">Download</string>
+    <string name="cert_link_again">Download again</string>
+    <string name="cert_link_done">Downloaded and converted. It\'s used from the next connection.</string>
+    <string name="cert_link_failed">Couldn\'t use it. %1$s</string>
 </resources>

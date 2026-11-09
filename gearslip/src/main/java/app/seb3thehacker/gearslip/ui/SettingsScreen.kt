@@ -1,5 +1,7 @@
 package app.seb3thehacker.gearslip.ui
 
+import androidx.compose.material.icons.filled.Create
+
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import app.seb3thehacker.gearslip.R
@@ -356,6 +358,8 @@ private fun CertificateSection() {
     var notice by remember { mutableStateOf<String?>(null) }
     var downloading by remember { mutableStateOf(false) }
     var detailsOpen by remember { mutableStateOf(false) }
+    var linkDialog by remember { mutableStateOf<LinkRequest?>(null) }
+    val savedLink = remember(refresh) { app.seb3thehacker.gearslip.CertFromLink.savedLink(context) }
     val picker = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         if (uri != null) pendingUri = uri
     }
@@ -414,6 +418,22 @@ private fun CertificateSection() {
         )
         SettingsDivider()
         SettingsRow(
+            stringResource(R.string.cert_link),
+            Modifier.clickable { linkDialog = LinkRequest() },
+            subtitle = stringResource(R.string.cert_link_sub),
+            icon = Icons.Filled.Create,
+        )
+        savedLink?.let { (cert, key) ->
+            SettingsDivider()
+            SettingsRow(
+                stringResource(R.string.cert_link_again),
+                Modifier.clickable { linkDialog = LinkRequest(cert, key, start = true) },
+                subtitle = cert.substringAfter("://").substringBefore('/'),
+                icon = Icons.Filled.Refresh,
+            )
+        }
+        SettingsDivider()
+        SettingsRow(
             stringResource(R.string.cert_import),
             Modifier.clickable { picker.launch(arrayOf("*/*")) },
             subtitle = stringResource(R.string.cert_import_sub),
@@ -440,6 +460,14 @@ private fun CertificateSection() {
         }
     }
 
+    linkDialog?.let { request ->
+        LinkDialog(request, onDismiss = { linkDialog = null }) {
+            linkDialog = null
+            notice = context.getString(R.string.cert_link_done)
+            refresh++
+        }
+    }
+
     pendingUri?.let { uri ->
         PasswordDialog(
             onDismiss = { pendingUri = null },
@@ -459,6 +487,75 @@ private fun CertificateSection() {
             },
         )
     }
+}
+
+/** What the link dialog opens with: blank, or the saved link to fetch again straight away. */
+private class LinkRequest(val cert: String = "https://", val key: String? = null, val start: Boolean = false)
+
+/**
+ * Fetches a certificate from a link (issue #15). It asks for more only when the file needs it:
+ * the password of a .p12, or the link to a key that came separately.
+ */
+@Composable
+private fun LinkDialog(request: LinkRequest, onDismiss: () -> Unit, onDone: () -> Unit) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    var cert by remember { mutableStateOf(request.cert) }
+    var key by remember { mutableStateOf(request.key) }
+    var password by remember { mutableStateOf<String?>(null) }
+    var error by remember { mutableStateOf<String?>(null) }
+    var busy by remember { mutableStateOf(false) }
+    fun go() {
+        busy = true
+        error = null
+        scope.launch {
+            val result = withContext(Dispatchers.IO) {
+                runCatching { app.seb3thehacker.gearslip.CertFromLink.import(context, cert, key?.takeIf { it.isNotBlank() }, password) }
+            }
+            busy = false
+            result.onSuccess { outcome ->
+                when (outcome) {
+                    app.seb3thehacker.gearslip.CertFromLink.Outcome.Done -> onDone()
+                    app.seb3thehacker.gearslip.CertFromLink.Outcome.NeedsKey -> if (key == null) key = "https://" else error = context.getString(R.string.cert_link_key_note)
+                    app.seb3thehacker.gearslip.CertFromLink.Outcome.NeedsPassword -> if (password == null) password = "" else error = context.getString(R.string.cert_import_failed)
+                }
+            }.onFailure { error = context.getString(R.string.cert_link_failed, it.message.orEmpty()) }
+        }
+    }
+    LaunchedEffect(request) { if (request.start) go() }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.cert_link_title)) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Text(stringResource(R.string.cert_link_note))
+                OutlinedTextField(
+                    cert, { cert = it }, label = { Text(stringResource(R.string.cert_link_label)) }, singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri),
+                )
+                key?.let { k ->
+                    Text(stringResource(R.string.cert_link_key_note), style = MaterialTheme.typography.bodySmall)
+                    OutlinedTextField(
+                        k, { key = it }, label = { Text(stringResource(R.string.cert_link_key)) }, singleLine = true,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri),
+                    )
+                }
+                password?.let { p ->
+                    Text(stringResource(R.string.cert_link_password_note), style = MaterialTheme.typography.bodySmall)
+                    OutlinedTextField(
+                        p, { password = it }, label = { Text(stringResource(R.string.cert_link_password)) }, singleLine = true,
+                        visualTransformation = androidx.compose.ui.text.input.PasswordVisualTransformation(),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    )
+                }
+                error?.let { Text(it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall) }
+            }
+        },
+        confirmButton = {
+            TextButton(::go, enabled = !busy) { Text(stringResource(if (busy) R.string.cert_downloading else R.string.cert_link_download)) }
+        },
+        dismissButton = { TextButton(onDismiss) { Text(stringResource(R.string.cancel)) } },
+    )
 }
 
 @Composable

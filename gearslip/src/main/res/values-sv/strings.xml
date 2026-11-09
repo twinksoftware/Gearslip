@@ -952,4 +952,17 @@
     <string name="car_apps_as_messaging_note">Dess aviseringar, upplästa, med svar.</string>
     <string name="car_apps_added_by_you">Tillagd av dig</string>
     <string name="car_apps_remove">Ta bort %1$s</string>
+    <string name="cert_link">Ladda ner från en länk</string>
+    <string name="cert_link_sub">En certifikatfil du litar på, från en adress du klistrar in</string>
+    <string name="cert_link_title">Certifikat från en länk</string>
+    <string name="cert_link_note">Klistra in adressen till en .p12-fil, eller till ett certifikat och en nyckel i PEM eller DER. Gearslip gör om den till den form bilen behöver.</string>
+    <string name="cert_link_label">Länk till certifikat eller .p12</string>
+    <string name="cert_link_key">Länk till den privata nyckeln</string>
+    <string name="cert_link_key_note">Det är ett certifikat utan nyckel. Klistra in nyckelns länk också.</string>
+    <string name="cert_link_password">Lösenord</string>
+    <string name="cert_link_password_note">Filen har ett lösenord.</string>
+    <string name="cert_link_download">Ladda ner</string>
+    <string name="cert_link_again">Ladda ner igen</string>
+    <string name="cert_link_done">Nedladdat och omgjort. Det används från nästa anslutning.</string>
+    <string name="cert_link_failed">Det gick inte att använda. %1$s</string>
 </resources>

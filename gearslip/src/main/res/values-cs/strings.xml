@@ -972,4 +972,17 @@
     <string name="car_apps_as_messaging_note">Její oznámení, předčítaná nahlas, s odpověďmi.</string>
     <string name="car_apps_added_by_you">Přidáno vámi</string>
     <string name="car_apps_remove">Odebrat %1$s</string>
+    <string name="cert_link">Stáhnout z odkazu</string>
+    <string name="cert_link_sub">Soubor certifikátu, kterému věříte, z adresy, kterou vložíte</string>
+    <string name="cert_link_title">Certifikát z odkazu</string>
+    <string name="cert_link_note">Vložte adresu souboru .p12 nebo certifikátu a klíče ve formátu PEM či DER. Gearslip ho převede do podoby, kterou auto potřebuje.</string>
+    <string name="cert_link_label">Odkaz na certifikát nebo .p12</string>
+    <string name="cert_link_key">Odkaz na soukromý klíč</string>
+    <string name="cert_link_key_note">Je to certifikát bez klíče. Vložte i odkaz na klíč.</string>
+    <string name="cert_link_password">Heslo</string>
+    <string name="cert_link_password_note">Tento soubor má heslo.</string>
+    <string name="cert_link_download">Stáhnout</string>
+    <string name="cert_link_again">Stáhnout znovu</string>
+    <string name="cert_link_done">Staženo a převedeno. Použije se od dalšího připojení.</string>
+    <string name="cert_link_failed">Nelze použít. %1$s</string>
 </resources>

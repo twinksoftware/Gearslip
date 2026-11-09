@@ -836,4 +836,17 @@
     <string name="car_apps_as_messaging_note">Sus notificaciones, leídas en voz alta, con respuestas.</string>
     <string name="car_apps_added_by_you">Añadida por ti</string>
     <string name="car_apps_remove">Quitar %1$s</string>
+    <string name="cert_link">Descargar desde un enlace</string>
+    <string name="cert_link_sub">Un archivo de certificado de confianza, en una dirección que pegues</string>
+    <string name="cert_link_title">Certificado desde un enlace</string>
+    <string name="cert_link_note">Pega la dirección de un archivo .p12, o de un certificado y su clave en PEM o DER. Gearslip lo convierte al formato que necesita el coche.</string>
+    <string name="cert_link_label">Enlace del certificado o del .p12</string>
+    <string name="cert_link_key">Enlace de la clave privada</string>
+    <string name="cert_link_key_note">Es un certificado sin su clave. Pega también el enlace de la clave.</string>
+    <string name="cert_link_password">Contraseña</string>
+    <string name="cert_link_password_note">Este archivo tiene contraseña.</string>
+    <string name="cert_link_download">Descargar</string>
+    <string name="cert_link_again">Descargar de nuevo</string>
+    <string name="cert_link_done">Descargado y convertido. Se usará en la próxima conexión.</string>
+    <string name="cert_link_failed">No se pudo usar. %1$s</string>
 </resources>

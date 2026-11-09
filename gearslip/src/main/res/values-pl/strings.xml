@@ -972,4 +972,17 @@
     <string name="car_apps_as_messaging_note">Jej powiadomienia, czytane na głos, z odpowiedziami.</string>
     <string name="car_apps_added_by_you">Dodana przez Ciebie</string>
     <string name="car_apps_remove">Usuń %1$s</string>
+    <string name="cert_link">Pobierz z linku</string>
+    <string name="cert_link_sub">Plik certyfikatu, któremu ufasz, spod wklejonego adresu</string>
+    <string name="cert_link_title">Certyfikat z linku</string>
+    <string name="cert_link_note">Wklej adres pliku .p12 albo certyfikatu i klucza w PEM lub DER. Gearslip przekształci go do postaci, której potrzebuje samochód.</string>
+    <string name="cert_link_label">Link do certyfikatu lub pliku .p12</string>
+    <string name="cert_link_key">Link do klucza prywatnego</string>
+    <string name="cert_link_key_note">To certyfikat bez klucza. Wklej też link do klucza.</string>
+    <string name="cert_link_password">Hasło</string>
+    <string name="cert_link_password_note">Ten plik ma hasło.</string>
+    <string name="cert_link_download">Pobierz</string>
+    <string name="cert_link_again">Pobierz ponownie</string>
+    <string name="cert_link_done">Pobrano i przekształcono. Zostanie użyty od następnego połączenia.</string>
+    <string name="cert_link_failed">Nie można go użyć. %1$s</string>
 </resources>

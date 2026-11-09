@@ -952,4 +952,17 @@
     <string name="car_apps_as_messaging_note">De meldingen, voorgelezen, met antwoorden.</string>
     <string name="car_apps_added_by_you">Door jou toegevoegd</string>
     <string name="car_apps_remove">%1$s verwijderen</string>
+    <string name="cert_link">Downloaden via een link</string>
+    <string name="cert_link_sub">Een certificaatbestand dat je vertrouwt, op een adres dat je plakt</string>
+    <string name="cert_link_title">Certificaat via een link</string>
+    <string name="cert_link_note">Plak het adres van een .p12-bestand, of van een certificaat en sleutel in PEM of DER. Gearslip zet het om naar de vorm die de auto nodig heeft.</string>
+    <string name="cert_link_label">Link naar certificaat of .p12</string>
+    <string name="cert_link_key">Link naar de privésleutel</string>
+    <string name="cert_link_key_note">Dat is een certificaat zonder sleutel. Plak ook de link naar de sleutel.</string>
+    <string name="cert_link_password">Wachtwoord</string>
+    <string name="cert_link_password_note">Dit bestand heeft een wachtwoord.</string>
+    <string name="cert_link_download">Downloaden</string>
+    <string name="cert_link_again">Opnieuw downloaden</string>
+    <string name="cert_link_done">Gedownload en omgezet. Het wordt gebruikt vanaf de volgende verbinding.</string>
+    <string name="cert_link_failed">Kon het niet gebruiken. %1$s</string>
 </resources>

@@ -952,4 +952,17 @@
     <string name="car_apps_as_messaging_note">Bildirimleri, sesli okunur ve yanıtlanabilir.</string>
     <string name="car_apps_added_by_you">Sizin eklediğiniz</string>
     <string name="car_apps_remove">%1$s kaldır</string>
+    <string name="cert_link">Bir bağlantıdan indir</string>
+    <string name="cert_link_sub">Güvendiğiniz bir sertifika dosyası, yapıştırdığınız bir adreste</string>
+    <string name="cert_link_title">Bağlantıdan sertifika</string>
+    <string name="cert_link_note">Bir .p12 dosyasının ya da PEM veya DER biçiminde bir sertifika ve anahtarın adresini yapıştırın. Gearslip bunu aracın istediği biçime dönüştürür.</string>
+    <string name="cert_link_label">Sertifika veya .p12 bağlantısı</string>
+    <string name="cert_link_key">Özel anahtarın bağlantısı</string>
+    <string name="cert_link_key_note">Bu, anahtarı olmayan bir sertifika. Anahtarın bağlantısını da yapıştırın.</string>
+    <string name="cert_link_password">Parola</string>
+    <string name="cert_link_password_note">Bu dosyanın parolası var.</string>
+    <string name="cert_link_download">İndir</string>
+    <string name="cert_link_again">Yeniden indir</string>
+    <string name="cert_link_done">İndirildi ve dönüştürüldü. Bir sonraki bağlantıdan itibaren kullanılır.</string>
+    <string name="cert_link_failed">Kullanılamadı. %1$s</string>
 </resources>

@@ -942,4 +942,17 @@
     <string name="car_apps_as_messaging_note">朗读其通知，并可回复。</string>
     <string name="car_apps_added_by_you">由你添加</string>
     <string name="car_apps_remove">移除 %1$s</string>
+    <string name="cert_link">从链接下载</string>
+    <string name="cert_link_sub">从你粘贴的地址下载你信任的证书文件</string>
+    <string name="cert_link_title">从链接获取证书</string>
+    <string name="cert_link_note">粘贴 .p12 文件的地址，或 PEM、DER 格式的证书和密钥的地址。Gearslip 会把它转换成汽车需要的格式。</string>
+    <string name="cert_link_label">证书或 .p12 链接</string>
+    <string name="cert_link_key">私钥链接</string>
+    <string name="cert_link_key_note">这是没有密钥的证书。请同时粘贴密钥的链接。</string>
+    <string name="cert_link_password">密码</string>
+    <string name="cert_link_password_note">此文件有密码。</string>
+    <string name="cert_link_download">下载</string>
+    <string name="cert_link_again">重新下载</string>
+    <string name="cert_link_done">已下载并转换。将在下次连接时使用。</string>
+    <string name="cert_link_failed">无法使用。%1$s</string>
 </resources>

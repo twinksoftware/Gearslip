@@ -844,4 +844,17 @@
     <string name="car_apps_as_messaging_note">Notificările ei, citite cu voce tare, cu răspunsuri.</string>
     <string name="car_apps_added_by_you">Adăugată de tine</string>
     <string name="car_apps_remove">Elimină %1$s</string>
+    <string name="cert_link">Descarcă dintr-un link</string>
+    <string name="cert_link_sub">Un fișier de certificat de încredere, de la o adresă pe care o lipești</string>
+    <string name="cert_link_title">Certificat dintr-un link</string>
+    <string name="cert_link_note">Lipește adresa unui fișier .p12 sau a unui certificat și a cheii lui în PEM ori DER. Gearslip îl convertește în forma de care are nevoie mașina.</string>
+    <string name="cert_link_label">Linkul certificatului sau al .p12</string>
+    <string name="cert_link_key">Linkul cheii private</string>
+    <string name="cert_link_key_note">Este un certificat fără cheie. Lipește și linkul cheii.</string>
+    <string name="cert_link_password">Parolă</string>
+    <string name="cert_link_password_note">Fișierul are o parolă.</string>
+    <string name="cert_link_download">Descarcă</string>
+    <string name="cert_link_again">Descarcă din nou</string>
+    <string name="cert_link_done">Descărcat și convertit. Se folosește de la următoarea conectare.</string>
+    <string name="cert_link_failed">Nu a putut fi folosit. %1$s</string>
 </resources>
