@@ -120,7 +120,9 @@ internal fun BrowsePanel(browse: app.seb3thehacker.gearslip.media.BrowseState, m
  */
 @Composable
 private fun BrowseList(entries: List<MediaEntry>, media: CarMedia) {
-    val sections = remember(entries) { browseSections(entries) }
+    // A list's keys must be unique, and some apps list the same item twice (Music Assistant's
+    // playlists, issue #90): the repeat would do the same thing anyway, so it's dropped.
+    val sections = remember(entries) { browseSections(entries.distinctBy { it.id }) }
     BoxWithConstraints(Modifier.fillMaxSize()) {
         val onlyGrid = sections.size == 1 && sections[0].grid && sections[0].heading == null
         val columns = ((maxWidth + SHELF_GAP) / (SHELF_COVER + SHELF_GAP)).toInt().coerceAtLeast(2)
@@ -243,7 +245,7 @@ internal fun QueuePanel(queue: List<QueueTrack>, now: NowPlaying, media: CarMedi
                 contentPadding = PaddingValues(bottom = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                items(upNext, key = { it.queueId }) { track -> QueueRow(track, media) }
+                items(upNext.distinctBy { it.queueId }, key = { it.queueId }) { track -> QueueRow(track, media) }
             }
         }
     }
