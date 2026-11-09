@@ -57,6 +57,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.collectAsState
+import androidx.compose.material3.SegmentedButton
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -107,6 +109,8 @@ fun HomeScreen(
                 ) {
                     Spacer(Modifier.height(16.dp))
                     StatusCard(status)
+                    Spacer(Modifier.height(16.dp))
+                    AudioSwitch()
                     if (live) BluetoothMissingCard()
                     BluetoothAddressCard()
                     VoiceDownloadCard()
@@ -255,6 +259,34 @@ private fun Arrow() = Icon(
     contentDescription = null,
     tint = MaterialTheme.colorScheme.onSurfaceVariant,
 )
+
+/**
+ * Where the car's sound comes from, switchable in one tap from Home: Bluetooth, or through
+ * Gearslip over the car link. It takes effect at once when a car is connected.
+ */
+@Composable
+private fun AudioSwitch() {
+    val pipe by app.seb3thehacker.gearslip.car.CarSettings.pipeAudio.collectAsState()
+    val thisCar by app.seb3thehacker.gearslip.car.CarSettings.thisCarPipes.collectAsState()
+    val through = pipe || thisCar
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(
+            stringResource(R.string.car_audio),
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.padding(start = 4.dp),
+        )
+        androidx.compose.material3.SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
+            listOf(false to R.string.guide_audio_bluetooth, true to R.string.guide_audio_usb).forEachIndexed { i, (value, label) ->
+                SegmentedButton(
+                    selected = through == value,
+                    onClick = { app.seb3thehacker.gearslip.car.CarSettings.setPipeAudio(value) },
+                    shape = androidx.compose.material3.SegmentedButtonDefaults.itemShape(i, 2),
+                ) { Text(stringResource(label), maxLines = 1) }
+            }
+        }
+    }
+}
 
 @Composable
 private fun StatusCard(status: SessionStatus.Snapshot) {
