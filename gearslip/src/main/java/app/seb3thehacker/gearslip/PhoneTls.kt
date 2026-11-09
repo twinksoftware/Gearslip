@@ -25,6 +25,12 @@ class PhoneTls(keyStore: KeyStore, password: CharArray) {
     private var netBuffer = ByteBuffer.allocate(32 * 1024)
 
     @Volatile var handshakeComplete: Boolean = false
+
+    /**
+     * A short fingerprint of the head unit's certificate, known once TLS completes: the first
+     * thing that tells one car model from another, before it has described itself.
+     */
+    @Volatile var headUnitKey: String? = null
         private set
 
     init {
@@ -166,6 +172,9 @@ class PhoneTls(keyStore: KeyStore, password: CharArray) {
         try {
             val peers = session.peerCertificates
             log.i("head unit presented ${peers.size} certificate(s):")
+            headUnitKey = peers.firstOrNull()?.encoded?.let { bytes ->
+                java.security.MessageDigest.getInstance("SHA-256").digest(bytes).take(8).joinToString("") { "%02x".format(it) }
+            }
             peers.forEachIndexed { index, certificate ->
                 if (certificate is X509Certificate) {
                     log.i("  [$index] subject=${certificate.subjectX500Principal}")

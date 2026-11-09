@@ -69,6 +69,8 @@ class GearslipRunner(
 
     /** Waits for the certificate only when TLS is first needed; see [run]. */
     private val tls: PhoneTls by lazy { identityTask.get() }
+    /** This session sent the short service discovery request. */
+    @Volatile private var plainDiscovery = false
     private var authenticationFailed = false
     private var drainWriterOnExit = false
     @Volatile private var stopped = false
@@ -174,6 +176,9 @@ class GearslipRunner(
             SessionReport.fail(link, "transport failed", t, state.name)
             reportDisconnect()
         } finally {
+            // The car hung up between our service discovery request and its answer: try the
+            // other kind of request with this car next time (see [ServiceDiscoveryQuirks]).
+            if (!stopped && state == State.WAIT_SDR) ServiceDiscoveryQuirks.droppedAfter(tls.headUnitKey, plainDiscovery)
             running = false
             // The car is gone, but nothing calls stop() when a wireless session drops: it waits
             // for the next one. Close the music channel now, so the audio capture behind it,
@@ -496,14 +501,17 @@ class GearslipRunner(
      * never answered the request when it had only the label and model (issue #47).
      */
     private fun sendServiceDiscoveryRequest() {
-        val icons = runCatching(phoneIcons).getOrDefault(emptyList())
+        // A 2019 Fiat 500's Uconnect hangs up on the full request (issue #91), so a car that has
+        // done that before gets the short one Gearslip sent until 0.3.39: label and model only.
+        plainDiscovery = ServiceDiscoveryQuirks.wantsPlain(tls.headUnitKey)
+        val icons = if (plainDiscovery) emptyList() else runCatching(phoneIcons).getOrDefault(emptyList())
         var body = ByteArray(0)
         icons.take(3).forEachIndexed { i, png -> body += Protobuf.bytesField(i + 1, png) } // small, medium, large icon
         body += Protobuf.stringField(4, "Gearslip") + // label_text
-            Protobuf.stringField(5, Build.MODEL) + // device_name
-            Protobuf.bytesField(6, Protobuf.stringField(1, java.util.UUID.randomUUID().toString())) // session ID
+            Protobuf.stringField(5, Build.MODEL) // device_name
+        if (!plainDiscovery) body += Protobuf.bytesField(6, Protobuf.stringField(1, java.util.UUID.randomUUID().toString())) // session ID
         send(MSG_SERVICE_DISCOVERY_REQUEST, body, encrypted = true)
-        log.i("-> ServiceDiscoveryRequest (encrypted, ${icons.size} icons, ${body.size} bytes)")
+        log.i("-> ServiceDiscoveryRequest (encrypted, ${if (plainDiscovery) "short, as this car asked" else "${icons.size} icons"}, ${body.size} bytes)")
     }
 
     private fun onServiceDiscoveryResponse(body: ByteArray) {
