@@ -841,14 +841,14 @@
     <string name="bt_address_use_title">Använda den här Bluetooth-adressen?</string>
     <string name="bt_address_your_car">din bil</string>
     <string name="car_apps_finding">Letar efter appar…</string>
-    <string name="car_apps_none">Inga bilappar hittades</string>
-    <string name="car_apps_sub">Välj vilka appar som visas i bilen</string>
+    <string name="car_apps_none">Inga appar funna</string>
+    <string name="car_apps_sub">Välj vilka appar som ska visas i bilen</string>
     <string name="car_audio_blocked">%1$s låter inte andra appar spela upp dess ljud, så det når inte bilen via Gearslip. Prova en annan musikapp.</string>
     <string name="car_audio_switched">Den här bilen stänger av Bluetooth-musik medan Gearslip körs, så musiken går nu via Gearslip. Godkänn frågan på telefonen.</string>
     <string name="car_autoplay_note">Fortsätter musiken där den slutade så fort bilen ansluter.</string>
     <string name="car_density">Bilskärmens täthet</string>
     <string name="car_density_note">Större text och kontroller, även i appar. Prova 200 DPI med Storlek på Normal. Anslut bilen igen eller öppna förhandsvisningen igen för att tillämpa det. Om kontroller klipps av, välj lägre DPI eller Från bilen.</string>
-    <string name="car_directions_over_music">Vägbeskrivning via musikkanalen</string>
+    <string name="car_directions_over_music">Vägbeskrivning över musikuppspelning</string>
     <string name="car_directions_over_music_note">För en bil som tappar anslutningen eller startar om efter en uppläst instruktion. Gearslip blandar in varje instruktion i musiken i stället för att använda bilens navigeringskanal.</string>
     <string name="car_experimental_note">Funktioner som fortfarande testas. De kanske inte fungerar i alla bilar.</string>
     <string name="car_player_beside_map_note">Den sida av kartan som spelaren dockas till när du trycker på dess dockningsknapp.</string>
@@ -873,18 +873,18 @@
     <string name="nav_lane_from_left">Använd körfält %1$d från vänster</string>
     <string name="nav_lane_from_right">Använd körfält %1$d från höger</string>
     <plurals name="nav_lane_left">
-        <item quantity="one">Använd vänster körfält</item>
-        <item quantity="other">Använd de %d vänstra körfälten</item>
+        <item quantity="one">Använd den vänstra filen</item>
+        <item quantity="other">Använd de %d vänstra filerna</item>
     </plurals>
-    <string name="nav_lane_middle">Använd mittenkörfältet</string>
-    <string name="nav_lane_middle_lanes">Använd mittenkörfälten</string>
+    <string name="nav_lane_middle">Använd mittenfilen</string>
+    <string name="nav_lane_middle_lanes">Använd mittenfilerna</string>
     <plurals name="nav_lane_right">
-        <item quantity="one">Använd höger körfält</item>
-        <item quantity="other">Använd de %d högra körfälten</item>
+        <item quantity="one">Använd den högra filen</item>
+        <item quantity="other">Använd de %d högra filerna</item>
     </plurals>
     <string name="nav_to_go">kvar</string>
     <string name="privacy_policy">Integritetspolicy</string>
-    <string name="privacy_policy_sub">Vad Gearslip skickar, till vem och varför</string>
+    <string name="privacy_policy_sub">Information som Gearslip skickar, till vem och varför</string>
     <string name="settings_bt_address">Telefonens Bluetooth-adress</string>
     <string name="settings_bt_address_hint">Kopiera den från Androids inställningar, under Om telefonen. Gearslip skickar den till bilen så att den vet att telefonen i kabeln är den parkopplade.</string>
     <string name="settings_bt_address_invalid">Det är ingen Bluetooth-adress. Den ser ut som 12:34:56:78:9A:BC.</string>

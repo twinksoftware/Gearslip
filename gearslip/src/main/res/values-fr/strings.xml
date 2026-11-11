@@ -846,16 +846,16 @@
     <string name="bt_address_open">Ouvrir À propos du téléphone</string>
     <string name="bt_address_type">La saisir plutôt</string>
     <string name="bt_address_use_body">Gearslip la transmet à votre voiture, pour qu\'elle sache que c\'est le téléphone associé.</string>
-    <string name="bt_address_use_title">Utiliser cette adresse Bluetooth ?</string>
-    <string name="bt_address_your_car">votre voiture</string>
-    <string name="car_apps_finding">Recherche des applis…</string>
-    <string name="car_apps_none">Aucune appli pour voiture trouvée</string>
-    <string name="car_apps_sub">Choisissez les applis affichées dans la voiture</string>
+    <string name="bt_address_use_title">Utiliser cette adresse Bluetooth ?</string>
+    <string name="bt_address_your_car">votre vehicule</string>
+    <string name="car_apps_finding">Recherche d\'applications…</string>
+    <string name="car_apps_none">Aucune application de voiture trouvée</string>
+    <string name="car_apps_sub">Choisir quelles applis apparaissent dans la voiture</string>
     <string name="car_audio_blocked">%1$s ne laisse pas d\'autres applis lire son son, il ne peut donc pas atteindre la voiture par Gearslip. Essayez une autre appli de musique.</string>
     <string name="car_audio_switched">Cette voiture coupe la musique Bluetooth pendant que Gearslip tourne, la musique passe donc maintenant par Gearslip. Acceptez la demande sur votre téléphone.</string>
     <string name="car_autoplay_note">Reprend la musique là où elle s\'était arrêtée dès que la voiture se connecte.</string>
-    <string name="car_density">Densité de l\'écran de la voiture</string>
-    <string name="car_density_note">Texte et commandes plus grands, y compris dans les applis. Essayez 200 DPI avec Taille sur Normale. Reconnectez la voiture ou rouvrez l\'aperçu pour l\'appliquer. Si des commandes sont coupées, choisissez moins de DPI ou Selon la voiture.</string>
+    <string name="car_density">Densité de l\'écran</string>
+    <string name="car_density_note">"Contrôles et texte plus larges. Essayez 200 DPi et Normale pour la Taille. Se reconnecter à la voiture ou rouvrir l\'aperçu pour appliquer les changements.  Si les contrôles sont tronqués, choisissez un DPI plus petit ou \'Depuis la voiture\'"</string>
     <string name="car_directions_over_music">Instructions sur le canal musique</string>
     <string name="car_directions_over_music_note">Pour une voiture qui se déconnecte ou redémarre après une instruction vocale. Gearslip mélange chaque instruction à la musique au lieu d\'utiliser le canal de navigation de la voiture.</string>
     <string name="car_experimental_note">Fonctions encore en test. Elles peuvent ne pas marcher dans toutes les voitures.</string>
@@ -863,7 +863,7 @@
     <string name="carset_advanced">Avancé</string>
     <string name="carset_experimental_heading">Expérimental</string>
     <string name="carset_fit_needs_car">Connectez une voiture pour enregistrer ce réglage pour elle.</string>
-    <string name="choice_density_car">Selon la voiture</string>
+    <string name="choice_density_car">De la voiture</string>
     <string name="choice_density_dpi">%1$d DPI</string>
     <string name="choice_density_custom">Personnalisé…</string>
     <string name="dialer_missed">Manqué · %1$s</string>
@@ -872,10 +872,10 @@
     <string name="dialer_recents_needs_permission">Gearslip a besoin de l\'autorisation Journaux d\'appels pour lister les appels récents.</string>
     <string name="help_bluetooth_first">Connectez le Bluetooth avant le câble.</string>
     <string name="help_bluetooth_first_detail">Si la musique en Bluetooth ne se connecte pas, laissez d\'abord la voiture trouver le téléphone en Bluetooth, puis branchez. Certaines voitures s\'embrouillent quand le câble arrive en premier.</string>
-    <string name="help_usb_data">Autorisez les données USB.</string>
-    <string name="help_usb_data_detail">GrapheneOS peut bloquer les données sur le port USB. Si le contrôle du port USB-C est réglé sur Recharge uniquement, la voiture ne voit jamais le téléphone, même avec un câble de données. Autorisez les données.</string>
+    <string name="help_usb_data">Autoriser les donnees USB.</string>
+    <string name="help_usb_data_detail">Il se peut que GrapheneOS bloque les données sur le port USB. Si le paramètre de contrôle de l\'USB-C est sur \'Charger seulement\', la voiture ne verra jamais le téléphone, même avec un câble de données. Changer ce contrôle pour \'Autoriser les données\'.</string>
     <string name="launcher_in_car">Cet appareil est connecté à une voiture, Gearslip est donc sur l\'écran de la voiture.</string>
-    <string name="launcher_open_gearslip">Ouvrir Gearslip</string>
+    <string name="launcher_open_gearslip">Ouvre Gearslip</string>
     <string name="nav_arrival">arrivée</string>
     <string name="nav_lane_any">N\'importe quelle voie</string>
     <string name="nav_lane_from_left">Prenez la voie %1$d en partant de la gauche</string>
@@ -894,8 +894,8 @@
     </plurals>
     <string name="nav_to_go">restants</string>
     <string name="privacy_policy">Politique de confidentialité</string>
-    <string name="privacy_policy_sub">Ce que Gearslip envoie, à qui et pourquoi</string>
-    <string name="settings_bt_address">Adresse Bluetooth du téléphone</string>
+    <string name="privacy_policy_sub">Ce que Gearslip envoie, a qui, et pourquoi</string>
+    <string name="settings_bt_address">Adresse Bluetooth du telephone</string>
     <string name="settings_bt_address_hint">Copiez-la depuis les paramètres d\'Android, dans À propos du téléphone. Gearslip la transmet à la voiture, pour qu\'elle sache que le téléphone sur le câble est celui associé.</string>
     <string name="settings_bt_address_invalid">Ce n\'est pas une adresse Bluetooth. Elle ressemble à 12:34:56:78:9A:BC.</string>
     <string name="settings_bt_address_off">Non définie. Seulement pour une voiture qui coupe le Bluetooth quand Gearslip se connecte.</string>
@@ -903,7 +903,7 @@
     <string name="settings_use_as_launcher_off">Pour un autoradio ou une tablette sur le tableau de bord. L\'écran voiture de Gearslip devient l\'écran d\'accueil de cet appareil.</string>
     <string name="settings_use_as_launcher_on">Gearslip peut être l\'écran d\'accueil de cet appareil. Choisissez-le dans Application d\'accueil par défaut.</string>
     <string name="status_no_car">Le téléphone charge, mais aucune voiture n\'a répondu. Certains câbles ne font que charger ; essayez-en un qui transmet les données.</string>
-    <string name="status_no_car_graphene">Le téléphone charge, mais aucune voiture n\'a répondu. Vérifiez que le contrôle du port USB-C, dans Sécurité et confidentialité, autorise les données et n\'est pas sur Recharge uniquement.</string>
+    <string name="status_no_car_graphene">Le téléphone est en train de charger, mais aucune voiture n\'a répondu. Vérifiez que le contrôle de port USB-C, sous Sécurité et confidentialité, permet les données et n\'est pas réglé sur Charge seulement.</string>
     <string name="status_open_settings">Ouvrir les paramètres</string>
     <string name="status_stuck_cable">La voiture n\'affiche pas encore Gearslip. Débranchez le câble, attendez quelques secondes et rebranchez-le. Si cela continue, essayez un autre câble ou port USB, et partagez le journal dans un ticket.</string>
     <string name="status_stuck_wireless">La voiture n\'affiche pas encore Gearslip. Éteignez et rallumez la voiture, ou connectez-vous avec un câble. Si cela continue, partagez le journal dans un ticket.</string>

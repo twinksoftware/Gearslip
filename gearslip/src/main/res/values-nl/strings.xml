@@ -840,8 +840,8 @@
     <string name="bt_address_use_body">Gearslip geeft het door aan je auto, zodat die weet dat dit de gekoppelde telefoon is.</string>
     <string name="bt_address_use_title">Dit bluetooth-adres gebruiken?</string>
     <string name="bt_address_your_car">je auto</string>
-    <string name="car_apps_finding">Apps zoeken…</string>
-    <string name="car_apps_none">Geen auto-apps gevonden</string>
+    <string name="car_apps_finding">Apps aan het vinden…</string>
+    <string name="car_apps_none">Geen auto apps gevonden</string>
     <string name="car_apps_sub">Kies welke apps in de auto verschijnen</string>
     <string name="car_audio_blocked">%1$s laat andere apps zijn geluid niet afspelen, dus het bereikt de auto niet via Gearslip. Probeer een andere muziek-app.</string>
     <string name="car_audio_switched">Deze auto zet bluetooth-muziek uit zolang Gearslip draait, dus de muziek gaat nu via Gearslip. Sta de melding op je telefoon toe.</string>
@@ -855,7 +855,7 @@
     <string name="carset_advanced">Geavanceerd</string>
     <string name="carset_experimental_heading">Experimenteel</string>
     <string name="carset_fit_needs_car">Verbind een auto om deze aanpassing ervoor op te slaan.</string>
-    <string name="choice_density_car">Van de auto</string>
+    <string name="choice_density_car">Van auto</string>
     <string name="choice_density_dpi">%1$d DPI</string>
     <string name="choice_density_custom">Aangepast…</string>
     <string name="dialer_missed">Gemist · %1$s</string>
@@ -864,7 +864,7 @@
     <string name="dialer_recents_needs_permission">Gearslip heeft de toestemming Gesprekslijsten nodig om recente oproepen te tonen.</string>
     <string name="help_bluetooth_first">Verbind bluetooth vóór de kabel.</string>
     <string name="help_bluetooth_first_detail">Als muziek via bluetooth niet verbindt, laat de auto de telefoon dan eerst via bluetooth vinden en steek daarna de kabel in. Sommige auto\'s raken in de war als de kabel eerst komt.</string>
-    <string name="help_usb_data">Sta USB-data toe.</string>
+    <string name="help_usb_data">USB data toestaan.</string>
     <string name="help_usb_data_detail">GrapheneOS kan data op de USB-poort blokkeren. Staat USB-C-poortbeheer op Alleen opladen, dan ziet de auto de telefoon nooit, zelfs niet met een datakabel. Zet het op data toestaan.</string>
     <string name="launcher_in_car">Dit apparaat is met een auto verbonden, dus Gearslip staat op het scherm van de auto.</string>
     <string name="launcher_open_gearslip">Gearslip openen</string>
@@ -884,7 +884,7 @@
     </plurals>
     <string name="nav_to_go">te gaan</string>
     <string name="privacy_policy">Privacybeleid</string>
-    <string name="privacy_policy_sub">Wat Gearslip verstuurt, naar wie en waarom</string>
+    <string name="privacy_policy_sub">Wat Gearslip verstuurt, naar wie, en waarom</string>
     <string name="settings_bt_address">Bluetooth-adres van de telefoon</string>
     <string name="settings_bt_address_hint">Kopieer het uit de Android-instellingen, onder Over de telefoon. Gearslip geeft het door aan de auto, zodat die weet dat de telefoon aan de kabel de gekoppelde is.</string>
     <string name="settings_bt_address_invalid">Dat is geen bluetooth-adres. Het ziet eruit als 12:34:56:78:9A:BC.</string>
