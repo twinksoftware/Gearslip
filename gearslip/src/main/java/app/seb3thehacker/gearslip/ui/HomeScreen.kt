@@ -112,6 +112,7 @@ fun HomeScreen(
                     Spacer(Modifier.height(16.dp))
                     AudioSwitch()
                     if (live) BluetoothMissingCard()
+                    if (live) BackgroundLocationCard()
                     BluetoothAddressCard()
                     VoiceDownloadCard()
                     // The first drive that worked asks once to share it, right under the result.
@@ -235,6 +236,60 @@ private fun BluetoothMissingCard() {
                 },
                 modifier = Modifier.padding(top = 4.dp),
             ) { Text(stringResource(R.string.bluetooth_settings)) }
+        }
+    }
+}
+
+/**
+ * Asks for "Allow all the time" location, shown only while a car is connected (issue #99).
+ * Without it, a car that connects with the phone locked leaves the car's map without GPS
+ * until Gearslip is opened. Once granted, the location service starts at once.
+ */
+@Composable
+private fun BackgroundLocationCard() {
+    val context = LocalContext.current
+    var allowed by remember { mutableStateOf(app.seb3thehacker.gearslip.host.LocationKeepAlive.allowedInBackground(context)) }
+    var dismissed by remember { mutableStateOf(false) }
+    if (allowed || dismissed) return
+    fun recheck() {
+        allowed = app.seb3thehacker.gearslip.host.LocationKeepAlive.allowedInBackground(context)
+        if (allowed) app.seb3thehacker.gearslip.host.LocationKeepAlive.retry(context)
+    }
+    // On Android 11 and later this opens the app's location settings, where "Allow all the time" is.
+    val askBackground = androidx.activity.compose.rememberLauncherForActivityResult(
+        androidx.activity.result.contract.ActivityResultContracts.RequestPermission(),
+    ) { recheck() }
+    // Android only offers all the time once the ordinary location permission is granted.
+    val askForeground = androidx.activity.compose.rememberLauncherForActivityResult(
+        androidx.activity.result.contract.ActivityResultContracts.RequestMultiplePermissions(),
+    ) { result ->
+        if (result[android.Manifest.permission.ACCESS_FINE_LOCATION] == true) {
+            askBackground.launch(android.Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+        }
+    }
+    val dark = gearslipDark()
+    val container = if (dark) Color(0xFF4A3B00) else Color(0xFFFFE08A)
+    val content = if (dark) Color(0xFFFFE08A) else Color(0xFF3A2E00)
+    Spacer(Modifier.height(16.dp))
+    Surface(color = container, contentColor = content, shape = MaterialTheme.shapes.extraLarge) {
+        Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text(stringResource(R.string.home_location_title), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
+            Text(stringResource(R.string.home_location_body), style = MaterialTheme.typography.bodyMedium)
+            Row(Modifier.padding(top = 4.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Button(
+                    colors = ButtonDefaults.buttonColors(containerColor = content, contentColor = container),
+                    onClick = {
+                        val fine = context.checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) ==
+                            android.content.pm.PackageManager.PERMISSION_GRANTED
+                        if (fine) askBackground.launch(android.Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+                        else askForeground.launch(arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION))
+                    },
+                ) { Text(stringResource(R.string.home_location_allow)) }
+                androidx.compose.material3.TextButton(
+                    colors = ButtonDefaults.textButtonColors(contentColor = content),
+                    onClick = { dismissed = true },
+                ) { Text(stringResource(R.string.home_location_not_now)) }
+            }
         }
     }
 }

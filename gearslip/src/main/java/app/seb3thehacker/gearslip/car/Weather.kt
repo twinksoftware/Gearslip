@@ -11,6 +11,7 @@ import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
 import app.seb3thehacker.gearslip.GearslipLog
+import app.seb3thehacker.gearslip.SessionStatus
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.Locale
@@ -66,8 +67,21 @@ object Weather {
 
     private var placeCache: Pair<String, String>? = null // rounded "lat,lon" to place name
 
+    /** Set while the car preview is on the phone's screen, where the dashboard shows the weather too. */
+    @Volatile var previewOpen = false
+
+    /**
+     * Location is read only while a car is connected or the preview is open. Opening Gearslip on
+     * the phone used to warm the forecast too, which read the location with no car anywhere.
+     */
+    private val mayLocate: Boolean
+        get() = previewOpen || SessionStatus.state.value.phase.let {
+            it == SessionStatus.Phase.CONNECTING || it == SessionStatus.Phase.PROJECTING
+        }
+
     /** Runs off the main thread. Fresh data younger than [TTL_MS] is kept unless [force]. */
     fun refresh(context: Context, force: Boolean = false) {
+        if (!mayLocate) return
         val current = flow.value
         if (!force && current is WeatherState.Ready && System.currentTimeMillis() - current.data.fetchedAt < TTL_MS) return
         val app = context.applicationContext

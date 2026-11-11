@@ -72,6 +72,11 @@ fun CarPreviewScreen(onBack: () -> Unit) {
     // The preview is something to watch, like a map on a dash mount, so the phone stays awake on
     // it. Only here: the flag goes with this screen, and every other screen sleeps as usual.
     val view = androidx.compose.ui.platform.LocalView.current
+    // Set during composition, before the car UI below warms the forecast.
+    remember { app.seb3thehacker.gearslip.car.Weather.previewOpen = true }
+    DisposableEffect(Unit) {
+        onDispose { app.seb3thehacker.gearslip.car.Weather.previewOpen = false }
+    }
     DisposableEffect(view) {
         view.keepScreenOn = true
         onDispose { view.keepScreenOn = false }

@@ -438,6 +438,10 @@
     <!--  -->
     <string name="home_debug_build">%1$s · debug build</string>
     <string name="home_bt_body">Music plays over Bluetooth, but your phone isn\'t connected to the car. Connect it here or from the car\'s Bluetooth menu.</string>
+    <string name="home_location_title">Keep the car\'s map on GPS</string>
+    <string name="home_location_body">With the phone locked, Android stops passing your location to the car\'s map. Choose Allow all the time, and Gearslip keeps it going. It reads your location in the background only while a car is connected.</string>
+    <string name="home_location_allow">Allow location</string>
+    <string name="home_location_not_now">Not now</string>
     <string name="home_voice_downloading">Downloading voice, %1$d%%</string>
 
     <!-- Car audio dialogs -->

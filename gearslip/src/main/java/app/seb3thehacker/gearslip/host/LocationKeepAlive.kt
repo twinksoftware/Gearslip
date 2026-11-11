@@ -46,7 +46,8 @@ class LocationKeepAlive : Service() {
         }.onSuccess {
             settle(State.ON)
         }.onFailure {
-            GearslipLog.w("location keep-alive: could not start the foreground service - ${it.message}")
+            val background = if (allowedInBackground(this)) "allowed all the time" else "not allowed all the time"
+            GearslipLog.w("location keep-alive: could not start the foreground service ($background) - ${it.message}")
             settle(State.FAILED)
             stopSelf()
         }
@@ -100,6 +101,21 @@ class LocationKeepAlive : Service() {
                 }, timeoutMs)
             }
         }
+
+        /**
+         * Starts the service again if a car still holds it but it was refused, as it is when a car
+         * connects with the phone locked and "Allow all the time" isn't granted. Called once the
+         * driver grants it, so the map gets its fix without reconnecting.
+         */
+        fun retry(context: Context) {
+            main.post {
+                if (holders > 0 && state == State.FAILED) begin(context.applicationContext)
+            }
+        }
+
+        /** Whether Android lets this service start with the phone locked (issue #99). */
+        fun allowedInBackground(context: Context) =
+            context.checkSelfPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED
 
         /** Lets go of one hold; the last one stops the service. */
         fun release(context: Context) {
