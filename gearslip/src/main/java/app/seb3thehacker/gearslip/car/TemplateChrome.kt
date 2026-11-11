@@ -223,14 +223,21 @@ private fun NavigationBars(
         val column = cardColumnWidth(maxWidth)
         val cards = @Composable {
             if (routing != null || estimate != null) {
-                Column(Modifier.width(column).fillMaxHeight().covers("nav-cards", cardEdge).padding(12.dp)) {
-                    // As tall as what it holds, up to the column's height.
-                    NavigationCard(
-                        routing,
-                        estimate,
-                        showStop = !template.actionStrip.hasStop(),
-                        Modifier.fillMaxWidth().weight(1f, fill = false),
-                    )
+                // The turn at the top and the trip in a card of its own at the bottom, with the
+                // map showing between them. The trip is measured first, so the turn card shrinks
+                // (dropping parts, see NavigationCard) rather than run into it on a short screen.
+                Column(
+                    Modifier.width(column).fillMaxHeight().covers("nav-cards", cardEdge).padding(12.dp),
+                    verticalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    if (routing != null) {
+                        NavigationCard(routing, Modifier.fillMaxWidth().weight(1f, fill = false))
+                    }
+                    estimate?.let {
+                        ChromeSurface(Modifier.fillMaxWidth().padding(top = if (routing != null) 12.dp else 0.dp)) {
+                            TripRow(it, showStop = !template.actionStrip.hasStop(), Modifier.fillMaxWidth())
+                        }
+                    }
                 }
             }
         }
@@ -252,23 +259,23 @@ private fun NavigationBars(
 }
 
 /**
- * The drive in one card, top to bottom: the manoeuvre big enough to read at a glance, the lanes
- * to be in, the turn after it, and the trip. On a short screen parts drop out whole, the lanes'
- * words first, then the next turn, then the lanes; the manoeuvre and the trip always stay.
+ * The turn, top to bottom: the manoeuvre big enough to read at a glance, the lanes to be in, and
+ * the turn after it. On a short screen parts drop out whole, the lanes' words first, then the
+ * next turn, then the lanes; the manoeuvre always stays. The trip has its own card (TripRow).
  */
 @Composable
-private fun NavigationCard(info: RoutingInfo?, estimate: TravelEstimate?, showStop: Boolean, modifier: Modifier) {
-    val step = info?.currentStep?.takeUnless { info.isLoading }
+private fun NavigationCard(info: RoutingInfo, modifier: Modifier) {
+    val step = info.currentStep?.takeUnless { info.isLoading }
     ChromeSurface(modifier) {
         FitColumn {
-            if (info?.isLoading == true) {
+            if (info.isLoading) {
                 Text(
                     stringResource(R.string.nav_finding_route),
                     Modifier.layoutId(0).padding(horizontal = 18.dp, vertical = 16.dp),
                     style = ChromeType.title,
                 )
             }
-            if (info != null && step != null) {
+            if (step != null) {
                 ManeuverHeader(info, step, Modifier.layoutId(0).fillMaxWidth())
                 // Drawn from the lane data whenever there is some, even beside the app's own picture.
                 step.lanes.orEmpty().takeIf { it.isNotEmpty() }?.let {
@@ -277,7 +284,6 @@ private fun NavigationCard(info: RoutingInfo?, estimate: TravelEstimate?, showSt
                 }
                 info.nextStep?.let { NextTurn(it, Modifier.layoutId(3).fillMaxWidth()) }
             }
-            estimate?.let { TripRow(it, showStop, Modifier.layoutId(1).fillMaxWidth()) }
         }
     }
 }
@@ -439,8 +445,8 @@ private fun TripRow(estimate: TravelEstimate, showStop: Boolean, modifier: Modif
                     stringResource(R.string.nav_stop),
                     { connection.stopNavigating() },
                     colors = GsColors(scheme.surfaceContainerHighest, scheme.onSurface),
-                    size = 52.dp,
-                    iconSize = 26.dp,
+                    size = 46.dp,
+                    iconSize = 24.dp,
                     shape = CircleShape,
                 )
             }
@@ -461,7 +467,7 @@ private fun TripRow(estimate: TravelEstimate, showStop: Boolean, modifier: Modif
 @Composable
 private fun TripRule() {
     Box(
-        Modifier.padding(horizontal = 12.dp, vertical = 4.dp).width(1.dp).fillMaxHeight()
+        Modifier.padding(horizontal = 8.dp, vertical = 4.dp).width(1.dp).fillMaxHeight()
             .background(MaterialTheme.colorScheme.outlineVariant),
     )
 }
@@ -478,10 +484,20 @@ private fun TripFigure(value: String, label: String?, color: Color, style: andro
             color = color,
             maxLines = 1,
             softWrap = false,
-            onTextLayout = { if (it.hasVisualOverflow && size.value > 12f) size *= 0.9f },
+            onTextLayout = { if (it.hasVisualOverflow && size.value > 10f) size *= 0.9f },
         )
         if (label != null) {
-            Text(label, style = ChromeType.label, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            // Shrinks like the figure, so "arrival" stays whole when the player narrows the column.
+            val labelStyle = ChromeType.label
+            var labelSize by androidx.compose.runtime.remember(label, labelStyle) { androidx.compose.runtime.mutableStateOf(labelStyle.fontSize) }
+            Text(
+                label,
+                style = labelStyle.copy(fontSize = labelSize),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1,
+                softWrap = false,
+                onTextLayout = { if (it.hasVisualOverflow && labelSize.value > 10f) labelSize *= 0.9f },
+            )
         }
     }
 }

@@ -1,5 +1,6 @@
 package app.seb3thehacker.gearslip.car
 
+import androidx.compose.foundation.layout.offset
 import androidx.compose.ui.res.stringResource
 import app.seb3thehacker.gearslip.car.theme.*
 import androidx.compose.foundation.layout.Arrangement
@@ -271,18 +272,33 @@ private fun DockedPlayer(now: NowPlaying, modifier: Modifier) {
                 } else {
                     Spacer(Modifier.height(10.dp))
                 }
-                TransportRow(now, media, skip = 56.dp, modifier = Modifier.fillMaxWidth())
-                Spacer(Modifier.height(10.dp))
-                PlayModeRow(now, media, size = 50.dp, modifier = Modifier.fillMaxWidth()) {
-                    GsIconButton(
-                        ImageVector.vectorResource(R.drawable.lyrics_24), stringResource(R.string.storage_lyrics), navigator::showSideLyrics,
-                        size = 50.dp, iconSize = 26.dp,
-                    )
+                // Sized from the column's width rather than fixed: fixed sizes filled a narrow
+                // column edge to edge, so the buttons sat squeezed against each other. Each row
+                // keeps a clear gap between buttons, and none grows past a comfortable size.
+                BoxWithConstraints(Modifier.fillMaxWidth()) {
+                    val w = maxWidth
+                    // Two skips, play at 1.25 times a skip, and two gaps of at least 20dp.
+                    val skip = ((w - 40.dp) / 3.25f).coerceIn(36.dp, 48.dp)
+                    // Four buttons and three gaps of at least 12dp.
+                    val mode = ((w - 36.dp) / 4).coerceIn(34.dp, 42.dp)
+                    Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+                        TransportRow(now, media, skip = skip, modifier = Modifier.fillMaxWidth())
+                        Spacer(Modifier.height(10.dp))
+                        PlayModeRow(now, media, size = mode, modifier = Modifier.fillMaxWidth()) {
+                            GsIconButton(
+                                ImageVector.vectorResource(R.drawable.lyrics_24), stringResource(R.string.storage_lyrics), navigator::showSideLyrics,
+                                size = mode, iconSize = mode * 0.52f,
+                            )
+                        }
+                    }
                 }
             }
+            // Round like the player's other buttons, and tucked into the card's corner so it
+            // covers as little of the cover as it can.
             GsIconButton(
                 Icons.Filled.Close, stringResource(R.string.home_back_nav), navigator::closeSidePanel,
-                Modifier.align(Alignment.TopEnd), size = 36.dp, iconSize = 20.dp,
+                Modifier.align(Alignment.TopEnd).offset(x = 6.dp, y = (-6).dp), size = 32.dp, iconSize = 18.dp,
+                shape = CircleShape,
             )
         }
     }
