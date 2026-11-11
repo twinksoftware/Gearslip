@@ -48,7 +48,8 @@
     <string name="guide_recommended">Recommended</string>
     <string name="guide_audio_bluetooth_body">No prompt each drive, and your map app\'s voice reaches the car.</string>
     <string name="guide_audio_usb">Through Gearslip</string>
-    <string name="guide_audio_usb_body">Clearer sound with no delay. Each drive, Android asks you to share your screen, which lets Gearslip send the sound.</string>
+    <string name="guide_audio_usb_body">Clearer sound with no delay, but your map app\'s spoken directions play on the phone, not in the car. Each drive, Android asks you to share your screen, which lets Gearslip send the sound.</string>
+    <string name="home_audio_usb_warning">Spoken directions from map apps play on the phone, not in the car. Choose Bluetooth to hear them in the car.</string>
     <string name="guide_optional">OPTIONAL</string>
     <string name="guide_already_allowed">Already allowed.</string>
     <string name="guide_scroll_more">Scroll for more  ↓</string>
@@ -239,7 +240,7 @@
     <string name="car_audio">Car audio</string>
     <string name="car_audio_bt">Bluetooth (Recommended)</string>
     <string name="car_audio_bt_sub">No prompt each drive, and your map app\'s voice reaches the car</string>
-    <string name="car_audio_usb_sub">Clearer sound with no delay. Each drive, Android asks you to share your screen, which lets Gearslip send the sound</string>
+    <string name="car_audio_usb_sub">Clearer sound with no delay, but map apps\' spoken directions play on the phone, not in the car. Each drive, Android asks you to share your screen, which lets Gearslip send the sound</string>
     <string name="car_audio_usb_footer">Run the command in Help once, and Android stops asking.</string>
     <string name="car_audio_bt_footer">Calls go over Bluetooth either way.</string>
 

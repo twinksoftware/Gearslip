@@ -1,5 +1,8 @@
 package app.seb3thehacker.gearslip.ui
 
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.selected
 import androidx.compose.material.icons.filled.Create
 
 import androidx.compose.ui.res.stringResource
@@ -250,6 +253,7 @@ private fun ConnectionSection() {
             icon = Icons.Filled.Home,
             trailing = { Switch(checked = launcher, onCheckedChange = null) },
         )
+        CarAudioSetting()
         var address by remember { mutableStateOf(CarBluetooth.typedAddress(context)) }
         var editing by remember { mutableStateOf(false) }
         SettingsRow(
@@ -271,6 +275,42 @@ private fun ConnectionSection() {
                     }
                 },
             )
+        }
+    }
+}
+
+/**
+ * Where the car's sound comes from: Bluetooth, or through Gearslip over the car link. Takes
+ * effect at once when a car is connected. The chosen pill is filled in the main colour, the
+ * other tonal, like the buttons on Home.
+ */
+@Composable
+private fun CarAudioSetting() {
+    val pipe by app.seb3thehacker.gearslip.car.CarSettings.pipeAudio.collectAsState()
+    val thisCar by app.seb3thehacker.gearslip.car.CarSettings.thisCarPipes.collectAsState()
+    val through = pipe || thisCar
+    val scheme = MaterialTheme.colorScheme
+    // Android won't let Gearslip capture navigation voices, only media, so they stay on the phone.
+    SettingsRow(
+        stringResource(R.string.car_audio),
+        subtitle = if (through) stringResource(R.string.home_audio_usb_warning) else null,
+        icon = app.seb3thehacker.gearslip.car.MediaIcons.MusicNote,
+    )
+    androidx.compose.foundation.layout.Row(
+        Modifier.fillMaxWidth().padding(start = 56.dp, end = 16.dp, bottom = 12.dp),
+        horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp),
+    ) {
+        listOf(false to R.string.guide_audio_bluetooth, true to R.string.guide_audio_usb).forEach { (value, label) ->
+            val chosen = through == value
+            androidx.compose.material3.Button(
+                onClick = { app.seb3thehacker.gearslip.car.CarSettings.setPipeAudio(value) },
+                colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                    containerColor = if (chosen) scheme.primary else scheme.secondaryContainer,
+                    contentColor = if (chosen) scheme.onPrimary else scheme.onSecondaryContainer,
+                ),
+                contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 12.dp),
+                modifier = Modifier.weight(1f).height(48.dp).semantics { selected = chosen },
+            ) { Text(stringResource(label), maxLines = 1) }
         }
     }
 }

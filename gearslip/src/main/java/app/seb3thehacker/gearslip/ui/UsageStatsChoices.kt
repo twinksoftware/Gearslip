@@ -129,12 +129,15 @@ internal fun ColumnScope.UsageStatsRows() {
                     shape = MaterialTheme.shapes.medium,
                     modifier = Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
                 ) {
-                    Text(
-                        note,
-                        style = MaterialTheme.typography.bodySmall,
-                        fontFamily = FontFamily.Monospace,
-                        modifier = Modifier.padding(12.dp),
-                    )
+                    // Selectable, so the phone's "id" can be copied into a request to see or delete its notes.
+                    androidx.compose.foundation.text.selection.SelectionContainer {
+                        Text(
+                            note,
+                            style = MaterialTheme.typography.bodySmall,
+                            fontFamily = FontFamily.Monospace,
+                            modifier = Modifier.padding(12.dp),
+                        )
+                    }
                 }
             }
         }
