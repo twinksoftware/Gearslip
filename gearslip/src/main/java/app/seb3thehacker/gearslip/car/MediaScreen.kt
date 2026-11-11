@@ -721,7 +721,7 @@ private fun StageControls(now: NowPlaying, media: CarMedia, modifier: Modifier) 
                     )
                 }
             }
-            PlayerProgress(now, media, Modifier.fillMaxWidth().padding(top = if (compact) 4.dp else 12.dp), showTimes = showTimes)
+            PlayerProgress(now, media, Modifier.fillMaxWidth().padding(top = if (compact) 4.dp else 12.dp), showTimes = showTimes, timeStyle = MaterialTheme.typography.titleLarge)
             // What's left goes to the buttons: play takes about half of it, the row below a third,
             // and neither grows past what a row of them fits across.
             BoxWithConstraints(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
@@ -770,7 +770,7 @@ private fun NowPlayingControls(now: NowPlaying, media: CarMedia, modifier: Modif
                     )
                 }
             }
-            PlayerProgress(now, media, Modifier.fillMaxWidth(), showTimes = showTimes)
+            PlayerProgress(now, media, Modifier.fillMaxWidth(), showTimes = showTimes, timeStyle = MaterialTheme.typography.titleLarge)
             TransportRow(now, media, skip = if (compact) 48.dp else 60.dp, modifier = Modifier.fillMaxWidth())
             PlayModeRow(now, media, size = if (compact) 46.dp else 56.dp, modifier = Modifier.fillMaxWidth(), maxOther = 2)
         }
@@ -810,7 +810,7 @@ private fun CompactPlayer(now: NowPlaying, media: CarMedia, art: android.graphic
             }
         }
         Spacer(Modifier.height(10.dp))
-        PlayerProgress(now, media, Modifier.fillMaxWidth())
+        PlayerProgress(now, media, Modifier.fillMaxWidth(), timeStyle = MaterialTheme.typography.titleLarge)
         Spacer(Modifier.height(6.dp))
         TransportRow(now, media, skip = 54.dp, modifier = Modifier.fillMaxWidth())
         Spacer(Modifier.height(10.dp))

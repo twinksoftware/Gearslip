@@ -268,7 +268,10 @@ private fun DockedPlayer(now: NowPlaying, modifier: Modifier) {
                     maxLines = 1, overflow = TextOverflow.Ellipsis,
                 )
                 if (now.durationMs > 0) {
-                    PlayerProgress(now, media, Modifier.fillMaxWidth().padding(vertical = 2.dp), showTimes = false)
+                    PlayerProgress(
+                        now, media, Modifier.fillMaxWidth().padding(vertical = 2.dp),
+                        timeStyle = MaterialTheme.typography.labelLarge,
+                    )
                 } else {
                     Spacer(Modifier.height(10.dp))
                 }

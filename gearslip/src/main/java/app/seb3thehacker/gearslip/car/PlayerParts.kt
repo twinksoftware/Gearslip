@@ -59,9 +59,18 @@ import kotlinx.coroutines.withContext
  * the map - so a button looks and behaves the same wherever it turns up.
  */
 
-/** The seek bar, with elapsed and total time under it when [showTimes]. */
+/**
+ * The seek bar, with elapsed and total time under it when [showTimes]. The times default to a
+ * size readable at a glance from the driver's seat; the narrow side column passes a smaller one.
+ */
 @Composable
-internal fun PlayerProgress(now: NowPlaying, media: CarMedia, modifier: Modifier = Modifier, showTimes: Boolean = true) {
+internal fun PlayerProgress(
+    now: NowPlaying,
+    media: CarMedia,
+    modifier: Modifier = Modifier,
+    showTimes: Boolean = true,
+    timeStyle: androidx.compose.ui.text.TextStyle = MaterialTheme.typography.titleMedium,
+) {
     if (now.durationMs <= 0) return
     var position by remember { mutableLongStateOf(now.currentPosition()) }
     LaunchedEffect(now) {
@@ -80,8 +89,10 @@ internal fun PlayerProgress(now: NowPlaying, media: CarMedia, modifier: Modifier
         )
         if (showTimes) {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                Text(formatDuration(position), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Text(formatDuration(now.durationMs), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                // Tabular figures, so the elapsed time doesn't jitter sideways as it counts.
+                val style = timeStyle.copy(fontFeatureSettings = "tnum")
+                Text(formatDuration(position), style = style, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(formatDuration(now.durationMs), style = style, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
     }
