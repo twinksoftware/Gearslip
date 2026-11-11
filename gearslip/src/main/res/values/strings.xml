@@ -393,6 +393,8 @@
     <string name="wireless_auto_off">Doesn\'t connect on its own</string>
     <string name="wireless_auto_turn_on">Let it connect on its own</string>
     <string name="bluetooth_settings">Bluetooth settings</string>
+    <string name="Wifi_not_enabled">Please enable Wi-Fi to connect wirelessly</string>
+    <string name="Wifi_off">Wi-Fi is off</string>
 
     <!-- Voice models -->
     <string name="voice_live_title">Voice: live words</string>
