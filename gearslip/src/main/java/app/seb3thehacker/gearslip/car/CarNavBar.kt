@@ -556,8 +556,13 @@ private fun NavNowPlaying(navigator: CarNavigator, selected: Boolean, modifier: 
     val phase by media.phase.collectAsState()
     val now by media.now.collectAsState()
     if (phase != CarMedia.Phase.READY || !now.isActive) return
-    // Docked beside the map, the player is already on screen - the pill steps aside for it.
-    if (navigator.sidePanel == SidePanel.CONTROLS && navigator.current == CarScreen.Home) return
+    // Docked beside the map, the player is already on screen, so the pill carries what the
+    // player leaves out - like, shuffle, repeat and lyrics - and its dock button, filled in, in
+    // the same place: tapped again, it closes the player.
+    if (navigator.sidePanel == SidePanel.CONTROLS && navigator.current == CarScreen.Home) {
+        DockedPill(navigator, now, selected, modifier)
+        return
+    }
     // The media screen is the full player already; the pill would only repeat its controls.
     if (navigator.current == CarScreen.Media) return
     val context = LocalContext.current
@@ -665,6 +670,42 @@ private fun NavNowPlaying(navigator: CarNavigator, selected: Boolean, modifier: 
                             .background(onPill.copy(alpha = 0.7f)),
                     )
                 }
+            }
+        }
+    }
+}
+
+/**
+ * The pill while the player is docked: like, shuffle, repeat and lyrics, then the dock button,
+ * shown open, which closes it. Sits on the player's side of the bar, under the player.
+ */
+@Composable
+private fun DockedPill(navigator: CarNavigator, now: app.seb3thehacker.gearslip.media.NowPlaying, selected: Boolean, modifier: Modifier) {
+    val scheme = MaterialTheme.colorScheme
+    val playerLeft by CarSettings.playerLeft.collectAsState()
+    Box(modifier.fillMaxWidth(), contentAlignment = if (playerLeft) Alignment.CenterStart else Alignment.CenterEnd) {
+        Surface(
+            modifier = Modifier.height(44.dp),
+            shape = RoundedCornerShape(14.dp),
+            color = if (selected) scheme.primaryContainer else scheme.secondaryContainer,
+            contentColor = if (selected) scheme.onPrimaryContainer else scheme.onSecondaryContainer,
+        ) {
+            PlayModeRow(
+                now, CarServices.media, size = 36.dp,
+                modifier = Modifier.fillMaxHeight().padding(horizontal = 4.dp),
+                arrangement = Arrangement.spacedBy(6.dp),
+            ) {
+                GsIconButton(
+                    androidx.compose.ui.graphics.vector.ImageVector.vectorResource(R.drawable.lyrics_24),
+                    stringResource(R.string.storage_lyrics), navigator::showSideLyrics,
+                    size = 36.dp, iconSize = 20.dp,
+                )
+                GsIconButton(
+                    if (playerLeft) MediaIcons.DockLeftOpen else MediaIcons.DockRightOpen,
+                    stringResource(R.string.navbar_close_panel),
+                    navigator::togglePlayerDock,
+                    size = 36.dp, iconSize = 22.dp,
+                )
             }
         }
     }
