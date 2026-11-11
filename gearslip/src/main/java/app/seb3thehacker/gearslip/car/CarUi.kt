@@ -291,9 +291,19 @@ fun CarUi() {
                 SideEffect { lastScreen[0] = screen }
                 val enter = remember(screen) { androidx.compose.animation.core.Animatable(0f) }
                 LaunchedEffect(screen) { enter.animateTo(1f, androidx.compose.animation.core.tween(180)) }
+                // Going back to Home, the screen that was up fades out and sinks a little over the
+                // same fifth of a second, rather than vanishing: it stays drawn until it's gone.
+                val lastAway = remember { arrayOf<CarScreen>(CarScreen.Home) }
+                val shown = if (screen != CarScreen.Home) screen else lastAway[0]
+                SideEffect { if (screen != CarScreen.Home) lastAway[0] = screen }
                 if (safetyWarningSeen) {
                     Box(Modifier.fillMaxSize()) {
-                        if (screen != CarScreen.Home) {
+                        androidx.compose.animation.AnimatedVisibility(
+                            visible = screen != CarScreen.Home,
+                            enter = androidx.compose.animation.EnterTransition.None,
+                            exit = androidx.compose.animation.fadeOut(androidx.compose.animation.core.tween(180)) +
+                                androidx.compose.animation.slideOutVertically(androidx.compose.animation.core.tween(180)) { it / 40 },
+                        ) {
                             Box(
                                 Modifier
                                     .fillMaxSize()
@@ -301,7 +311,7 @@ fun CarUi() {
                                     .background(MaterialTheme.colorScheme.background)
                                     // The bar never hides here, so keep the screen clear of it. The
                                     // player runs on under the see-through bar and keeps clear itself.
-                                    .padding(bottom = if (!keyboardVisible && !fullscreen && screen != CarScreen.Media) NAV_BAR_HEIGHT else 0.dp)
+                                    .padding(bottom = if (!keyboardVisible && !fullscreen && shown != CarScreen.Media) NAV_BAR_HEIGHT else 0.dp)
                                     // Keeps touches that miss this screen's controls off the map.
                                     .pointerInput(Unit) { detectTapGestures { } },
                             ) {
@@ -311,7 +321,7 @@ fun CarUi() {
                                         translationY = (1f - enter.value) * 16.dp.toPx()
                                     },
                                 ) {
-                                    when (screen) {
+                                    when (shown) {
                                         CarScreen.Home -> Unit
                                         CarScreen.Apps -> CarLauncher()
                                         CarScreen.Media -> CompositionLocalProvider(
@@ -322,9 +332,9 @@ fun CarUi() {
                                         CarScreen.Dashboard -> CarDashboardScreen()
                                         CarScreen.Weather -> WeatherScreen()
                                         CarScreen.VehicleData -> VehicleDataScreen()
-                                        is CarScreen.Notifications -> NotificationsScreen(screen.replyTo)
-                                        is CarScreen.Messages -> MessagesScreen(screen.packageName)
-                                        is CarScreen.App -> CarApps.find(screen.id)?.content?.invoke()
+                                        is CarScreen.Notifications -> NotificationsScreen(shown.replyTo)
+                                        is CarScreen.Messages -> MessagesScreen(shown.packageName)
+                                        is CarScreen.App -> CarApps.find(shown.id)?.content?.invoke()
                                     }
                                 }
                             }
