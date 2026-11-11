@@ -15,6 +15,19 @@ object Changelog {
 
     val releases = listOf(
         Release(
+            4001, "0.4.0-alpha",
+            listOf(
+                "The web browser opens on your bookmarks, with the search engine you choose and ads blocked.",
+                "Add any app to the car as a music app or a messenger, under Apps on the phone.",
+                "Apps that list places show them on a map.",
+                "Like, shuffle, repeat, and lyrics sit in the nav bar while the player is beside the map.",
+                "Map apps keep their GPS with the phone locked once location is allowed all the time.",
+                "Apps that don't work show a red X and start unticked.",
+                "Download a certificate from a link, under Certificate in Settings.",
+                "Car audio moved to Settings > Connection.",
+            ),
+        ),
+        Release(
             15, "0.3.40-alpha",
             listOf(
                 "A liked song lights up the whole like button, as shuffle and repeat do.",
