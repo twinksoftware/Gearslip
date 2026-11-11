@@ -346,8 +346,11 @@ private fun DebugSection() {
     SettingsSection("Debug build") {
         SettingsRow(
             "Send a test message",
-            Modifier.clickable { TestMessage.post(context) },
-            subtitle = "Posts a message notification to read on the car",
+            // After a few seconds, so there's time to open the car preview and watch it arrive.
+            Modifier.clickable {
+                android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({ TestMessage.post(context.applicationContext) }, 5_000)
+            },
+            subtitle = "Posts a message notification in 5 seconds, time to open the car preview",
             icon = Icons.AutoMirrored.Filled.Send,
         )
         SettingsDivider()
