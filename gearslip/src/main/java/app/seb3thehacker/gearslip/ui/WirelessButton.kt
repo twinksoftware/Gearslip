@@ -9,6 +9,8 @@ import android.provider.Settings
 import android.bluetooth.BluetoothDevice
 import android.content.pm.PackageManager
 import android.os.Build
+import android.content.Context
+import android.net.wifi.WifiManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
@@ -57,6 +59,8 @@ internal fun WirelessButton() {
     val context = LocalContext.current
     var devices by remember { mutableStateOf<List<BluetoothDevice>?>(null) }
     var denied by remember { mutableStateOf(false) }
+    var showWifiDialog by remember { mutableStateOf(false) }
+
     fun granted() = WIRELESS_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
     }
@@ -83,8 +87,13 @@ internal fun WirelessButton() {
     }
     Button(
         onClick = {
-            denied = false
-            if (granted()) devices = WirelessLink.pairedDevices(context) else ask.launch(WIRELESS_PERMISSIONS)
+            val wifiManager = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
+            if (!wifiManager.isWifiEnabled) {
+                showWifiDialog = true
+            } else {
+                denied = false
+                if (granted()) devices = WirelessLink.pairedDevices(context) else ask.launch(WIRELESS_PERMISSIONS)
+            }
         },
         modifier = Modifier.fillMaxWidth().height(64.dp),
     ) {
@@ -152,6 +161,17 @@ internal fun WirelessButton() {
                 }) { Text(stringResource(R.string.bluetooth_settings)) }
             },
             confirmButton = { TextButton(onClick = { devices = null }) { Text(stringResource(R.string.cancel)) } },
+        )
+    }
+
+    if (showWifiDialog) {
+        AlertDialog(
+            onDismissRequest = { showWifiDialog = false },
+            title = { Text(stringResource(R.string.Wifi_off)) },
+            text = { Text(stringResource(R.string.Wifi_not_enabled)) },
+            confirmButton = {
+                TextButton(onClick = { showWifiDialog = false }) { Text("OK") }
+            },
         )
     }
 }
