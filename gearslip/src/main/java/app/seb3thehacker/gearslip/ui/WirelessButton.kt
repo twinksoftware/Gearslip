@@ -164,14 +164,19 @@ internal fun WirelessButton() {
         )
     }
 
+    // A wireless car hands over its own Wi-Fi network, which the phone can't join with Wi-Fi off.
     if (showWifiDialog) {
         AlertDialog(
             onDismissRequest = { showWifiDialog = false },
-            title = { Text(stringResource(R.string.Wifi_off)) },
-            text = { Text(stringResource(R.string.Wifi_not_enabled)) },
+            title = { Text(stringResource(R.string.wireless_wifi_off_title)) },
+            text = { Text(stringResource(R.string.wireless_wifi_off_body)) },
             confirmButton = {
-                TextButton(onClick = { showWifiDialog = false }) { Text("OK") }
+                TextButton(onClick = {
+                    showWifiDialog = false
+                    runCatching { context.startActivity(Intent(Settings.Panel.ACTION_WIFI)) }
+                }) { Text(stringResource(R.string.wireless_wifi_turn_on)) }
             },
+            dismissButton = { TextButton(onClick = { showWifiDialog = false }) { Text(stringResource(R.string.cancel)) } },
         )
     }
 }
