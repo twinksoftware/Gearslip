@@ -404,7 +404,16 @@ class CarMedia(private val context: Context) {
 
     private fun update(metadata: MediaMetadata?, state: PlaybackState?) {
         fun text(vararg keys: String) = keys.firstNotNullOfOrNull { metadata?.getString(it)?.takeIf(String::isNotEmpty) }.orEmpty()
-        fun art(vararg keys: String) = keys.firstNotNullOfOrNull { metadata?.getBitmap(it) }
+        // The cover comes over IPC as a new Bitmap with every update, a play state change as much
+        // as a new song. The same picture keeps the Bitmap already shown, or the player fades the
+        // cover in again every few seconds and it looks like it's flickering.
+        fun art(vararg keys: String): Bitmap? {
+            val fresh = keys.firstNotNullOfOrNull { metadata?.getBitmap(it) } ?: return null
+            val shown = _now.value.art
+            val same = shown != null && !shown.isRecycled && shown.width == fresh.width && shown.height == fresh.height &&
+                runCatching { shown.sameAs(fresh) }.getOrDefault(false)
+            return if (same) shown else fresh
+        }
         fun uri(vararg keys: String) = keys.firstNotNullOfOrNull { metadata?.getString(it)?.takeIf(String::isNotEmpty) }?.let(Uri::parse)
         _now.value = NowPlaying(
             title = text(MediaMetadata.METADATA_KEY_DISPLAY_TITLE, MediaMetadata.METADATA_KEY_TITLE),
