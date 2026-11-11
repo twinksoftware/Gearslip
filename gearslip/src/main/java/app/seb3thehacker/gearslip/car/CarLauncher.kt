@@ -298,13 +298,10 @@ fun CarLauncher() {
     val showVehicleData = rememberVehicleDataShown()
 
     fun tileOf(entry: Entry): Tile {
-        // Only apps that don't work get a mark. The X rates an app's own car screens; a messenger
-        // shown on Gearslip's own Messages screen has none, so it never gets one.
-        val pkg = entry.packageName?.takeIf { entry.messaging == null }
         val id = entry.componentId
         return Tile(
             entry.builtIn?.let { context.getString(it.labelRes) } ?: entry.label, entry.icon, entry.builtIn?.glyph,
-            broken = pkg != null && (KnownApps.isBroken(context, pkg) || (entry.template != null && KnownApps.screenBroken(pkg))),
+            broken = markedBroken(context, entry),
             onLongClick = id?.let { { navigator.showAppMenu(it) } },
             id = id,
         ) {
@@ -357,8 +354,21 @@ fun CarLauncher() {
 }
 
 /** A red disc with a white X: marks a tile known not to work with Gearslip yet. */
+/**
+ * Whether [entry] gets the red X, in the car and in the phone's app list alike. Only apps that
+ * don't work get one, and a patched copy that does (Waze through Morphe) never does, since
+ * [KnownApps.isBroken] knows it by its signer. The X rates an app's own car screens; a messenger
+ * shown on Gearslip's own Messages screen has none, so it gets one only when it's one of
+ * Google's apps, which never work (Google Maps lists itself only as a messenger).
+ */
+internal fun markedBroken(context: android.content.Context, entry: Entry): Boolean {
+    val pkg = entry.packageName ?: return false
+    if (entry.messaging != null) return KnownApps.brokenAsMessenger(context, pkg)
+    return KnownApps.isBroken(context, pkg) || (entry.template != null && KnownApps.screenBroken(pkg))
+}
+
 @Composable
-private fun BrokenBadge(size: androidx.compose.ui.unit.Dp, modifier: Modifier = Modifier) {
+internal fun BrokenBadge(size: androidx.compose.ui.unit.Dp, modifier: Modifier = Modifier) {
     Box(
         modifier.size(size).background(Color(0xFFD32F2F), CircleShape),
         contentAlignment = Alignment.Center,

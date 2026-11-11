@@ -80,6 +80,10 @@ object KnownApps {
     fun startsHidden(context: Context, packageName: String, messaging: Boolean): Boolean =
         isBroken(context, packageName) && (!messaging || packageName in google)
 
+    /** Google's own apps get the red X even as a messenger: Google Maps shows only as one. */
+    fun brokenAsMessenger(context: Context, packageName: String): Boolean =
+        packageName in google && isBroken(context, packageName)
+
     /**
      * The certificate each broken app's own publisher signs it with. A copy signed with another
      * key has been patched to accept Gearslip, like Waze with the waze-gearslip Morphe patch, and

@@ -1,5 +1,7 @@
 package app.seb3thehacker.gearslip.ui
 
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.offset
 import androidx.annotation.StringRes
 import androidx.compose.ui.res.stringResource
 import app.seb3thehacker.gearslip.R
@@ -418,7 +420,20 @@ private fun AppRows() {
             entry.label,
             Modifier.toggleable(shown, role = Role.Checkbox) { CarSettings.setAppHidden(id, !it) },
             subtitle = if (added) stringResource(R.string.car_apps_added_by_you) else null,
-            leading = { entry.icon?.let { Image(it, contentDescription = null, Modifier.size(40.dp)) } },
+            leading = {
+                Box {
+                    entry.icon?.let { Image(it, contentDescription = null, Modifier.size(40.dp)) }
+                    // The same red X the car shows, so it's clear why the app starts unticked.
+                    if (app.seb3thehacker.gearslip.car.markedBroken(context, entry)) {
+                        app.seb3thehacker.gearslip.car.BrokenBadge(
+                            16.dp,
+                            Modifier.align(Alignment.BottomEnd)
+                                .offset(x = 4.dp, y = 3.dp)
+                                .border(2.dp, MaterialTheme.colorScheme.surfaceContainerHigh, androidx.compose.foundation.shape.CircleShape),
+                        )
+                    }
+                }
+            },
             trailing = {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     if (added && pkg != null) {
