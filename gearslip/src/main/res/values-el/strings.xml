@@ -1,0 +1,909 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="touch_relay_description">Το Gearslip επιτρέπει την αναπαραγωγή των αγγιγμάτων από την οθόνη του αυτοκινήτου στο τηλέφωνο κατά τη διάρκεια του κατόπτρου οθόνης (mirroring). Το Gearslip δεν διαβάζει το περιεχόμενο της οθόνης.</string>
+
+    <!-- Setup guide -->
+    <string name="guide_usage_title">Βοηθήστε άλλους οδηγούς.</string>
+    <string name="guide_safety_title">Οδηγήστε με ασφάλεια.</string>
+    <string name="guide_safety_body">Το Gearslip είναι μη επίσημο. Κανένας κατασκευαστής αυτοκινήτων δεν το έφτιαξε ή το έλεγξε και μπορεί να αποτύχει χωρίς προειδοποίηση. Εγκαταστήστε το πριν φύγετε, μετά κρατήστε τα μάτια σας στον δρόμο.</string>
+    <string name="guide_mic_title">Μικρόφωνο.</string>
+    <string name="guide_mic_body">Το Gearslip το χρησιμοποιεί για να στείλει τη μουσική σας στο αυτοκίνητο και να ακούσει όταν ζητήσετε κάτι ή απαντήσετε σε μήνυμα. Αυτό που λέτε παραμένει στο τηλέφωνο.</string>
+    <string name="guide_location_title">Θέση.</string>
+    <string name="guide_location_body">Ο χάρτης του αυτοκινήτου και οι αναζητήσεις κοντά το χρειάζονται. Χωρίς αυτό, το ταμπλό δεν δείχνει χάρτη.</string>
+    <string name="guide_calendar_title">Ημερολόγιο.</string>
+    <string name="guide_calendar_body">Η οθόνη του αυτοκινήτου δείχνει την επόμενη σας εκδήλωση. Το Gearslip διαβάζει μόνο το ημερολόγιό σας.</string>
+    <string name="guide_calls_title">Κλήσεις και επαφές.</string>
+    <string name="guide_calls_body">Το αυτοκίνητο δείχνει ποιος καλεί με το όνομα και η εφαρμογή Τηλέφωνο μπορεί να καλέσει έναν αριθμό ή μία από τις επαφές σας. Το Gearslip τις διαβάζει μόνο.</string>
+    <string name="guide_bluetooth_title">Bluetooth.</string>
+    <string name="guide_bluetooth_body">Την πρώτη φορά που θα το συνδέσετε, το Gearslip προσφέρει να ζευγώσει το τηλέφωνό σας με το αυτοκίνητο, ώστε οι κλήσεις να ακούγονται από τα ηχεία του.</string>
+    <string name="guide_notifications_title">Ειδοποιήσεις.</string>
+    <string name="guide_notifications_body">Όταν το Gearslip είναι συνδεδεμένο, δείχνει μια ειδοποίηση με κουμπί για διακοπή. Χωρίς αυτό, το Android την κρύβει.</string>
+    <string name="guide_messages_title">Μηνύματα.</string>
+    <string name="guide_messages_body">Το αυτοκίνητο δείχνει τα μηνύματά σας, τα διαβάζει δυνατά και σας επιτρέπει να απαντήσετε. Ενεργοποιήστε το Gearslip στη λίστα που ανοίγει.</string>
+    <string name="guide_android_auto_title">Απενεργοποιήστε το Android Auto.</string>
+    <string name="guide_android_auto_body">Το Android Auto είναι ακόμη εγκατεστημένο και ανταγωνίζεται το Gearslip για την USB σύνδεση του αυτοκινήτου. Απενεργοποιήστε ή αφαιρέστε το στην οθόνη που ανοίγει.</string>
+    <string name="guide_default_title">Επιλέξτε Gearslip.</string>
+    <string name="guide_default_body">Αν το τηλέφωνο ρωτά ποια εφαρμογή να ανοίξει όταν συνδέεστε στο αυτοκίνητο, επιλέξτε Gearslip και πατήστε Πάντα.</string>
+    <string name="guide_audio_title">Ήχος αυτοκινήτου.</string>
+    <string name="guide_audio_body">Επιλέξτε πώς η μουσική φτάνει στο αυτοκίνητο. Οι κλήσεις πάνε μέσω Bluetooth ούτως ή άλλως.</string>
+    <string name="guide_voice_title">Φωνή.</string>
+    <string name="guide_voice_body">Ζητήστε κατευθύνσεις, μουσική ή κλήση με τη φωνή σας. Το τηλέφωνο μετατρέπει τον λόγο σε κείμενο μόνο του και τίποτα από όσα λέτε δεν φεύγει. Χρειάζεται %1$d MB, κατέβασμα μία φορά. Χρησιμοποιήστε Wi-Fi αν μπορείτε.</string>
+    <string name="guide_audio_prompt_title">Χωρίς προτροπή ήχου.</string>
+    <string name="guide_audio_prompt_body">Εκτελέστε το από υπολογιστή με ενεργό USB debugging και το Android εμπιστεύεται το Gearslip για τον ήχο σας για πάντα. Χωρίς αυτό, πατάτε Έναρξη μία φορά κάθε ταξίδι.</string>
+    <string name="guide_readable_title">Ανάγνωστες ειδοποιήσεις.</string>
+    <string name="guide_readable_body">Όταν ο ήχος πάει στο αυτοκίνητο, το Android κρύβει τι λένε οι ειδοποιήσεις, σαν να μοιράζεστε την οθόνη σας. Αυτό επιτρέπει στο Gearslip να τις δείχνει κατά τη διάρκεια μιας οδήγησης και να τις κρύβει ξανά μετά.</string>
+    <string name="guide_answer_title">Απάντηση σε κλήσεις.</string>
+    <string name="guide_answer_body">Κάντε το Gearslip την εφαρμογή caller ID σας και το αυτοκίνητο μπορεί να απαντήσει και να απορρίψει κλήσεις. Χωρίς αυτό, οι κλήσεις χτυπούν ακόμη, αλλά μόνο το τηλέφωνο μπορεί να τις απαντήσει.</string>
+    <string name="guide_apps_title">Καλές εταιρείες.</string>
+    <string name="guide_buttons_title">Τα κουμπιά σας.</string>
+    <string name="guide_buttons_body">Επιλέξτε πώς φαίνονται τα κουμπιά του αυτοκινήτου. Αλλάξτε το οποιαδήποτε στιγμή στις ρυθμίσεις του αυτοκινήτου.</string>
+    <string name="guide_open_notification_access">Άνοιγμα πρόσβασης ειδοποιήσεων</string>
+    <string name="guide_open_android_auto">Άνοιγμα πληροφοριών εφαρμογής Android Auto</string>
+    <string name="guide_download_voice">Λήψη φωνής</string>
+    <string name="guide_set_up">Εγκατάσταση</string>
+    <string name="guide_voice_downloading">Λήψη, %1$d%%. Μπορείτε να συνεχίσετε· θα συνεχίσει.</string>
+    <string name="guide_voice_ready">Η φωνή είναι έτοιμη.</string>
+    <string name="guide_voice_failed">Το κατέβασμα δεν ολοκληρώθηκε. Πατήστε Λήψη φωνής για νέα προσπάθεια.</string>
+    <string name="guide_audio_bluetooth">Bluetooth</string>
+    <string name="guide_recommended">Συνιστάται</string>
+    <string name="guide_audio_bluetooth_body">Χωρίς προτροπή κάθε ταξίδι και η φωνή της εφαρμογής χάρτη σας φτάνει στο αυτοκίνητο.</string>
+    <string name="guide_audio_usb">Μέσω Gearslip</string>
+    <string name="guide_audio_usb_body">Πιο καθαρός ήχος χωρίς καθυστέρηση. Κάθε ταξίδι, το Android σας ζητά να μοιραστείτε την οθόνη σας, που επιτρέπει στο Gearslip να στείλει τον ήχο.</string>
+    <string name="guide_optional">ΠΡΟΑΙΡΕΤΙΚΟ</string>
+    <string name="guide_already_allowed">Ήδη επιτράπηκε.</string>
+    <string name="guide_scroll_more">Κύλιση για περισσότερα ↓</string>
+    <string name="guide_allow">Επιτρέψτε</string>
+    <string name="guide_skip">Παράλειψη τώρα</string>
+    <string name="guide_open">Άνοιγμα</string>
+    <string name="guide_next">Επόμενο</string>
+    <string name="guide_done">Ολοκλήρωση</string>
+    <string name="guide_back">Πίσω</string>
+
+    <!-- Usage notes -->
+    <string name="usage_intro">Ενεργοποιήστε το και το Gearslip στέλνει μια σύντομη σημείωση όταν την ανοίγετε και μετά από κάθε ταξίδι. &lt;b&gt;Η σημείωση δεν περιέχει όνομα, λογαριασμό ή θέση. Ένας τυχαίος αριθμός μετρά το τηλέφωνό σας μία φορά και ο διακομιστής δεν κρατά διεύθυνση IP.&lt;/b&gt; Οι σημειώσεις δείχνουν ποια αυτοκίνητα λειτουργούν και πού αποτυγχάνουν τα άλλα.</string>
+    <string name="usage_send">Αποστολή σημειώσεων χρήσης</string>
+    <string name="usage_also_share">Κοινοποίηση επίσης</string>
+    <string name="usage_share_android">Έκδοση Android και σύστημα</string>
+    <string name="usage_share_phone">Μοντέλο τηλεφώνου</string>
+    <string name="usage_share_cars">Κάθε αυτοκίνητο και αν συνδέθηκε</string>
+    <string name="usage_share_drives">Κάθε ταξίδι και πώς τελείωσε</string>
+    <string name="usage_what_sent">Τι στέλνεται</string>
+    <string name="usage_what_sent_sub">Κάθε πεδίο, ακριβώς όπως φεύγει</string>
+    <string name="usage_hide_note">Απόκρυψη σημείωσης</string>
+    <string name="usage_show_note">Εμφάνιση σημείωσης</string>
+    <string name="usage_example">Παράδειγμα, δεν στέλνεται: ένα ταξίδι προσθέτει αυτό στα "sessions"</string>
+    <string name="usage_no_server">Αυτή η κατασκευή δεν έχει διακομιστή στατιστικών, οπότε δεν στέλνει τίποτα</string>
+    <string name="usage_debug_build">Κατασκευή debug: οι σημειώσεις κρατώνται ξεχωριστά και δεν μετρώνται ποτέ στη στατιστική</string>
+    <string name="worked_title">Το Gearslip λειτούργησε με το %1$s σας</string>
+    <string name="worked_title_unknown">Το Gearslip λειτούργησε με το αυτοκίνητό σας</string>
+    <string name="worked_body">Κοινοποιήστε το ώστε ο επόμενος οδηγός να ξέρει ότι λειτουργεί; Χωρίς όνομα, λογαριασμό ή θέση.</string>
+    <string name="worked_not_now">Όχι τώρα</string>
+    <string name="worked_share">Κοινοποίηση</string>
+
+    <!-- Recommended apps -->
+    <string name="recommended_intro">Αυτές οι δωρεάν εφαρμογές εκτελούνται στην οθόνη του αυτοκινήτου Gearslip. Κάθε κουμπί ανοίγει τη σελίδα της εφαρμογής στο GitHub.</string>
+    <string name="recommended_title">Προτεινόμενες εφαρμογές</string>
+    <string name="back">Επιστροφή</string>
+    <string name="recommended_installed">Εγκατεστημένο</string>
+    <string name="recommended_maps">Χάρτες</string>
+    <string name="recommended_music">Μουσική</string>
+    <string name="recommended_podcasts">Podcasts</string>
+    <string name="recommended_other">Άλλες ενδιαφέρουσες εφαρμογές</string>
+    <string name="recommended_about_organic">Χάρτες και διαδρομές χωρίς σύνδεση.</string>
+    <string name="recommended_about_vela">Πλοήγηση βήμα-προς-βήμα χωρίς Google.</string>
+    <string name="recommended_about_ytm">Αναπαραγωγέας YouTube Music.</string>
+    <string name="recommended_about_antennapod">Podcasts, κεφάλαια και όλα.</string>
+    <string name="recommended_about_rfsentinel">Εντοπισμός εντοπιστικών συσκευών και φωτογράφων κοντά σας.</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Ρυθμίσεις</string>
+    <string name="settings_whats_new">Τι νέο υπάρχει</string>
+    <string name="settings_whats_new_sub">Διαβάστε τις σημειώσεις έκδοσης %1$s στο GitHub</string>
+    <string name="settings_support">Υποστηρίξτε το Gearslip</string>
+    <string name="settings_support_footer">Το Gearslip είναι δωρεάν, χωρίς διαφημίσεις και χωρίς παρακολούθηση. Η υποστήριξή σας το κρατά ζωντανό.</string>
+    <string name="settings_usage_notes">Σημειώσεις χρήσης</string>
+    <string name="settings_updates">Ενημερώσεις</string>
+    <string name="settings_about">Πληροφορίες</string>
+    <string name="settings_replay">Επανάληψη του οδηγού εγκατάστασης</string>
+    <string name="settings_replay_sub">Επαναλάβετε τα βήματα της πρώτης εκκίνησης</string>
+    <string name="settings_connection">Σύνδεση</string>
+    <string name="settings_use_in_car">Χρήση του Gearslip στο αυτοκίνητο</string>
+    <string name="settings_use_in_car_on">Το Gearslip απαντά όταν συνδέεστε σε αυτοκίνητο</string>
+    <string name="settings_use_in_car_off">Ανενεργό: Το Android Auto μπορεί να αναλάβει τη σύνδεση</string>
+    <string name="settings_apps">Εφαρμογές</string>
+    <string name="settings_certificate">Πιστοποιητικό</string>
+    <string name="cert_next_connection">Οι αλλαγές θα ισχύσουν στην επόμενη σύνδεση.</string>
+    <string name="cert_checking">Έλεγχος…</string>
+    <string name="cert_valid_until">Ισχύει έως %1$s</string>
+    <string name="cert_hide_details">Απόκρυψη λεπτομερειών</string>
+    <string name="cert_show_details">Εμφάνιση λεπτομερειών</string>
+    <string name="cert_subject">Θέμα</string>
+    <string name="cert_issuer">Εκδότης</string>
+    <string name="cert_downloading">Λήψη…</string>
+    <string name="cert_download">Λήψη από aasdk</string>
+    <string name="cert_downloaded">Το πιστοποιητικό λήφθηκε.</string>
+    <string name="cert_download_failed">Η λήψη απέτυχε: %1$s</string>
+    <string name="cert_download_sub">Το πιστοποιητικό που δημοσιεύει το ανοιχτό έργο aasdk στο GitHub. Τα περισσότερα αυτοκίνητα το δέχονται, αλλά κάποια μοντέλα γύρω στο 2020 το απορρίπτουν.</string>
+    <string name="cert_import">Εισαγωγή δικού μου αρχείου</string>
+    <string name="cert_import_sub">Αρχείο .p12 με το ιδιωτικό του κλειδί. Χρησιμοποιήστε το δικό σας όταν η αυτοκίνησή σας απορρίπτει το πιστοποιητικό aasdk.</string>
+    <string name="cert_remove_imported">Κατάργηση εισαγμένου πιστοποιητικού</string>
+    <string name="cert_remove_downloaded">Κατάργηση ληφθέντος πιστοποιητικού</string>
+    <string name="cert_removed_imported">Το εισαγμένο πιστοποιητικό καταργήθηκε.</string>
+    <string name="cert_removed_downloaded">Το ληφθέν πιστοποιητικό καταργήθηκε.</string>
+    <string name="cert_imported">Το πιστοποιητικό εισήχθη.</string>
+    <string name="cert_import_failed">Αδυναμία εισαγωγής: λάθος κωδικός, ή δεν είναι αρχείο PKCS#12 με ιδιωτικό κλειδί.</string>
+    <string name="cert_password_title">Κωδικός πιστοποιητικού</string>
+    <string name="cert_password">Κωδικός</string>
+    <string name="cert_password_hint">Αφήστε κενό αν το αρχείο δεν έχει κωδικό.</string>
+    <string name="cert_import_button">Εισαγωγή</string>
+
+    <!-- Certificate summary -->
+    <string name="cancel">Άκυρο</string>
+    <string name="cert_none">Κανένα φορτωμένο (self-signed· τα αυτοκίνητα το απορρίπτουν)</string>
+    <string name="cert_kind_imported">Εισαγμένο: %1$s</string>
+    <string name="cert_kind_downloaded">Ληφθέν: %1$s</string>
+    <string name="cert_kind_adb">Αποθηκευμένο μέσω adb: %1$s</string>
+    <string name="cert_kind_self">Self-signed: %1$s</string>
+
+
+    <!-- Car settings on the phone -->
+    <string name="car_apps_sub">Επιλέξτε ποιες εφαρμογές θα εμφανίζονται στο αυτοκίνητο</string>
+    <string name="car_apps_finding">Αναζήτηση εφαρμογών…</string>
+    <string name="car_apps_none">Δεν βρέθηκαν εφαρμογές αυτοκινήτου</string>
+    <string name="car_group_screen">Οθόνη</string>
+    <string name="car_group_nav_bar">Μπάρα πλοήγησης και player</string>
+    <string name="car_group_sound">Ήχος και φωνή</string>
+    <string name="car_group_warnings">Ειδοποιήσεις</string>
+    <string name="car_group_more">Περισσότερα</string>
+    <string name="choice_size_normal">Κανονικό</string>
+    <string name="choice_size_large">Μεγάλο</string>
+    <string name="choice_size_xlarge">Πολύ μεγάλο</string>
+    <string name="choice_theme_phone">Ακολουθώ το τηλέφωνο</string>
+    <string name="choice_theme_light">Φωτεινό</string>
+    <string name="choice_theme_dark">Σκοτεινό</string>
+    <string name="choice_dark_black">Μαύρο</string>
+    <string name="choice_dark_black_colour">Μαύρο και έγχρωμο</string>
+    <string name="choice_dark_deep_colour">Βαθύ χρώμα</string>
+    <string name="choice_dark_grey">Γκρι</string>
+    <string name="choice_auto">Αυτόματο</string>
+    <string name="choice_night_day">Ημέρα</string>
+    <string name="choice_night_night">Νύχτα</string>
+    <string name="choice_units_imperial">Ιμπεριαλά</string>
+    <string name="choice_units_metric">Μετρικό</string>
+    <string name="choice_nav_show">Εμφάνιση πάντα</string>
+    <string name="choice_nav_hide_navigating">Απόκρυψη κατά την πλοήγηση</string>
+    <string name="choice_nav_hide">Απόκρυψη μέχρι να πατηθεί</string>
+    <string name="choice_open_home">Αρχική</string>
+    <string name="summary_player_left">Player αριστερά</string>
+    <string name="summary_player_right">Player δεξιά</string>
+    <string name="summary_usb_audio">Ήχος μέσω Gearslip</string>
+    <string name="summary_bluetooth_audio">Ήχος Bluetooth</string>
+    <string name="summary_directions_on">Οδηγίες ενεργές</string>
+    <string name="summary_directions_off">Οδηγίες ανενεργές</string>
+    <string name="summary_bluetooth_on">Bluetooth ενεργό</string>
+    <string name="summary_bluetooth_off">Bluetooth ανενεργό</string>
+    <string name="summary_location_on">Τοποθεσία ενεργή</string>
+    <string name="summary_location_off">Τοποθεσία ανενεργή</string>
+    <string name="web_page">Ιστοσελίδα</string>
+    <string name="summary_experimental_shown">Οι πειραματικές λειτουργίες είναι ορατές</string>
+    <string name="summary_experimental_hidden">Οι πειραματικές λειτουργίες κρύβονται</string>
+    <string name="home_car">Αυτοκίνητο</string>
+    <string name="car_group_same">Αυτές είναι οι ίδιες ρυθμίσεις με τις Ρυθμίσεις στο αυτοκίνητο. Μια αλλαγή εδώ εμφανίζεται και εκεί.</string>
+    <string name="car_open_on_connect">Άνοιγμα κατά τη σύνδεση</string>
+    <string name="car_size">Μέγεθος</string>
+    <string name="car_density">Πυκνότητα οθόνης αυτοκινήτου</string>
+    <string name="car_density_note">Μεγαλύτερο κείμενο και ελέγχους, συμπεριλαμβανομένων στις εφαρμογές. Δοκιμάστε 200 DPI με Μέγεθος σε Κανονικό. Αποσυνδεθείτε ξανά ή επαναλάβετε την προεπισκόπηση για να εφαρμόσετε. Αν τα στοιχεία κολλάνε, επιλέξτε χαμηλότερο DPI ή Από το αυτοκίνητο.</string>
+    <string name="choice_density_car">Από το αυτοκίνητο</string>
+    <string name="choice_density_dpi">%1$d DPI</string>
+    <string name="car_app_theme">Θέμα εφαρμογής</string>
+    <string name="car_dark_mode">Σκοτεινό θέμα</string>
+    <string name="car_buttons">Κουμπιά</string>
+    <string name="car_map_day_night">Χάρτης ημέρας/νύχτας</string>
+    <string name="car_units">Μονάδες</string>
+    <string name="car_nav_bar">Μπάρα πλοήγησης</string>
+    <string name="car_player_nav_bar">Player στη μπάρα πλοήγησης</string>
+    <string name="car_skip_buttons">Κουμπιά παρακάμψης</string>
+    <string name="car_song_title">Τίτλος τραγουδιού</string>
+    <string name="car_player_beside_map">Player δίπλα στον χάρτη</string>
+    <string name="car_right">Δεξιά</string>
+    <string name="car_left">Αριστερά</string>
+    <string name="car_autoplay">Αυτόματη αναπαραγωγή κατά τη σύνδεση</string>
+    <string name="car_more_lyrics">Πιο πολλές πηγές στίχων</string>
+    <string name="car_more_lyrics_note">Ζητά επίσης BetterLyrics και KuGou, που τότε παίρνουν το όνομα και τον καλλιτέχνη. Ανενεργό ζητά μόνο LRCLIB.</string>
+    <string name="car_spoken_directions">Προφορικές οδηγίες</string>
+    <string name="car_spoken_directions_note">Το απενεργοποιήστε αν η φωνή της εφαρμογής χάρτη σας παίζει ήδη στο αυτοκίνητο.</string>
+    <string name="car_phone_speech">Χρήση αναγνώρισης ομιλίας του τηλεφώνου</string>
+    <string name="car_phone_speech_note">Στα περισσότερα τηλέφωνα είναι της Google, η οποία μπορεί να στείλει τη φωνή σας στη Google.</string>
+    <string name="car_warn_bluetooth">Ειδοποίηση όταν το Bluetooth δεν είναι συνδεδεμένο</string>
+    <string name="car_warn_location">Ειδοποίηση όταν η τοποθεσία είναι ανενεργή</string>
+    <string name="car_experimental">Πειραματικές λειτουργίες</string>
+    <string name="car_vehicle_data">Δεδομένα οχήματος</string>
+    <string name="car_vehicle_data_note">Προσθέτει μια κεραμωτή Δεδομένων οχήματος: ζωντανή απορρήψη των αισθητηρίων του αυτοκινήτου. Οι ονόματα πεδίων είναι μαντεψίματα μέχρι να δείτε ένα να αλλάζει.</string>
+    <string name="car_adaptive_video">Προσαρμοστική ποιότητα βίντεο</string>
+    <string name="car_adaptive_video_note">Μειώνει την ποιότητα της εικόνας όταν το αυτοκίνητο ή το Wi-Fi δεν μπορούν να ανταποκριθούν και την αυξάνει ξανά όταν μπορέσουν. Εφαρμόζεται στην επόμενη σύνδεση.</string>
+    <string name="web_page_note">Εμφανίζεται από την εφαρμογή Περιηγητή στο αυτοκίνητο. Κενό ανοίγει το DuckDuckGo. Εφαρμόζεται στην επόμενη σύνδεση.</string>
+    <string name="car_audio">Ήχος αυτοκινήτου</string>
+    <string name="car_audio_bt">Bluetooth (Προτεινόμενο)</string>
+    <string name="car_audio_bt_sub">Χωρίς προτροπή κάθε φορά που οδηγείτε και η φωνή της εφαρμογής χάρτη σας φτάνει στο αυτοκίνητο</string>
+    <string name="car_audio_usb_sub">Καθαρότερος ήχος χωρίς καθυστέρηση. Κάθε φορά που οδηγείτε, το Android σας ζητά να κοινοποιήσετε την οθόνη σας, η οποία επιτρέπει στο Gearslip να στείλει τον ήχο</string>
+    <string name="car_audio_usb_footer">Εκτελέστε την εντολή στην Βοήθεια μία φορά και το Android θα σταματήσει να ζητά.</string>
+    <string name="car_audio_bt_footer">Οι κλήσεις περνούν από το Bluetooth ούτως ή άλλως.</string>
+
+    <!-- Car screen size -->
+    <!-- Car screen size -->
+    <string name="screen_car_size">Μέγεθος οθόνης αυτοκινήτου</string>
+    <string name="screen_use_cars">Χρήση του αυτοκινήτου</string>
+    <string name="screen_preview_size">Μέγεθος προεπισκόπησης</string>
+    <string name="screen_preview_note">Το μέγεθος στο οποίο ζωγραφίζεται η προεπισκόπηση του αυτοκινήτου, όπως 1920x720.</string>
+    <string name="screen_car_screen">Οθόνη αυτοκινήτου</string>
+    <string name="screen_footer">Το Gearslip χρησιμοποιεί το μέγεθος που αναφέρει το αυτοκίνητο εκτός αν ορίσετε ένα.</string>
+    <string name="screen_size">Μέγεθος οθόνης</string>
+    <string name="screen_from_car">Από το αυτοκίνητο</string>
+    <string name="screen_crop">Κοπή των άκρων</string>
+    <string name="screen_crop_sub">Για ένα αυτοκίνητο που κόβει την πάνω και κάτω πλευρά, ή τις πλευρές</string>
+    <string name="screen_squash">Πίεση για προσαρμογή</string>
+    <string name="screen_squash_sub">Για ένα αυτοκίνητο που συμπιέζει όλη την εικόνα, έτσι οι κύκλοι φαίνονται ως έλλειψεις</string>
+    <string name="screen_preview_title">Μέγεθος προεπισκόπησης αυτοκινήτου</string>
+    <string name="screen_last_car">Τελευταίο αυτοκίνητο</string>
+    <string name="screen_last_car_sub">Το μέγεθος του τελευταίου αυτοκινήτου auquel συνδεθήκατε</string>
+    <string name="screen_this_screen">Αυτή η οθόνη</string>
+    <string name="screen_this_screen_sub">Γεμίζει την οθόνη αυτής της συσκευής, για κεντρική μονάδα που εκτελεί το Gearslip itself</string>
+    <string name="screen_custom">Προσαρμοσμένο</string>
+    <string name="screen_enter_size">Εισαγωγή μεγέθους</string>
+    <string name="screen_change_custom">Αλλαγή του προσαρμοσμένου μεγέθους</string>
+    <string name="screen_width">Πλάτος</string>
+    <string name="screen_height">Ύψος</string>
+    <string name="save">Αποθήκευση</string>
+
+    <!--  -->
+    <string name="screen_car_size_note">Χρησιμοποιήστε το αν η εικόνα του αυτοκινήτου φαίνεται παραμορφωμένη. Πληκτρολογήστε τα πραγματικά dimensions της οθόνης, π.χ. 1280x480. Ισχύει την επόμενη σύνδεση.</string>
+    <string name="screen_set_by_you">%1$s, ορίστηκε από εσάς</string>
+
+    <!-- Help -->
+    <string name="help_title">Πώς να συνδεθείτε</string>
+    <string name="help_which_cars">Σε ποια αυτοκίνητα λειτουργεί</string>
+    <string name="help_full_list">Δείτε την πλήρη λίστα</string>
+    <string name="help_first_drive">Πριν την πρώτη σας διαδρομή</string>
+    <string name="help_in_car">Μέσα στο αυτοκίνητο</string>
+    <string name="help_usb_audio">Ήχος μέσω Gearslip</string>
+
+    <!--  -->
+    <string name="help_aa_off">Απενεργοποιήστε το Android Auto.</string>
+    <string name="help_aa_off_detail">Απενεργοποιήστε ή αφαιρέστε την εφαρμογή Android Auto, ώστε το αυτοκίνητο να επικοινωνεί με το Gearslip αντί για αυτό.</string>
+    <string name="help_cert">Φόρτωση πιστοποιητικού.</string>
+    <string name="help_cert_detail">Στις Ρυθμίσεις, κατεβάστε το πιστοποιητικό aasdk, το οποίο οι περισσότερες αυτοκίνες αποδέχονται. Αν το αυτοκίνητό σας το απορρίψει, εισάγετε το δικό σας.</string>
+    <string name="help_mic">Επιτρέψτε το μικρόφωνο.</string>
+    <string name="help_mic_detail">Το Android δεν θα επιτρέψει σε μια εφαρμογή να περάσει μουσική στο αυτοκίνητο χωρίς αυτό. Το Gearslip ακούει μόνο όταν πατάτε το μικρόφωνο ή το κουμπί ομιλίας στον τιμόνι.</string>
+    <string name="help_plug_in">Συνδέστε με καλώδιο ή ασύρματα.</string>
+    <string name="help_plug_in_detail">Το Gearslip ανοίγει αυτόματα όταν συνδέεται το αυτοκίνητο. Για ασύρματη σύνδεση, συζεύξτε πρώτα το τηλέφωνο με το αυτοκίνητο, μετά πατήστε Σύνδεση ασύρματα στην Αρχική.</string>
+    <string name="help_usb_data">Επιτρέψτε τα δεδομένα USB.</string>
+    <string name="help_usb_data_detail">Το GrapheneOS μπορεί να μπλοκάρει τα δεδομένα στη θύρα USB. Αν ο έλεγχος θύρας USB-C είναι σε Φόρτιση-μόνο, το αυτοκίνητο δεν βλέπει ποτέ το τηλέφωνο, ακόμα και με καλώδιο δεδομένων. Ορίστε το να επιτρέπει δεδομένα.</string>
+    <string name="help_pair">Συζεύξτε μέσω Bluetooth για κλήσεις.</string>
+    <string name="help_pair_detail">Οι κλήσεις παίζονται μέσω του αυτοκινήτου μόλις συζευχτούν το τηλέφωνο και το αυτοκίνητο. Το Gearslip προσφέρει σύζευξη την πρώτη φορά που συνδέετε.</string>
+    <string name="help_answer">Απαντήστε στις κλήσεις από την οθόνη του αυτοκινήτου.</string>
+    <string name="help_answer_detail">Ορίστε το Gearslip ως εφαρμογή caller ID και spam. Χωρίς αυτό, οι κλήσεις χτυπούν ακόμα, αλλά μόνο το τηλέφωνο μπορεί να απαντήσει.</string>
+    <string name="help_prompt">Διακόψτε την ηχητική ειδοποίηση κάθε διαδρομή.</string>
+    <string name="help_prompt_detail">Συνδέστε το τηλέφωνο σε υπολογιστή με ενεργό USB debugging και εκτελέστε το μία φορά. Αν το παραλείψετε, πατάτε Start κάθε φορά που ξεκινάτε.</string>
+    <string name="help_readable">Διατηρήστε τις ειδοποιήσεις αναγνώσιμες.</string>
+    <string name="help_readable_detail">Το Android κρύπτει τι λένε οι ειδοποιήσεις ενώ μοιράζεται ήχο. Εκτελέστε το και αυτό και το Gearslip αφαιρεί αυτό μόνο όταν η μουσική πηγαίνει στο αυτοκίνητο.</string>
+    <string name="help_which_cars_body">Οι περισσότερες αυτοκίνες αποδέχονται το πιστοποιητικό aasdk. Από περίπου το 2020, κάποιες αυτοκίνες πρόσθεσαν νεότερους ελέγχους ασφαλείας που το απορρίπτουν και σε αυτές το Gearslip χρειάζεται δικό σας πιστοποιητικό.</string>
+
+    <!-- Updates -->
+    <string name="update_downloaded_ask">Κατεβήκε. Το Android ρωτάει πριν την εγκατάσταση.</string>
+    <string name="update_install">Εγκατάσταση</string>
+    <string name="update_download_now">Κατεβάστε το τώρα. Το Android ρωτάει πριν την εγκατάσταση.</string>
+    <string name="update_try_again">Δοκιμάστε ξανά</string>
+    <string name="update_update">Ενημέρωση</string>
+    <string name="update_checking">Έλεγχος…</string>
+    <string name="update_latest">Έχετε την τελευταία έκδοση</string>
+    <string name="update_download">Κατέβασμα</string>
+    <string name="update_check_now">Έλεγχος τώρα</string>
+    <string name="update_check_auto">Αυτόματος έλεγχος</string>
+    <string name="update_once_a_day">Μία φορά την ημέρα</string>
+
+    <!--  -->
+    <string name="update_unplug_first">Αποσυνδέστε από το αυτοκίνητο για εγκατάσταση. Η εγκατάσταση κλείνει το Gearslip.</string>
+    <string name="update_card_title">Gearslip %1$s είναι διαθέσιμο</string>
+    <string name="update_downloading">Κατέβασμα… %1$d%%</string>
+    <string name="update_debug_manual">Οι debug εκδόσεις ελέγχουν μόνο όταν πατάτε Έλεγχος τώρα</string>
+    <string name="update_checks_daily">Το Gearslip ελέγχει μία φορά την ημέρα</string>
+    <string name="update_version_out">Η έκδοση %1$s είναι διαθέσιμη</string>
+    <string name="update_version_ready">Η έκδοση %1$s είναι έτοιμη για εγκατάσταση</string>
+    <string name="update_dialog_status">Έκδοση %1$s. %2$s.</string>
+
+    <!-- About and support -->
+    <string name="about_give_regularly">Κάντε δωρεές εβδομαδιαία ή μηνιαία</string>
+    <string name="about_bmac_sub" formatted="false">Κάντε δωρεά μία φορά ή μηνιαία, με κάρτα. Το Buy Me a Coffee κρατάει 5%</string>
+    <string name="about_give_once">Κάντε δωρεά μία φορά</string>
+    <string name="about_any_amount">Οποιοδήποτε ποσό, με κάρτα</string>
+    <string name="about_monero_sub">Ανοίξτε το πορτοφόλι ή αντιγράψτε τη διεύθυνση</string>
+    <string name="about_monero_title">Υποστήριξη με Monero</string>
+    <string name="about_monero_body">Στείλετε οποιοδήποτε ποσό σε αυτή τη διεύθυνση από το πορτοφόλι Monero.</string>
+    <string name="about_open_wallet">Άνοιγμα στο πορτοφόλι</string>
+    <string name="about_copy_address">Αντιγραφή διεύθυνσης</string>
+    <string name="close">Κλείσιμο</string>
+    <string name="about_matrix">Ενταχθείτε στην κουβέντα στο Matrix</string>
+    <string name="about_matrix_sub">Μιλήστε με άλλους οδηγούς για αυτοκίνητα, εφαρμογές και Gearslip</string>
+    <string name="about_translate">Βοηθήστε στη μετάφραση του Gearslip</string>
+    <string name="about_translate_sub">Διορθώστε ή προσθέστε τη γλώσσα σας στο Weblate. Μερικές μεταφράσεις ξεκίνησαν ως μηχανικές.</string>
+    <string name="about_source">Πηγαίος κώδικας</string>
+    <string name="about_source_sub">Αναγνώστε ή αλλάξτε τον κώδικα του Gearslip υπό το AGPL</string>
+    <string name="about_voice_credits">Credits φωνής</string>
+
+    <!--  -->
+    <string name="about_no_wallet">Δεν βρέθηκε εφαρμογή πορτοφολιού Monero. Αντιγράψτε τη διεύθυνση.</string>
+    <string name="about_monero_copied">Η διεύθυνση Monero αντιγράφηκε</string>
+    <string name="about_voice_credits_sub">Αναγνώριση φωνής από sherpa-onnx (Apache 2.0), με Kroko ASR από Banafo (CC BY-SA 4.0) και Parakeet και Canary από NVIDIA (CC BY 4.0)</string>
+
+    <!-- Certificate setup -->
+    <string name="certsetup_title">Ρύθμιση Πιστοποιητικού</string>
+    <string name="certsetup_installed">Το πιστοποιητικό εγκαταστάθηκε.</string>
+    <string name="certsetup_continue">Συνέχεια</string>
+    <string name="certsetup_failed">Το κατέβασμα απέτυχε</string>
+    <string name="certsetup_retry">Επανάληψη</string>
+    <string name="certsetup_import_sub">Αρχείο .p12 με το ιδιωτικό του κλειδί. Χρησιμοποιήστε το δικό σας όταν το αυτοκίνητό σας απορρίπτει το πιστοποιητικό aasdk.</string>
+    <string name="certsetup_skip">Παράλειψη ρύθμισης σύνδεσης αυτοκινήτου</string>
+
+    <!--  -->
+    <string name="certsetup_loaded">Τα αυτοκίνητα αποδέχονται μόνο πιστοποιητικά που εξέδωσε η Google και έχετε ένα φορτωμένο.</string>
+    <string name="certsetup_choose">Τα αυτοκίνητα αποδέχονται μόνο πιστοποιητικά που εξέδωσε η Google. Το Gearslip δεν περιλαμβάνει ένα τέτοιο, οπότε επιλέξτε το δικό σας.</string>
+    <string name="certsetup_aasdk_sub">Το open-source έργο aasdk δημοσιεύει αυτό το πιστοποιητικό στο github.com/opencardev/aasdk. Οι περισσότερες εταιρείες το αποδέχονται. Κάποιες από περίπου το 2020 και μετά το απορρίπτουν και τότε χρειάζεται να εισάγετε το δικό σας.</string>
+
+    <!-- Storage -->
+    <string name="storage_title">Αποθήκευση Gearslip</string>
+    <string name="storage_measuring">Μέτρηση…</string>
+    <string name="storage_lyrics">Στίχοι</string>
+    <string name="storage_clear">Εκκαθάριση</string>
+    <string name="storage_voice">Μοντέλα φωνής</string>
+    <string name="storage_remove">Αφαίρεση</string>
+    <string name="storage_logs">Παλιά αρχεία καταγραφής</string>
+    <string name="storage_other">Άλλα προσωρινά αρχεία</string>
+    <string name="storage_delete_all">Διαγραφή όλων των δεδομένων Gearslip</string>
+
+    <!--  -->
+    <string name="storage_total">Τα δεδομένα του Gearslip καταλαμβάνουν %1$s της αποθήκευσης του τηλεφώνου.</string>
+    <plurals name="storage_lyrics_detail">
+        <item quantity="one">%1$d τραγούδι · %2$s. Οι διαγραμμένοι στίχοι κατεβαίνουν ξανά όταν τους ανοίγετε.</item>
+        <item quantity="other">%1$d τραγούδια · %2$s. Οι διαγραμμένοι στίχοι κατεβαίνουν ξανά όταν τους ανοίγετε.</item>
+    </plurals>
+    <string name="storage_voice_detail">%1$s. Χρειάζονται για εντολές φωνής· κατεβάστε τα ξανά στις Ρυθμίσεις.</string>
+    <string name="storage_logs_detail">%1$s. Αρχεία καταγραφής από προηγούμενες εκκινήσεις· η καταγραφή αυτής της εκκίνησης παραμένει.</string>
+    <string name="storage_other_detail">%1$s. Ενημερώσεις και άλλα αρχεία που έχει κατεβάσει το Gearslip και μπορεί να τα ξανακατεβάσει.</string>
+    <string name="storage_delete_armed">Πατήστε ξανά Διαγραφή για να διαγράψετε τις ρυθμίσεις, τα πιστοποιητικά, τα μοντέλα φωνής και τα αρχεία καταγραφής. Το Gearslip κλείνει και ξεκινά από την αρχή την επόμενη φορά.</string>
+    <string name="storage_delete_sub">Ρυθμίσεις, πιστοποιητικά, μοντέλα φωνής, στίχοι και αρχεία καταγραφής.</string>
+    <string name="storage_delete">Διαγραφή</string>
+    <string name="storage_delete_ellipsis">Διαγραφή…</string>
+
+    <!-- Donate prompt -->
+    <string name="donate_title">Χαιρόμαστε που λειτούργησε</string>
+    <string name="donate_liberapay">Υποστήριξη στο Liberapay</string>
+    <string name="donate_bmac">Πάρε μου έναν καφέ</string>
+    <string name="donate_card">Μια δωρεά με κάρτα</string>
+
+    <!--  -->
+    <string name="donate_body">Το Gearslip είναι δωρεάν, χωρίς διαφημίσεις και χωρίς παρακολούθηση. Αν σας βοηθά να ξεκινήσετε, η υποστήριξή σας το κρατά ζωντανό.</string>
+
+    <!-- Wireless -->
+    <string name="wireless_needs_permission">Το Gearslip χρειάζεται άδεια Bluetooth και πρόσβαση σε κοντινό Wi-Fi για αυτό.</string>
+    <string name="wireless_enable_permission">Ενεργοποίηση άδειας γειτονικών συσκευών</string>
+    <string name="wireless_connect">Σύνδεση ασύρματα</string>
+    <string name="wireless_which_car">Ποιο αυτοκίνητο;</string>
+    <string name="wireless_none_paired">Το τηλέφωνό σας δεν έχει συνδεθεί ακόμα με τίποτα. Συνδέστε το πρώτα με το αυτοκίνητο.</string>
+    <string name="wireless_not_listed">Δεν φαίνεται στη λίστα; Συνδέστε το πρώτα με το τηλέφωνό σας.</string>
+    <string name="wireless_auto_off">Χωρίς αυτόματη σύνδεση</string>
+    <string name="wireless_auto_turn_on">Αυτόματη σύνδεση</string>
+    <string name="bluetooth_settings">Ρυθμίσεις Bluetooth</string>
+    <string name="Wifi_not_enabled">Ενεργοποιήστε το Wi-Fi για ασύρματη σύνδεση</string>
+    <string name="Wifi_off">Το Wi-Fi είναι απενεργοποιημένο</string>
+
+    <!-- Voice models -->
+    <string name="voice_live_title">Φωνή: ζωντανά λόγια</string>
+    <string name="voice_final_title">Φωνή: τελικά λόγια</string>
+    <string name="voice_none">Κανένα</string>
+    <string name="voice_none_sub">Διατήρηση των ζωντανών λέξεων. Ταχύτερο, λιγότερο ακριβές</string>
+
+    <!--  -->
+    <string name="voice_live_body">Η φωνητική βοηθός μετατρέπει τον λόγο σε κείμενο σε αυτή τη συσκευή και κανένα από τα λεκτά σας δεν φεύγει. Χρειάζεται δύο μοντέλα, περίπου 270 MB μαζί, που κατεβαίνουν μία φορά. Αυτό γράφει τις λέξεις σας καθώς μιλάτε.</string>
+    <string name="voice_final_body">Όταν σταματήσετε να μιλάτε, αυτό το μοντέλο διαβάζει ξανά όλη τη φράση. Πιάνει ονόματα και τοποθεσίες που χάνονται στο ζωντανό μοντέλο.</string>
+    <string name="voice_model_size">%1$s · %2$d MB</string>
+    <string name="voice_downloaded">Κατεβήκε. %1$s</string>
+    <string name="voice_downloading">Κατεβάσμα, %1$d%%</string>
+
+    <!-- Home -->
+    <string name="home_help">Βοήθεια</string>
+    <string name="home_preview">Προεπισκόπηση</string>
+    <string name="home_logs">Αρχεία καταγραφής</string>
+    <string name="home_disconnect">Αποσύνδεση</string>
+    <string name="home_bt_title">Το Bluetooth δεν είναι συνδεδεμένο</string>
+
+    <!--  -->
+    <string name="home_debug_build">%1$s · έκδοση debug</string>
+    <string name="home_bt_body">Η μουσική παίζει μέσω Bluetooth, αλλά το τηλέφωνό σας δεν έχει συνδεθεί με το αυτοκίνητο. Συνδέστε το εδώ ή από τις ρυθμίσεις Bluetooth του αυτοκινήτου.</string>
+    <string name="home_voice_downloading">Κατέβασμα φωνής, %1$d%%</string>
+
+    <!-- Car audio dialogs -->
+    <string name="audio_bt_title">Αναπαραγωγή ήχου αυτοκινήτου μέσω Bluetooth;</string>
+    <string name="audio_never_ask">Ποτέ ξανά, χρησιμοποιώντας υπολογιστή</string>
+    <string name="audio_use_bt">Χρήση Bluetooth</string>
+    <string name="audio_keep_asking">Συνεχής επανάταση ερωτήματος</string>
+    <string name="audio_mic_title">Ο ήχος αυτοκινήτου χρειάζεται άδεια μικροφώνου</string>
+    <string name="audio_open_settings">Άνοιγμα ρυθμίσεων εφαρμογής</string>
+
+    <!--  -->
+    <string name="audio_bt_body">Το Android θεωρεί τη μουσική που στέλνει το Gearslip στο αυτοκίνητο σαν κοινοποίηση οθόνης, οπότε ζητάει κάθε φορά. Μέσω Bluetooth δεν ζητάει ποτέ. Μπορείτε να το αλλάξετε αργότερα στις Ρυθμίσεις.</string>
+    <string name="audio_keep_usb">Ή συνεχίστε τον ήχο μέσω Gearslip και σταματήστε μόνιμα το ερώτημα: συνδέστε το τηλέφωνο με υπολογιστή μέσω USB με ενεργό την debug και τρέξτε αυτό μία φορά.</string>
+    <string name="audio_mic_body">Το Android επιτρέπει σε μια εφαρμογή να στέλνει ήχο άλλων εφαρμογών στο αυτοκίνητο μόνο αν έχει άδεια μικροφώνου. Είναι απενεργοποιημένο για το Gearslip, οπότε η μουσική παίζει στο τηλέφωνο. Ενεργοποιήστε την στην ενότητα Άδειες → Μικρόφωνο.</string>
+
+    <!-- Phone keyboard -->
+    <string name="typing_close">Κλείσιμο πληκτρολογίου αυτοκινήτου</string>
+    <string name="typing_label">Πληκτρολογήστε για την οθόνη του αυτοκινήτου</string>
+    <string name="typing_search">Αναζήτηση στην οθόνη του αυτοκινήτου</string>
+
+    <!-- Copyable command -->
+    <string name="command_tap_copy">Πατήστε για αντιγραφή</string>
+
+    <string name="command_copied">Η εντολή αντιγράφηκε</string>
+
+    <!--  -->
+    <string name="whats_new_this_version">%1$s (η τρέχουσα έκδοση)</string>
+
+    <!-- Car settings screen -->
+    <string name="carset_theme">Θέμα</string>
+    <string name="carset_imperial">Αυτοκρατορικό (mi, ft, °F)</string>
+    <string name="carset_metric">Μετρικό (km, m, °C)</string>
+    <string name="carset_screen_size">Μέγεθος οθόνης (επόμενη σύνδεση)</string>
+    <string name="carset_fit">Προσαρμογή στην οθόνη</string>
+    <string name="off">Ανενεργό</string>
+    <string name="on">Ενεργό</string>
+    <string name="carset_lyrics_from">Στίχοι από</string>
+    <string name="carset_more_sources">Πιο πολλές πηγές</string>
+    <string name="carset_hide">Απόκρυψη</string>
+    <string name="carset_show">Εμφάνιση</string>
+    <string name="carset_phone">Τηλέφωνο</string>
+    <string name="carset_vehicle">Όχημα</string>
+    <string name="carset_video">Βίντεο</string>
+    <string name="carset_version">Έκδοση</string>
+    <string name="carset_build">Δόμηση</string>
+    <string name="carset_whats_new_after">Τι νέο υπάρχει μετά τις ενημερώσεις</string>
+    <string name="carset_whats_new_after_sub">Εμφάνιση της λίστας αλλαγών μία φορά, κατά την πρώτη σύνδεση του οχήματος μετά από ενημέρωση.</string>
+    <string name="carset_web_default">DuckDuckGo (προεπιλογή) - πατήστε για ορισμό διαφορετικής σελίδας</string>
+    <string name="carset_web_note">Εμφανίζεται από την εφαρμογή Browser στον εκτοξευτή. Ισχύει στην επόμενη σύνδεση.</string>
+    <string name="carset_screen_fit">Προσαρμογή οθόνης</string>
+    <string name="carset_top">Πάνω</string>
+    <string name="carset_bottom">Κάτω</string>
+    <string name="carset_save_vehicle">Αποθήκευση για αυτό το όχημα</string>
+    <string name="carset_no_profile">Δεν βρέθηκε προφίλ οχήματος</string>
+
+    <!--  -->
+    <string name="carset_audio_note">Η λειτουργία Through Gearslip στέλνει τον ήχο του τηλεφώνου μέσω της σύνδεσης με το αυτοκίνητο, καλωδίου ή ασύρματα. Το Android ζητά να μοιραστείτε την οθόνη κάθε φορά που οδηγείτε και μερικές εφαρμογές το μπλοκάρουν. Το Bluetooth αναπαράγει τον ήχο όπως κανονικά και το Android δεν ζητάει ποτέ.</string>
+    <string name="car_directions_over_music">Οδηγίες μέσω του καναλιού μουσικής</string>
+    <string name="car_directions_over_music_note">Για αυτοκίνητα που αποσυνδέονται ή επανεκκινούν μετά από προφορική οδηγία. Το Gearslip αναμειγνύει κάθε οδηγία στη μουσική αντί να χρησιμοποιεί το κανάλι οδηγιών του αυτοκινήτου.</string>
+    <string name="carset_directions_note">Το Gearslip διαβάζει κάθε οδηγία δυνατά μέσω των ηχείων του αυτοκινήτου και η μουσική χαμηλώνει ενώ μιλάει. Απενεργοποιήστε το αν η φωνή της εφαρμογής πλοήγησής σας παίζει ήδη στο αυτοκίνητο.</string>
+    <string name="carset_phone_speech_note">Ακούει μέσω της υπηρεσίας αναγνώρισης φωνής του τηλεφώνου αντί για αυτή του Gearslip. Στα περισσότερα τηλέφωνα είναι αυτή της Google, η οποία μπορεί να στείλει τη φωνή σας στη Google. Το GrapheneOS δεν έχει καμία, οπότε το Gearslip χρησιμοποιεί τη δική του.</string>
+    <string name="carset_vehicle_data_note">Προσθέτει μια πλακίδα Δεδομένα οχήματος: ζωντανή, ωμή καταγραφή του καναλιού αισθητήρων της κεφαλής. Οι ετικέτες πεδίων (ταχύτητα, στροφές, καύσιμα...) μεταφέρονται από άλλα projects reverse-engineering και δεν έχουν επαληθευτεί για αυτό το αυτοκίνητο — αντιμετωπίστε τες ως εκτίμηση, όχι ως πραγματικότητα, μέχρι να δείτε εσείς οι ίδιοι ότι αλλάζουν.</string>
+    <string name="carset_adaptive_note">Μειώνει την ποιότητα της εικόνας όταν το αυτοκίνητο ή το Wi-Fi του δεν μπορούν να ανταποκριθούν και την αυξάνει ξανά όταν μπορέσουν. Ισχύει στην επόμενη σύνδεση.</string>
+    <string name="carset_usable_height">Χρήσιμο ύψος %1$dpx από 480</string>
+    <string name="carset_saved_to">Αποθηκεύτηκε στο %1$s</string>
+    <string name="carset_save_failed">Αδυναμία αποθήκευσης</string>
+    <string name="carset_px">%1$dpx</string>
+
+    <!-- Car media app -->
+    <string name="media_open_on_phone">Άνοιγμα στο τηλέφωνο</string>
+    <string name="media_now_playing">Αναπαραγωγή τώρα</string>
+    <string name="media_up_next">Επόμενο</string>
+    <string name="media_browse">Περιήγηση</string>
+    <string name="media_search_hint">Πληκτρολογήστε τραγούδι, καλλιτέχνη, άλμπουμ ή λίστα αναπαραγωγής.</string>
+    <string name="media_looking_lyrics">Αναζήτηση στίχων…</string>
+    <string name="media_nothing_playing">Καμία αναπαραγωγή</string>
+    <string name="media_press_play">Πατήστε αναπαραγωγή για να συνεχίσετε από όπου σταματήσατε, ή βρείτε κάτι στην Περιήγηση.</string>
+
+    <!--  -->
+    <string name="media_keeps_library">%1$s διατηρεί τη βιβλιοθήκη του κλειστή.</string>
+    <string name="media_needs_access">Το Gearslip μπορεί να το ελέγξει μόλις έχει πρόσβαση Ειδοποιήσεων στο τηλέφωνο. Να το επιτρέψετε στις Ρυθμίσεις &gt; Ειδοποιήσεις &gt; Πρόσβαση ειδοποιήσεων.</string>
+    <string name="media_not_running">%1$s δεν εκτελείται.</string>
+    <string name="media_not_running_body">%1$s αναπαράγει μέσω του δικού player του Gearslip, αλλά μόνο ενώ είναι ανοιχτό στο τηλέφωνο. Ανοίξτε το μία φορά και συνεχίζει να παίζει εδώ στο αυτοκίνητο.</string>
+    <string name="media_open_app">Άνοιγμα %1$s</string>
+    <string name="media_refused">%1$s αρνήθηκε να επιτρέψει την περιήγηση στο Gearslip.</string>
+    <string name="media_refused_body">Ορισμένες εφαρμογές μουσικής δέχονται μόνο τον δικό host της Google.</string>
+    <string name="media_connecting">Σύνδεση με %1$s…</string>
+    <string name="media_search">Αναζήτηση %1$s</string>
+    <string name="media_search_no_list">%1$s δεν μπορεί να καταγράψει αποτελέσματα. Πατήστε αναζήτηση και το %1$s επιλέγει τι θα παίξει.</string>
+    <string name="media_search_unsupported">%1$s δεν υποστηρίζει αναζήτηση από το αυτοκίνητο.</string>
+    <string name="media_searching">Αναζήτηση %1$s…</string>
+    <string name="media_search_nothing">%1$s δεν βρήκε τίποτα για \"%2$s\".</string>
+    <string name="media_search_ignored">%1$s δεν έπαιξε τίποτα για \"%2$s\".</string>
+    <string name="media_searching_for">Αναζήτηση %1$s για \"%2$s\"…</string>
+    <string name="media_nothing_playing_dot">Καμία αναπαραγωγή.</string>
+    <string name="media_no_lyrics">Δεν βρέθηκαν στίχοι για αυτό το κομμάτι.</string>
+
+    <!-- Car media browsing -->
+    <string name="media_up">Πάνω</string>
+    <string name="media_loading">Φόρτωση…</string>
+    <string name="media_browse_start">Ξεκινήστε τη μουσική στην εφαρμογή στο τηλέφωνό σας. Αναπαραγωγή, παύση, αλλαγή κομματιού και αναζήτηση λειτουργούν από εδώ.</string>
+    <string name="media_load_failed">Αδυναμία φόρτωσης αυτής της λίστας.</string>
+    <string name="media_nothing_here">Κανένα στοιχείο εδώ.</string>
+    <string name="media_nothing_queued">Κανένα στοιχείο στην ουρά.</string>
+    <string name="media_play">Αναπαραγωγή</string>
+
+    <!--  -->
+    <string name="media_queue_empty_idle">Κανένα αναπαραγόμενο - δεν ενημερώνει κάθε εφαρμογή το Gearslip για το επόμενο.</string>
+    <string name="media_queue_empty_playing">Μόνο ό,τι παίζει ήδη - δεν ενημερώνει κάθε εφαρμογή το Gearslip για το επόμενο.</string>
+
+    <!-- Player controls -->
+    <string name="player_previous">Προηγούμενο</string>
+    <string name="player_next">Επόμενο</string>
+    <string name="player_repeat">Επανάληψη</string>
+
+    <!--  -->
+    <string name="player_pause">Παύση</string>
+    <string name="player_unlike">Δεν μου αρέσει</string>
+    <string name="player_like">Μου αρέσει</string>
+    <string name="player_shuffle_off">Τυχαία αναπαραγωγή εκτός</string>
+    <string name="player_shuffle_on">Τυχαία αναπαραγωγή ενεργή</string>
+
+    <!-- Car home -->
+    <string name="home_choose_app">Επιλέξτε άλλη εφαρμογή</string>
+    <string name="home_no_maps">Δεν βρέθηκαν εφαρμογές χαρτών.</string>
+    <string name="home_no_maps_body">Εγκαταστήστε μια εφαρμογή πλοήγησης που υποστηρίζει το Android Auto και θα ξεκινήσει εδώ από μόνη της.</string>
+    <string name="home_map_stopped">Ο χάρτης σταμάτησε</string>
+    <string name="home_map_stopped_body">Παραμένει κλειστό μέχρι να το ανοίξετε ξανά.</string>
+    <string name="home_reopen_map">Επαναφορά χάρτη</string>
+    <string name="home_car_apps">Εφαρμογές αυτοκινήτου</string>
+    <string name="home_back_nav">Επιστροφή στη γραμμή πλοήγησης</string>
+    <string name="home_show_player">Εμφάνιση του παίκτη</string>
+    <string name="home_hide_lyrics">Απόκρυψη στίχων</string>
+
+    <!--  -->
+    <string name="home_starting">Έναρξη %1$s…</string>
+    <string name="home_starting_map">Έναρξη του χάρτη…</string>
+    <string name="home_failed">%1$s δεν μπόρεσε να ξεκινήσει.</string>
+    <string name="home_failed_map">Η εφαρμογή χάρτη δεν μπόρεσε να ξεκινήσει.</string>
+
+    <!-- Breadcrumbs -->
+    <string name="crumb_home">Αρχική</string>
+    <string name="crumb_media">Πολυμέσα</string>
+    <string name="crumb_apps">Εφαρμογές</string>
+    <string name="crumb_dashboard">Πίνακας ελέγχου</string>
+    <string name="crumb_weather">Καιρός</string>
+    <string name="crumb_reply">Απάντηση</string>
+
+    <!-- Built-in apps -->
+    <string name="app_browser">Περιηγητής</string>
+    <string name="app_screen_sharing">Κοινή χρήση οθόνης</string>
+    <string name="app_exit">Έξοδος</string>
+    <string name="navapps_unpin">Απόσπαση από τη γραμμή πλοήγησης</string>
+    <string name="navapps_full">Η γραμμή πλοήγησης είναι γεμάτη (%1$d καρφιτσωμένες)</string>
+    <string name="navapps_pin">Καρφίτσωμα στη γραμμή πλοήγησης</string>
+    <string name="navapps_close">Κλείσιμο εφαρμογής</string>
+    <string name="navapps_move_left">Μετακίνηση αριστερά</string>
+    <string name="navapps_move_right">Μετακίνηση δεξιά</string>
+    <string name="navapps_reset">Επαναφορά σειράς εφαρμογών</string>
+
+    <!-- Message popup -->
+    <string name="msg_dismiss">Απόρριψη</string>
+    <string name="msg_read">Ανάγνωση</string>
+    <string name="msg_stop">Διακοπή</string>
+    <string name="msg_no">Όχι</string>
+    <string name="msg_send_now">Αποστολή τώρα</string>
+    <string name="msg_type">Πληκτρολογήστε</string>
+
+    <!--  -->
+    <plurals name="msg_burst">
+        <item quantity="one">%1$s · %2$d νέο</item>
+        <item quantity="other">%1$s · %2$d νέα</item>
+    </plurals>
+    <string name="msg_reply_to">Απάντηση στο/στην %1$s</string>
+    <string name="msg_listening">Ακρόαση</string>
+    <string name="msg_sending_to">Αποστολή στο/στην %1$s</string>
+    <string name="msg_sent_to">Εστάλη στο/στην %1$s</string>
+    <string name="msg_reply_failed">Δεν μπόρεσε να απαντήσει</string>
+
+    <!-- Bluetooth pairing -->
+    <string name="bt_pair_unfinished">Η σύζευξη δεν ολοκληρώθηκε. Συζεύξτε από το μενού Bluetooth του αυτοκινήτου αντί για αυτό.</string>
+    <string name="bt_pair_not_started">Η σύζευξη δεν ξεκίνησε. Συζεύξτε από το μενού Bluetooth του αυτοκινήτου αντί για αυτό.</string>
+    <string name="bt_paired">Συζεύχθηκε. Οι κλήσεις αναπαράγονται τώρα μέσω του αυτοκινήτου.</string>
+
+    <!-- Car overlays -->
+    <string name="overlay_dont_show">Να μην εμφανιστεί ξανά</string>
+    <string name="overlay_ok">Εντάξει</string>
+    <string name="overlay_location_off">Η τοποθεσία είναι εκτός</string>
+    <string name="overlay_pair_title">Σύζευξη με αυτό το αυτοκίνητο;</string>
+    <string name="overlay_pair">Σύζευξη</string>
+    <string name="overlay_confirm_title">Επιβεβαίωση στο τηλέφωνό σας</string>
+    <string name="overlay_confirm_body">Ελέγξτε τον κωδικό στο τηλέφωνό σας και πατήστε Σύζευξη. Το αυτοκίνητο μπορεί να ζητήσει επίσης.</string>
+
+    <!--  -->
+    <string name="overlay_bt_body">Η μουσική παίζει μέσω Bluetooth, αλλά το τηλέφωνό σας δεν είναι συνδεδεμένο στο αυτοκίνητο. Συνδεθείτε από τις ρυθμίσεις Bluetooth του αυτοκινήτου ή του τηλεφώνου.</string>
+    <string name="overlay_location_body">Οι εφαρμογές χάρτων δεν μπορούν να δείξουν πού βρίσκεστε ή να δώσουν κατευθύνσεις. Ενεργοποιήστε το εντοπισμό θέσης στις γρήγορες ρυθμίσεις του τηλεφώνου σας όταν είστε σταθμευμένοι.</string>
+    <string name="overlay_pair_body_music">Κλήσεις και μουσική παίζουν από τα ηχεία του αυτοκινήτου μόλις συζευχτούν το τηλέφωνο και το αυτοκίνητο. Στη συνέχεια, το τηλέφωνο σας ζητά να επιβεβαιώσετε έναν κωδικό.</string>
+    <string name="overlay_pair_body">Οι κλήσεις παίζουν από τα ηχεία του αυτοκινήτου μόλις συζευχτούν το τηλέφωνο και το αυτοκίνητο. Στη συνέχεια, το τηλέφωνο σας ζητά να επιβεβαιώσετε έναν κωδικό.</string>
+
+    <!-- Weather -->
+    <string name="weather_waiting_fix">Αναμονή για σήμα θέσης.</string>
+    <string name="weather_allow_location">Επιτρέψτε στη Gearslip πρόσβαση στη θέση για να βλέπετε τον καιρό.</string>
+    <string name="weather_unreachable">Δεν ήταν δυνατή η σύνδεση με την υπηρεσία καιρού.</string>
+    <string name="weather_clear">Καθαρός</string>
+    <string name="weather_mostly_clear">Περισσότερο καθαρός</string>
+    <string name="weather_partly_cloudy">Μερικώς νεφελώδης</string>
+    <string name="weather_overcast">Συννεφιά</string>
+    <string name="weather_fog">Ομίχλη</string>
+    <string name="weather_drizzle">Ψιχή</string>
+    <string name="weather_rain">Βροχή</string>
+    <string name="weather_snow">Χιόνι</string>
+    <string name="weather_rain_showers">Βροχοπτώσεις</string>
+    <string name="weather_snow_showers">Χιονοπτώσεις</string>
+    <string name="weather_thunderstorm">Καταιγίδα</string>
+
+    <!-- Weather screen -->
+    <string name="weather_getting">Λήψη καιρού…</string>
+    <string name="weather_next_hours">Επόμενες ώρες</string>
+    <string name="weather_this_week">Αυτή την εβδομάδα</string>
+    <string name="weather_today">Σήμερα</string>
+    <string name="weather_credit">Δεδομένα καιρού από Open-Meteo.com (CC BY 4.0)</string>
+
+    <!--  -->
+    <string name="weather_feels_like">Αίσθηση: %1$s</string>
+    <string name="weather_humidity">Υγρασία %1$d%%</string>
+    <string name="weather_wind">Ανέμος %1$s</string>
+
+    <!-- Dashboard -->
+    <string name="dash_today">Σήμερα</string>
+    <string name="dash_getting_weather">Λήψη καιρού…</string>
+    <string name="dash_coming_up">Επόμενα</string>
+    <string name="dash_loading_calendar">Φόρτωση ημερολογίου…</string>
+    <string name="dash_nothing_week">Κανένα ραντεβού την επόμενη εβδομάδα.</string>
+
+    <!--  -->
+    <string name="dash_all_day">Όλη μέρα</string>
+
+    <!-- Phone dialer -->
+    <string name="dialer_contacts">Επαφές</string>
+    <string name="dialer_keypad">Πλήκτρο αριθμών</string>
+    <string name="dialer_ask">Ερώτηση στο τηλέφωνο</string>
+    <string name="dialer_enter_number">Εισαγωγή αριθμού</string>
+    <string name="dialer_call">Κλήση</string>
+    <string name="dialer_no_contacts">Δεν βρέθηκαν επαφές με αριθμό τηλεφώνου.</string>
+    <string name="dialer_search">Αναζήτηση επαφών</string>
+
+    <!--  -->
+    <string name="dialer_needs_permission">Η Gearslip χρειάζεται άδεια Τηλέφωνο και Επαφές για κλήσεις από εδώ. Επιτρέψτε τις στο τηλέφωνο όταν είστε σταθμευμένοι.</string>
+    <string name="dialer_no_match">Καμία επαφή δεν ταιριάζει με \"%1$s\".</string>
+    <string name="dialer_call_who">Κλήση σε %1$s;</string>
+
+    <!-- Car screen -->
+    <string name="carui_exit_fullscreen">Έξοδος από πλήρη οθόνη</string>
+    <string name="carui_drive_safely">Οδηγείτε με προσοχή</string>
+    <string name="carui_understand">Το καταλαβαίνω</string>
+
+    <!--  -->
+    <string name="carui_unofficial">Η Gearslip είναι μη επίσημο λογισμικό: δεν έχει δημιουργηθεί ή ελεγχθεί από κανέναν κατασκευαστή αυτοκινήτων και μπορεί να αποτύχει χωρίς προειδοποίηση.</string>
+    <string name="carui_never_interact">Μην αλληλεπιδράσετε ποτέ με αυτή την οθόνη ενώ οδηγείτε. Ορίστε τη διαδρομή ή το τραγούδι πριν φύγετε και κρατήστε την προσοχή σας στο δρόμο.</string>
+    <string name="carui_this_app">Η εφαρμογή</string>
+    <string name="carui_app_unsupported">%1$s δεν λειτουργεί ακόμη με τη Gearslip.</string>
+    <string name="carui_app_unsupported_body">Δεν ξεκίνησε. Ορισμένες εφαρμογές τρέχουν μόνο στο Google Android Auto.</string>
+
+    <!-- Nav bar -->
+    <string name="navbar_on_call">Σε κλήση</string>
+    <string name="navbar_end_call">Τερματισμός κλήσης</string>
+
+    <!--  -->
+    <string name="navbar_unmute">Ενεργοποίηση ήχου</string>
+    <string name="navbar_mute">Σίγαση</string>
+    <string name="navbar_close_panel">Κλείσιμο πλευρικού πάνελ</string>
+    <string name="navbar_dock_player">Μετακίνηση του player δίπλα στον χάρτη</string>
+
+    <!-- Browser -->
+    <string name="web_search">Αναζήτηση ή πληκτρολόγηση διεύθυνσης</string>
+    <string name="web_forward">Εμπρός</string>
+    <string name="web_reload">Επανφόρτωση</string>
+    <string name="web_start_page">Αρχική σελίδα</string>
+    <string name="web_fullscreen">Πλήρης οθόνη</string>
+
+    <!-- Notifications -->
+    <string name="notif_title">Ειδοποιήσεις</string>
+    <string name="notif_clear_all">Καθαρισμός όλων</string>
+    <string name="notif_empty">Ακόμα τίποτα. Οι νέες ειδοποιήσεις από το τηλέφωνο θα εμφανιστούν εδώ.</string>
+    <string name="notif_off">Οι ειδοποιήσεις είναι απενεργοποιημένες. Επιτρέψτε στην Gearslip πρόσβαση στις ειδοποιήσεις under Ρυθμίσεις &gt; Ειδοποιήσεις &gt; Πρόσβαση ειδοποιήσεων στο τηλέφωνο.</string>
+    <string name="notif_replied">Απαντήθηκε</string>
+
+    <!-- Messages -->
+    <string name="msg_mark_read">Επισήμανση ως αναγνωσμένο</string>
+
+    <!--  -->
+    <string name="msg_messages">Μηνύματα</string>
+    <string name="msg_none_recent">Δεν υπάρχουν πρόσφατα μηνύματα. Τα νέα μηνύματα %1$s θα εμφανιστούν εδώ καθώς φτάνουν στο τηλέφωνο.</string>
+    <plurals name="msg_earlier">
+        <item quantity="one">%1$d νωρίτερα</item>
+        <item quantity="other">%1$d νωρίτερα</item>
+    </plurals>
+    <string name="msg_hide_quick">Απόκρυψη γρήγορων απαντήσεων</string>
+    <string name="msg_quick">Γρήγορη απάντηση</string>
+    <string name="msg_you">Εσείς: </string>
+    <string name="msg_sender">%1$s: </string>
+
+    <!-- Car app navigation -->
+    <string name="nav_finding_route">Εύρεση διαδρομής…</string>
+    <string name="nav_then">Στη συνέχεια</string>
+    <string name="nav_stop">Διακοπή πλοήγησης</string>
+    <string name="nav_finding_routes">Εύρεση διαδρομών…</string>
+
+    <!--  -->
+    <string name="nav_lane_recommended">Συνιστώμενη λωρίδα</string>
+    <string name="nav_lane">Λωρίδα</string>
+    <string name="nav_arrive">Άφιξη σε %1$s</string>
+
+    <!-- Car app screens -->
+    <string name="template_nothing_playing">Δεν παίζει κάτι ακόμη.</string>
+
+    <!--  -->
+    <string name="template_search">Αναζήτηση</string>
+
+    <!-- Car app screens, more -->
+    <string name="template_start">Έναρξη</string>
+
+    <!-- Calls -->
+    <string name="call_incoming">Εισερχόμενη κλήση</string>
+    <string name="call_decline">Απόρψη</string>
+    <string name="call_answer">Απάντηση</string>
+    <string name="call_ringing">Ήδη χτυπά δυνατά - απαντήστε εδώ, ή αφήστε το να χτυπήσει.</string>
+
+    <!-- Screen sharing -->
+    <string name="phoneapps_touch_off">Η αφή είναι απενεργοποιημένη. Ενεργοποιήστε την Gearslip under Ρυθμίσεις &gt; Προσβασιμότητα στο τηλέφωνο.</string>
+
+    <!-- What's new in the car -->
+    <string name="whatsnew_show_after">Εμφάνιση μετά από ενημερώσεις</string>
+    <string name="whatsnew_got_it">Το κατάλαβα</string>
+
+    <!--  -->
+    <string name="whatsnew_title">Τι νέο υπάρχει στο %1$s</string>
+
+    <!-- Car keyboard -->
+    <string name="keyboard_space">διάστημα</string>
+    <string name="keyboard_hide">Απόκρυψη πληκτρολογίου</string>
+    <string name="keyboard_submit">Υποβολή</string>
+
+    <!-- Launcher -->
+    <string name="launcher_broken">Δεν λειτουργεί με τη Gearslip</string>
+
+    <!-- Car app stage -->
+    <string name="stage_car_app">Εφαρμογή αυτοκινήτου</string>
+    <string name="stage_close">Κλείσιμο %1$s</string>
+    <string name="stage_close_app">Κλείσιμο εφαρμογής</string>
+
+    <!-- Spoken directions -->
+    <string name="dir_slight_left">Στροφή ελαφρώς αριστερά</string>
+    <string name="dir_slight_left_onto">Στροφή ελαφρώς αριστερά στην/στον %1$s</string>
+    <string name="dir_slight_right">Στροφή ελαφρώς δεξιά</string>
+    <string name="dir_slight_right_onto">Στροφή ελαφρώς δεξιά στην/στον %1$s</string>
+    <string name="dir_left">Στροφή αριστερά</string>
+    <string name="dir_left_onto">Στροφή αριστερά στην/στον %1$s</string>
+    <string name="dir_right">Στροφή δεξιά</string>
+    <string name="dir_right_onto">Στροφή δεξιά στην/στον %1$s</string>
+    <string name="dir_sharp_left">Απότομη στροφή αριστερά</string>
+    <string name="dir_sharp_left_onto">Απότομη στροφή αριστερά στην/στον %1$s</string>
+    <string name="dir_sharp_right">Απότομη στροφή δεξιά</string>
+    <string name="dir_sharp_right_onto">Απότομη στροφή δεξιά στην/στον %1$s</string>
+    <string name="dir_u_turn">U-στρόφα (αναστροφή)</string>
+    <string name="dir_keep_left">Συνεχίστε αριστερά</string>
+    <string name="dir_keep_left_toward">Συνεχίστε αριστερά προς %1$s</string>
+    <string name="dir_keep_right">Συνεχίστε δεξιά</string>
+    <string name="dir_keep_right_toward">Συνεχίστε δεξιά προς %1$s</string>
+    <string name="dir_fork_left">Συνεχίστε αριστερά στο διακλάδωμα</string>
+    <string name="dir_fork_left_toward">Συνεχίστε αριστερά στο διακλάδωμα προς %1$s</string>
+    <string name="dir_fork_right">Συνεχίστε δεξιά στο διακλάδωμα</string>
+    <string name="dir_fork_right_toward">Συνεχίστε δεξιά στο διακλάδωμα προς %1$s</string>
+    <string name="dir_ramp_left">Πάρτε την έξοδο αριστερά</string>
+    <string name="dir_ramp_left_onto">Πάρτε την έξοδο αριστερά στην/στον %1$s</string>
+    <string name="dir_ramp_right">Πάρτε την έξοδο δεξιά</string>
+    <string name="dir_ramp_right_onto">Πάρτε την έξοδο δεξιά στην/στον %1$s</string>
+    <string name="dir_exit_left">Πάρτε την έξοδο αριστερά</string>
+    <string name="dir_exit_left_toward">Πάρτε την έξοδο αριστερά προς %1$s</string>
+    <string name="dir_exit_right">Πάρτε την έξοδο δεξιά</string>
+    <string name="dir_exit_right_toward">Πάρτε την έξοδο δεξιά προς %1$s</string>
+    <string name="dir_merge_left">Ενταχθείτε αριστερά</string>
+    <string name="dir_merge_left_onto">Ενταχθείτε αριστερά στην/στον %1$s</string>
+    <string name="dir_merge_right">Ενταχθείτε δεξιά</string>
+    <string name="dir_merge_right_onto">Ενταχθείτε δεξιά στην/στον %1$s</string>
+    <string name="dir_merge">Εντάξη</string>
+    <string name="dir_merge_onto">Ενταχθείτε στην/στον %1$s</string>
+    <string name="dir_roundabout_through">Διανύστε την κυκλική διασταύρωση </string>
+    <string name="dir_roundabout_through_onto">Συνεχίστε μέσω της κυκλικής διασταύρωσης προς %1$s</string>
+    <string name="dir_roundabout_enter">Εισαγωγή στην κυκλική διασταύρωση</string>
+    <string name="dir_roundabout_exit">Έξοδος από την κυκλική διασταύρωση</string>
+    <string name="dir_roundabout_exit_onto">Εξέλθετε από την κυκλική διασταύρωση προς %1$s</string>
+    <string name="dir_straight">Συνεχίστε ευθεία</string>
+    <string name="dir_straight_onto">Συνεχίστε ευθεία προς %1$s</string>
+    <string name="dir_continue">Συνεχίστε</string>
+    <string name="dir_continue_onto">Συνεχίστε προς %1$s</string>
+    <string name="dir_ferry">Πάρτε το πλοίο</string>
+    <string name="dir_train">Πάρτε το τρένο</string>
+    <string name="dir_destination">Ο προορισμός σας είναι μπροστά</string>
+    <string name="dir_destination_left">Ο προορισμός σας είναι στα αριστερά</string>
+    <string name="dir_destination_right">Ο προορισμός σας είναι στα δεξιά</string>
+    <string name="dir_roundabout_take">Στο στροφέιο, πάρτε την %1$s έξοδο</string>
+    <string name="dir_roundabout_take_onto">Στο στροφέιο, πάρτε την %1$s έξοδο προς %2$s</string>
+    <string name="dir_ordinal_1">πρώτη</string>
+    <string name="dir_ordinal_2">δεύτερη</string>
+    <string name="dir_ordinal_3">τρίτη</string>
+    <string name="dir_ordinal_4">τέταρτη</string>
+    <string name="dir_ordinal_5">πέμπτη</string>
+    <string name="dir_ordinal_6">έκτη</string>
+    <string name="dir_ordinal_7">έβδομη</string>
+    <string name="dir_ordinal_8">όγδοη</string>
+    <string name="dir_in_distance">Σε %1$s, %2$s</string>
+    <plurals name="dir_km">
+        <item quantity="one">%1$s χιλιόμετρο</item>
+        <item quantity="other">%1$s χιλιόμετρα</item>
+    </plurals>
+    <string name="dir_km_decimal">%1$s χιλιόμετρα</string>
+    <string name="dir_quarter_mile">ένα τέταρτο του μιλίου</string>
+    <string name="dir_half_mile">μισό μίλιο</string>
+    <string name="dir_three_quarter_mile">τρία τέταρτα του μιλίου</string>
+    <plurals name="dir_miles">
+        <item quantity="one">%1$s μίλι</item>
+        <item quantity="other">%1$s μίλια</item>
+    </plurals>
+    <string name="dir_miles_decimal">%1$s μίλια</string>
+    <plurals name="dir_feet">
+        <item quantity="one">%1$s πόδι</item>
+        <item quantity="other">%1$s πόδια</item>
+    </plurals>
+    <plurals name="dir_yards">
+        <item quantity="one">%1$s γυάρδο</item>
+        <item quantity="other">%1$s γυάρδoυς</item>
+    </plurals>
+    <plurals name="dir_meters">
+        <item quantity="one">%1$d μέτρο</item>
+        <item quantity="other">%1$d μέτρα</item>
+    </plurals>
+
+    <!--  -->
+    <string name="certsetup_installed_hint">Αν το αυτοκίνητό σας δεν συνδέεται, ίσως απορρίψει αυτό το πιστοποιητικό. Εισάγετε δικό σας στις Ρυθμίσεις, dưới το Πιστοποιητικό.</string>
+
+    <!--  -->
+    <string name="cert_downloaded_footer">Δεν συνδέεται το αυτοκίνητο; Ορισμένα αυτοκίνητα από το 2020 και μετά απορρίπτουν το πιστοποιητικό aasdk, οπότε εισάγετε δικό σας. Οι αλλαγές ισχύουν στην επόμενη σύνδεση.</string>
+
+    <!-- Cluster screen -->
+    <string name="car_cluster_video">Εμφάνιση της κάρτας στην οθόνη του πίνακα</string>
+    <string name="car_cluster_video_note">Για αυτοκίνητο με δεύτερη οθόνη στον πίνακα οργάνων: το Gearslip εμφανίζει εκεί την επόμενη στροφή. Ισχύει στην επόμενη σύνδεση.</string>
+
+    <!-- Connection status on Home -->
+    <string name="status_idle">Μη συνδεδεμένο</string>
+    <string name="status_idle_detail">Συνδέστε στη θύρα USB του αυτοκινήτου ή συνδεθείτε ασύρματα. Το Gearslip ανοίγει αυτόματα όταν το αυτοκίνητο απαντήσει.</string>
+    <string name="status_no_car">Το τηλέφωνο φορτίζει, αλλά κανένα αυτοκίνητο δεν απάντησε. Ορισμένα καλώδια φορτίζουν μόνο· δοκιμάστε ένα που μεταφέρει δεδομένα.</string>
+    <string name="status_no_car_graphene">Το τηλέφωνο φορτίζει, αλλά κανένα αυτοκίνητο δεν απάντησε. Ελέγξτε ότι ο έλεγχος θύρας USB-C, υπό Ασφάλεια &amp; ιδιωτικότητα, επιτρέπει τα δεδομένα και δεν είναι ρυθμισμένο σε Φόρτιση-μόνο.</string>
+    <string name="status_stuck_cable">Το αυτοκίνητο δεν έχει εμφανίσει το Gearslip ακόμα. Αποσυνδέστε το καλώδιο, περιμένετε λίγα δευτερόλεπτα και ξανασυνδέστε το. Αν συνεχιστεί, δοκιμάστε άλλο καλώδιο ή θύρα USB και κοινοποιήστε το αρχείο καταγραφής σε ένα θέμα.</string>
+    <string name="status_stuck_wireless">Το αυτοκίνητο δεν έχει εμφανίσει το Gearslip ακόμα. Απενεργοποιήστε και ενεργοποιήστε ξανά το αυτοκίνητο, ή συνδεθείτε με καλώδιο. Αν συνεχιστεί, κοινοποιήστε το αρχείο καταγραφής σε ένα θέμα.</string>
+    <string name="settings_bt_address">Διεύθυνση Bluetooth του τηλεφώνου</string>
+    <string name="settings_bt_address_off">Όχι ρυθμισμένη. Μόνο για αυτοκίνητο που χάνει το Bluetooth όταν συνδέεται το Gearslip.</string>
+    <string name="settings_bt_address_hint">Αντιγράψτε την από τις Ρυθμίσεις του Android, υπό Περί τηλεφώνου. Το Gearslip τη περνά στο αυτοκίνητο, ώστε να γνωρίζει ότι το τηλέφωνο στο καλώδιο είναι αυτό με το οποίο έχει ζευγώσει.</string>
+    <string name="settings_bt_address_invalid">Αυτή δεν είναι διεύθυνση Bluetooth. Θα πρέπει να μοιάζει με 12:34:56:78:9A:BC.</string>
+    <string name="settings_use_as_launcher">Χρήση ως εκτοξευτής</string>
+    <string name="settings_use_as_launcher_off">Για κεφαλαιακή μονάδα ή tablet στο ταμπλό. Η οθόνη του αυτοκινήτου του Gearslip γίνεται η αρχική οθόνη της συσκευής.</string>
+    <string name="settings_use_as_launcher_on">Το Gearslip μπορεί να είναι η αρχική οθόνη αυτής της συσκευής. Επιλέξτε το υπό Προεπιλεγμένη εφαρμογή αρχικής οθόνης.</string>
+    <string name="app_all_apps">Όλες οι εφαρμογές</string>
+    <string name="launcher_in_car">Αυτή η συσκευή είναι συνδεδεμένη σε αυτοκίνητο, οπότε το Gearslip είναι στην οθόνη του αυτοκινήτου.</string>
+    <string name="launcher_open_gearslip">Άνοιγμα Gearslip</string>
+    <string name="status_open_settings">Άνοιγμα ρυθμίσεων</string>
+    <string name="status_connecting">Σύνδεση</string>
+    <string name="status_projecting">Προβολή</string>
+    <string name="status_projecting_detail">Ροή στην κεφαλαιακή μονάδα.</string>
+    <string name="status_disconnected">Αποσυνδέθηκε</string>
+    <string name="status_disconnected_detail">Η κεφαλαιακή μονάδα δεν είναι πλέον συνδεδεμένη.</string>
+    <string name="places_title">Αποθηκευμένες τοποθεσίες</string>
+    <string name="places_sub">Πείτε “πλοήγηση στο σπίτι” σε οποιαδήποτε εφαρμογή χάρτων</string>
+    <string name="places_intro">Πείτε “πλοήγηση στο σπίτι”, “οδήγησέ με στη δουλειά” ή “πλοήγηση σε” ένα όνομα δικό σας και το Gearslip στέλνει αυτή τη διεύθυνση στην εφαρμογή χάρτη σας.</string>
+    <string name="places_home">Σπίτι</string>
+    <string name="places_work">Δουλειά</string>
+    <string name="places_other">Τοποθεσία %1$d</string>
+    <string name="places_name">Όνομα</string>
+    <string name="places_address">Διεύθυνση</string>
+    <string name="places_here">Χρήση της τρέχουσας θέσης μου</string>
+    <string name="places_finding">Εύρεση θέσης…</string>
+    <string name="places_not_found">Το Gearslip δεν μπόρεσε να βρει πού βρίσκεστε. Ελέγξτε ότι η τοποθεσία είναι ενεργή.</string>
+    <string name="places_clear">Εκκαθάριση</string>
+    <string name="settings_language">Γλώσσα</string>
+    <string name="settings_language_phone">Ίδια με το τηλέφωνο</string>
+    <string name="player_next_chapter">Επόμενο κεφάλαιο</string>
+</resources>
+
