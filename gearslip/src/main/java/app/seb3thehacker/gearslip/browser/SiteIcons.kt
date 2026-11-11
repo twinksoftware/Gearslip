@@ -87,15 +87,14 @@ object SiteIcons {
     }
 
     /**
-     * Where [host]'s icon is kept, or null for a host that can't name a file in the icons folder.
-     * The host comes from a web page, so the name is cut down to letters, digits, dots and dashes,
-     * a host made of dots only is refused, and the result has to land inside the folder.
+     * Where [host]'s icon is kept. The host comes from a web page, so it never names the file
+     * itself: the file is named after a hash of it, 64 hex digits that can only ever be a plain
+     * file name inside the icons folder.
      */
     private fun file(context: Context, host: String): File? {
-        val name = host.replace(Regex("[^A-Za-z0-9.-]"), "_")
-        if (name.isEmpty() || name.all { it == '.' }) return null
-        val dir = File(context.filesDir, DIRECTORY).canonicalFile
-        val file = File(dir, "$name.png").canonicalFile
-        return file.takeIf { it.toPath().normalize().startsWith(dir.toPath()) && it.parentFile == dir }
+        if (host.isEmpty()) return null
+        val digest = java.security.MessageDigest.getInstance("SHA-256").digest(host.lowercase().toByteArray())
+        val name = digest.joinToString("") { "%02x".format(it) }
+        return File(File(context.filesDir, DIRECTORY), "$name.png")
     }
 }
