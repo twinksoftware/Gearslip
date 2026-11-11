@@ -9,6 +9,9 @@ on:
     paths:
       - "gearslip/src/main/res/values-*/strings.xml"
 
+# It only reads the pull request's own details from the event, so it needs no token at all.
+permissions: {}
+
 jobs:
   weblate-only:
     if: github.event.pull_request.user.login != 'weblate'

@@ -33,7 +33,7 @@ object SiteIcons {
     fun icon(context: Context, host: String): Bitmap? {
         if (host.isEmpty()) return null
         memory[host]?.let { return it }
-        val file = file(context, host)
+        val file = file(context, host) ?: return null
         if (!file.isFile) return null
         return runCatching { BitmapFactory.decodeFile(file.path) }.getOrNull()?.also { memory[host] = it }
     }
@@ -64,7 +64,7 @@ object SiteIcons {
     private fun store(context: Context, host: String, bitmap: Bitmap) {
         memory[host] = bitmap
         runCatching {
-            val file = file(context, host)
+            val file = file(context, host) ?: return@runCatching
             file.parentFile?.mkdirs()
             file.outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
         }.onFailure { GearslipLog.w("browser: couldn't save the icon for $host: ${it.message}") }
@@ -86,6 +86,16 @@ object SiteIcons {
         }
     }
 
-    private fun file(context: Context, host: String) =
-        File(File(context.filesDir, DIRECTORY), host.replace(Regex("[^A-Za-z0-9.-]"), "_") + ".png")
+    /**
+     * Where [host]'s icon is kept, or null for a host that can't name a file in the icons folder.
+     * The host comes from a web page, so the name is cut down to letters, digits, dots and dashes,
+     * a host made of dots only is refused, and the result has to land inside the folder.
+     */
+    private fun file(context: Context, host: String): File? {
+        val name = host.replace(Regex("[^A-Za-z0-9.-]"), "_")
+        if (name.isEmpty() || name.all { it == '.' }) return null
+        val dir = File(context.filesDir, DIRECTORY).canonicalFile
+        val file = File(dir, "$name.png").canonicalFile
+        return file.takeIf { it.toPath().normalize().startsWith(dir.toPath()) && it.parentFile == dir }
+    }
 }
