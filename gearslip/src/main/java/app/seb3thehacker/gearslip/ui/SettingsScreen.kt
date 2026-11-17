@@ -239,6 +239,7 @@ private fun ConnectionSection() {
             icon = Icons.Filled.Settings,
             trailing = { Switch(checked = enabled, onCheckedChange = null) },
         )
+        ConnectionOrderRows()
         // For a head unit or a tablet on the dash: the car UI becomes the device's home screen.
         var launcher by remember { mutableStateOf(LauncherMode.enabled(context)) }
         SettingsRow(
@@ -276,6 +277,58 @@ private fun ConnectionSection() {
                 },
             )
         }
+    }
+}
+
+/**
+ * Cable and wireless, each switchable on its own, and which one Gearslip tries first when the
+ * car offers both. Wireless auto-connect off keeps Gearslip from fighting the car's Bluetooth.
+ */
+@Composable
+private fun ConnectionOrderRows() {
+    val context = LocalContext.current
+    var cable by remember { mutableStateOf(AppSettings.cableEnabled(context)) }
+    var wireless by remember { mutableStateOf(AppSettings.wirelessAutoConnect(context)) }
+    var order by remember { mutableStateOf(AppSettings.connectionOrder(context)) }
+    SettingsRow(
+        stringResource(R.string.settings_cable),
+        Modifier.toggleable(cable, role = Role.Switch) {
+            cable = it
+            AppSettings.setCableEnabled(context, it)
+        },
+        subtitle = stringResource(if (cable) R.string.settings_cable_on else R.string.settings_cable_off),
+        icon = Icons.Filled.Settings,
+        trailing = { Switch(checked = cable, onCheckedChange = null) },
+    )
+    SettingsRow(
+        stringResource(R.string.settings_wireless_auto),
+        Modifier.toggleable(wireless, role = Role.Switch) {
+            wireless = it
+            AppSettings.setWirelessAutoConnect(context, it)
+        },
+        subtitle = stringResource(if (wireless) R.string.settings_wireless_auto_on else R.string.settings_wireless_auto_off),
+        icon = Icons.Filled.Refresh,
+        trailing = { Switch(checked = wireless, onCheckedChange = null) },
+    )
+    // An order only matters when both can start.
+    if (cable && wireless) {
+        val cableFirst = order == AppSettings.ConnectionOrder.CABLE_FIRST
+        SettingsRow(
+            stringResource(R.string.settings_order),
+            Modifier.clickable {
+                order = if (cableFirst) AppSettings.ConnectionOrder.WIRELESS_FIRST else AppSettings.ConnectionOrder.CABLE_FIRST
+                AppSettings.setConnectionOrder(context, order)
+            },
+            subtitle = stringResource(if (cableFirst) R.string.settings_order_cable else R.string.settings_order_wireless),
+            icon = Icons.Filled.KeyboardArrowUp,
+            trailing = {
+                Text(
+                    stringResource(if (cableFirst) R.string.settings_order_cable_short else R.string.settings_order_wireless_short),
+                    color = MaterialTheme.colorScheme.primary,
+                    fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold,
+                )
+            },
+        )
     }
 }
 

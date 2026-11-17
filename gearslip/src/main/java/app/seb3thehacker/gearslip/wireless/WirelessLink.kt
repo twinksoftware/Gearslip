@@ -80,6 +80,9 @@ object WirelessLink {
     /** Set by the activity: starts a session on the car's socket. */
     @Volatile var onConnected: ((Socket) -> Unit)? = null
 
+    /** Set by the activity: a start-up ended without reaching the car, so the cable can have a go. */
+    @Volatile var onGaveUp: (() -> Unit)? = null
+
     /** Set by the activity: whether the session on the socket still waits for the car's first message. */
     @Volatile var sessionWaiting: (() -> Boolean)? = null
 
@@ -141,7 +144,10 @@ object WirelessLink {
             tryAndRetry(context, device, me)
         } finally {
             // A newer start-up has the service now; stop() already ended this one's.
-            if (worker === me) WirelessKeepAlive.stop(context)
+            if (worker === me) {
+                WirelessKeepAlive.stop(context)
+                if (!handedOver) onGaveUp?.invoke()
+            }
         }
     }
 

@@ -44,6 +44,12 @@ import java.io.FileOutputStream
  * rotation or theme change from recreating it and dropping the connection.
  */
 class GearslipActivity : ComponentActivity(), Projection {
+    private companion object {
+        const val ACTION_CABLE_PERMISSION = "app.seb3thehacker.gearslip.CABLE_PERMISSION"
+        /** Cable first: how long a car seen over Bluetooth waits for a cable before going wireless. */
+        const val CABLE_GRACE_MS = 6_000L
+    }
+
     private val mainHandler = android.os.Handler(android.os.Looper.getMainLooper())
 
 
@@ -110,8 +116,32 @@ class GearslipActivity : ComponentActivity(), Projection {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (intent?.action == UsbManager.ACTION_USB_ACCESSORY_DETACHED) {
                 GearslipLog.w("accessory detached")
+                deferredAccessory = null
                 // A wireless session has no accessory to lose; leave it running.
                 if (wirelessSocket == null) closeAccessory()
+            }
+        }
+    }
+
+    /** A cable the car offered while wireless came first; opened if wireless gives up. */
+    private var deferredAccessory: UsbAccessory? = null
+
+    /** The last known car seen over Bluetooth, for falling back to wireless when the cable fails. */
+    private var nearbyCar: String? = null
+
+    /** Cable first: the wait for a cable before a car seen over Bluetooth goes wireless. */
+    private var cableWait: Runnable? = null
+
+    /** Android's answer to [requestCable]: open the cable if the driver allowed it. */
+    private val cablePermissionReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent?.action != ACTION_CABLE_PERMISSION) return
+            val accessory = intent.getParcelableExtra(UsbManager.EXTRA_ACCESSORY, UsbAccessory::class.java)
+            if (accessory != null && intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)) {
+                GearslipLog.i("cable: allowed")
+                start(accessory)
+            } else {
+                GearslipLog.w("cable: Android's dialog was declined")
             }
         }
     }
@@ -152,6 +182,8 @@ class GearslipActivity : ComponentActivity(), Projection {
             runOnUiThread { startWireless(socket) }
         }
         app.seb3thehacker.gearslip.wireless.WirelessLink.sessionWaiting = { runner?.waitingForVersion == true }
+        app.seb3thehacker.gearslip.wireless.WirelessLink.onGaveUp = { runOnUiThread { fallBackToCable() } }
+        CableLink.connect = { runOnUiThread { connectCableByHand() } }
         app.seb3thehacker.gearslip.wireless.WirelessAuto.showApproval = { chooser, address ->
             runOnUiThread {
                 approvingCar = address
@@ -210,6 +242,7 @@ class GearslipActivity : ComponentActivity(), Projection {
         CarAudio.onConsentRequested = { runOnUiThread { requestAudioCapture() } }
 
         registerReceiver(detachReceiver, IntentFilter(UsbManager.ACTION_USB_ACCESSORY_DETACHED), RECEIVER_NOT_EXPORTED)
+        registerReceiver(cablePermissionReceiver, IntentFilter(ACTION_CABLE_PERMISSION), RECEIVER_NOT_EXPORTED)
         handleIntent(intent)
     }
 
@@ -251,8 +284,13 @@ class GearslipActivity : ComponentActivity(), Projection {
         super.onDestroy()
         app.seb3thehacker.gearslip.wireless.WirelessLink.onConnected = null
         app.seb3thehacker.gearslip.wireless.WirelessLink.sessionWaiting = null
+        app.seb3thehacker.gearslip.wireless.WirelessLink.onGaveUp = null
+        CableLink.connect = null
+        cableWait?.let(mainHandler::removeCallbacks)
+        cableWait = null
         app.seb3thehacker.gearslip.wireless.WirelessAuto.showApproval = null
         runCatching { unregisterReceiver(detachReceiver) }
+        runCatching { unregisterReceiver(cablePermissionReceiver) }
         PhoneMirror.onStartRequested = null
         PhoneMirror.onTokenReady = null
         PhoneMirror.onEnded = null
@@ -361,9 +399,62 @@ class GearslipActivity : ComponentActivity(), Projection {
             SessionStatus.failed("Accessory missing", "The system reported a USB attach but did not include the accessory.")
             return
         }
+        if (!AppSettings.cableEnabled(this)) {
+            GearslipLog.i("accessory attached, but the cable is switched off - not connecting")
+            return
+        }
         GearslipLog.i("accessory attached by the system - permission is implicit on this path")
+        if (AppSettings.connectionOrder(this) == AppSettings.ConnectionOrder.WIRELESS_FIRST && wirelessActive()) {
+            GearslipLog.i("wireless comes first and is on it - holding the cable back")
+            deferredAccessory = accessory
+            return
+        }
         stepAsideOnVideo = !shownOnPhone
         start(accessory)
+    }
+
+    /** A wireless session, or its start-up, is under way. */
+    private fun wirelessActive(): Boolean =
+        wirelessSocket != null || app.seb3thehacker.gearslip.wireless.WirelessLink.busy
+
+    /** Wireless gave up before reaching the car: use the cable if there is one. */
+    private fun fallBackToCable() {
+        if (!AppSettings.gearslipEnabled(this) || !AppSettings.cableEnabled(this)) return
+        if (descriptor != null || wirelessSocket != null) return
+        val accessory = deferredAccessory ?: CableLink.attached(this) ?: return
+        deferredAccessory = null
+        GearslipLog.i("wireless gave up - trying the cable")
+        openCable(accessory)
+    }
+
+    /** Home's Connect with cable. */
+    private fun connectCableByHand() {
+        if (!AppSettings.gearslipEnabled(this)) return
+        val accessory = deferredAccessory ?: CableLink.attached(this)
+        if (accessory == null) {
+            GearslipLog.w("cable: nothing is plugged in")
+            return
+        }
+        deferredAccessory = null
+        GearslipLog.i("cable: connecting by hand")
+        openCable(accessory)
+    }
+
+    /** Opens [accessory], first asking Android when the car didn't hand it over itself. */
+    private fun openCable(accessory: UsbAccessory) {
+        val manager = getSystemService(UsbManager::class.java)
+        if (manager.hasPermission(accessory)) {
+            start(accessory)
+            return
+        }
+        GearslipLog.i("cable: asking Android for the car's USB connection")
+        val reply = android.app.PendingIntent.getBroadcast(
+            this,
+            0,
+            Intent(ACTION_CABLE_PERMISSION).setPackage(packageName),
+            android.app.PendingIntent.FLAG_MUTABLE or android.app.PendingIntent.FLAG_UPDATE_CURRENT,
+        )
+        manager.requestPermission(accessory, reply)
     }
 
     /** A known car came up over Bluetooth: connect wirelessly, unless USB or another try is already on it. */
@@ -373,6 +464,37 @@ class GearslipActivity : ComponentActivity(), Projection {
             GearslipLog.i("auto-connect: Gearslip is switched off - not connecting")
             return
         }
+        nearbyCar = address
+        if (!AppSettings.wirelessAutoConnect(this)) {
+            GearslipLog.i("auto-connect: wireless auto-connect is off - leaving the car's Bluetooth alone")
+            return
+        }
+        if (descriptor != null) {
+            GearslipLog.i("auto-connect: the car is on USB already - staying on USB")
+            return
+        }
+        // Cable first: give a cable the car may be bringing up a moment to show, and take it if it does.
+        if (AppSettings.connectionOrder(this) == AppSettings.ConnectionOrder.CABLE_FIRST && AppSettings.cableEnabled(this)) {
+            CableLink.attached(this)?.let { cable ->
+                GearslipLog.i("auto-connect: cable first, and one is plugged in - using it")
+                openCable(cable)
+                return
+            }
+            cableWait?.let(mainHandler::removeCallbacks)
+            val wait = Runnable {
+                cableWait = null
+                connectWireless(address)
+            }
+            cableWait = wait
+            GearslipLog.i("auto-connect: cable first - waiting ${CABLE_GRACE_MS / 1000} s for one")
+            mainHandler.postDelayed(wait, CABLE_GRACE_MS)
+            return
+        }
+        connectWireless(address)
+    }
+
+    /** The wireless half of [connectToNearbyCar], also reached after the cable-first wait. */
+    private fun connectWireless(address: String) {
         if (descriptor != null) {
             GearslipLog.i("auto-connect: the car is on USB already - staying on USB")
             return
@@ -406,6 +528,9 @@ class GearslipActivity : ComponentActivity(), Projection {
         // point anyway (its read loop already died when the head unit dropped the transport),
         // but the accessory it opened was never explicitly closed, which is what actually blocks
         // a re-open - a dead thread does not release the file descriptor on its own.
+        // The cable is here, so a cable-first wait for it is over.
+        cableWait?.let(mainHandler::removeCallbacks)
+        cableWait = null
         closeAccessory()
         describe(accessory)
 
@@ -414,6 +539,11 @@ class GearslipActivity : ComponentActivity(), Projection {
         if (pfd == null) {
             GearslipLog.e("openAccessory returned null - the session was claimed by someone else")
             SessionStatus.failed("Accessory unavailable", "Another app claimed the USB accessory before Gearslip could open it.")
+            // The cable didn't work out; a known car nearby can still go wireless.
+            nearbyCar?.takeIf { AppSettings.wirelessAutoConnect(this) }?.let {
+                GearslipLog.i("cable failed - trying wireless")
+                connectWireless(it)
+            }
             return
         }
         descriptor = pfd
