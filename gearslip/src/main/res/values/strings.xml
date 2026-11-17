@@ -424,16 +424,14 @@
     <string name="cable_none_title">No car on the cable</string>
     <string name="cable_none_body">Plug the phone into the car\'s USB port with a data cable, then try again.</string>
     <string name="settings_cable">Connect over cable</string>
-    <string name="settings_cable_on">Gearslip answers the car\'s USB connection</string>
+    <string name="settings_cable_on">When the phone is plugged into the car</string>
     <string name="settings_cable_off">Off: the cable only charges, or Android Auto takes it</string>
-    <string name="settings_wireless_auto">Connect wirelessly on its own</string>
-    <string name="settings_wireless_auto_on">Starts when a car you\'ve connected to comes up on Bluetooth</string>
+    <string name="settings_wireless_auto">Connect wirelessly</string>
+    <string name="settings_wireless_auto_on">On its own, when a car you\'ve used comes up on Bluetooth</string>
     <string name="settings_wireless_auto_off">Off: the car\'s Bluetooth is left alone until you tap Connect wirelessly</string>
-    <string name="settings_order">Try first</string>
-    <string name="settings_order_cable">Cable. Gearslip waits a few seconds for one before going wireless.</string>
-    <string name="settings_order_wireless">Wireless. A cable plugged in later doesn\'t take over, but steps in if wireless fails.</string>
-    <string name="settings_order_cable_short">Cable</string>
-    <string name="settings_order_wireless_short">Wireless</string>
+    <string name="settings_order_hint">Gearslip tries these in order. Use the arrows to choose which comes first.</string>
+    <string name="settings_order_up">Move up</string>
+    <string name="settings_order_down">Move down</string>
 
     <!-- Voice models -->
     <string name="voice_live_title">Voice: live words</string>

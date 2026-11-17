@@ -281,8 +281,8 @@ private fun ConnectionSection() {
 }
 
 /**
- * Cable and wireless, each switchable on its own, and which one Gearslip tries first when the
- * car offers both. Wireless auto-connect off keeps Gearslip from fighting the car's Bluetooth.
+ * Cable and wireless as a short list in the order Gearslip tries them: arrows move a link up or
+ * down, and each has its own switch. Wireless off keeps Gearslip from fighting the car's Bluetooth.
  */
 @Composable
 private fun ConnectionOrderRows() {
@@ -290,43 +290,61 @@ private fun ConnectionOrderRows() {
     var cable by remember { mutableStateOf(AppSettings.cableEnabled(context)) }
     var wireless by remember { mutableStateOf(AppSettings.wirelessAutoConnect(context)) }
     var order by remember { mutableStateOf(AppSettings.connectionOrder(context)) }
-    SettingsRow(
-        stringResource(R.string.settings_cable),
-        Modifier.toggleable(cable, role = Role.Switch) {
-            cable = it
-            AppSettings.setCableEnabled(context, it)
-        },
-        subtitle = stringResource(if (cable) R.string.settings_cable_on else R.string.settings_cable_off),
-        icon = Icons.Filled.Settings,
-        trailing = { Switch(checked = cable, onCheckedChange = null) },
+    val links = if (order == AppSettings.ConnectionOrder.CABLE_FIRST) listOf(true, false) else listOf(false, true)
+    fun swap() {
+        order = if (order == AppSettings.ConnectionOrder.CABLE_FIRST) AppSettings.ConnectionOrder.WIRELESS_FIRST
+        else AppSettings.ConnectionOrder.CABLE_FIRST
+        AppSettings.setConnectionOrder(context, order)
+    }
+    Text(
+        stringResource(R.string.settings_order_hint),
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 4.dp),
     )
-    SettingsRow(
-        stringResource(R.string.settings_wireless_auto),
-        Modifier.toggleable(wireless, role = Role.Switch) {
-            wireless = it
-            AppSettings.setWirelessAutoConnect(context, it)
-        },
-        subtitle = stringResource(if (wireless) R.string.settings_wireless_auto_on else R.string.settings_wireless_auto_off),
-        icon = Icons.Filled.Refresh,
-        trailing = { Switch(checked = wireless, onCheckedChange = null) },
-    )
-    // An order only matters when both can start.
-    if (cable && wireless) {
-        val cableFirst = order == AppSettings.ConnectionOrder.CABLE_FIRST
+    links.forEachIndexed { index, isCable ->
+        val on = if (isCable) cable else wireless
         SettingsRow(
-            stringResource(R.string.settings_order),
-            Modifier.clickable {
-                order = if (cableFirst) AppSettings.ConnectionOrder.WIRELESS_FIRST else AppSettings.ConnectionOrder.CABLE_FIRST
-                AppSettings.setConnectionOrder(context, order)
+            stringResource(if (isCable) R.string.settings_cable else R.string.settings_wireless_auto),
+            Modifier.toggleable(on, role = Role.Switch) {
+                if (isCable) {
+                    cable = it
+                    AppSettings.setCableEnabled(context, it)
+                } else {
+                    wireless = it
+                    AppSettings.setWirelessAutoConnect(context, it)
+                }
             },
-            subtitle = stringResource(if (cableFirst) R.string.settings_order_cable else R.string.settings_order_wireless),
-            icon = Icons.Filled.KeyboardArrowUp,
-            trailing = {
+            subtitle = stringResource(
+                when {
+                    isCable && on -> R.string.settings_cable_on
+                    isCable -> R.string.settings_cable_off
+                    on -> R.string.settings_wireless_auto_on
+                    else -> R.string.settings_wireless_auto_off
+                },
+            ),
+            leading = {
                 Text(
-                    stringResource(if (cableFirst) R.string.settings_order_cable_short else R.string.settings_order_wireless_short),
-                    color = MaterialTheme.colorScheme.primary,
+                    "${index + 1}",
+                    style = MaterialTheme.typography.titleLarge,
                     fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold,
+                    color = if (on) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
                 )
+            },
+            trailing = {
+                androidx.compose.foundation.layout.Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+                    // With two links, moving either one swaps them.
+                    if (index > 0) {
+                        IconButton(onClick = ::swap) {
+                            Icon(Icons.Filled.KeyboardArrowUp, contentDescription = stringResource(R.string.settings_order_up))
+                        }
+                    } else {
+                        IconButton(onClick = ::swap) {
+                            Icon(Icons.Filled.KeyboardArrowDown, contentDescription = stringResource(R.string.settings_order_down))
+                        }
+                    }
+                    Switch(checked = on, onCheckedChange = null)
+                }
             },
         )
     }
