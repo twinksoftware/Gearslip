@@ -357,6 +357,9 @@ fun CarUi() {
                                         CarScreen.Media -> CompositionLocalProvider(
                                             LocalNavBarInset provides if (!keyboardVisible && !fullscreen) NAV_BAR_HEIGHT else 0.dp,
                                         ) { mediaApp?.let { MediaScreen(it) { navigator.back() } } }
+                                        CarScreen.FirstPartyMusic -> FirstPartyMusicScreen()
+                                        CarScreen.FirstPartyPlayer -> FirstPartyPlayerScreen(onBack = navigator::back)
+                                        CarScreen.PlaceSearch -> PlaceSearchScreen()
                                         CarScreen.Browse -> BrowseAppScreen(navigator)
                                         CarScreen.Settings -> CarSettingsScreen()
                                         CarScreen.Dashboard -> CarDashboardScreen()

@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gearslip — Nothing OS Car Preview</title>
+<style>
+@font-face {
+  font-family: Doto;
+  src: url("gearslip/src/main/res/font/doto.ttf") format("truetype-variations");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+:root {
+  --bg: #000000;
+  --s1: #0D0D0D;
+  --s2: #1A1A1A;
+  --s3: #242424;
+  --border: #2E2E2E;
+  --subtle: #1C1C1C;
+  --text: #FFFFFF;
+  --secondary: #999999;
+  --muted: #555555;
+  --red: #FF3030;
+  --red-dim: #3A0A0A;
+  --ghost: rgba(255,255,255,.06);
+  --mono: "Doto", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body { height: 100%; }
+
+body {
+  background: #050505;
+  color: var(--text);
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  overflow: hidden;
+}
+
+/* Ambient dot field behind the device frame */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(circle, #222 1px, transparent 1.2px);
+  background-size: 22px 22px;
+  opacity: .35;
+  pointer-events: none;
+}
+
+.device {
+  position: relative;
+  width: min(1440px, 100vw - 48px);
+  height: min(810px, 100vh - 48px);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  display: grid;
+  grid-template-rows: 56px 1fr 104px;
+  overflow: hidden;
+}
+
+/* ── status bar ─────────────────────────────────────────── */
+.status {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 0 22px;
+  border-bottom: 1px solid var(--border);
+  background: var(--s1);
+}
+.brand { display: flex; align-items: center; gap: 10px; font-size: 20px; letter-spacing: .08em; font-weight: 700; }
+.brand .mark { width: 9px; height: 9px; background: var(--red); animation: pulse 2.4s linear infinite; }
+.brand small { color: var(--muted); font-size: 11px; letter-spacing: .18em; font-weight: 400; margin-left: 6px; }
+.status-center { display: flex; align-items: center; gap: 12px; font-size: 13px; letter-spacing: .12em; color: var(--secondary); }
+.status-center .live { color: var(--red); font-size: 10px; letter-spacing: .2em; }
+.status-right { justify-self: end; display: flex; align-items: center; gap: 18px; font-size: 15px; letter-spacing: .06em; }
+.chip { border: 1px solid var(--border); padding: 6px 10px; font-size: 11px; letter-spacing: .12em; color: var(--secondary); }
+.chip.on { color: var(--text); border-color: var(--secondary); }
+.bars { display: flex; align-items: end; gap: 3px; height: 14px; }
+.bars i { width: 3px; background: var(--text); display: block; }
+.bars i:nth-child(1){height:5px}.bars i:nth-child(2){height:8px}.bars i:nth-child(3){height:11px}.bars i:nth-child(4){height:14px;background:var(--muted)}
+.batt { width: 26px; height: 13px; border: 1px solid var(--secondary); position: relative; padding: 2px; }
+.batt::after { content:""; position:absolute; right:-4px; top:4px; width:2px; height:5px; background: var(--secondary); }
+.batt span { display:block; height:100%; width:72%; background: var(--text); }
+
+/* ── shell ──────────────────────────────────────────────── */
+.shell { display: grid; grid-template-columns: 132px 1fr 280px; min-height: 0; }
+
+/* left rail */
+.rail {
+  border-right: 1px solid var(--border);
+  background: var(--s1);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 18px 0;
+  gap: 6px;
+}
+.rail-label { font-size: 10px; letter-spacing: .22em; color: var(--muted); padding: 0 20px 14px; }
+.app {
+  position: relative;
+  height: 74px;
+  border: 0;
+  border-left: 2px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: color .18s ease, background .18s ease;
+}
+.app:hover { color: var(--secondary); background: var(--ghost); }
+.app.active { color: var(--text); border-left-color: var(--red); background: linear-gradient(90deg, var(--red-dim), transparent 70%); }
+.app svg { width: 26px; height: 26px; }
+.app span { font-size: 10px; letter-spacing: .16em; }
+.rail-foot { margin-top: auto; padding: 16px 20px 0; border-top: 1px solid var(--subtle); color: var(--muted); font-size: 10px; letter-spacing: .14em; line-height: 1.8; }
+.rail-foot b { color: var(--secondary); font-weight: 400; }
+
+/* stage */
+.stage { position: relative; min-width: 0; overflow: hidden; background: var(--bg); }
+.view { display: none; height: 100%; }
+.view.active { display: block; animation: reveal .45s cubic-bezier(.2,.7,.2,1) both; }
+
+/* MAP VIEW */
+.map-wrap { position: absolute; inset: 0; }
+.map-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(to right, var(--subtle) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--subtle) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+.map-dots {
+  position: absolute; inset: 0;
+  background-image: radial-gradient(circle, #2b2b2b 1.4px, transparent 1.6px);
+  background-size: 16px 16px;
+  opacity: .55;
+  mask-image: radial-gradient(ellipse at 50% 45%, #000 30%, transparent 78%);
+}
+.road { position: absolute; background: var(--s3); }
+.road.h1 { left:-10%; top:58%; width:120%; height:16px; transform:rotate(-8deg); }
+.road.h2 { left:-10%; top:18%; width:120%; height:10px; transform:rotate(5deg); }
+.road.v1 { left:26%; top:-10%; height:120%; width:12px; transform:rotate(6deg); }
+.road.v2 { left:72%; top:-10%; height:120%; width:10px; transform:rotate(-4deg); }
+.route {
+  position: absolute; left: 30%; top: 74%;
+  width: 44%; height: 46%;
+  border-left: 3px solid var(--red);
+  border-top: 3px solid var(--red);
+  border-radius: 0 28px 0 0;
+  transform: skewY(-12deg);
+  filter: drop-shadow(0 0 0 transparent);
+}
+.route::after {
+  content:""; position:absolute; right:-7px; top:-9px;
+  width:12px; height:12px; background: var(--red);
+}
+.map-label { position: absolute; font-size: 11px; letter-spacing: .18em; color: var(--muted); }
+.map-label.a { left: 12%; top: 30%; }
+.map-label.b { right: 14%; top: 66%; }
+.map-label.c { left: 54%; top: 22%; }
+
+.turn-card {
+  position: absolute; left: 26px; top: 26px;
+  background: rgba(0,0,0,.92);
+  border: 1px solid var(--border);
+  width: 300px;
+  padding: 18px 20px 16px;
+}
+.turn-card .eyebrow { font-size: 10px; letter-spacing: .24em; color: var(--secondary); }
+.turn-row { display: flex; align-items: center; gap: 18px; margin-top: 10px; }
+.turn-arrow { font-size: 62px; line-height: .8; color: var(--red); font-weight: 700; }
+.turn-dist { font-size: 34px; letter-spacing: .02em; font-weight: 700; white-space: nowrap; }
+.turn-street { font-size: 13px; letter-spacing: .12em; color: var(--secondary); margin-top: 8px; line-height: 1.5; }
+.turn-sub { border-top: 1px solid var(--subtle); margin-top: 14px; padding-top: 12px; font-size: 10px; letter-spacing: .08em; color: var(--muted); display:flex; justify-content:space-between; gap:10px; white-space:nowrap; }
+.turn-sub b { color: var(--text); font-weight: 400; }
+
+.destination {
+  position: absolute; right: 26px; top: 26px;
+  border: 1px solid var(--border);
+  background: rgba(0,0,0,.9);
+  padding: 12px 16px;
+  font-size: 11px; letter-spacing: .14em; color: var(--secondary);
+}
+.destination b { color: var(--text); font-weight: 400; }
+
+.speed-badge {
+  position:absolute; left:26px; bottom:26px;
+  border:1px solid var(--border); background:rgba(0,0,0,.92);
+  padding:14px 18px; display:flex; align-items:center; gap:16px;
+}
+.speed-badge .v { font-size:54px; font-weight:700; line-height:.8; }
+.speed-badge .u { font-size:10px; letter-spacing:.18em; color:var(--secondary); line-height:1.8; }
+.speed-badge .u span { color:var(--muted); }
+.speed-badge .lim { margin-left:8px; width:40px; height:40px; border:1px solid var(--secondary); border-radius:50%; display:grid; place-items:center; font-size:13px; }
+
+/* MUSIC VIEW */
+.music { height:100%; display:grid; grid-template-columns: 300px 1fr; gap: 26px; padding: 26px; }
+.art {
+  border: 1px solid var(--border);
+  background:
+    radial-gradient(circle at 30% 30%, #2a2a2a 0 18%, transparent 19%),
+    radial-gradient(circle at 70% 68%, #1c1c1c 0 26%, transparent 27%),
+    repeating-linear-gradient(45deg, #0d0d0d 0 8px, #111 8px 16px);
+  position: relative;
+  min-height: 0;
+}
+.art .dot { position:absolute; inset:0; background-image: radial-gradient(circle, #fff 1.5px, transparent 1.7px); background-size: 18px 18px; opacity:.16; }
+.art .stamp { position:absolute; left:16px; bottom:14px; font-size:10px; letter-spacing:.2em; color:var(--muted); }
+.track-list { display:flex; flex-direction:column; gap:10px; min-height:0; }
+.section-head { display:flex; justify-content:space-between; align-items:baseline; padding-bottom:10px; border-bottom:1px solid var(--border); margin-bottom:4px; }
+.section-head h2 { font-size: 22px; letter-spacing:.06em; font-weight:700; }
+.section-head span { font-size:10px; letter-spacing:.2em; color:var(--muted); }
+.track {
+  display:grid; grid-template-columns: 34px 1fr auto; align-items:center; gap:16px;
+  padding:13px 14px; border:1px solid var(--subtle); color:var(--secondary);
+  transition: border-color .18s, color .18s;
+}
+.track:hover { border-color:var(--border); color:var(--text); }
+.track.now { border-color: var(--border); color: var(--text); background: var(--s1); }
+.track .n { font-size:11px; color:var(--muted); }
+.track.now .n { color:var(--red); }
+.track .t { font-size:14px; letter-spacing:.05em; }
+.track .t small { display:block; color:var(--muted); font-size:10px; letter-spacing:.14em; margin-top:4px; }
+.track .d { font-size:11px; color:var(--muted); }
+
+/* VEHICLE VIEW */
+.vehicle { height:100%; display:grid; grid-template-columns: 1fr 1fr; gap:24px; padding:26px; }
+.panel { border:1px solid var(--border); background:var(--s1); padding:20px; }
+.panel h3 { font-size:10px; letter-spacing:.24em; color:var(--secondary); font-weight:400; margin-bottom:18px; }
+.gauge { display:flex; align-items:center; gap:22px; }
+.gauge .num { font-size:76px; font-weight:700; line-height:.85; letter-spacing:-.02em; }
+.gauge .unit { font-size:11px; letter-spacing:.2em; color:var(--muted); margin-top:10px; }
+.gauge .ring { margin-left:auto; width:96px; height:96px; border:1px solid var(--border); border-radius:50%; display:grid; place-items:center; position:relative; }
+.gauge .ring::before { content:""; position:absolute; inset:8px; border:1px dashed var(--s3); border-radius:50%; }
+.gauge .ring span { font-size:10px; letter-spacing:.16em; color:var(--muted); }
+.bars-v { display:flex; flex-direction:column; gap:14px; margin-top:6px; }
+.bar-row { display:grid; grid-template-columns: 96px 1fr 44px; align-items:center; gap:12px; font-size:11px; letter-spacing:.12em; color:var(--secondary); }
+.meter { height:8px; border:1px solid var(--border); }
+.meter i { display:block; height:100%; background:var(--secondary); }
+.meter i.red { background:var(--red); }
+.bar-row .val { text-align:right; color:var(--text); }
+.tyres { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+.tyre { border:1px solid var(--subtle); padding:14px 10px; text-align:center; }
+.tyre b { display:block; font-size:20px; font-weight:700; }
+.tyre small { font-size:9px; letter-spacing:.16em; color:var(--muted); }
+
+/* right info column */
+.info { border-left:1px solid var(--border); background:var(--s1); padding:22px 20px; display:flex; flex-direction:column; gap:18px; min-height:0; overflow:hidden; }
+.info h4 { font-size:10px; letter-spacing:.24em; color:var(--muted); font-weight:400; }
+.fact { border-top:1px solid var(--subtle); padding-top:12px; }
+.fact .k { font-size:10px; letter-spacing:.18em; color:var(--muted); }
+.fact .v { font-size:27px; font-weight:700; margin-top:4px; }
+.fact .v small { font-size:11px; color:var(--secondary); letter-spacing:.1em; }
+.fact.alert .v { color:var(--red); }
+.info .spacer { flex:1; }
+.mini-map { border:1px solid var(--border); height:116px; position:relative; background-image: radial-gradient(circle,#2a2a2a 1px,transparent 1.5px); background-size:12px 12px; overflow:hidden; }
+.mini-map::before { content:""; position:absolute; left:20%; top:60%; width:60%; height:2px; background:var(--red); transform:rotate(-18deg); }
+.mini-map::after { content:""; position:absolute; left:74%; top:30%; width:7px; height:7px; background:var(--red); }
+
+/* ── now playing ────────────────────────────────────────── */
+.player {
+  border-top:1px solid var(--border);
+  background:var(--s1);
+  display:grid;
+  grid-template-columns: 132px 1fr 300px;
+  align-items:center;
+  gap:20px;
+  padding:0 22px;
+}
+.player-art { width:62px; height:62px; border:1px solid var(--border); background: repeating-linear-gradient(135deg,#111 0 6px,#1a1a1a 6px 12px); position:relative; margin-left:8px; }
+.player-art i { position:absolute; inset:0; background-image:radial-gradient(circle,#fff 1px,transparent 1.4px); background-size:9px 9px; opacity:.2; }
+.player-meta { min-width:0; }
+.player-meta .song { font-size:17px; letter-spacing:.03em; font-weight:700; }
+.player-meta .artist { font-size:10px; letter-spacing:.18em; color:var(--secondary); margin-top:6px; }
+.progress { display:flex; align-items:center; gap:12px; margin-top:12px; font-size:10px; color:var(--muted); }
+.progress .line { flex:1; height:3px; background:var(--s3); position:relative; max-width:420px; }
+.progress .line i { position:absolute; inset:0 auto 0 0; width:38%; background:var(--red); animation:seek 24s linear infinite; }
+.controls { justify-self:end; display:flex; align-items:center; gap:10px; }
+.ctrl { width:40px; height:40px; border:1px solid var(--border); background:transparent; color:var(--text); display:grid; place-items:center; cursor:pointer; font-family:inherit; transition:border-color .18s,background .18s; }
+.ctrl:hover { border-color:var(--secondary); }
+.ctrl.play { background:var(--text); color:var(--bg); border-color:var(--text); width:48px; height:48px; }
+.ctrl svg { width:16px; height:16px; }
+.vol { display:flex; align-items:center; gap:8px; color:var(--muted); margin-left:8px; }
+.vol .track-v { width:64px; height:3px; background:var(--s3); }
+.vol .track-v i { display:block; width:62%; height:100%; background:var(--secondary); }
+
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.25} }
+@keyframes seek { from{width:12%} to{width:92%} }
+@keyframes reveal { from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none} }
+
+@media (max-width: 1100px) {
+  .shell { grid-template-columns:104px 1fr; }
+  .info { display:none; }
+  .music { grid-template-columns:200px 1fr; }
+  .player { grid-template-columns:100px 1fr auto; }
+}
+</style>
+</head>
+<body>
+
+<div class="device">
+
+  <!-- STATUS -->
+  <header class="status">
+    <div class="brand"><span class="mark"></span>GEARSLIP <small>NOTHING EDITION</small></div>
+    <div class="status-center"><span class="live">● LIVE</span><span id="drive">DRIVING · 14 MIN TO ARRIVAL</span></div>
+    <div class="status-right">
+      <span class="chip on">AA WIRELESS</span>
+      <span class="bars"><i></i><i></i><i></i><i></i></span>
+      <span>14:32</span>
+      <span class="batt"><span></span></span>
+    </div>
+  </header>
+
+  <div class="shell">
+    <!-- RAIL -->
+    <nav class="rail" aria-label="Car apps">
+      <div class="rail-label">APPS</div>
+      <button class="app active" data-view="nav">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"><path d="M12 2l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/></svg>
+        <span>MAPS</span>
+      </button>
+      <button class="app" data-view="music">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>
+        <span>MUSIC</span>
+      </button>
+      <button class="app" data-view="vehicle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"><path d="M3 14h18l-2-6H5zM5 14v4h2v-4M17 14v4h2v-4"/><circle cx="7" cy="16" r="1"/><circle cx="17" cy="16" r="1"/></svg>
+        <span>CAR</span>
+      </button>
+      <button class="app" data-view="nav">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"><path d="M4 5h16v11H9l-5 4z"/></svg>
+        <span>MESSAGES</span>
+      </button>
+      <div class="rail-foot">GEARSLIP 0.4<br><b>CPH2381</b> · 22°C</div>
+    </nav>
+
+    <!-- STAGE -->
+    <main class="stage">
+
+      <section class="view active" id="view-nav">
+        <div class="map-wrap">
+          <div class="map-grid"></div><div class="map-dots"></div>
+          <div class="road h1"></div><div class="road h2"></div>
+          <div class="road v1"></div><div class="road v2"></div>
+          <div class="route"></div>
+          <div class="map-label a">SECTOR 04</div>
+          <div class="map-label b">RING ROAD</div>
+          <div class="map-label c">NORTH / 22°</div>
+
+          <div class="turn-card">
+            <div class="eyebrow">NEXT TURN</div>
+            <div class="turn-row"><div class="turn-arrow">↱</div><div><div class="turn-dist">450 m</div><div class="turn-street">RIGHT ONTO KARL JÄGER STR.</div></div></div>
+            <div class="turn-sub"><span>THEN <b>LEFT IN 1.2 KM</b></span><span>LANE <b>2 / 3</b></span></div>
+          </div>
+
+          <div class="destination">DESTINATION · <b>HOME</b> · ETA 14:46</div>
+
+          <div class="speed-badge"><div class="v">72</div><div class="u">KM/H<br><span>CURRENT</span></div><div class="lim">80</div></div>
+        </div>
+      </section>
+
+      <section class="view" id="view-music">
+        <div class="music">
+          <div class="art"><div class="dot"></div><div class="stamp">SIDE A / 09</div></div>
+          <div class="track-list">
+            <div class="section-head"><h2>Up Next</h2><span>QUEUE · 12 TRACKS</span></div>
+            <div class="track now"><span class="n">01</span><span class="t">Glass Facade<small>METROLIST · DOT MATRIX EP</small></span><span class="d">3:42</span></div>
+            <div class="track"><span class="n">02</span><span class="t">Surface Tension<small>HEAD UNIT · VOL. 2</small></span><span class="d">4:18</span></div>
+            <div class="track"><span class="n">03</span><span class="t">Monochrome Hours<small>NIGHT DRIVE</small></span><span class="d">2:57</span></div>
+            <div class="track"><span class="n">04</span><span class="t">Signal / Noise<small>THE QUIET MACHINE</small></span><span class="d">5:06</span></div>
+            <div class="track"><span class="n">05</span><span class="t">Cold Start<small>METROLIST</small></span><span class="d">3:11</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="view-vehicle">
+        <div class="vehicle">
+          <div class="panel">
+            <h3>VEHICLE</h3>
+            <div class="gauge"><div><div class="num">72</div><div class="unit">KM / H</div></div><div class="ring"><span> ECO</span></div></div>
+            <div class="bars-v">
+              <div class="bar-row"><span>RANGE</span><div class="meter"><i style="width:68%"></i></div><span class="val">312 KM</span></div>
+              <div class="bar-row"><span>FUEL</span><div class="meter"><i class="red" style="width:18%"></i></div><span class="val">18 %</span></div>
+              <div class="bar-row"><span>COOLANT</span><div class="meter"><i style="width:84%"></i></div><span class="val">84 °C</span></div>
+            </div>
+          </div>
+          <div class="panel">
+            <h3>TYRE PRESSURE</h3>
+            <div class="tyres">
+              <div class="tyre"><b>2.4</b><small>FRONT L</small></div>
+              <div class="tyre"><b>2.4</b><small>FRONT R</small></div>
+              <div class="tyre"><b>2.3</b><small>REAR L</small></div>
+              <div class="tyre"><b>2.5</b><small>REAR R</small></div>
+            </div>
+            <div class="bars-v" style="margin-top:26px">
+              <div class="bar-row"><span>ODOMETER</span><div></div><span class="val">48 210 KM</span></div>
+              <div class="bar-row"><span>TRIP</span><div></div><span class="val">36.4 KM</span></div>
+              <div class="bar-row"><span>OUTSIDE</span><div></div><span class="val">22 °C</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- INFO -->
+    <aside class="info">
+      <h4>TRIP DATA</h4>
+      <div class="fact"><div class="k">TIME</div><div class="v">14:32</div></div>
+      <div class="fact"><div class="k">OUTSIDE</div><div class="v">22° <small>C</small></div></div>
+      <div class="fact"><div class="k">SPEED LIMIT</div><div class="v">80 <small>KM/H</small></div></div>
+      <div class="fact alert"><div class="k">FUEL LOW</div><div class="v">18 <small>%</small></div></div>
+      <div class="mini-map"></div>
+      <div class="spacer"></div>
+      <h4>CONNECTION</h4>
+      <div class="fact"><div class="k">HEAD UNIT</div><div class="v" style="font-size:14px;letter-spacing:.1em">WIRELESS AA</div></div>
+      <div class="fact"><div class="k">AUDIO</div><div class="v" style="font-size:14px;letter-spacing:.1em">VIA GEARSLIP</div></div>
+    </aside>
+  </div>
+
+  <!-- PLAYER -->
+  <footer class="player">
+    <div class="player-art"><i></i></div>
+    <div class="player-meta">
+      <div class="song">Glass Facade</div>
+      <div class="artist">METROLIST · DOT MATRIX EP</div>
+      <div class="progress"><span>01:24</span><div class="line"><i></i></div><span>03:42</span></div>
+    </div>
+    <div class="controls">
+      <button class="ctrl" aria-label="Previous"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h2v14H6zM20 5v14l-11-7z"/></svg></button>
+      <button class="ctrl play" aria-label="Play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4l13 8-13 8z"/></svg></button>
+      <button class="ctrl" aria-label="Next"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 5h2v14h-2zM4 5v14l11-7z"/></svg></button>
+      <div class="vol"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 9h4l5-4v14l-5-4H4z"/></svg><div class="track-v"><i></i></div></div>
+    </div>
+  </footer>
+</div>
+
+<script>
+  const apps = document.querySelectorAll('.app');
+  const views = document.querySelectorAll('.view');
+  apps.forEach(btn => btn.addEventListener('click', () => {
+    apps.forEach(a => a.classList.remove('active'));
+    btn.classList.add('active');
+    const target = btn.dataset.view;
+    views.forEach(v => v.classList.toggle('active', v.id === 'view-' + target));
+    document.getElementById('drive').textContent = target === 'nav'
+      ? 'DRIVING · 14 MIN TO ARRIVAL'
+      : target === 'music' ? 'NOW PLAYING · METROLIST' : 'VEHICLE · LIVE SENSORS';
+  }));
+  document.querySelector('.ctrl.play').addEventListener('click', e => {
+    const b = e.currentTarget;
+    const playing = b.dataset.playing === '1';
+    b.dataset.playing = playing ? '0' : '1';
+    b.innerHTML = playing
+      ? '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4l13 8-13 8z"/></svg>'
+      : '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>';
+  });
+</script>
+</body>
+</html>

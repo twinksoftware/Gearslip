@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Place
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Share
@@ -85,6 +86,10 @@ internal object BuiltInApps {
     // car. Its turn notifications still feed the rest of the UI while it guides.
     val GoogleMaps = BuiltInApp("googlemaps", "Google Maps", R.string.app_google_maps, Icons.Filled.Place, CarScreen.App("googlemaps")) { it.open("googlemaps") }
     val Phone = BuiltInApp("dialer", "Phone", R.string.carset_phone, Icons.Filled.Call, CarScreen.App("dialer")) { it.open("dialer") }
+    /** First-party front-ends for the active media session and the offline place index. */
+    val Music = BuiltInApp("music", "Music", R.string.recommended_music, Icons.Filled.PlayArrow, CarScreen.FirstPartyMusic) { it.firstPartyMusic() }
+    val Player = BuiltInApp("player", "Now playing", R.string.media_now_playing, Icons.Filled.PlayArrow, CarScreen.FirstPartyPlayer) { it.firstPartyPlayer() }
+    val Places = BuiltInApp("places", "Places", R.string.app_places, Icons.Filled.Place, CarScreen.PlaceSearch) { it.placeSearch() }
     val VehicleData = BuiltInApp("vehicle", "Vehicle data", R.string.car_vehicle_data, Icons.Filled.Info, CarScreen.VehicleData) { it.vehicleData() }
     val Settings = BuiltInApp("settings", "Settings", R.string.settings_title, Icons.Filled.Settings, CarScreen.Settings) { it.settings() }
 
@@ -94,7 +99,7 @@ internal object BuiltInApps {
     /** Hands the screen back to the car's own interface, like Android Auto's Exit. */
     val Exit = BuiltInApp("exit", "Exit", R.string.app_exit, CarGlyph, screen = null) { CarFocus.exitToCar() }
 
-    val all = listOf(Web, ScreenSharing, Phone, GoogleMaps, VehicleData, Settings, Exit, AllApps)
+    val all = listOf(Web, ScreenSharing, Phone, GoogleMaps, Music, Player, Places, VehicleData, Settings, Exit, AllApps)
     private val byApp = all.associateWith { Entry(it.label, icon = null, builtIn = it) }
     val everyEntry: List<Entry> = byApp.values.toList()
 

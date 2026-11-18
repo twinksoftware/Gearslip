@@ -2,7 +2,6 @@ package app.seb3thehacker.gearslip.car
 
 import android.graphics.Bitmap
 import android.os.SystemClock
-import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -13,6 +12,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,12 +28,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
@@ -41,17 +38,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
@@ -59,6 +50,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
@@ -72,17 +64,23 @@ import kotlinx.coroutines.withContext
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
+import kotlin.math.sin
 
 /**
  * A black resting screen for the car, after [IDLE_MS] with nothing touched on Home.
  *
- * It keeps the design's pure black canvas and only lets the playing cover tint it: three very
- * faint pools of the album's dominant hue, drifting slowly, plus one moving line of that hue
- * along the bottom edge. Nothing is filled in, so an OLED or a dimmed head unit still reads as
- * black. Clock, the car's own readings, the song and the next turn live in the four corners,
- * each one a glance rather than a panel.
+ * The screen reads as one of six quiet cases, driven only by what is actually live:
+ *  - music playing + a route: album-tinted wash, track bottom-start, animated dot-matrix turn bottom-centre;
+ *  - music playing, no route: the same wash, track plus a small level meter;
+ *  - a route, no music: pure black, the arrow and distance alone;
+ *  - nothing: pure black, a dot-matrix clock, one breathing red dot, TOUCH TO WAKE;
+ *  - music paused + a route: the arrow stays live, the track dims behind a PAUSED chip;
+ *  - an imminent turn (parsed distance <= 100 m/ft) with music: the arrow and distance pulse red.
  *
- * Any touch or key wakes it; leaving Home hides it. A call or the keyboard suppresses it.
+ * Clock and vehicle readings sit in the top corners, the track bottom-start, the turn bottom-centre.
+ * Every case wakes on touch (and on any key through [CarScreensaver.poke] elsewhere). A call or the
+ * keyboard suppresses the whole thing.
  */
 object CarScreensaver {
 
@@ -128,6 +126,12 @@ internal fun CarScreensaverOverlay() {
     val moment by rememberNow()
     val locale = LocalConfiguration.current.locales[0]
 
+    val musicReady = phase == CarMedia.Phase.READY && now.isActive
+    val playing = musicReady && now.playing
+    val hasTurn = turn != null
+    val imminent = turn != null && isImminent(turn.distance)
+    val idle = !musicReady && !hasTurn
+
     BoxWithConstraints(
         Modifier
             .fillMaxSize()
@@ -137,20 +141,25 @@ internal fun CarScreensaverOverlay() {
         val compact = maxWidth < 840.dp || maxHeight < 520.dp
         val pad = if (compact) 24.dp else 40.dp
         val facts = rememberVehicleFacts(limit = if (compact) 3 else 5)
-        AlbumAtmosphere(accent, Modifier.fillMaxSize())
-        HorizonLight(accent, Modifier.align(Alignment.BottomCenter).fillMaxWidth().height(2.dp))
 
+        // Cases A, B, E, F: only music tints the black; C and D stay pure black.
+        if (musicReady) AlbumAtmosphere(accent, Modifier.fillMaxSize())
+
+        // Clock + date, top-start. D uses the explicit dot-matrix face.
         Column(Modifier.align(Alignment.TopStart).padding(pad)) {
+            if (idle) {
+                DotMatrixClock(moment, locale, compact)
+            } else {
+                Text(
+                    DateFormat.getTimeInstance(DateFormat.SHORT).format(Date(moment)),
+                    style = MaterialTheme.typography.displayLarge,
+                    fontSize = if (compact) 44.sp else 68.sp,
+                    color = Color.White.copy(alpha = 0.94f),
+                    maxLines = 1,
+                )
+            }
             Text(
-                DateFormat.getTimeInstance(DateFormat.SHORT).format(Date(moment)),
-                style = MaterialTheme.typography.displayLarge,
-                fontSize = if (compact) 44.sp else 68.sp,
-                color = Color.White.copy(alpha = 0.94f),
-                maxLines = 1,
-            )
-            Text(
-                SimpleDateFormat("EEEE d MMMM", locale).format(Date(moment))
-                    .uppercase(locale),
+                SimpleDateFormat("EEEE d MMMM", locale).format(Date(moment)).uppercase(locale),
                 style = MaterialTheme.typography.labelLarge,
                 letterSpacing = 0.16.em,
                 color = Color.White.copy(alpha = 0.34f),
@@ -158,6 +167,7 @@ internal fun CarScreensaverOverlay() {
             )
         }
 
+        // Vehicle facts, top-end.
         if (facts.isNotEmpty()) {
             Column(
                 Modifier.align(Alignment.TopEnd).padding(pad),
@@ -168,20 +178,47 @@ internal fun CarScreensaverOverlay() {
             }
         }
 
-        if (phase == CarMedia.Phase.READY && now.isActive) {
-            NowPlayingWake(now, art, accent, compact, Modifier.align(Alignment.BottomStart).padding(pad))
-        }
-        turn?.let {
-            DirectionWake(it, accent, compact, Modifier.align(Alignment.BottomEnd).padding(pad))
+        // Track, bottom-start: every case with live music (A, B, E, F).
+        if (musicReady) {
+            NowPlayingWake(
+                now = now,
+                art = art,
+                accent = accent,
+                compact = compact,
+                paused = !playing,
+                showLevel = playing && !hasTurn, // B only
+                modifier = Modifier.align(Alignment.BottomStart).padding(pad),
+            )
         }
 
-        Text(
-            stringResource(R.string.screensaver_touch_to_wake),
-            Modifier.align(Alignment.BottomCenter).padding(bottom = 16.dp),
-            style = MaterialTheme.typography.labelSmall,
-            letterSpacing = 0.18.em,
-            color = Color.White.copy(alpha = 0.18f),
-        )
+        // Dot-matrix arrow + distance, bottom-centre: every case with a route (A, C, E, F).
+        turn?.let {
+            TurnCluster(
+                turn = it,
+                accent = accent,
+                imminent = imminent,
+                compact = compact,
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = pad)
+                    .widthIn(max = if (compact) 220.dp else 360.dp),
+            )
+        }
+
+        // Case D: the single breathing red dot and the wake hint.
+        if (idle) {
+            BreathingDot(
+                Color(0xFFFF3030),
+                Modifier.align(Alignment.Center).size(if (compact) 12.dp else 16.dp),
+            )
+            Text(
+                stringResource(R.string.screensaver_touch_to_wake),
+                Modifier.align(Alignment.BottomCenter).padding(bottom = 16.dp),
+                style = MaterialTheme.typography.labelSmall,
+                letterSpacing = 0.18.em,
+                color = Color.White.copy(alpha = 0.4f),
+            )
+        }
     }
 }
 
@@ -231,32 +268,6 @@ private fun AlbumAtmosphere(accent: Color, modifier: Modifier) {
     }
 }
 
-/** One line of the album colour travelling the bottom edge, OnePlus' horizon light at rest. */
-@Composable
-private fun HorizonLight(accent: Color, modifier: Modifier) {
-    val transition = rememberInfiniteTransition(label = "horizon")
-    val sweep by transition.animateFloat(
-        initialValue = 0f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(7_500, easing = LinearEasing)),
-        label = "sweep",
-    )
-    Canvas(modifier) {
-        drawRect(Color.White.copy(alpha = 0.035f), size = Size(size.width, 1.dp.toPx()))
-        val band = size.width * 0.24f
-        val at = -band + (size.width + band * 2f) * sweep
-        drawRect(
-            Brush.horizontalGradient(
-                listOf(Color.Transparent, accent.copy(alpha = 0.55f), Color.Transparent),
-                startX = at - band / 2f,
-                endX = at + band / 2f,
-            ),
-            topLeft = Offset.Zero,
-            size = Size(size.width, size.height),
-        )
-    }
-}
-
 @Composable
 private fun FactRow(fact: VehicleFact) {
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -277,171 +288,317 @@ private fun FactRow(fact: VehicleFact) {
     }
 }
 
-/** The song, small enough to leave the screen black: thumb, words, and one hairline of progress. */
+/**
+ * The track, small enough to leave the screen black: square thumb, words, one hairline of progress.
+ * When music is paused it dims and wears a rectangular PAUSED chip; with no route it gains a small
+ * level meter so case B still reads as alive.
+ */
 @Composable
-private fun NowPlayingWake(now: NowPlaying, art: Bitmap?, accent: Color, compact: Boolean, modifier: Modifier) {
+private fun NowPlayingWake(
+    now: NowPlaying,
+    art: Bitmap?,
+    accent: Color,
+    compact: Boolean,
+    paused: Boolean,
+    showLevel: Boolean,
+    modifier: Modifier,
+) {
+    val dim = if (paused) 0.45f else 1f
     Row(
-        modifier.widthIn(max = if (compact) 280.dp else 540.dp),
+        modifier.widthIn(max = if (compact) 260.dp else 500.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(if (compact) 10.dp else 16.dp),
     ) {
         Box(
-            Modifier.size(if (compact) 46.dp else 62.dp)
-                .clip(RoundedCornerShape(10.dp))
-                .background(Color.White.copy(alpha = 0.06f)),
+            Modifier
+                .size(if (compact) 44.dp else 60.dp)
+                .border(1.dp, Color.White.copy(alpha = 0.18f * dim)),
         ) {
-            art?.let { Image(it.asImageBitmap(), null, Modifier.fillMaxSize(), contentScale = ContentScale.Crop) }
+            art?.let {
+                Image(
+                    it.asImageBitmap(), null, Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop, alpha = dim,
+                )
+            }
         }
         Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
-            Text(
-                now.title,
-                style = if (compact) MaterialTheme.typography.titleSmall else MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold,
-                color = Color.White.copy(alpha = 0.90f),
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(
+                    now.title,
+                    style = if (compact) MaterialTheme.typography.titleSmall else MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.White.copy(alpha = 0.92f * dim),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                if (paused) PausedChip()
+            }
             Text(
                 now.artist,
                 style = MaterialTheme.typography.labelLarge,
-                color = Color.White.copy(alpha = 0.42f),
+                color = Color.White.copy(alpha = 0.42f * dim),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
-            Spacer(Modifier.height(6.dp))
-            Box(Modifier.width(if (compact) 180.dp else 300.dp).height(1.dp).background(Color.White.copy(alpha = 0.14f))) {
+            Spacer(Modifier.height(4.dp))
+            Box(
+                Modifier
+                    .width(if (compact) 160.dp else 280.dp)
+                    .height(1.dp)
+                    .background(Color.White.copy(alpha = 0.14f * dim)),
+            ) {
                 val fraction = if (now.durationMs > 0) {
                     (now.positionMs.toFloat() / now.durationMs).coerceIn(0.015f, 1f)
                 } else 0f
                 if (fraction > 0f) {
-                    Box(Modifier.fillMaxWidth(fraction).fillMaxHeight().background(accent.copy(alpha = 0.85f)))
+                    Box(Modifier.fillMaxWidth(fraction).fillMaxHeight().background(accent.copy(alpha = 0.85f * dim)))
                 }
             }
+        }
+        if (showLevel) LevelMeter(accent, compact, Modifier.padding(start = 2.dp))
+    }
+}
+
+/** A bordered, unrounded label for case E. */
+@Composable
+private fun PausedChip() {
+    Box(Modifier.border(1.dp, Color.White.copy(alpha = 0.5f)).padding(horizontal = 6.dp, vertical = 2.dp)) {
+        Text(
+            "PAUSED",
+            style = MaterialTheme.typography.labelSmall,
+            letterSpacing = 0.12.em,
+            color = Color.White.copy(alpha = 0.7f),
+            maxLines = 1,
+        )
+    }
+}
+
+/** Five small bars drifting out of phase; the only movement in case B. */
+@Composable
+private fun LevelMeter(color: Color, compact: Boolean, modifier: Modifier = Modifier) {
+    val transition = rememberInfiniteTransition(label = "level")
+    val progress by transition.animateFloat(
+        initialValue = 0f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(tween(900, easing = LinearEasing)),
+        label = "level-phase",
+    )
+    val maxHeight = if (compact) 16.dp else 22.dp
+    Row(
+        modifier.height(maxHeight),
+        verticalAlignment = Alignment.Bottom,
+        horizontalArrangement = Arrangement.spacedBy(3.dp),
+    ) {
+        repeat(5) { i ->
+            val phase = (progress + i * 0.17f) % 1f
+            val heightFraction = 0.22f + 0.78f * sin(phase * Math.PI.toFloat()).coerceIn(0f, 1f)
+            Box(
+                Modifier
+                    .width(if (compact) 3.dp else 4.dp)
+                    .height(maxHeight * heightFraction)
+                    .background(color.copy(alpha = 0.85f)),
+            )
         }
     }
 }
 
 /**
- * The next turn, OnePlus-quiet: an arrow with a slow breathing halo, the distance in the display
- * face, the road in tracked mono, and a short horizon line sweeping under it. A new road slides
- * in from the edge once, while distance updates keep ticking in place.
+ * The next turn, bottom-centre: a self-contained 9x9 dot-matrix arrow whose lit cells carry a
+ * travelling pulse, with the distance in the display face and the road in tracked mono beneath it.
+ * An imminent turn swaps the album hue for red and speeds the pulse up (case F).
  */
 @Composable
-private fun DirectionWake(turn: NextTurn, accent: Color, compact: Boolean, modifier: Modifier) {
+private fun TurnCluster(
+    turn: NextTurn,
+    accent: Color,
+    imminent: Boolean,
+    compact: Boolean,
+    modifier: Modifier = Modifier,
+    rightTurn: Boolean = false,
+) {
     val locale = LocalConfiguration.current.locales[0]
     val transition = rememberInfiniteTransition(label = "turn")
-    val pulse by transition.animateFloat(
-        initialValue = 0.35f,
+    val progress by transition.animateFloat(
+        initialValue = 0f,
         targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(2_400, easing = FastOutSlowInEasing), RepeatMode.Reverse),
-        label = "pulse",
+        animationSpec = infiniteRepeatable(
+            tween(if (imminent) 520 else 1_400, easing = LinearEasing),
+        ),
+        label = "travel",
     )
-    val enter = remember { Animatable(0f) }
-    LaunchedEffect(turn.road) {
-        if (turn.road.isNotEmpty()) {
-            enter.snapTo(0f)
-            enter.animateTo(1f, tween(620, easing = FastOutSlowInEasing))
-        } else {
-            enter.snapTo(1f)
-        }
-    }
+    val arrowColor = if (imminent) Color(0xFFFF3030) else accent
+    val pattern = if (rightTurn) TURN_ARROW.map { it.reversed() } else TURN_ARROW
 
     Column(
-        modifier.widthIn(max = if (compact) 250.dp else 460.dp),
-        horizontalAlignment = Alignment.End,
-        verticalArrangement = Arrangement.spacedBy(if (compact) 4.dp else 10.dp),
+        modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(if (compact) 4.dp else 8.dp),
     ) {
         Text(
             stringResource(R.string.screensaver_next_turn),
             style = MaterialTheme.typography.labelSmall,
             letterSpacing = 0.20.em,
-            color = accent.copy(alpha = 0.75f),
+            color = arrowColor.copy(alpha = 0.75f),
         )
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(if (compact) 10.dp else 20.dp),
-        ) {
-            Box(Modifier.size(if (compact) 44.dp else 66.dp), contentAlignment = Alignment.Center) {
-                Canvas(Modifier.fillMaxSize()) {
-                    drawCircle(accent.copy(alpha = 0.10f * pulse), radius = size.minDimension / 2f)
-                }
-                if (turn.icon != null) {
-                    CarGlyph(turn.icon, Modifier.size(if (compact) 36.dp else 54.dp))
+        DotMatrix(
+            pattern = pattern,
+            cell = if (compact) 3.dp else 4.5.dp,
+            color = arrowColor,
+            progress = progress,
+            stagger = 1f / (9f * 9f),
+        )
+        if (turn.distance.isNotEmpty()) {
+            Text(
+                turn.distance,
+                style = MaterialTheme.typography.displayMedium,
+                fontSize = if (compact) 28.sp else 44.sp,
+                color = if (imminent) arrowColor else Color.White.copy(alpha = 0.95f),
+                maxLines = 1,
+                textAlign = TextAlign.Center,
+            )
+        }
+        if (turn.road.isNotEmpty()) {
+            Text(
+                turn.road.uppercase(locale),
+                style = MaterialTheme.typography.labelLarge,
+                letterSpacing = 0.12.em,
+                color = Color.White.copy(alpha = 0.52f),
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                textAlign = TextAlign.Center,
+            )
+        }
+    }
+}
+
+/**
+ * One grid of small squares from a row-string pattern. With [progress] the lit cells carry a
+ * travelling pulse, staggered by their index (a comet trail across the grid); without it every
+ * lit cell holds a steady alpha. This is the arrow's and the idle clock's own matrix, not DotGrid.
+ */
+@Composable
+private fun DotMatrix(
+    pattern: List<String>,
+    cell: Dp,
+    color: Color,
+    modifier: Modifier = Modifier,
+    progress: Float? = null,
+    stagger: Float = 0f,
+    staticAlpha: Float = 0.85f,
+) {
+    val rows = pattern.size
+    val cols = pattern.maxOf { it.length }
+    val gap = cell * 0.22f
+    Canvas(modifier.size(cols * cell + (cols - 1) * gap, rows * cell + (rows - 1) * gap)) {
+        val cellPx = cell.toPx()
+        val gapPx = gap.toPx()
+        for (r in 0 until rows) {
+            val line = pattern[r]
+            for (c in 0 until cols) {
+                if (c >= line.length || line[c] != '#') continue
+                val index = r * cols + c
+                val alpha = if (progress == null) {
+                    staticAlpha
                 } else {
-                    DefaultChevron(Modifier.size(if (compact) 36.dp else 54.dp))
+                    val phase = ((progress - index * stagger) % 1f + 1f) % 1f
+                    val glow = 1f - phase
+                    (0.18f + 0.82f * glow * glow) * staticAlpha
                 }
-            }
-            Column(
-                horizontalAlignment = Alignment.End,
-                modifier = Modifier.graphicsLayer {
-                    alpha = enter.value
-                    translationX = (1f - enter.value) * 20.dp.toPx()
-                },
-            ) {
-                if (turn.distance.isNotEmpty()) {
-                    Text(
-                        turn.distance,
-                        style = MaterialTheme.typography.displayMedium,
-                        fontSize = if (compact) 30.sp else 48.sp,
-                        color = Color.White.copy(alpha = 0.95f),
-                        maxLines = 1,
-                    )
-                }
-                Text(
-                    turn.road.ifEmpty { " " }.uppercase(locale),
-                    style = MaterialTheme.typography.labelLarge,
-                    letterSpacing = 0.12.em,
-                    color = Color.White.copy(alpha = 0.52f),
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                    textAlign = TextAlign.End,
+                drawRect(
+                    color = color.copy(alpha = alpha),
+                    topLeft = Offset(c * (cellPx + gapPx), r * (cellPx + gapPx)),
+                    size = Size(cellPx, cellPx),
                 )
             }
         }
-        HorizonSweep(accent, Modifier.width(if (compact) 130.dp else 210.dp).height(1.5.dp))
     }
 }
 
+/** The idle clock, drawn as an explicit 5x7 dot matrix rather than relying on the display font. */
 @Composable
-private fun HorizonSweep(accent: Color, modifier: Modifier) {
-    val transition = rememberInfiniteTransition(label = "turn-line")
-    val sweep by transition.animateFloat(
-        initialValue = 0f,
+private fun DotMatrixClock(moment: Long, locale: Locale, compact: Boolean, modifier: Modifier = Modifier) {
+    val time = SimpleDateFormat("HH:mm", locale).format(Date(moment))
+    val pattern = remember(time) { clockPattern(time) }
+    DotMatrix(
+        pattern = pattern,
+        cell = if (compact) 3.5.dp else 5.dp,
+        color = Color.White.copy(alpha = 0.9f),
+        modifier = modifier,
+    )
+}
+
+/** The single red point of light in case D, breathing slowly. */
+@Composable
+private fun BreathingDot(color: Color, modifier: Modifier = Modifier) {
+    val transition = rememberInfiniteTransition(label = "breath")
+    val alpha by transition.animateFloat(
+        initialValue = 0.12f,
         targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(3_600, easing = LinearEasing)),
-        label = "sweep",
+        animationSpec = infiniteRepeatable(tween(2_200, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        label = "dot-alpha",
     )
     Canvas(modifier) {
-        val band = size.width * 0.55f
-        val at = -band + (size.width + band * 2f) * sweep
-        drawRect(
-            Brush.horizontalGradient(
-                listOf(Color.Transparent, accent.copy(alpha = 0.7f), Color.Transparent),
-                startX = at - band / 2f,
-                endX = at + band / 2f,
-            ),
-            topLeft = Offset.Zero,
-            size = Size(size.width, size.height),
-        )
+        drawCircle(color.copy(alpha = alpha), radius = size.minDimension / 2f)
     }
 }
 
-/** A squared double chevron for a turn with no icon of its own, in the design's stroke language. */
-@Composable
-private fun DefaultChevron(modifier: Modifier) {
-    Canvas(modifier) {
-        val path = Path().apply {
-            moveTo(size.width * 0.22f, size.height * 0.52f)
-            lineTo(size.width * 0.50f, size.height * 0.24f)
-            lineTo(size.width * 0.78f, size.height * 0.52f)
-            moveTo(size.width * 0.22f, size.height * 0.80f)
-            lineTo(size.width * 0.50f, size.height * 0.52f)
-            lineTo(size.width * 0.78f, size.height * 0.80f)
+/**
+ * True when a distance string describes 100 m/ft or less, so the turn can pulse red (case F).
+ * The first number in the string is used with its unit; anything unparseable is non-imminent.
+ */
+private fun isImminent(distance: String): Boolean {
+    val value = REGEX_NUMBER.find(distance)?.value?.toFloatOrNull() ?: return false
+    val text = distance.lowercase(Locale.ROOT)
+    val metres = when {
+        "km" in text -> value * 1_000f
+        "mi" in text -> value * 1_609f
+        "ft" in text -> value * 0.3048f
+        "yd" in text -> value * 0.9144f
+        else -> value // 'm', or a bare number: assume metres
+    }
+    return metres <= 100f
+}
+
+/** The left-turn arrow: a filled triangular head on the left and a horizontal shaft to its right. */
+private val TURN_ARROW = listOf(
+    "....#....",
+    "...##....",
+    "..###....",
+    ".####....",
+    "#########",
+    ".####....",
+    "..###....",
+    "...##....",
+    "....#....",
+)
+
+private val REGEX_NUMBER = Regex("""\d+(?:\.\d+)?""")
+
+/** 5x7 dot-matrix digits and the colon, for the idle clock. */
+private val DIGITS: Map<Char, List<String>> = mapOf(
+    '0' to listOf(".###.", "#...#", "#.##.", "#.#.#", "##..#", "#...#", ".###."),
+    '1' to listOf("..#..", ".##..", "..#..", "..#..", "..#..", "..#..", ".###."),
+    '2' to listOf(".###.", "#...#", "....#", "...#.", "..#..", ".#...", "#####"),
+    '3' to listOf("#####", "...#.", "..#..", "...#.", "....#", "#...#", ".###."),
+    '4' to listOf("...#.", "..##.", ".#.#.", "#..#.", "#####", "...#.", "...#."),
+    '5' to listOf("#####", "#....", "####.", "....#", "....#", "#...#", ".###."),
+    '6' to listOf("..##.", ".#...", "#....", "####.", "#...#", "#...#", ".###."),
+    '7' to listOf("#####", "....#", "...#.", "..#..", ".#...", ".#...", ".#..."),
+    '8' to listOf(".###.", "#...#", "#...#", ".###.", "#...#", "#...#", ".###."),
+    '9' to listOf(".###.", "#...#", "#...#", ".####", "....#", "...#.", ".##.."),
+    ':' to listOf(".....", "..#..", "..#..", ".....", "..#..", "..#..", "....."),
+)
+
+/** Lay the glyphs for [text] side by side, with one blank column between them. */
+private fun clockPattern(text: String): List<String> {
+    val glyphs = text.map { DIGITS[it] }.filterNotNull()
+    if (glyphs.isEmpty()) return listOf(".")
+    return (0 until 7).map { row ->
+        buildString {
+            glyphs.forEachIndexed { i, glyph ->
+                if (i > 0) append('.')
+                append(glyph[row])
+            }
         }
-        drawPath(
-            path,
-            color = Color.White.copy(alpha = 0.90f),
-            style = Stroke(width = 4.dp.toPx(), cap = StrokeCap.Square, join = StrokeJoin.Miter),
-        )
     }
 }

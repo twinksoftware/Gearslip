@@ -27,6 +27,15 @@ sealed interface CarScreen {
     /** The current media app, full size: browse, lyrics and controls. */
     data object Media : CarScreen
 
+    /** Gearslip's own music front-end, built on the active media session (no local files). */
+    data object FirstPartyMusic : CarScreen
+
+    /** The full-screen player with synced lyrics and the queue. */
+    data object FirstPartyPlayer : CarScreen
+
+    /** Place search over the offline demo index and saved places. */
+    data object PlaceSearch : CarScreen
+
     /**
      * A templated app that isn't a navigation app - Spotify's own Car App Library service, among
      * others - opened on its own screen rather than the Home map slot, which only a genuine
@@ -135,6 +144,12 @@ class CarNavigator(startId: String) {
     fun dismissAppMenu() { appMenu = null }
 
     fun media() { push(CarScreen.Media, "Media", R.string.crumb_media) }
+
+    fun firstPartyMusic() { push(CarScreen.FirstPartyMusic, "Music", R.string.recommended_music) }
+
+    fun firstPartyPlayer() { push(CarScreen.FirstPartyPlayer, "Player", R.string.media_now_playing) }
+
+    fun placeSearch() { push(CarScreen.PlaceSearch, "Places", R.string.app_places) }
 
     fun browse(label: String) { push(CarScreen.Browse, label) }
 

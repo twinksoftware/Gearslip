@@ -599,6 +599,7 @@
     <string name="app_browser">Browser</string>
     <string name="app_screen_sharing">Screen sharing</string>
     <string name="app_google_maps">Google Maps</string>
+    <string name="app_places">Places</string>
     <string name="gmaps_missing">Google Maps isn\'t installed on this phone.</string>
     <string name="gmaps_body">Google Maps runs on the phone and is mirrored to the car screen, so touch, panning and searching are the app\'s own. While it guides, its turns stay in the nav bar, on the cluster and on the screensaver.</string>
     <string name="gmaps_open">Open Google Maps</string>
