@@ -76,12 +76,22 @@ import app.seb3thehacker.gearslip.notify.MessagingApp
 import app.seb3thehacker.gearslip.notify.MessagingCatalog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
+import androidx.compose.foundation.interaction.collectIsPressedAsState
+import androidx.compose.foundation.lazy.grid.LazyGridState
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.unit.em
 
 /** One tile on the launcher: either a phone app's own icon or a built-in glyph. */
 private class Tile(
     val label: String,
     val icon: ImageBitmap? = null,
     val glyph: ImageVector? = null,
+    /** The Nothing theme's monochrome mask for the app, tinted onSurface at draw time. */
+    val glyphMask: ImageBitmap? = null,
     /** Known not to work; drawn with a red X instead of being left off the launcher. */
     val broken: Boolean = false,
     val onLongClick: (() -> Unit)? = null,
@@ -98,6 +108,8 @@ internal class Entry(
     val media: MediaApp? = null,
     val builtIn: BuiltInApp? = null,
     val messaging: MessagingApp? = null,
+    /** The Nothing theme's glyph, rendered on IO at scan time; null for the classic themes. */
+    val glyphMask: ImageBitmap? = null,
 ) {
     /** What a pin or a nav-bar shortcut remembers this entry as; null for nothing pinnable. */
     val componentId: String?
@@ -137,15 +149,21 @@ internal object LauncherCache {
         val mediaApps = MediaCatalog.installed(context).associateBy { it.component.packageName }
         val messagingApps = MessagingCatalog.installed(context).associateBy { it.packageName }
 
+        // Glyphs are the Nothing theme's cost: rendered once on IO and cached, so the classic
+        // themes never pay for them. An entry loaded before the skin was picked gets its mask
+        // when CarLauncher's warm-up effect fills the cache.
+        val nothing = CarSettings.uiTheme.value == GsThemes.Nothing.id
+
         // One decision per app over everything it offers a car - a car screen, a player, car
         // notifications - rather than a filter per kind that has to know about the others.
         val tiles = (carApps.keys + mediaApps.keys + messagingApps.keys).flatMap { pkg ->
             val icon by lazy { iconOf(pkg) }
+            val glyph by lazy { if (nothing) NothingIconCache.glyph(context, pkg) else null }
             tilesFor(carApps[pkg], mediaApps[pkg], messagingApps[pkg], context.getString(R.string.media_browse)).map { tile ->
                 when (tile) {
-                    is AppTile.Screen -> Entry(tile.label, icon, template = tile.app)
-                    is AppTile.Player -> Entry(tile.app.label, icon, media = tile.app)
-                    is AppTile.Messages -> Entry(tile.app.label, icon, messaging = tile.app)
+                    is AppTile.Screen -> Entry(tile.label, icon, glyphMask = glyph, template = tile.app)
+                    is AppTile.Player -> Entry(tile.app.label, icon, glyphMask = glyph, media = tile.app)
+                    is AppTile.Messages -> Entry(tile.app.label, icon, glyphMask = glyph, messaging = tile.app)
                 }
             }
         }
@@ -219,6 +237,7 @@ private fun groupOf(entry: Entry, mediaPackages: Set<String>): AppGroup {
             BuiltInApps.Phone -> AppGroup.PHONE
             BuiltInApps.Web -> AppGroup.WEB
             BuiltInApps.ScreenSharing -> AppGroup.SCREEN_SHARING
+            BuiltInApps.GoogleMaps -> AppGroup.MAPS
             BuiltInApps.Exit -> AppGroup.EXIT
             else -> AppGroup.SETTINGS
         }
@@ -297,10 +316,26 @@ fun CarLauncher() {
     val running = rememberRunningApps()
     val showVehicleData = rememberVehicleDataShown()
 
+    // The Nothing skin swaps the palette and type in CarUi; here it swaps the launcher's chrome:
+    // a Doto header over the grid, sharp tiles without their fill, and onSurface-tinted glyphs.
+    val isNothing = LocalGsTheme.current.id == GsThemes.Nothing.id
+    // Read so a glyph that lands on IO redraws the tiles that asked for it.
+    NothingIconCache.refreshed.collectAsState().value
+    // Warm the glyph cache when the skin is on, or when an app is installed while it's on - an
+    // entry scanned under a classic theme gets its mask here rather than waiting for a rescan.
+    LaunchedEffect(isNothing, all) {
+        if (isNothing) withContext(Dispatchers.IO) {
+            all.forEach { entry -> entry.packageName?.let { NothingIconCache.glyph(context, it) } }
+        }
+    }
+
     fun tileOf(entry: Entry): Tile {
         val id = entry.componentId
         return Tile(
-            entry.builtIn?.let { context.getString(it.labelRes) } ?: entry.label, entry.icon, entry.builtIn?.glyph,
+            entry.builtIn?.let { context.getString(it.labelRes) } ?: entry.label,
+            entry.icon,
+            entry.builtIn?.glyph,
+            glyphMask = entry.glyphMask ?: if (isNothing) entry.packageName?.let(NothingIconCache::peek) else null,
             broken = markedBroken(context, entry),
             onLongClick = id?.let { { navigator.showAppMenu(it) } },
             id = id,
@@ -341,6 +376,26 @@ fun CarLauncher() {
         onDispose { if (CarKeys.knobTaker === taker) CarKeys.knobTaker = null }
     }
 
+    if (isNothing) {
+        // The header is the design's one dot-matrix zone, and its divider tells the grid's area
+        // from the empty canvas above, where a card would otherwise blur the two.
+        Column(Modifier.fillMaxSize()) {
+            NothingHeader(tiles.size)
+            LauncherGrid(gridState, tiles, lastIndex, lastFocus, isNothing)
+        }
+    } else {
+        LauncherGrid(gridState, tiles, lastIndex, lastFocus, isNothing)
+    }
+}
+
+@Composable
+private fun LauncherGrid(
+    gridState: LazyGridState,
+    tiles: List<Tile>,
+    lastIndex: Int,
+    lastFocus: FocusRequester,
+    isNothing: Boolean,
+) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 108.dp),
         state = gridState,
@@ -349,7 +404,35 @@ fun CarLauncher() {
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        itemsIndexed(tiles) { i, tile -> AppTile(tile, if (i == lastIndex) Modifier.focusRequester(lastFocus) else Modifier) }
+        itemsIndexed(tiles) { i, tile -> AppTile(tile, isNothing, if (i == lastIndex) Modifier.focusRequester(lastFocus) else Modifier) }
+    }
+}
+
+/** The Nothing skin's launcher header: Doto "APPS", the tile count, a 1px divider, and the
+ * dot-matrix texture - the one dotted zone the design allows per page. */
+@Composable
+private fun NothingHeader(count: Int) {
+    Box(Modifier.fillMaxWidth()) {
+        DotGrid(Modifier.matchParentSize())
+        Column(
+            Modifier.padding(horizontal = 20.dp, vertical = 14.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    "APPS",
+                    style = MaterialTheme.typography.displayMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.weight(1f),
+                )
+                Text(
+                    count.toString(),
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+            Box(Modifier.fillMaxWidth().height(1.dp).background(MaterialTheme.colorScheme.outline))
+        }
     }
 }
 
@@ -379,7 +462,13 @@ internal fun BrokenBadge(size: androidx.compose.ui.unit.Dp, modifier: Modifier =
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun AppTile(tile: Tile, modifier: Modifier = Modifier) {
+private fun AppTile(tile: Tile, isNothing: Boolean, modifier: Modifier = Modifier) {
+    if (isNothing) NothingTile(tile, modifier) else ClassicTile(tile, modifier)
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun ClassicTile(tile: Tile, modifier: Modifier = Modifier) {
     val shape = MaterialTheme.shapes.extraLarge
     // A long press opens the app's menu (pin, close) - the same gesture everywhere apps are
     // shown, here and on the nav bar. GsIconBox marks it in the theme's style.
@@ -415,9 +504,71 @@ private fun AppTile(tile: Tile, modifier: Modifier = Modifier) {
     }
 }
 
+/**
+ * The Nothing skin's tile: no container at all, just the glyph and the label on the canvas - a
+ * 1px onSurface border while pressed or focused is the only chrome, since the design draws
+ * elevation with borders, not fills.
+ */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun TileIcon(tile: Tile) {
+private fun NothingTile(tile: Tile, modifier: Modifier = Modifier) {
+    val scheme = MaterialTheme.colorScheme
+    val source = remember { MutableInteractionSource() }
+    val pressed by source.collectIsPressedAsState()
+    val focused by source.collectIsFocusedAsState()
+    val ring = if (pressed || focused) scheme.onSurface.copy(alpha = 0.2f) else Color.Transparent
+    Box(
+        modifier
+            .height(120.dp)
+            .then(if (ring.alpha > 0f) Modifier.border(1.dp, ring) else Modifier)
+            .combinedClickable(
+                interactionSource = source,
+                indication = null,
+                role = Role.Button,
+                onLongClick = tile.onLongClick,
+                onClick = tile.onClick,
+            ),
+    ) {
+        Box(Modifier.fillMaxSize()) {
+            Column(
+                Modifier.fillMaxSize().padding(8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+            ) {
+                Box {
+                    TileIcon(tile, isNothing = true)
+                    if (tile.broken) {
+                        NothingBrokenBadge(22.dp, Modifier.align(Alignment.BottomEnd).offset(x = 6.dp, y = 4.dp))
+                    }
+                }
+                Spacer(Modifier.height(8.dp))
+                NothingTileLabel(tile)
+            }
+        }
+    }
+}
+
+/** The Nothing theme's broken tile: a 1px red-bordered square and a white X - no colour fill,
+ * per the design's "border + text colour instead of colour fills". */
+@Composable
+private fun NothingBrokenBadge(size: androidx.compose.ui.unit.Dp, modifier: Modifier = Modifier) {
+    Box(
+        modifier.size(size).border(1.dp, MaterialTheme.colorScheme.error),
+        contentAlignment = Alignment.Center,
+    ) {
+        Icon(Icons.Filled.Close, contentDescription = stringResource(R.string.launcher_broken), tint = Color.White, modifier = Modifier.size(size * 0.66f))
+    }
+}
+
+@Composable
+private fun TileIcon(tile: Tile, isNothing: Boolean = false) {
     when {
+        isNothing && tile.glyphMask != null -> Image(
+            tile.glyphMask,
+            contentDescription = null,
+            modifier = Modifier.size(52.dp),
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
+        )
         tile.icon != null -> Image(tile.icon, contentDescription = null, modifier = Modifier.size(52.dp))
         tile.glyph != null -> Icon(tile.glyph, contentDescription = null, modifier = Modifier.size(52.dp))
     }
@@ -430,6 +581,20 @@ private fun TileLabel(tile: Tile, maxLines: Int = 2, modifier: Modifier = Modifi
         modifier = modifier,
         style = MaterialTheme.typography.labelLarge,
         fontWeight = FontWeight.SemiBold,
+        textAlign = TextAlign.Center,
+        maxLines = maxLines,
+        overflow = TextOverflow.Ellipsis,
+    )
+}
+
+/** Nothing's labels run uppercase, monospace, with the design's tracking, on the muted grey. */
+@Composable
+private fun NothingTileLabel(tile: Tile, maxLines: Int = 2, modifier: Modifier = Modifier) {
+    Text(
+        tile.label.uppercase(),
+        modifier = modifier,
+        style = MaterialTheme.typography.labelLarge.copy(letterSpacing = 0.08.em),
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
         textAlign = TextAlign.Center,
         maxLines = maxLines,
         overflow = TextOverflow.Ellipsis,

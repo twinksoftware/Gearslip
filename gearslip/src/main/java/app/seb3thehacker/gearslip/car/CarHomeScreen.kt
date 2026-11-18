@@ -63,8 +63,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.seb3thehacker.gearslip.host.CarAppConnection
+import app.seb3thehacker.gearslip.host.display
 import app.seb3thehacker.gearslip.media.CarMedia
 import app.seb3thehacker.gearslip.media.NowPlaying
+import app.seb3thehacker.gearslip.mirror.PhoneMirror
+import app.seb3thehacker.gearslip.notify.PhoneNavigation
 import kotlinx.coroutines.launch
 
 /**
@@ -168,6 +171,8 @@ private fun MapPane(status: CarAppConnection.Status, frame: CarEnvironment.Frame
     ) {
         val hasLast = CarSettings.lastNav.value != null
         val hasNavApps by CarServices.hasNavApps.collectAsStateWithLifecycle()
+        val phoneTurn by PhoneNavigation.turn.collectAsStateWithLifecycle()
+        val context = LocalContext.current
         val scope = androidx.compose.runtime.rememberCoroutineScope()
         when (status.phase) {
             CarAppConnection.Phase.BINDING, CarAppConnection.Phase.HANDSHAKE ->
@@ -179,14 +184,41 @@ private fun MapPane(status: CarAppConnection.Status, frame: CarEnvironment.Frame
                 StatusButton(stringResource(R.string.home_choose_app), GsTone.Primary, navigator::apps)
             }
             else -> if (!hasNavApps) {
-                // Nothing to auto-select and nothing to pick from Car apps either - this is the
-                // only case worth a distinct screen, since every other IDLE case resolves itself.
-                Text(stringResource(R.string.home_no_maps), style = MaterialTheme.typography.titleMedium)
-                Text(
-                    stringResource(R.string.home_no_maps_body),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
+                // No hostable map, but the phone can still be the map: Google Maps guiding on it
+                // feeds the turn here, and the full map is one tap from the mirror.
+                val live = phoneTurn
+                if (live != null) {
+                    Text(stringResource(R.string.home_google_maps_guiding), style = MaterialTheme.typography.titleMedium)
+                    Text(
+                        listOf(live.distance?.display() ?: live.distanceText, live.road).filter { it.isNotEmpty() }.joinToString("  ·  "),
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold,
+                    )
+                    Spacer(Modifier.height(8.dp))
+                    StatusButton(stringResource(R.string.gmaps_open), GsTone.Primary) {
+                        PhoneMirror.open(context, GoogleMaps.PACKAGE)
+                    }
+                } else if (remember(context) { GoogleMaps.installed(context) }) {
+                    Text(stringResource(R.string.home_google_maps), style = MaterialTheme.typography.titleMedium)
+                    Text(
+                        stringResource(R.string.home_google_maps_body),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    Spacer(Modifier.height(8.dp))
+                    StatusButton(stringResource(R.string.gmaps_open), GsTone.Primary) {
+                        PhoneMirror.open(context, GoogleMaps.PACKAGE)
+                    }
+                } else {
+                    // Nothing to auto-select and nothing to pick from Car apps either - this is the
+                    // only case worth a distinct screen, since every other IDLE case resolves itself.
+                    Text(stringResource(R.string.home_no_maps), style = MaterialTheme.typography.titleMedium)
+                    Text(
+                        stringResource(R.string.home_no_maps_body),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
             } else if (hasLast) {
                 // IDLE with a last app on record means the driver stopped it themselves - it will
                 // not come back on its own, so the screen must offer a way to bring it back rather

@@ -68,6 +68,7 @@ fun CarDashboardScreen() {
     ) {
         ScreenHeader(stringResource(R.string.dash_today))
         WeatherCard(context)
+        VehicleCard()
         AgendaCard(context)
         NotificationsSection()
     }
@@ -117,9 +118,49 @@ private fun WeatherCard(context: Context) {
  * The next few hours beside the weather now, in the same card, so a glance answers "will it rain
  * on the way" without opening Weather. As many as fit, up to five; none if fewer than three would.
  */
+/**
+ * The head unit's own readings, one compact strip: fuel, range, speed and odometer. Only what the
+ * car sends appears, so a unit with no sensor channel simply omits the card; the same values sit
+ * in the screensaver's top corner, which is where they are meant to be read while driving.
+ */
 @Composable
-private fun NextHours(all: List<HourForecast>, modifier: Modifier) {
-    val now = System.currentTimeMillis()
+private fun VehicleCard() {
+    val facts = rememberVehicleFacts(limit = 4)
+    if (facts.isEmpty()) return
+    Surface(color = MaterialTheme.colorScheme.surfaceContainerHigh, shape = MaterialTheme.shapes.extraLarge) {
+        Row(
+            Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            facts.forEach { fact ->
+                Column(
+                    Modifier.weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(2.dp),
+                ) {
+                    Text(
+                        fact.label,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1,
+                    )
+                    Text(
+                        fact.value,
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = if (fact.alert) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun NextHours(all: List<HourForecast>, modifier: Modifier) {    val now = System.currentTimeMillis()
     // The forecast is cached, so its first hours may already be past.
     val hours = all.filter { it.time > now }
     androidx.compose.foundation.layout.BoxWithConstraints(modifier) {

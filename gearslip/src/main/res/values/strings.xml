@@ -217,6 +217,8 @@
     <string name="car_song_title">Song title</string>
     <string name="car_player_beside_map">Player beside the map</string>
     <string name="car_player_beside_map_note">The side of the map the player docks to when you tap its dock button.</string>
+    <string name="car_screensaver">Screensaver</string>
+    <string name="car_screensaver_note">After a minute untouched on the map, the screen fades to black with the album\'s colours, the next turn and the car\'s own readings. Touch or press any key to wake it.</string>
     <string name="car_right">Right</string>
     <string name="car_left">Left</string>
     <string name="car_autoplay">Autoplay on connect</string>
@@ -596,6 +598,16 @@
     <!-- Built-in apps -->
     <string name="app_browser">Browser</string>
     <string name="app_screen_sharing">Screen sharing</string>
+    <string name="app_google_maps">Google Maps</string>
+    <string name="gmaps_missing">Google Maps isn\'t installed on this phone.</string>
+    <string name="gmaps_body">Google Maps runs on the phone and is mirrored to the car screen, so touch, panning and searching are the app\'s own. While it guides, its turns stay in the nav bar, on the cluster and on the screensaver.</string>
+    <string name="gmaps_open">Open Google Maps</string>
+    <string name="gmaps_hint">Start a route in Google Maps before you put the phone away: its notification is what feeds the car\'s directions.</string>
+    <string name="home_google_maps_guiding">Google Maps is guiding on the phone</string>
+    <string name="home_google_maps">Google Maps</string>
+    <string name="home_google_maps_body">No map app runs on the car screen itself, so Google Maps can be mirrored here instead. Its turns stay on the bar and the screensaver while it guides.</string>
+    <string name="screensaver_touch_to_wake">TOUCH TO WAKE</string>
+    <string name="screensaver_next_turn">NEXT TURN</string>
     <string name="app_exit">Exit</string>
     <string name="navapps_unpin">Unpin from nav bar</string>
     <string name="navapps_full">Nav bar is full (%1$d pinned)</string>

@@ -5,6 +5,7 @@ import app.seb3thehacker.gearslip.R
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Call
+import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Settings
@@ -38,6 +39,9 @@ object CarApps {
         },
         CarApp("settings", "Settings", R.string.settings_title, Icons.Filled.Settings) {
             CarSettingsScreen()
+        },
+        CarApp("googlemaps", "Google Maps", R.string.app_google_maps, Icons.Filled.Place) {
+            GoogleMapsScreen()
         },
         CarApp("allapps", "All apps", R.string.app_all_apps, Icons.Filled.List) {
             AllAppsScreen()

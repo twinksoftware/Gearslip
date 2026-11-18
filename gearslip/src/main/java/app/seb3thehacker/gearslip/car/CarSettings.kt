@@ -85,6 +85,7 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
     private const val KEY_SEEN_SAFETY_WARNING = "car_seen_safety_warning"
     private const val KEY_UNITS = "car_units"
     private const val KEY_NAV_BAR = "car_nav_bar"
+    private const val KEY_SCREENSAVER = "car_screensaver"
     private const val KEY_SCREEN_SIZE = "car_screen_size"
     private const val KEY_SCREEN_FIT = "car_screen_fit"
     private const val KEY_PREVIEW_SIZE = "preview_size"
@@ -171,6 +172,16 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
 
     private val navBarFlow = MutableStateFlow(NavBarMode.SHOW)
     val navBarMode: StateFlow<NavBarMode> = navBarFlow
+
+    private val screensaverFlow = MutableStateFlow(true)
+
+    /** The black resting screen after a minute untouched on Home; on unless turned off. */
+    val screensaver: StateFlow<Boolean> = screensaverFlow
+
+    fun setScreensaver(on: Boolean) {
+        screensaverFlow.value = on
+        AppSettings.putString(app, KEY_SCREENSAVER, on.toString())
+    }
 
     fun setNavBarMode(mode: NavBarMode) {
         navBarFlow.value = mode
@@ -441,6 +452,7 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
         navBarFlow.value = runCatching {
             NavBarMode.valueOf(AppSettings.getString(app, KEY_NAV_BAR, NavBarMode.SHOW.name))
         }.getOrDefault(NavBarMode.SHOW)
+        screensaverFlow.value = AppSettings.getString(app, KEY_SCREENSAVER, "true") == "true"
         whatsNewFlow.value = AppSettings.getString(app, KEY_WHATS_NEW, "true") == "true"
         whatsNewSeenFlow.value = AppSettings.getString(app, KEY_WHATS_NEW_SEEN, "0").toIntOrNull() ?: 0
     }

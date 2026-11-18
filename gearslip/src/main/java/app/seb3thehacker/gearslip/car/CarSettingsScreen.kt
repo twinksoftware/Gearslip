@@ -58,6 +58,7 @@ fun CarSettingsScreen() {
     val night by CarSettings.nightMode.collectAsState()
     val units by CarSettings.units.collectAsState()
     val navBar by CarSettings.navBarMode.collectAsState()
+    val screensaver by CarSettings.screensaver.collectAsState()
     val screenSize by CarSettings.screenSize.collectAsState()
     val screenFit by CarSettings.screenFit.collectAsState()
     val whatsNew by CarSettings.whatsNewAfterUpdates.collectAsState()
@@ -139,6 +140,13 @@ fun CarSettingsScreen() {
                             GsThemes.builtIn.map { it.id to it.name },
                             uiTheme,
                         ) { CarSettings.setUiTheme(it) }
+                    }
+                    item {
+                        SwitchRow(
+                            stringResource(R.string.car_screensaver),
+                            stringResource(R.string.car_screensaver_note),
+                            screensaver,
+                        ) { CarSettings.setScreensaver(it) }
                     }
                     item {
                         ChoiceRow(

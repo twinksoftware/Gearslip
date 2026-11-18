@@ -44,6 +44,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.Typography
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
@@ -79,6 +80,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import app.seb3thehacker.gearslip.R
 import app.seb3thehacker.gearslip.car.theme.GsColors
 import app.seb3thehacker.gearslip.car.theme.withTintedSurfaces
+import app.seb3thehacker.gearslip.car.theme.nothingColorScheme
+import app.seb3thehacker.gearslip.car.theme.nothingTypography
 import app.seb3thehacker.gearslip.car.theme.GsIconBox
 import app.seb3thehacker.gearslip.car.theme.GsIconButton
 import app.seb3thehacker.gearslip.car.theme.GsButton
@@ -122,7 +125,13 @@ fun CarUi() {
         AppTheme.LIGHT -> false
         AppTheme.DARK -> true
     }
-    val colors = (if (dark) dynamicDarkColorScheme(appContext) else dynamicLightColorScheme(appContext)).withTintedSurfaces(dark, darkStyle)
+    val colors = if (uiThemeId == GsThemes.Nothing.id) {
+        // The Nothing skin's fixed scheme replaces Material You entirely, dark/light by the app
+        // theme setting alone - no wallpaper accent, no Dark mode style on top.
+        nothingColorScheme(dark)
+    } else {
+        (if (dark) dynamicDarkColorScheme(appContext) else dynamicLightColorScheme(appContext)).withTintedSurfaces(dark, darkStyle)
+    }
     val base = LocalDensity.current
     val insets by CarEnvironment.insets.collectAsState()
     val navigator = remember {
@@ -140,7 +149,7 @@ fun CarUi() {
         }
     }
     // The knob counts as a touch: the map's buttons can't be found while they're faded out.
-    LaunchedEffect(controlsWake) { CarKeys.focusMoves.collect { controlsWake.touch() } }
+    LaunchedEffect(controlsWake) { CarKeys.focusMoves.collect { controlsWake.touch(); CarScreensaver.poke() } }
     remember(appContext) { Prefetch.warm(appContext, force = true); CarServices.init(appContext) }
     DisposableEffect(Unit) { onDispose { CarServices.shutdown() } }
     // Ask for the phone's sound as soon as the car connects, not only when a media app opens:
@@ -167,6 +176,11 @@ fun CarUi() {
     // The car's own back, home, map, media and phone keys.
     LaunchedEffect(navigator) {
         CarKeys.screenKeys.collect { key ->
+            // Any key wakes the resting screen first; the second press does what it always did.
+            if (CarScreensaver.visible) {
+                CarScreensaver.dismiss()
+                return@collect
+            }
             when (key) {
                 CarKeys.ScreenKey.BACK -> when {
                     navigator.appMenu != null -> navigator.dismissAppMenu()
@@ -200,7 +214,10 @@ fun CarUi() {
         LocalMapControlsWake provides controlsWake,
         LocalGsTheme provides GsThemes.byId(uiThemeId),
     ) {
-        MaterialTheme(colorScheme = colors) {
+        MaterialTheme(
+            colorScheme = colors,
+            typography = if (uiThemeId == GsThemes.Nothing.id) nothingTypography() else Typography(),
+        ) {
           CompositionLocalProvider(LocalIndication provides FocusRingIndication(MaterialTheme.colorScheme.primary)) {
             Surface(
                 Modifier
@@ -216,6 +233,7 @@ fun CarUi() {
                             while (true) {
                                 val event = awaitPointerEvent(PointerEventPass.Initial)
                                 controlsWake.touch()
+                                CarScreensaver.poke()
                                 CarFullscreen.touch()
                                 val change = event.changes.firstOrNull() ?: continue
                                 if (!CarFullscreen.active) continue
@@ -258,6 +276,18 @@ fun CarUi() {
                 // A call keeps the bar up whatever the setting: End and Mute live on it.
                 val onCall = CarCalls.state.collectAsState().value is CallUiState.Active
                 val barShown = !keyboardVisible && (!barMayHide || controlsWake.navBarAwake || onCall)
+                // The black resting screen: only from Home, and only when nothing on it needs the
+                // driver - no keyboard, no call, and never before the safety warning is accepted.
+                val screensaverOn by CarSettings.screensaver.collectAsState()
+                LaunchedEffect(screensaverOn, screen, keyboardVisible, onCall, safetyWarningSeen) {
+                    while (true) {
+                        CarScreensaver.tick(
+                            enabled = screensaverOn,
+                            allowed = screen == CarScreen.Home && safetyWarningSeen && !keyboardVisible && !onCall,
+                        )
+                        delay(250)
+                    }
+                }
                 // Up to the bar's top edge, so the map's cards and the player end above it.
                 val homeInset = if (barShown) NAV_BAR_HEIGHT else 0.dp
                 // Only the screen that asked: going Home or anywhere else ends it.
@@ -369,6 +399,9 @@ fun CarUi() {
                                 exit = androidx.compose.animation.slideOutVertically { it },
                             ) { CarNavBar(navigator) }
                         }
+                        // Last of the resting layer so it covers the nav bar too; a call, alert or
+                        // the assistant draws after it and the tick hides it as soon as one starts.
+                        CarScreensaverOverlay()
                         if (fullscreen) {
                             androidx.compose.animation.AnimatedVisibility(
                                 CarFullscreen.revealed,

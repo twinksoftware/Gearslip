@@ -65,6 +65,11 @@ data class ControlLook(
      */
     val holdMarker: HoldMarkerStyle = HoldMarkerStyle.PEEL,
     /**
+     * Renders [GsButton] as a pill (radius 50% of its height) instead of the theme's corner.
+     * Tiles and nav-bar buttons keep their own [gsShape] corners either way.
+     */
+    val pill: Boolean = false,
+    /**
      * The shadow a panel floating over the map casts onto it (the docked player, the lyrics), and
      * the nav bar casts up. 0 for none, so a flat look stays flat.
      */
@@ -126,8 +131,19 @@ object GsThemes {
         control = ControlLook(holdMarker = HoldMarkerStyle.DOT),
     )
 
+    // Nothing OS skin: sharp edges, no depth, a soft press, and pill buttons; the palette and
+    // typography swap is done by CarUi / GearslipTheme on the id.
+    val Nothing = GsTheme(
+        id = "nothing",
+        name = "Nothing",
+        control = ControlLook(
+            corner = 0.dp, pressedDim = 0.06f, pressedScale = 1f,
+            pill = true, holdMarker = HoldMarkerStyle.DOT,
+        ),
+    )
+
     val default = Flat
-    val builtIn = listOf(Tactile, Keycap, Flat)
+    val builtIn = listOf(Tactile, Keycap, Flat, Nothing)
 
     fun byId(id: String?): GsTheme = builtIn.firstOrNull { it.id == id } ?: default
 }

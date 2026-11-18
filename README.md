@@ -2,11 +2,11 @@
 
 <img src="docs/icon/gearslip-icon.png" alt="Gearslip icon" width="96" height="96">
 
-# Gearslip
+# Gearslip — Nothing OS fork
 
-An Android Auto alternative built for everyone.
+An Android Auto alternative built for everyone, with a Nothing OS-inspired car interface.
 
-[<img src="https://raw.githubusercontent.com/ImranR98/Obtainium/main/assets/graphics/badge_obtainium.png" alt="Get it on Obtainium" height="80">](https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/twinksoftware/gearslip)
+[<img src="https://raw.githubusercontent.com/ImranR98/Obtainium/main/assets/graphics/badge_obtainium.png" alt="Get it on Obtainium" height="80">](https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/shrijit37/gearslip)
 
 ![Vela Maps navigating on the car screen, with the music player beside the map](docs/screenshots/navigation.png)
 
@@ -15,6 +15,12 @@ An Android Auto alternative built for everyone.
 Gearslip speaks the Android Auto protocol straight to your car, over USB or wireless, with no
 Google software in the path. Map, music, and messaging apps draw their car screens through
 Gearslip, and it adds a player, calls, voice, and a web browser of its own.
+
+> [!IMPORTANT]
+> This is an unofficial fork. It keeps Gearslip's car protocol and apps, but replaces the car UI
+> with a fixed, monochrome Nothing OS-inspired skin and adds a screensaver, Google Maps mirroring
+> and car sensor readings. It is not affiliated with Nothing Technology Limited or Twink Software
+> LLC. Upstream is [twinksoftware/Gearslip](https://github.com/twinksoftware/Gearslip).
 
 > [!WARNING]
 > Gearslip is **alpha software**. It can drop the connection, freeze the car screen, or fail
@@ -67,14 +73,32 @@ Questions, ideas? [Join the discussion on Matrix](https://matrix.to/#/!mf0_mgBd5
 - **Weather and the day ahead.** A dashboard shows the week's calendar beside the weather.
 - **Your apps, your order.** Apps group by kind. Press and hold one to move it, and hide
   the ones you don't use from the Apps card on the phone.
-- **Your look.** The car screen takes your phone's Material You colors. Choose flat
-  buttons or ones that look like real keys, and make text bigger on small screens.
+- **Your look.** The car screen uses a fixed monochrome palette instead of Material You:
+  pure black surfaces, sharp 1px borders, a dot-matrix display face and dot-grid icons, with
+  Nothing Red as the only accent. See [design.md](design.md) for the tokens.
 - **Settings on the phone.** Set things up before you drive. A change on either screen
   shows on both.
 
+## The Nothing edition
+
+The car UI is a skin, not a separate app: every car screen, the nav bar, the player and the
+dashboard use the same tokens listed in [design.md](design.md).
+
+- **Monochrome, by default.** Pure black canvas, near-black surfaces, white text and one red
+  accent. Wallpaper-derived Material You colours are deliberately not used.
+- **Dot-matrix type and icons.** Display text uses the bundled Doto font; app glyphs are redrawn
+  as square, dot-grid icons in `car/theme/NothingIcons.kt`.
+- **Screensaver.** After a minute untouched on the map, the screen fades to the album's colours,
+  the next turn and the car's own readings. Touch or press any key to wake it. Turn it off in car
+  Settings.
+- **Google Maps on the car screen.** The phone runs Google Maps and Gearslip mirrors it, so its
+  turns still feed the nav bar, the cluster and the screensaver.
+- **Vehicle readings.** Speed, fuel and other supported sensors appear in a small corner card;
+  unsupported sensors are left out rather than shown as dashes.
+
 ## Install
 
-1. Install Gearslip from [the releases page](https://github.com/twinksoftware/Gearslip/releases)
+1. Install Gearslip from [this fork's releases page](https://github.com/shrijit37/Gearslip/releases)
    or through Obtainium.
 2. Open it. Setup asks where your Android Auto certificate comes from, then for one
    permission at a time, each with a plain reason. A help screen in the car answers the rest.
@@ -88,20 +112,17 @@ From then on, Gearslip connects whenever the car's Bluetooth does.
 > On GrapheneOS, make sure **USB-C port control** isn't set to **Charging-only**. That
 > setting blocks USB data, so the car never sees the phone, even with a data cable.
 
-Gearslip updates itself from this repository. Once a day it checks the latest release,
-downloads the APK, checks it against GitHub's SHA-256, and installs it through Android's
-own installer. Turn off automatic checks in Settings.
+Gearslip's built-in updater still checks **upstream** releases, not this fork's. Fork builds are
+published as debug APKs on the [releases page](https://github.com/shrijit37/Gearslip/releases);
+install new ones manually with sideloading or Obtainium, and turn off automatic checks in Settings
+so the app doesn't replace this fork with an upstream build.
 
 ### Verify your download
 
-Check that your copy of Gearslip is genuine with
-[AppVerifier](https://github.com/soupslurpr/AppVerifier): share this block to it, or compare it
-with the output of `apksigner verify --print-certs`.
-
-```
-app.seb3thehacker.gearslip
-4C:C5:6E:BD:D1:3A:54:D2:60:EC:A9:B7:E2:B2:AE:6B:30:E2:F2:25:BF:DA:8F:50:8F:07:09:ED:F0:84:94:8B
-```
+Fork releases are **debug builds**, signed with the debug key generated on the CI runner, not the
+upstream release key. There is no fixed certificate fingerprint to compare here. Get the APK only
+from [this fork's releases page](https://github.com/shrijit37/Gearslip/releases); the build log in
+Actions shows exactly what produced it.
 
 ## Good to know
 
@@ -197,9 +218,11 @@ certificate stays on your phone. Gearslip never uploads, backs up, or logs it.
 
 ## Trademarks
 
-Android, Android Auto, Google Messages, and Waze are trademarks of Google LLC. Spotify is
-a trademark of Spotify AB. Gearslip is not affiliated with, endorsed by, or sponsored by
-any of these companies. All other names belong to their owners.
+Android, Android Auto, Google Maps, Google Messages, and Waze are trademarks of Google LLC.
+Spotify is a trademark of Spotify AB. Nothing and Nothing OS are trademarks of Nothing Technology
+Limited. Doto is © The Doto Project Authors (OFL-1.1); the dot-grid icon pipeline is adapted from
+linuxct/nothing-icongen (AGPL-3.0); see [NOTICE.md](NOTICE.md). This fork is not affiliated with,
+endorsed by, or sponsored by any of these companies. All other names belong to their owners.
 
 ## License
 

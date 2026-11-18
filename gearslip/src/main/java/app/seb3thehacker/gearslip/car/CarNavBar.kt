@@ -422,22 +422,27 @@ private const val TITLE_SHOWN_MS = 3_000L
 private val TURN_AND_PLAYER_MIN_WIDTH = 520.dp
 
 /** The next manoeuvre, as the running nav app last described it, or [fromPhone] a map guiding on the phone. */
-private class NextTurn(val icon: CarIcon?, val distance: String, val road: String, val fromPhone: Boolean = false)
+internal class NextTurn(val icon: CarIcon?, val distance: String, val road: String, val fromPhone: Boolean = false)
 
 /**
  * Read straight off the nav app's own template: a navigation app keeps sending its routing card
  * while it's running, whether or not the map is the screen being shown.
+ *
+ * A live turn from Google Maps or Waze on the phone wins over the car's own template. The phone
+ * app is the one the driver picked as their map, and its notification only exists while it is
+ * actually guiding, so this never pins a stale turn over a route running in the car.
  */
 @Composable
-private fun rememberNextTurn(): NextTurn? {
+internal fun rememberNextTurn(): NextTurn? {
     val status by CarServices.nav.status.collectAsState()
     val template by CarServices.nav.template.collectAsState()
     // Read so a change of units redraws the distance straight away, not at the next update.
     CarSettings.units.collectAsState().value
     val phone by PhoneNavigation.turn.collectAsState()
+    phone?.let { return phoneTurn(it) }
     val routing = ((template as? NavigationTemplate)?.navigationInfo as? RoutingInfo)
         ?.takeIf { status.phase == CarAppConnection.Phase.RUNNING }
-    val step = routing?.takeIf { !it.isLoading }?.currentStep ?: return phone?.let { phoneTurn(it) }
+    val step = routing?.takeIf { !it.isLoading }?.currentStep ?: return null
     return NextTurn(
         icon = step.maneuver?.icon,
         distance = routing.currentDistance.display(),

@@ -78,6 +78,10 @@ fun gsColors(tone: GsTone): GsColors {
 @Composable
 fun gsShape(): Shape = RoundedCornerShape(gsLook().corner)
 
+/** Buttons pick the pill shape when the theme asks for it; tiles and nav buttons stay square. */
+@Composable
+fun gsButtonShape(): Shape = if (gsLook().pill) RoundedCornerShape(50) else gsShape()
+
 /** The current theme's control look, swapped for its light-mode variant on a light UI. */
 @Composable
 fun gsLook(): ControlLook {
@@ -309,7 +313,7 @@ fun GsButton(
     content: @Composable RowScope.() -> Unit,
 ) {
     val c = colors.disabled(enabled, MaterialTheme.colorScheme.onSurface)
-    val shape = gsShape()
+    val shape = gsButtonShape()
     val source = remember { MutableInteractionSource() }
     val pressed = rememberPressed(source)
     Row(
