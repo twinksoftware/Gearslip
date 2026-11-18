@@ -64,7 +64,7 @@ fun CarNothingRail(navigator: CarNavigator, modifier: Modifier = Modifier) {
         RailEntry("APPS", RailIcons.Apps) { navigator.apps() },
         RailEntry("WEATHER", RailIcons.Weather) { navigator.weather() },
         RailEntry("CAR", RailIcons.Car) { navigator.vehicleData() },
-        // No public "show now" on the screensaver yet; poke() is the lead's hook for one.
+        // The resting screen is an action, not a destination: show it without moving the trail.
         RailEntry("SAVE", RailIcons.Save) { CarScreensaver.show() },
     )
     Column(
@@ -164,6 +164,7 @@ private object RailIcons {
 @Composable
 fun NothingBottomPlayer(modifier: Modifier = Modifier) {
     val media = CarServices.media
+    val navigator = LocalCarNavigator.current
     val now by media.now.collectAsStateWithLifecycle()
     val art = rememberArt(now)
     val scheme = MaterialTheme.colorScheme
@@ -207,7 +208,7 @@ fun NothingBottomPlayer(modifier: Modifier = Modifier) {
                 Column(
                     Modifier
                         .weight(1f)
-                        .clickable { LocalCarNavigator.current.firstPartyPlayer() }
+                        .clickable { navigator.firstPartyPlayer() }
                         .then(if (hasTrack) Modifier else Modifier.alpha(0.5f)),
                     verticalArrangement = Arrangement.spacedBy(2.dp),
                 ) {

@@ -72,7 +72,8 @@ fun FirstPartyMusicScreen() {
             DotGrid(Modifier.fillMaxSize())
             Column(
                 Modifier.fillMaxSize().padding(
-                    horizontal = 20.dp,
+                    start = 20.dp,
+                    end = 20.dp,
                     top = 16.dp,
                     bottom = 16.dp + LocalNavBarInset.current,
                 ),
@@ -353,7 +354,7 @@ private fun DotMatrixCover(seed: String, modifier: Modifier) {
         var bits = (seed.hashCode().toLong() and 0x7fffffffL) xor 0x2a2a2a2aL
         for (r in 0 until rows) {
             for (c in 0..(cols / 2)) {
-                val lit = bits and 1L == 1L
+                val lit = (bits and 1L) == 1L
                 bits = (bits ushr 1) or (bits shl 30)
                 if (!lit) continue
                 drawCircle(color, radius, Offset(startX + c * step, startY + r * step))

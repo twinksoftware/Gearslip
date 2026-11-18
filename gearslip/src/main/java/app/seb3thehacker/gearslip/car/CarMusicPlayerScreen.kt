@@ -55,7 +55,7 @@ fun FirstPartyPlayerScreen(onBack: () -> Unit) {
                 Column(
                     Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 4.dp),
                 ) {
-                    // Compact header: back + NOW PLAYING in ~44.dp.
+                    // Compact header: back + NOW PLAYING in ~40.dp.
                     Row(
                         Modifier.fillMaxWidth().height(40.dp),
                         verticalAlignment = Alignment.CenterVertically,
@@ -76,7 +76,7 @@ fun FirstPartyPlayerScreen(onBack: () -> Unit) {
                     // by BoxWithConstraints. The larger weight keeps it the visual anchor without
                     // pushing the transport and tabs off a short screen.
                     Box(
-                        Modifier.fillMaxWidth().weight(2f).padding(vertical = 2.dp),
+                        Modifier.fillMaxWidth().weight(2f),
                         contentAlignment = Alignment.Center,
                     ) {
                         EntryArt(
@@ -121,7 +121,7 @@ fun FirstPartyPlayerScreen(onBack: () -> Unit) {
                     // LYRICS / QUEUE switch, sharing the car UI's icon-box treatment at a shorter
                     // height so it fits above the lyrics on a 480dp-tall display.
                     Row(
-                        Modifier.fillMaxWidth().padding(top = 2.dp),
+                        Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
                         CompactMusicTab("LYRICS", tab == TAB_LYRICS, Modifier.weight(1f)) { tab = TAB_LYRICS }
@@ -141,14 +141,14 @@ fun FirstPartyPlayerScreen(onBack: () -> Unit) {
 }
 
 /**
- * A shorter sibling of [MusicTab]: same latched icon-box look, but 40.dp tall with a smaller label
+ * A shorter sibling of [MusicTab]: same latched icon-box look, but 38.dp tall with a smaller label
  * so the tab strip fits on a short car screen.
  */
 @Composable
 private fun CompactMusicTab(label: String, selected: Boolean, modifier: Modifier, onClick: () -> Unit) {
     GsIconBox(
         onClick = onClick,
-        modifier = modifier.height(40.dp),
+        modifier = modifier.height(38.dp),
         colors = if (selected) GsColors(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.onPrimary)
         else GsColors(MaterialTheme.colorScheme.surfaceContainerHigh, MaterialTheme.colorScheme.onSurface),
         shape = RectangleShape,
@@ -196,13 +196,13 @@ private fun LyricsView(now: NowPlaying, modifier: Modifier) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     if (current) {
                         // The one sparing red accent: a thin marker on the playing line.
-                        Box(Modifier.size(width = 3.dp, height = 18.dp).background(MaterialTheme.colorScheme.error))
+                        Box(Modifier.size(width = 3.dp, height = 16.dp).background(MaterialTheme.colorScheme.error))
                         Spacer(Modifier.width(8.dp))
                     }
                     Text(
                         line.text.ifEmpty { " " },
-                        style = if (current) MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
-                        else MaterialTheme.typography.bodyMedium,
+                        style = if (current) MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold)
+                        else MaterialTheme.typography.bodySmall,
                         color = if (current) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
