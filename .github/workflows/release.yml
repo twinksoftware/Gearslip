@@ -1,9 +1,10 @@
-name: Release
+name: Build APK and release
 
 on:
   push:
-    tags:
-      - "v*"
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
   build:
@@ -21,36 +22,40 @@ jobs:
           distribution: temurin
           java-version: "21"
 
+      - uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK packages
+        run: |
+          yes | sdkmanager --licenses > /dev/null
+          sdkmanager "platforms;android-37" "build-tools;37.0.0"
+
       - uses: gradle/actions/setup-gradle@v4
 
-      - name: Write signing key and properties
-        run: |
-          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > gearslip-release.jks
-          cat > keystore.properties <<EOF
-          storeFile=gearslip-release.jks
-          storePassword=${{ secrets.KEYSTORE_STORE_PASSWORD }}
-          keyAlias=${{ secrets.KEYSTORE_KEY_ALIAS }}
-          keyPassword=${{ secrets.KEYSTORE_KEY_PASSWORD }}
-          EOF
-
-      - name: Build release APK
-        run: ./gradlew :gearslip:assembleRelease
+      - name: Build debug APK
+        # Debug needs no signing secrets, so this works in a fork out of the box.
+        run: ./gradlew :gearslip:assembleDebug --no-daemon
 
       - name: Locate APK
         id: apk
         run: |
-          # The build moves its APKs to <root>/build/Gearslip-<variant>.apk (see renameApk).
-          apk=build/Gearslip-release.apk
+          apk=build/Gearslip-debug.apk
           test -f "$apk" || { echo "no APK at $apk"; ls -R build | head -50; exit 1; }
           echo "path=$apk" >> "$GITHUB_OUTPUT"
 
-      - name: Create release
+      - name: Compute release tag
+        id: version
+        run: |
+          tag=$(git describe --tags --match 'v*' --abbrev=7 2>/dev/null \
+            || echo "v0.0.0-$(git rev-parse --short=7 HEAD)")
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
+      - name: Create tagged release
         uses: softprops/action-gh-release@v2
         with:
-          files: ${{ steps.apk.outputs.path }}
-          # The hand-written notes go first; GitHub adds the full changelog link under them.
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: ${{ steps.version.outputs.tag }}
           body_path: .github/release-notes.md
           generate_release_notes: true
-          # Every release starts as a pre-release: only phones on the Alpha update channel get it.
-          # Once it's tested, untick pre-release on GitHub and everyone gets it.
+          files: ${{ steps.apk.outputs.path }}
+          # Every build starts as a pre-release; promote it on GitHub after testing.
           prerelease: true
