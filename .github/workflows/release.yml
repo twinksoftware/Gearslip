@@ -22,15 +22,8 @@ jobs:
           distribution: temurin
           java-version: "21"
 
-      - name: Install Android SDK packages
-        # ubuntu-latest ships the SDK and cmdline-tools; setup-android@v3 still tries to
-        # install the removed `tools` package, so call sdkmanager directly.
-        run: |
-          sdkmgr=$(find "$ANDROID_HOME/cmdline-tools" -name sdkmanager -type f | head -1)
-          test -n "$sdkmgr" || { echo "sdkmanager not found under $ANDROID_HOME"; exit 1; }
-          yes | "$sdkmgr" --licenses > /dev/null
-          "$sdkmgr" "platforms;android-37" "build-tools;37.0.0"
-
+      # ubuntu-latest ships the Android SDK (incl. compileSdk 37) and Gradle picks it up
+      # from ANDROID_HOME; upstream's release job relies on this too.
       - uses: gradle/actions/setup-gradle@v4
 
       - name: Build debug APK
