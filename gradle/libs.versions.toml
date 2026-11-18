@@ -17,7 +17,6 @@ zxing = "3.5.4"
 okhttp = "5.4.0"
 kotlinxSerializationJson = "1.11.0"
 ossLicenses = "17.5.1"
-webkit = "1.16.0"
 androidxMedia = "1.6.0"
 
 [libraries]
@@ -53,7 +52,6 @@ zxing-core = { group = "com.google.zxing", name = "core", version.ref = "zxing" 
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 google-oss-licenses = { group = "com.google.android.gms", name = "play-services-oss-licenses", version.ref = "ossLicenses" }
-androidx-webkit = { group = "androidx.webkit", name = "webkit", version.ref = "webkit" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

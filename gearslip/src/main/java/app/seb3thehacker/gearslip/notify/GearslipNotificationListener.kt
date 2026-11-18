@@ -33,10 +33,8 @@ class GearslipNotificationListener : NotificationListenerService() {
     }
 
     private fun ingest(sbn: StatusBarNotification, quiet: Boolean) {
-        // Gearslip's own notifications are skipped, except a debug build's test message.
-        if (sbn.packageName == packageName &&
-            !(app.seb3thehacker.gearslip.BuildConfig.DEBUG && sbn.notification.channelId == TestMessage.CHANNEL)
-        ) return
+        // Gearslip's own notifications are not car content.
+        if (sbn.packageName == packageName) return
         val n = sbn.notification
         // Google Maps or Waze guiding on the phone: the turn goes to the nav bar and the cluster.
         if (n.category == Notification.CATEGORY_NAVIGATION && sbn.packageName in PhoneNavigation.APPS) {

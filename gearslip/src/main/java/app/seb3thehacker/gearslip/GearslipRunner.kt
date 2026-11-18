@@ -8,9 +8,6 @@ import app.seb3thehacker.gearslip.media.CarMediaStatus
 import app.seb3thehacker.gearslip.car.BluetoothAudioCheck
 import app.seb3thehacker.gearslip.car.LocationCheck
 import app.seb3thehacker.gearslip.car.CarBluetooth
-import app.seb3thehacker.gearslip.car.ClusterNav
-import app.seb3thehacker.gearslip.car.DirectionsVoice
-import app.seb3thehacker.gearslip.car.CarAssistant
 import app.seb3thehacker.gearslip.car.CarEnvironment
 import app.seb3thehacker.gearslip.car.CarKeys
 import app.seb3thehacker.gearslip.car.ScreenFit
@@ -108,11 +105,8 @@ class GearslipRunner(
     @Volatile private var sensorChannelId: Int = -1
     @Volatile private var mediaStatus: CarMediaStatus? = null
     @Volatile private var phoneStatus: app.seb3thehacker.gearslip.call.CarPhoneStatus? = null
-    @Volatile private var clusterVideo: ClusterVideo? = null
-    @Volatile private var clusterNav: ClusterNav? = null
     private var sensorTypes: List<Int> = emptyList()
     @Volatile private var audioLink: AudioLink? = null
-    @Volatile private var guidanceLink: AudioLink? = null
     @Volatile private var vendorChannelId = -1
     /** The car's Wi-Fi projection channel, opened in GM cars only (see [startVendorChannel]); -1 when closed. */
     @Volatile private var wifiChannelId = -1
@@ -205,8 +199,6 @@ class GearslipRunner(
         CarAudio.openSink = null
         audioLink?.close()
         audioLink = null
-        guidanceLink?.close()
-        guidanceLink = null
         CarSensors.clear()
         app.seb3thehacker.gearslip.car.CarData.clear()
         CarMic.current = null
@@ -218,10 +210,6 @@ class GearslipRunner(
         mediaStatus = null
         phoneStatus?.stop()
         phoneStatus = null
-        clusterVideo?.stop()
-        clusterVideo = null
-        clusterNav?.stop()
-        clusterNav = null
         lastSensorNight = null
         CarEnvironment.setSensorNight(null) // back to the clock until a car says otherwise
         projection?.onProjectionStopped()
@@ -263,16 +251,10 @@ class GearslipRunner(
                 onInputMessage(messageId, body)
             } else if (frame.channel == sensorChannelId) {
                 onSensorMessage(messageId, body)
-            } else if (frame.channel == clusterNav?.channelId) {
-                clusterNav?.onMessage(messageId, body)
             } else if (frame.channel == mediaStatus?.channelId) {
                 mediaStatus?.onMessage(messageId, body)
             } else if (frame.channel == phoneStatus?.channelId) {
                 phoneStatus?.onMessage(messageId, body)
-            } else if (frame.channel == clusterVideo?.channelId) {
-                clusterVideo?.onMessage(messageId, body)
-            } else if (frame.channel == guidanceLink?.channelId) {
-                guidanceLink?.onMessage(messageId, body)
             } else if (frame.channel == CarBluetooth.channelId) {
                 CarBluetooth.onMessage(messageId, body)
             } else if (frame.channel == vendorChannelId) {
@@ -311,12 +293,7 @@ class GearslipRunner(
             MSG_PING_RESPONSE -> onPingResponse()
             MSG_BYEBYE_REQUEST -> onByeByeRequest(body)
             MSG_UNEXPECTED_MESSAGE, MSG_FRAMING_ERROR -> onProtocolError(messageId)
-            AudioLink.MSG_FOCUS_RESPONSE -> {
-                // One answer for both sinks: it is the directions' while they wait on one.
-                val state = Protobuf.readInt32Field(body, 1) ?: 0
-                val guidance = guidanceLink
-                if (guidance != null && guidance.expectsFocusAnswer()) guidance.onFocus(state) else audioLink?.onFocus(state)
-            }
+            AudioLink.MSG_FOCUS_RESPONSE -> audioLink?.onFocus(Protobuf.readInt32Field(body, 1) ?: 0)
             else -> log.i("unhandled control message id=$messageId (${body.size} bytes) - continuing")
         }
     }
@@ -582,13 +559,10 @@ class GearslipRunner(
 
         openChannel(video.serviceId)
         startAudioChannel(serviceDiscoveryResponse)
-        startGuidanceChannel(serviceDiscoveryResponse)
         startSensorChannel(serviceDiscoveryResponse)
         startMicChannel(serviceDiscoveryResponse)
         startMediaStatusChannel(serviceDiscoveryResponse)
         startPhoneStatusChannel(serviceDiscoveryResponse)
-        startClusterVideo(serviceDiscoveryResponse)
-        startClusterNavChannel(serviceDiscoveryResponse)
         startBluetooth(serviceDiscoveryResponse)
         startVendorChannel(serviceDiscoveryResponse)
 
@@ -658,29 +632,6 @@ class GearslipRunner(
         }
     }
 
-    /** The car's directions channel, where [DirectionsVoice] reads out each turn. */
-    private fun startGuidanceChannel(serviceDiscoveryResponse: ByteArray) {
-        val guidance = ServiceDiscovery.findAudioServices(serviceDiscoveryResponse)
-            .filter { it.streamType == ServiceDiscovery.STREAM_GUIDANCE }
-            .firstOrNull { it.codecType == ServiceDiscovery.CODEC_PCM } ?: run {
-            log.i("no PCM directions sink - turns won't be spoken")
-            return
-        }
-        guidanceLink = AudioLink(
-            guidance,
-            sendOnChannel = { id, body -> send(id, body, encrypted = true, channel = guidance.serviceId) },
-            sendControl = { id, body -> send(id, body, encrypted = true) },
-            tag = "guidance",
-            sessionId = GUIDANCE_SESSION_ID,
-            asksFocus = false,
-            onReady = {
-                DirectionsVoice.attach(it, musicIsOurs = { audioLink?.streaming == true }, musicSink = { audioLink?.takeIf { link -> link.isReady } })
-            },
-            onClose = { DirectionsVoice.detach(it) },
-        )
-        openChannel(guidance.serviceId)
-    }
-
     /** The car's microphone, for voice: opened now, recording only while something listens. */
     private fun startMicChannel(serviceDiscoveryResponse: ByteArray) {
         val mic = ServiceDiscovery.findMicService(serviceDiscoveryResponse) ?: run {
@@ -709,19 +660,6 @@ class GearslipRunner(
         log.i("media status channel: $channel")
         mediaStatus = CarMediaStatus(channel) { id, body -> send(id, body, encrypted = true, channel = channel) }
         openChannel(channel)
-    }
-
-    /** The turn card on the instrument cluster, for a car with a cluster screen: experimental, off by default. */
-    private fun startClusterVideo(serviceDiscoveryResponse: ByteArray) {
-        val sink = ServiceDiscovery.findClusterVideoService(serviceDiscoveryResponse) ?: return
-        log.i("cluster video sink: channel=${sink.serviceId} display=${sink.displayId} type=${sink.displayType}")
-        if (!CarSettings.experimentalFeaturesEnabled.value || !CarSettings.clusterVideoEnabled.value) {
-            log.i("cluster screen is off in the car's Settings (experimental) - leaving that sink alone")
-            return
-        }
-        val context = app.seb3thehacker.gearslip.car.CarEnvironment.appContext ?: return
-        clusterVideo = ClusterVideo(context, sink) { id, body -> send(id, body, encrypted = true, channel = sink.serviceId) }
-        openChannel(sink.serviceId)
     }
 
     /** Calls, for the car's own screens: the cluster, the steering wheel display. */
@@ -795,20 +733,6 @@ class GearslipRunner(
                 }
             },
         )
-    }
-
-    /** Turn-by-turn for the instrument cluster: the next turn, its road, and how far. */
-    private fun startClusterNavChannel(serviceDiscoveryResponse: ByteArray) {
-        val navigation = ServiceDiscovery.findNavStatusService(serviceDiscoveryResponse) ?: run {
-            log.i("no navigation status channel - the cluster won't show turns")
-            return
-        }
-        val channel = navigation.serviceId
-        log.i("navigation status channel: $channel")
-        clusterNav = ClusterNav(channel, navigation.minimumIntervalMs.toLong()) { id, body ->
-            send(id, body, encrypted = true, channel = channel)
-        }
-        openChannel(channel)
     }
 
     /**
@@ -1754,7 +1678,6 @@ class GearslipRunner(
         const val ACK_STALL_MS = 2_000L
         const val WITHHELD_SCREEN_MS = 5_000L
         const val AUDIO_TRACE_MESSAGES = 6
-        const val GUIDANCE_SESSION_ID = 1
         const val PERIODIC_KEYFRAME_MS = 5_000L
     }
 }

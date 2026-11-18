@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.SharedFlow
  * The car's own buttons: steering wheel, rotary knob, D-pad and the hard keys around the screen.
  *
  * The head unit sends Android keycodes as they are, so the numbers here are android.view.KeyEvent's.
- * Media, voice and call keys act straight away. Keys that move around the car UI (back, home, the
+ * Media and call keys act straight away. Keys that move around the car UI (back, home, the
  * knob) need a [CarNavigator], which only [CarUi] has, so they go out on [screenKeys]. Focus keys
  * (D-pad, knob turns, OK) become real key events on the car's display through [focusSink], where
  * Compose moves focus between buttons the same way it would with a keyboard.
@@ -72,7 +72,6 @@ object CarKeys {
     val WANTED = listOf(
         KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, KeyEvent.KEYCODE_MEDIA_PLAY, KeyEvent.KEYCODE_MEDIA_PAUSE,
         KeyEvent.KEYCODE_MEDIA_NEXT, KeyEvent.KEYCODE_MEDIA_PREVIOUS, KeyEvent.KEYCODE_MEDIA_STOP,
-        KeyEvent.KEYCODE_SEARCH, KeyEvent.KEYCODE_VOICE_ASSIST,
         KeyEvent.KEYCODE_CALL, KeyEvent.KEYCODE_ENDCALL,
         KeyEvent.KEYCODE_BACK, KeyEvent.KEYCODE_HOME,
         KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_DPAD_DOWN, KeyEvent.KEYCODE_DPAD_LEFT,
@@ -107,7 +106,6 @@ object CarKeys {
             KeyEvent.KEYCODE_MEDIA_PAUSE, KeyEvent.KEYCODE_MEDIA_STOP -> if (media != null && media.now.value.playing) media.togglePlay()
             KeyEvent.KEYCODE_MEDIA_NEXT -> media?.next()
             KeyEvent.KEYCODE_MEDIA_PREVIOUS -> media?.previous()
-            KeyEvent.KEYCODE_SEARCH, KeyEvent.KEYCODE_VOICE_ASSIST -> voice()
             KeyEvent.KEYCODE_CALL -> call()
             KeyEvent.KEYCODE_ENDCALL -> endCall()
             KeyEvent.KEYCODE_BACK -> if (knobTaker?.take(KnobEvent.Back) != true) screen(ScreenKey.BACK)
@@ -131,14 +129,6 @@ object CarKeys {
             sink(code, true)
             sink(code, false)
         }
-    }
-
-    /**
-     * The voice key: answers the message on screen if there is one, otherwise starts the
-     * assistant.
-     */
-    private fun voice() = main.post {
-        if (!VoiceReply.onVoiceKey()) CarAssistant.start()
     }
 
     /** Answers a ringing call; with nothing ringing, opens the phone screen. */

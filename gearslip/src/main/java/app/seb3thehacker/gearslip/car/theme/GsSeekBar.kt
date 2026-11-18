@@ -1,12 +1,5 @@
 package app.seb3thehacker.gearslip.car.theme
 
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -28,22 +21,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import kotlin.math.sin
 
 /**
  * A capsule progress bar: a tinted track with a glossy fill set inside it, lighter along the
  * top and darker along the bottom. Below its own height the fill narrows into a smaller oval, so
- * a countdown runs smoothly all the way to empty. The flat theme draws Material's wavy bar instead.
+ * a countdown runs smoothly all the way to empty.
  */
 @Composable
 fun GsProgressBar(
@@ -58,10 +46,6 @@ fun GsProgressBar(
     val shown = fraction.coerceIn(0f, 1f)
     val inset = 3.dp
     val fill = if (active) lerp(color, Color.White, 0.12f) else color
-    if (LocalGsTheme.current.id == GsThemes.Flat.id) {
-        WavyBar(shown, fill, lerp(scheme.surfaceContainerHighest, color, 0.12f), modifier.fillMaxWidth().height(height))
-        return
-    }
     BoxWithConstraints(
         modifier
             .fillMaxWidth()
@@ -96,45 +80,6 @@ fun GsProgressBar(
                     )
                 },
         )
-    }
-}
-
-/**
- * Material 3's wavy progress bar, drawn here because the stable library doesn't offer it yet: the
- * filled part is a sine wave that drifts along, then a gap, then a straight track and a stop dot
- * at the end.
- */
-@Composable
-private fun WavyBar(fraction: Float, color: Color, track: Color, modifier: Modifier) {
-    val phase by rememberInfiniteTransition(label = "wave").animateFloat(
-        0f, 1f, infiniteRepeatable(tween(1_000, easing = LinearEasing), RepeatMode.Restart), label = "phase",
-    )
-    Canvas(modifier) {
-        val stroke = 4.dp.toPx()
-        val amplitude = (size.height / 2 - stroke).coerceIn(0f, 3.dp.toPx())
-        val wavelength = 32.dp.toPx()
-        val gap = 6.dp.toPx()
-        val mid = size.height / 2
-        val start = stroke / 2
-        val end = size.width - stroke / 2
-        val split = start + (end - start) * fraction
-
-        if (split > start) {
-            val wave = Path()
-            var x = start
-            val shift = phase * wavelength
-            while (x <= split) {
-                val y = mid + amplitude * sin(2 * Math.PI * (x - shift) / wavelength).toFloat()
-                if (x == start) wave.moveTo(x, y) else wave.lineTo(x, y)
-                x += 1f
-            }
-            drawPath(wave, color, style = Stroke(stroke, cap = StrokeCap.Round))
-        }
-        val trackStart = if (split > start) split + gap + stroke else start
-        if (trackStart < end) {
-            drawLine(track, Offset(trackStart, mid), Offset(end, mid), stroke, StrokeCap.Round)
-        }
-        drawCircle(color, stroke / 2, Offset(end, mid))
     }
 }
 

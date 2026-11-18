@@ -42,12 +42,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import app.seb3thehacker.gearslip.car.theme.GsColors
 import app.seb3thehacker.gearslip.car.theme.GsIconBox
-import app.seb3thehacker.gearslip.car.theme.GsThemes
-import app.seb3thehacker.gearslip.AppSettings
 
 /**
- * Settings that make sense while sitting in the car. The web page URL is edited here, with the
- * car's own on-screen keyboard ([CarKeyboard]); certificate management still needs a real
+ * Settings that make sense while sitting in the car. Certificate management still needs a real
  * keyboard and file picker, so it stays on the phone's Settings screen.
  */
 @Composable
@@ -63,8 +60,6 @@ fun CarSettingsScreen() {
     val screenFit by CarSettings.screenFit.collectAsState()
     val whatsNew by CarSettings.whatsNewAfterUpdates.collectAsState()
     val pipeAudio by CarSettings.pipeAudio.collectAsState()
-    val speakDirections by CarSettings.speakDirections.collectAsState()
-    val directionsOverMusic by CarSettings.directionsOverMusic.collectAsState()
     val bluetoothWarning by CarSettings.bluetoothWarning.collectAsState()
     val locationWarning by CarSettings.locationWarning.collectAsState()
     val autoplay by CarSettings.autoplay.collectAsState()
@@ -72,13 +67,11 @@ fun CarSettingsScreen() {
     val playerLeft by CarSettings.playerLeft.collectAsState()
     val navMic by CarSettings.navMic.collectAsState()
     val theme by CarSettings.appTheme.collectAsState()
-    val uiTheme by CarSettings.uiTheme.collectAsState()
     val darkStyle by CarSettings.darkStyle.collectAsState()
     val experimentalFeatures by CarSettings.experimentalFeaturesEnabled.collectAsState()
     val carSensors by CarSettings.carSensorsEnabled.collectAsState()
     val adaptiveVideo by CarSettings.adaptiveVideoEnabled.collectAsState()
     val clusterVideo by CarSettings.clusterVideoEnabled.collectAsState()
-    val systemSpeech by CarSettings.systemSpeech.collectAsState()
     val display by CarEnvironment.display.collectAsState()
     val vehicle by CarEnvironment.vehicle.collectAsState()
     val context = LocalContext.current
@@ -133,13 +126,6 @@ fun CarSettingsScreen() {
                             ),
                             darkStyle,
                         ) { CarSettings.setDarkStyle(it) }
-                    }
-                    item {
-                        ChoiceRow(
-                            stringResource(R.string.car_buttons),
-                            GsThemes.builtIn.map { it.id to it.name },
-                            uiTheme,
-                        ) { CarSettings.setUiTheme(it) }
                     }
                     item {
                         SwitchRow(
@@ -227,15 +213,6 @@ fun CarSettingsScreen() {
                         ) { CarSettings.setPipeAudio(it) }
                     }
                     item { Note(stringResource(R.string.carset_audio_note)) }
-                    item {
-                        SwitchRow(stringResource(R.string.car_spoken_directions), stringResource(R.string.carset_directions_note), speakDirections) { CarSettings.setSpeakDirections(it) }
-                    }
-                    if (speakDirections) item {
-                        SwitchRow(stringResource(R.string.car_directions_over_music), stringResource(R.string.car_directions_over_music_note), directionsOverMusic) { CarSettings.setDirectionsOverMusic(it) }
-                    }
-                    item {
-                        SwitchRow(stringResource(R.string.car_phone_speech), stringResource(R.string.carset_phone_speech_note), systemSpeech) { CarSettings.setSystemSpeech(it) }
-                    }
                 }
                 3 -> {
                     item { Group(stringResource(R.string.car_group_warnings)) }
@@ -248,7 +225,6 @@ fun CarSettingsScreen() {
                 }
                 else -> {
                     item { Group(stringResource(R.string.car_group_more)) }
-                    item { WebPageSetting() }
                     item {
                         SwitchRow(stringResource(R.string.car_experimental), stringResource(R.string.car_experimental_note), experimentalFeatures) { CarSettings.setExperimentalFeaturesEnabled(it) }
                     }
@@ -463,49 +439,6 @@ private fun SwitchRow(
             }
             Spacer(Modifier.width(12.dp))
             GsSwitch(checked, onCheckedChange)
-        }
-    }
-}
-
-/** The URL (or raw HTML) the Browser app shows. Edited with [CarKeyboard] - no phone in hand needed. */
-@Composable
-private fun WebPageSetting() {
-    val context = LocalContext.current
-    var editing by remember { mutableStateOf(false) }
-    var url by remember { mutableStateOf(AppSettings.startupUrl(context)) }
-
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text(stringResource(R.string.web_page), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
-        Surface(
-            onClick = { editing = !editing },
-            shape = MaterialTheme.shapes.large,
-            color = MaterialTheme.colorScheme.surfaceContainerHigh,
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Text(
-                url.ifEmpty { stringResource(R.string.carset_web_default) },
-                style = MaterialTheme.typography.bodyLarge,
-                color = if (url.isEmpty()) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp),
-            )
-        }
-        Text(
-            stringResource(R.string.carset_web_note),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        if (editing) {
-            CarKeyboard(
-                url,
-                onTextChange = {
-                    url = it
-                    AppSettings.setStartupUrl(context, it)
-                },
-                onSubmit = { editing = false },
-                onDismiss = { editing = false },
-            )
         }
     }
 }

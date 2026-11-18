@@ -447,7 +447,7 @@ internal object NothingIconRenderer {
 /**
  * The launcher's Nothing glyphs, one ALPHA_8 mask per package. Computed on the caller's thread -
  * the launcher prefetch and the warm-up effects call it from Dispatchers.IO - and cached so the
- * theme can flip between Nothing and the classics without re-rendering anything.
+ * launcher tiles can redraw on every refresh without re-rendering anything.
  */
 object NothingIconCache {
     private const val MAX_ENTRIES = 96

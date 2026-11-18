@@ -78,7 +78,6 @@ import app.seb3thehacker.gearslip.AppSettings
 import app.seb3thehacker.gearslip.BuildConfig
 import app.seb3thehacker.gearslip.CertProvider
 import app.seb3thehacker.gearslip.SessionStatus
-import app.seb3thehacker.gearslip.notify.TestMessage
 import app.seb3thehacker.gearslip.car.CarSettings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -93,7 +92,6 @@ fun SettingsScreen(
     onBack: () -> Unit,
     onOpenRecommendedApps: () -> Unit,
     onReplayTutorial: () -> Unit,
-    atUsageNotes: Boolean = false,
 ) {
     val scroll = rememberScrollState()
     // Built a section per frame after the first two, so the screen shows at once instead of
@@ -106,15 +104,6 @@ fun SettingsScreen(
         }
     }
     fun ready(n: Int) = built > n
-    // Opened from Home's "it worked" card: start at usage notes.
-    var usageNotesY by remember { mutableIntStateOf(-1) }
-    if (atUsageNotes) {
-        LaunchedEffect(Unit) {
-            val y = snapshotFlow { usageNotesY }.first { it >= 0 }
-            snapshotFlow { scroll.maxValue }.first { it > 0 && it < Int.MAX_VALUE }
-            scroll.scrollTo(y)
-        }
-    }
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
@@ -138,28 +127,10 @@ fun SettingsScreen(
         ) {
             Spacer(Modifier.height(0.dp))
             SettingsSection {
-                val context = LocalContext.current
-                SettingsRow(
-                    stringResource(R.string.settings_whats_new),
-                    Modifier.clickable { GearslipLinks.open(context, GearslipLinks.RELEASE_NOTES) },
-                    subtitle = stringResource(R.string.settings_whats_new_sub, BuildConfig.VERSION_NAME),
-                    icon = Icons.Filled.Star,
-                    trailing = { Arrow() },
-                )
                 LanguageRow()
             }
-            SettingsSection(
-                stringResource(R.string.settings_support),
-                footer = stringResource(R.string.settings_support_footer),
-            ) { DonateRows() }
             if (ready(2)) ConnectionSection()
             if (SHOW_RECOMMENDED_APPS && ready(6)) AppsSection(onOpenRecommendedApps)
-            if (ready(7)) SettingsSection(
-                stringResource(R.string.settings_usage_notes),
-                Modifier.onGloballyPositioned { usageNotesY = it.positionInParent().y.toInt() },
-                header = usageStatsIntro(LocalContext.current),
-            ) { UsageStatsRows() }
-            if (ready(8)) SettingsSection(stringResource(R.string.settings_updates)) { UpdateRow() }
             if (ready(9)) CertificateSection()
             if (ready(10)) AboutSection(onReplayTutorial)
             if (BuildConfig.DEBUG && ready(11)) DebugSection()
@@ -219,7 +190,6 @@ private fun AboutSection(onReplayTutorial: () -> Unit) {
             trailing = { Arrow() },
         )
         SettingsDivider()
-        AboutLinkRows()
     }
 }
 
@@ -344,15 +314,6 @@ internal fun AddressDialog(initial: String, onDismiss: () -> Unit, onSave: (Stri
 private fun DebugSection() {
     val context = LocalContext.current
     SettingsSection("Debug build") {
-        SettingsRow(
-            "Send a test message",
-            // After a few seconds, so there's time to open the car preview and watch it arrive.
-            Modifier.clickable {
-                android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({ TestMessage.post(context.applicationContext) }, 5_000)
-            },
-            subtitle = "Posts a message notification in 5 seconds, time to open the car preview",
-            icon = Icons.AutoMirrored.Filled.Send,
-        )
         SettingsDivider()
         SettingsRow(
             "Ask for the Bluetooth address",

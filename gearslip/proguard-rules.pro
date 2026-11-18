@@ -8,6 +8,3 @@
 # library rebuilds them by class name and reflection. Any model class an app might send has to
 # survive, used by Gearslip's code or not.
 -keep class androidx.car.app.** { *; }
-
-# Speech-to-text: the native library calls back into these classes by name.
--keep class com.k2fsa.sherpa.onnx.** { *; }

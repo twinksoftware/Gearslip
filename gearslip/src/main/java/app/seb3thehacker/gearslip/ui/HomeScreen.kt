@@ -2,9 +2,6 @@ package app.seb3thehacker.gearslip.ui
 
 import androidx.compose.ui.res.stringResource
 import app.seb3thehacker.gearslip.R
-import app.seb3thehacker.gearslip.speech.SpeechModels
-
-import androidx.compose.material3.LinearProgressIndicator
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.heightIn
@@ -32,7 +29,6 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import app.seb3thehacker.gearslip.stats.UsageStats
 import kotlinx.coroutines.delay
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -69,26 +65,18 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.seb3thehacker.gearslip.BuildConfig
 import app.seb3thehacker.gearslip.SessionStatus
-import app.seb3thehacker.gearslip.notify.TestMessage
-import app.seb3thehacker.gearslip.stats.WorkedPrompt
 
 @Composable
 fun HomeScreen(
     onOpenSettings: () -> Unit,
-    onOpenHelp: () -> Unit,
-    onOpenUsageNotes: () -> Unit,
     onOpenCarPreview: () -> Unit,
-    onOpenLogs: () -> Unit,
     onDisconnect: () -> Unit,
     onOpenCarGroup: (CarGroup) -> Unit,
 ) {
     val status by SessionStatus.state.collectAsStateWithLifecycle()
-    val context = LocalContext.current
-    val workedCar by remember { WorkedPrompt.pending(context) }.collectAsStateWithLifecycle()
     val live = status.phase == SessionStatus.Phase.CONNECTING ||
         status.phase == SessionStatus.Phase.PROJECTING
 
-    val celebrate by WorkedPrompt.celebrate.collectAsStateWithLifecycle()
     Box {
         Scaffold(containerColor = MaterialTheme.colorScheme.background) { padding ->
             Column(
@@ -112,15 +100,6 @@ fun HomeScreen(
                     if (live) BluetoothMissingCard()
                     if (live) BackgroundLocationCard()
                     BluetoothAddressCard()
-                    VoiceDownloadCard()
-                    // The first drive that worked asks once to share it, right under the result.
-                    val car = workedCar
-                    if (car != null && !live) {
-                        Spacer(Modifier.height(16.dp))
-                        WorkedCard(car, onSeeWhatsSent = onOpenUsageNotes)
-                    }
-                    Spacer(Modifier.height(16.dp))
-                    UpdateCard()
                     Spacer(Modifier.height(24.dp))
                     HomeCarSettings(onOpenCarGroup)
                     Spacer(Modifier.height(16.dp))
@@ -129,10 +108,8 @@ fun HomeScreen(
                 // Sits at the bottom, where a thumb reaches it.
                 Column(Modifier.padding(vertical = 16.dp)) {
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        HomeShortcut(Icons.Filled.Info, stringResource(R.string.home_help), onOpenHelp, Modifier.weight(1f))
                         // The preview draws the car screen on the phone, so it waits until no car is using it.
                         if (!live) HomeShortcut(Icons.Filled.PlayArrow, stringResource(R.string.home_preview), onOpenCarPreview, Modifier.weight(1f))
-                        HomeShortcut(Icons.AutoMirrored.Filled.List, stringResource(R.string.home_logs), onOpenLogs, Modifier.weight(1f))
                     }
                     if (live) {
                         Spacer(Modifier.height(16.dp))
@@ -144,10 +121,6 @@ fun HomeScreen(
             }
             }
         }
-        // Sharing just went on from the "it worked" ask: a little thanks.
-        if (celebrate) ConfettiFall(onDone = WorkedPrompt::celebrated)
-        // The usage notes ask comes first; the donation ask waits until that's answered.
-        if (workedCar == null) DonateDialog(live)
     }
 }
 
@@ -292,20 +265,6 @@ private fun BackgroundLocationCard() {
     }
 }
 
-/** While the voice models download, how far along they are; nothing otherwise. */
-@Composable
-private fun VoiceDownloadCard() {
-    val progress by SpeechModels.progress.collectAsStateWithLifecycle()
-    val percent = progress ?: return
-    Spacer(Modifier.height(16.dp))
-    SettingsCard {
-        Column(Modifier.padding(horizontal = 16.dp, vertical = 14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Text(stringResource(R.string.home_voice_downloading, percent), style = MaterialTheme.typography.bodyLarge)
-            LinearProgressIndicator(progress = { percent / 100f }, modifier = Modifier.fillMaxWidth())
-        }
-    }
-}
-
 @Composable
 private fun Arrow() = Icon(
     Icons.AutoMirrored.Filled.KeyboardArrowRight,
@@ -325,8 +284,6 @@ private fun StatusCard(status: SessionStatus.Snapshot) {
     }
 
     val live = status.phase == SessionStatus.Phase.CONNECTING || status.phase == SessionStatus.Phase.PROJECTING
-    val context = LocalContext.current
-    val grapheneOs = remember { UsageStats.isGrapheneOs(context) }
     val noCar = chargingWithNoCar(status.phase == SessionStatus.Phase.IDLE)
     Surface(color = container, contentColor = content, shape = MaterialTheme.shapes.extraLarge) {
       Column(Modifier.fillMaxWidth().padding(24.dp)) {
@@ -357,11 +314,7 @@ private fun StatusCard(status: SessionStatus.Snapshot) {
                 }
                 val detail = when (status.phase) {
                     SessionStatus.Phase.IDLE -> stringResource(
-                        when {
-                            !noCar -> R.string.status_idle_detail
-                            grapheneOs -> R.string.status_no_car_graphene
-                            else -> R.string.status_no_car
-                        },
+                        if (noCar) R.string.status_no_car else R.string.status_idle_detail,
                     )
                     SessionStatus.Phase.PROJECTING -> stringResource(R.string.status_projecting_detail)
                     SessionStatus.Phase.DISCONNECTED -> stringResource(R.string.status_disconnected_detail)
@@ -376,13 +329,6 @@ private fun StatusCard(status: SessionStatus.Snapshot) {
                 Spacer(Modifier.height(4.dp))
                 Text(detail, style = MaterialTheme.typography.bodyMedium)
             }
-        }
-        // GrapheneOS keeps its USB-C port setting under Security & privacy.
-        if (noCar && grapheneOs) {
-            Spacer(Modifier.height(12.dp))
-            Button(onClick = {
-                runCatching { context.startActivity(Intent(Settings.ACTION_SECURITY_SETTINGS)) }
-            }) { Text(stringResource(R.string.status_open_settings)) }
         }
         // The other way in: wireless, right under the cable's instructions.
         if (!live) {

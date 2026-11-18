@@ -123,39 +123,15 @@ android {
         buildConfig = true
     }
 
-    // Lists each language that has a translation in the app's locale config, so Android 13+
-    // offers it under the system's per-app languages. English is the unqualified default
-    // (res/resources.properties).
-    //
-    // Only languages that are mostly translated ship, so the app never comes up half in English.
-    // Danish and Estonian are still early on Weblate; add them here once they're close to done.
-    androidResources {
-        generateLocaleConfig = true
-        localeFilters += listOf(
-            "en", "ar", "cs", "de", "es", "fr", "it", "ja", "ko", "nl", "pl", "pt-rBR", "ro", "ru",
-            "sv", "tr", "uk", "zh-rCN",
-        )
-    }
-
-    lint {
-        // Weblate fills languages in a string at a time; the rest fall back to English.
-        disable += "MissingTranslation"
-    }
+    // Standalone Nothing car UI: English only, no per-app locale list to generate.
+    androidResources { localeFilters += listOf("en") }
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
 
-    defaultConfig {
-        // Speech-to-text (sherpa-onnx 1.13.8, static-link-onnxruntime build, in jniLibs) is the
-        // only native code. One APK for all three, since the updater takes the release's only APK;
-        // 32-bit x86 is left out, nothing that drives a car runs it.
-        ndk { abiFilters += listOf("arm64-v8a", "armeabi-v7a", "x86_64") }
-    }
-
-    // Compressed, the three copies cost a 33 MB download instead of 75 MB; the phone unpacks
-    // only its own at install.
+    // MapLibre ships four ABIs; compressing them keeps the download small.
     packaging { jniLibs { useLegacyPackaging = true } }
 
     testOptions {
@@ -198,8 +174,6 @@ dependencies {
     implementation(libs.androidx.car.app)
     implementation(libs.androidx.car.app.projected)
     implementation(libs.androidx.media)
-    // Document-start scripts, so the ad blocker hides ad slots before a page first paints.
-    implementation(libs.androidx.webkit)
     // The map behind a place list (PlaceListMapTemplate), which the host draws, not the app.
     implementation(libs.maplibre.android)
     testImplementation(libs.junit)

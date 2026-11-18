@@ -29,8 +29,8 @@ internal class MapKnob(
     @Volatile private var swallowLift = false
 
     override fun take(event: CarKeys.KnobEvent): Boolean {
-        // A card over the map with buttons of its own (an app's alert, a call, a message, the
-        // assistant, Bluetooth pairing) needs the knob more than the map does.
+        // A card over the map with buttons of its own (an app's alert, a call, a message,
+        // Bluetooth pairing) needs the knob more than the map does.
         if (overlayUp()) return false
         if (_buttonsOpen.value) {
             if (event is CarKeys.KnobEvent.Key && !event.down && swallowLift && event.keyCode in PRESS_KEYS) {
@@ -58,7 +58,6 @@ internal class MapKnob(
         CarAlerts.shown.value != null ||
             app.seb3thehacker.gearslip.call.CarCalls.state.value is app.seb3thehacker.gearslip.call.CallUiState.Ringing ||
             app.seb3thehacker.gearslip.notify.CarNotifications.popup.value != null ||
-            CarAssistant.state.value.phase != CarAssistant.Phase.IDLE ||
             CarBluetooth.prompt.value != CarBluetooth.Prompt.NONE
 
     private fun zoom(steps: Int) {

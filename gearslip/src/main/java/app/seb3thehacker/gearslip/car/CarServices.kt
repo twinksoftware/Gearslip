@@ -83,22 +83,17 @@ object CarServices {
         context = appContext.applicationContext
         app.seb3thehacker.gearslip.notify.CarMotion.start(appContext)
         app.seb3thehacker.gearslip.call.CarCalls.start(appContext)
-        CarAssistant.init(appContext)
-        DirectionsVoice.init(appContext)
         CarBluetooth.init(appContext)
         BluetoothAudioCheck.init(appContext)
         LocationCheck.init(appContext)
         CarKeys.init(appContext)
-        VoiceReply.init(appContext)
-        // Loaded now, while nothing's waiting on it, so the first reply isn't slower than the rest.
-        app.seb3thehacker.gearslip.speech.SpeechEngine.warm(appContext)
     }
 
     // --- map -----------------------------------------------------------------------------
 
     /**
      * [destination] is a search query to start navigating to right away - "navigate to X with Y"
-     * from the voice assistant - left null for a plain app launch. An app that's already the one
+     * - left null for a plain app launch. An app that's already the one
      * running gets the destination sent to its live session instead of being torn down and
      * rebuilt, same as [CarAppConnection.navigateTo] documents.
      */
@@ -344,9 +339,6 @@ object CarServices {
         runCatching { nav.disconnect() }
         runCatching { media.disconnect() }
         runCatching { browse.disconnect() }
-        CarAssistant.cancel()
-        // About 900 MB that nothing needs once the car's gone.
-        app.seb3thehacker.gearslip.speech.SpeechEngine.unload()
         CarAudio.release()
         _mediaApp.value = null
         navStopped = false

@@ -3,16 +3,10 @@ package app.seb3thehacker.gearslip.car
 import androidx.annotation.StringRes
 import app.seb3thehacker.gearslip.R
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.List
-import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Place
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
-import app.seb3thehacker.gearslip.ProjectedContent
 
 /** One tile in the launcher and the screen it opens. */
 class CarApp(
@@ -24,27 +18,17 @@ class CarApp(
     val content: @Composable () -> Unit,
 )
 
-/** Built-in apps. Third-party (Android Auto) apps are a later step and will register here too. */
+/** Built-in apps that still have a screen of their own. */
 object CarApps {
 
     val all: List<CarApp> = listOf(
-        CarApp("web", "Browser", R.string.app_browser, Icons.Filled.Search) {
-            WebApp(content = ProjectedContent.resolve(LocalContext.current))
-        },
-        CarApp("phone", "Screen sharing", R.string.app_screen_sharing, Icons.Filled.Share) {
-            PhoneAppsScreen()
-        },
-        CarApp("dialer", "Phone", R.string.carset_phone, Icons.Filled.Call) {
-            PhoneDialerScreen()
-        },
         CarApp("settings", "Settings", R.string.settings_title, Icons.Filled.Settings) {
             CarSettingsScreen()
         },
+        // Google Maps cannot be hosted as a car app, so this is the phone's own Maps mirrored to the
+        // car. Its turn notifications still feed the rest of the UI while it guides.
         CarApp("googlemaps", "Google Maps", R.string.app_google_maps, Icons.Filled.Place) {
             GoogleMapsScreen()
-        },
-        CarApp("allapps", "All apps", R.string.app_all_apps, Icons.Filled.List) {
-            AllAppsScreen()
         },
     )
 

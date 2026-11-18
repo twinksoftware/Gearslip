@@ -58,8 +58,6 @@ object CarSettings {
     private const val KEY_NIGHT = "car_night_mode"
     private const val KEY_PIPE_AUDIO = "car_pipe_audio"
     private const val KEY_AUDIO_CARS = "car_audio_through_gearslip_cars"
-private const val KEY_SPEAK_DIRECTIONS = "car_speak_directions"
-private const val KEY_DIRECTIONS_OVER_MUSIC = "car_directions_over_music"
 private const val KEY_BLUETOOTH_WARNING = "car_bluetooth_warning"
 private const val KEY_LOCATION_WARNING = "car_location_warning"
     private const val KEY_AUDIO_CHOICE_ASKED = "car_audio_choice_asked"
@@ -77,7 +75,6 @@ private const val KEY_LOCATION_WARNING = "car_location_warning"
     private const val KEY_APP_ORDER = "car_app_order"
     private const val KEY_HIDDEN_APPS = "car_hidden_apps"
     private const val KEY_EXPERIMENTAL_FEATURES = "car_experimental_features"
-    private const val KEY_SYSTEM_SPEECH = "car_system_speech"
     private const val KEY_CAR_SENSORS = "car_sensors_enabled"
     private const val KEY_ADAPTIVE_VIDEO = "adaptive_video_enabled"
 private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
@@ -107,8 +104,6 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
     private val openFlow = MutableStateFlow(HOME)
     private val nightFlow = MutableStateFlow(NightMode.AUTO)
     private val pipeAudioFlow = MutableStateFlow(true)
-    private val speakDirectionsFlow = MutableStateFlow(true)
-    private val directionsOverMusicFlow = MutableStateFlow(false)
     private val bluetoothWarningFlow = MutableStateFlow(true)
     private val locationWarningFlow = MutableStateFlow(true)
     private val lastNavFlow = MutableStateFlow<String?>(null)
@@ -131,7 +126,6 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
     private val appOrderFlow = MutableStateFlow<List<String>>(emptyList())
     private val hiddenAppsFlow = MutableStateFlow<Set<String>>(emptySet())
     private val experimentalFeaturesFlow = MutableStateFlow(false)
-    private val systemSpeechFlow = MutableStateFlow(false)
     private val carSensorsFlow = MutableStateFlow(false)
     private val adaptiveVideoFlow = MutableStateFlow(false)
     private val clusterVideoFlow = MutableStateFlow(false)
@@ -321,12 +315,6 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
         java.security.MessageDigest.getInstance("SHA-256").digest(address.uppercase().toByteArray())
             .take(8).joinToString("") { "%02x".format(it) }
 
-    /** Gearslip reads the map app's turns aloud on the car's directions channel; see DirectionsVoice. */
-    val speakDirections: StateFlow<Boolean> = speakDirectionsFlow
-
-    /** The turns go out on the music channel instead, for cars the directions channel upsets. */
-    val directionsOverMusic: StateFlow<Boolean> = directionsOverMusicFlow
-
     /** With Bluetooth audio, warn when the phone isn't connected to the car; see BluetoothAudioCheck. */
     val bluetoothWarning: StateFlow<Boolean> = bluetoothWarningFlow
 
@@ -351,9 +339,6 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
      * them - the voice assistant included - show up to turn on individually.
      */
     val experimentalFeaturesEnabled: StateFlow<Boolean> = experimentalFeaturesFlow
-
-    /** Listen with the phone's own speech service instead of Gearslip's on-device model. */
-    val systemSpeech: StateFlow<Boolean> = systemSpeechFlow
 
     /**
      * Vehicle data is experimental and off by default: the launcher's tile for it, and the
@@ -416,10 +401,6 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
         playerLeftFlow.value = AppSettings.getString(app, KEY_PLAYER_LEFT, "false") == "true"
         navMicFlow.value = AppSettings.getString(app, KEY_NAV_MIC, "true") == "true"
         pipeAudioFlow.value = AppSettings.getString(app, KEY_PIPE_AUDIO, "true") == "true"
-        // Until the driver sets it, on for USB audio and off for Bluetooth, where the map app's
-        // own voice already reaches the car.
-        speakDirectionsFlow.value = AppSettings.getString(app, KEY_SPEAK_DIRECTIONS, pipeAudioFlow.value.toString()) == "true"
-        directionsOverMusicFlow.value = AppSettings.getString(app, KEY_DIRECTIONS_OVER_MUSIC, "false") == "true"
         bluetoothWarningFlow.value = AppSettings.getString(app, KEY_BLUETOOTH_WARNING, "true") == "true"
         locationWarningFlow.value = AppSettings.getString(app, KEY_LOCATION_WARNING, "true") == "true"
         nightFlow.value = runCatching {
@@ -432,7 +413,6 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
         hiddenAppsFlow.value = AppSettings.getString(app, KEY_HIDDEN_APPS, "")
             .split(",").filter { it.isNotEmpty() }.toSet()
         experimentalFeaturesFlow.value = AppSettings.getString(app, KEY_EXPERIMENTAL_FEATURES, "false") == "true"
-        systemSpeechFlow.value = AppSettings.getString(app, KEY_SYSTEM_SPEECH, "false") == "true"
         carSensorsFlow.value = AppSettings.getString(app, KEY_CAR_SENSORS, "false") == "true"
         adaptiveVideoFlow.value = AppSettings.getString(app, KEY_ADAPTIVE_VIDEO, "false") == "true"
         clusterVideoFlow.value = AppSettings.getString(app, KEY_CLUSTER_VIDEO, "false") == "true"
@@ -531,18 +511,7 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
         }
         if (pipeAudioFlow.value == on) return
         pipeAudioFlow.value = on
-        if (AppSettings.getString(app, KEY_SPEAK_DIRECTIONS, "") == "") speakDirectionsFlow.value = on
         if (on) CarAudio.request() else CarAudio.release()
-    }
-
-    fun setSpeakDirections(on: Boolean) {
-        speakDirectionsFlow.value = on
-        AppSettings.putString(app, KEY_SPEAK_DIRECTIONS, on.toString())
-    }
-
-    fun setDirectionsOverMusic(on: Boolean) {
-        directionsOverMusicFlow.value = on
-        AppSettings.putString(app, KEY_DIRECTIONS_OVER_MUSIC, on.toString())
     }
 
     fun setBluetoothWarning(on: Boolean) {
@@ -558,11 +527,6 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
     fun setExperimentalFeaturesEnabled(on: Boolean) {
         experimentalFeaturesFlow.value = on
         AppSettings.putString(app, KEY_EXPERIMENTAL_FEATURES, on.toString())
-    }
-
-    fun setSystemSpeech(on: Boolean) {
-        systemSpeechFlow.value = on
-        AppSettings.putString(app, KEY_SYSTEM_SPEECH, on.toString())
     }
 
     fun setAdaptiveVideoEnabled(on: Boolean) {

@@ -2,11 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- The projected WebView loads real pages; without this every load fails silently. -->
+    <!-- The car link and its phone-side services talk over the network. -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-    <!-- Lets an update Gearslip installed itself skip Android's prompt. -->
-    <uses-permission android:name="android.permission.UPDATE_PACKAGES_WITHOUT_USER_ACTION" />
 
     <!--
       Phone mirroring. Android refuses to hand over a MediaProjection unless a foreground
@@ -104,8 +101,7 @@
          LAUNCHER query below to find, so the setup guide's Android Auto check needs this to see
          whether the package is installed at all. -->
     <package android:name="com.google.android.projection.gearhead" />
-    <!-- The opt-in usage note names the OS: GrapheneOS's setup app and /e/OS's app store give
-         them away (UsageStats.osName). -->
+    <!-- Kept visible for OS detection: GrapheneOS's setup app and /e/OS's app store identify it. -->
     <package android:name="app.grapheneos.setupwizard" />
     <package android:name="foundation.e.apps" />
     <intent>
@@ -136,7 +132,6 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:label="${appLabel}"
         android:supportsRtl="true"
-        android:manageSpaceActivity="app.seb3thehacker.gearslip.ui.ManageSpaceActivity"
         android:theme="@style/Theme.Gearslip">
 
         <provider
@@ -188,38 +183,15 @@
             </intent-filter>
         </activity>
 
-        <!--
-          Answers the car's USB connection on GearslipActivity's behalf. Kept apart from the
-          activity so Settings can switch off just this (AppSettings.setGearslipEnabled) and leave
-          the head unit to Android Auto, without disabling the screen the switch is on.
-        -->
-        <!-- App info › Storage › Manage space: clears lyrics, voice models and logs one at a time. -->
-        <!-- "Share" a page from any browser to add it to the car browser's start page (issue #85). -->
-        <activity
-            android:name=".browser.ShareToBrowserActivity"
-            android:exported="true"
-            android:excludeFromRecents="true"
-            android:label="@string/browser_share_label"
-            android:noHistory="true"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar">
-            <intent-filter>
-                <action android:name="android.intent.action.SEND" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="text/plain" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".ui.ManageSpaceActivity"
-            android:exported="true"
-            android:label="Gearslip storage" />
-
         <activity
             android:name=".PermissionActivity"
             android:exported="false"
             android:excludeFromRecents="true"
             android:theme="@style/Theme.Gearslip.Invisible" />
 
+        <!-- Answers the car's USB connection on GearslipActivity's behalf. Kept apart from the
+             activity so Settings can leave the head unit to Android Auto without disabling the
+             screen the switch is on. -->
         <activity-alias
             android:name=".GearslipUsbAccessory"
             android:targetActivity=".GearslipActivity"
@@ -233,19 +205,6 @@
                 android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED"
                 android:resource="@xml/accessory_filter" />
         </activity-alias>
-
-        <!-- Dev builds' test message: its Reply and Mark as read actions land here. -->
-        <receiver
-            android:name=".notify.TestMessageReceiver"
-            android:exported="false" />
-
-        <receiver
-            android:name=".update.UpdateReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
-            </intent-filter>
-        </receiver>
 
         <service
             android:name=".mirror.MirrorService"

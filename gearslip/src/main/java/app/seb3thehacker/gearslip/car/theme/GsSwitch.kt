@@ -15,8 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 /**
- * An on/off switch in the current theme's finish: the track is pressed in while on, the knob is
- * raised like a button. The whole switch is one tap target, as big as a nav bar button.
+ * An on/off switch in the current theme's finish: a flat track that fills with the primary colour
+ * while on and a flat knob that slides along it. The whole switch is one tap target, as big as a
+ * nav bar button.
  */
 @Composable
 fun GsSwitch(checked: Boolean, onCheckedChange: (Boolean) -> Unit, modifier: Modifier = Modifier) {

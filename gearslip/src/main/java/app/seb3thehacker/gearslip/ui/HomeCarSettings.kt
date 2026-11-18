@@ -61,7 +61,6 @@ import app.seb3thehacker.gearslip.car.LauncherCache
 import app.seb3thehacker.gearslip.car.NavBarMode
 import app.seb3thehacker.gearslip.car.NightMode
 import app.seb3thehacker.gearslip.car.Units
-import app.seb3thehacker.gearslip.car.theme.GsThemes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -72,7 +71,6 @@ enum class CarGroup(@param:StringRes val title: Int) {
     NAV_BAR(R.string.car_group_nav_bar),
     SOUND(R.string.car_group_sound),
     PLACES(R.string.places_title),
-    BROWSER(R.string.app_browser),
     WARNINGS(R.string.car_group_warnings),
     MORE(R.string.car_group_more),
 }
@@ -154,14 +152,11 @@ internal fun HomeCarSettings(onOpen: (CarGroup) -> Unit, modifier: Modifier = Mo
     val open by CarSettings.openOnConnect.collectAsState()
     val navBar by CarSettings.navBarMode.collectAsState()
     val pipeAudio by CarSettings.pipeAudio.collectAsState()
-    val speakDirections by CarSettings.speakDirections.collectAsState()
     val bluetoothWarning by CarSettings.bluetoothWarning.collectAsState()
     val locationWarning by CarSettings.locationWarning.collectAsState()
     val playerLeft by CarSettings.playerLeft.collectAsState()
     val theme by CarSettings.appTheme.collectAsState()
     val experimental by CarSettings.experimentalFeaturesEnabled.collectAsState()
-    val browserEngine by app.seb3thehacker.gearslip.browser.BrowserSettings.searchEngine.collectAsState()
-    val browserAdBlock by app.seb3thehacker.gearslip.browser.BrowserSettings.adBlock.collectAsState()
 
     val opens = openChoices()
     val sizes = sizeChoices()
@@ -177,7 +172,6 @@ internal fun HomeCarSettings(onOpen: (CarGroup) -> Unit, modifier: Modifier = Mo
         CarGroup.NAV_BAR -> listOf(navBars.label(navBar), str(if (playerLeft) R.string.summary_player_left else R.string.summary_player_right))
         CarGroup.SOUND -> listOf(
             str(if (pipeAudio) R.string.summary_usb_audio else R.string.summary_bluetooth_audio),
-            str(if (speakDirections) R.string.summary_directions_on else R.string.summary_directions_off),
         )
         CarGroup.PLACES -> places.mapIndexedNotNull { i, place ->
             when {
@@ -190,10 +184,6 @@ internal fun HomeCarSettings(onOpen: (CarGroup) -> Unit, modifier: Modifier = Mo
         CarGroup.WARNINGS -> listOf(
             str(if (bluetoothWarning && !pipeAudio) R.string.summary_bluetooth_on else R.string.summary_bluetooth_off),
             str(if (locationWarning) R.string.summary_location_on else R.string.summary_location_off),
-        )
-        CarGroup.BROWSER -> listOf(
-            browserEngine.label,
-            str(if (browserAdBlock) R.string.summary_adblock_on else R.string.summary_adblock_off),
         )
         CarGroup.MORE -> listOf(
             str(if (experimental) R.string.summary_experimental_shown else R.string.summary_experimental_hidden),
@@ -246,13 +236,10 @@ internal fun CarGroupScreen(group: CarGroup, onBack: () -> Unit) {
         ) {
             SettingsCard { GroupRows(group) }
             // The bigger pieces each keep their own card: the car screen's size and the preview's,
-            // and the two voice models with their downloads.
+            // and how music reaches the car.
             when (group) {
                 CarGroup.SCREEN -> CarScreenSection()
-                CarGroup.SOUND -> {
-                    CarAudioSection()
-                    VoiceModelSection()
-                }
+                CarGroup.SOUND -> CarAudioSection()
                 else -> Unit
             }
             // The car's own Settings has no list of apps.
@@ -275,9 +262,6 @@ private fun GroupRows(group: CarGroup) {
     val units by CarSettings.units.collectAsState()
     val navBar by CarSettings.navBarMode.collectAsState()
     val pipeAudio by CarSettings.pipeAudio.collectAsState()
-    val directionsOverMusic by CarSettings.directionsOverMusic.collectAsState()
-    val speakDirections by CarSettings.speakDirections.collectAsState()
-    val systemSpeech by CarSettings.systemSpeech.collectAsState()
     val bluetoothWarning by CarSettings.bluetoothWarning.collectAsState()
     val locationWarning by CarSettings.locationWarning.collectAsState()
     val autoplay by CarSettings.autoplay.collectAsState()
@@ -285,7 +269,6 @@ private fun GroupRows(group: CarGroup) {
     val playerLeft by CarSettings.playerLeft.collectAsState()
     val navMic by CarSettings.navMic.collectAsState()
     val theme by CarSettings.appTheme.collectAsState()
-    val uiTheme by CarSettings.uiTheme.collectAsState()
     val darkStyle by CarSettings.darkStyle.collectAsState()
     val experimental by CarSettings.experimentalFeaturesEnabled.collectAsState()
     val carSensors by CarSettings.carSensorsEnabled.collectAsState()
@@ -318,8 +301,6 @@ private fun GroupRows(group: CarGroup) {
                 Choice(stringResource(R.string.car_dark_mode), darkChoices(), darkStyle, CarSettings::setDarkStyle)
                 SettingsDivider()
             }
-            Choice(stringResource(R.string.car_buttons), GsThemes.builtIn.map { it.id to it.name }, uiTheme, CarSettings::setUiTheme)
-            SettingsDivider()
             Choice(stringResource(R.string.car_map_day_night), nightChoices(), night, CarSettings::setNightMode)
             SettingsDivider()
             Choice(stringResource(R.string.car_units), unitChoices(), units, CarSettings::setUnits)
@@ -335,30 +316,7 @@ private fun GroupRows(group: CarGroup) {
             SettingsDivider()
             Toggle(stringResource(R.string.car_autoplay), autoplay, CarSettings::setAutoplay, note = stringResource(R.string.car_autoplay_note))
         }
-        CarGroup.SOUND -> {
-            Toggle(
-                stringResource(R.string.car_spoken_directions),
-                speakDirections,
-                CarSettings::setSpeakDirections,
-                note = stringResource(R.string.car_spoken_directions_note),
-            )
-            if (speakDirections) {
-                SettingsDivider()
-                Toggle(
-                    stringResource(R.string.car_directions_over_music),
-                    directionsOverMusic,
-                    CarSettings::setDirectionsOverMusic,
-                    note = stringResource(R.string.car_directions_over_music_note),
-                )
-            }
-            SettingsDivider()
-            Toggle(
-                stringResource(R.string.car_phone_speech),
-                systemSpeech,
-                CarSettings::setSystemSpeech,
-                note = stringResource(R.string.car_phone_speech_note),
-            )
-        }
+        CarGroup.SOUND -> Unit
         CarGroup.PLACES -> Unit
         CarGroup.WARNINGS -> {
             if (!pipeAudio) {
@@ -367,7 +325,6 @@ private fun GroupRows(group: CarGroup) {
             }
             Toggle(stringResource(R.string.car_warn_location), locationWarning, CarSettings::setLocationWarning)
         }
-        CarGroup.BROWSER -> BrowserSettingsRows { WebPageRow() }
         CarGroup.MORE -> {
             Toggle(stringResource(R.string.car_experimental), experimental, CarSettings::setExperimentalFeaturesEnabled, note = stringResource(R.string.car_experimental_note))
             if (experimental) {
@@ -585,33 +542,6 @@ private fun Toggle(title: String, on: Boolean, onChange: (Boolean) -> Unit, note
         subtitle = note,
         trailing = { Switch(checked = on, onCheckedChange = null) },
     )
-}
-
-/** The page the car's Browser app opens, typed here instead of on the car's keyboard. */
-@Composable
-private fun WebPageRow() {
-    val context = androidx.compose.ui.platform.LocalContext.current
-    var url by remember { mutableStateOf(app.seb3thehacker.gearslip.AppSettings.startupUrl(context)) }
-    Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp)) {
-        androidx.compose.material3.OutlinedTextField(
-            url,
-            {
-                url = it
-                app.seb3thehacker.gearslip.AppSettings.setStartupUrl(context, it)
-            },
-            label = { Text(stringResource(R.string.web_page)) },
-            placeholder = { Text("DuckDuckGo") },
-            singleLine = true,
-            keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(keyboardType = androidx.compose.ui.text.input.KeyboardType.Uri),
-            modifier = Modifier.fillMaxWidth(),
-        )
-        Text(
-            stringResource(R.string.web_page_note),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(top = 6.dp),
-        )
-    }
 }
 
 /** How music reaches the car: by Bluetooth as usual, or through Gearslip over USB. Same choice as setup. */

@@ -19,14 +19,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -80,12 +77,9 @@ internal class BuiltInApp(
 )
 
 internal object BuiltInApps {
-    val Web = BuiltInApp("web", "Browser", R.string.app_browser, Icons.Filled.Search, CarScreen.App("web")) { it.open("web") }
-    val ScreenSharing = BuiltInApp("phone", "Screen sharing", R.string.app_screen_sharing, Icons.Filled.Share, CarScreen.App("phone")) { it.open("phone") }
     // Google Maps cannot be hosted as a car app, so this is the phone's own Maps mirrored to the
     // car. Its turn notifications still feed the rest of the UI while it guides.
     val GoogleMaps = BuiltInApp("googlemaps", "Google Maps", R.string.app_google_maps, Icons.Filled.Place, CarScreen.App("googlemaps")) { it.open("googlemaps") }
-    val Phone = BuiltInApp("dialer", "Phone", R.string.carset_phone, Icons.Filled.Call, CarScreen.App("dialer")) { it.open("dialer") }
     /** First-party front-ends for the active media session and the offline place index. */
     val Music = BuiltInApp("music", "Music", R.string.recommended_music, Icons.Filled.PlayArrow, CarScreen.FirstPartyMusic) { it.firstPartyMusic() }
     val Player = BuiltInApp("player", "Now playing", R.string.media_now_playing, Icons.Filled.PlayArrow, CarScreen.FirstPartyPlayer) { it.firstPartyPlayer() }
@@ -93,25 +87,27 @@ internal object BuiltInApps {
     val VehicleData = BuiltInApp("vehicle", "Vehicle data", R.string.car_vehicle_data, Icons.Filled.Info, CarScreen.VehicleData) { it.vehicleData() }
     val Settings = BuiltInApp("settings", "Settings", R.string.settings_title, Icons.Filled.Settings, CarScreen.Settings) { it.settings() }
 
-    /** Launcher mode only: every app on the device, opened full screen. */
-    val AllApps = BuiltInApp("allapps", "All apps", R.string.app_all_apps, Icons.Filled.List, CarScreen.App("allapps")) { it.open("allapps") }
+    /**
+     * The phone key on the head unit still points here, even though the dial pad screen is gone.
+     * Kept as an object so that key keeps compiling; it is deliberately not in [all], so no tile
+     * or choice list offers a screen that no longer exists.
+     */
+    val Phone = BuiltInApp("dialer", "Phone", R.string.carset_phone, Icons.Filled.Call, CarScreen.App("dialer")) { it.open("dialer") }
 
     /** Hands the screen back to the car's own interface, like Android Auto's Exit. */
     val Exit = BuiltInApp("exit", "Exit", R.string.app_exit, CarGlyph, screen = null) { CarFocus.exitToCar() }
 
-    val all = listOf(Web, ScreenSharing, Phone, GoogleMaps, Music, Player, Places, VehicleData, Settings, Exit, AllApps)
+    val all = listOf(GoogleMaps, Music, Player, Places, VehicleData, Settings, Exit)
     private val byApp = all.associateWith { Entry(it.label, icon = null, builtIn = it) }
     val everyEntry: List<Entry> = byApp.values.toList()
 
     /**
-     * The ones that make sense where the car UI is showing. As a device's own home screen there
-     * is no car to share the screen with or exit to, and no phone line on most head units.
+     * The ones that make sense where the car UI is showing. On a device's own home screen there
+     * is no car to exit to.
      */
     fun entries(launcher: Boolean, canCall: Boolean): List<Entry> = byApp.filterKeys { app ->
         when (app) {
-            AllApps -> launcher
-            ScreenSharing, Exit -> !launcher
-            Phone -> !launcher || canCall
+            Exit -> !launcher
             else -> true
         }
     }.values.toList()
@@ -168,7 +164,6 @@ internal fun rememberRunningApps(): Map<String, RunningSlot> {
         }
         mediaApp?.component?.flattenToString()?.takeIf { mediaLive }?.let { put(it, RunningSlot.MEDIA) }
         BuiltInApps.all.firstOrNull { it.screen != null && it.screen == current }?.let { put(BUILT_IN_PREFIX + it.id, RunningSlot.SCREEN) }
-        (current as? CarScreen.Messages)?.let { put(MESSAGING_PREFIX + it.packageName, RunningSlot.SCREEN) }
     }
 }
 

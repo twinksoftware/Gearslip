@@ -2,11 +2,9 @@ package app.seb3thehacker.gearslip.ui
 
 import androidx.compose.ui.res.stringResource
 import app.seb3thehacker.gearslip.R
-import app.seb3thehacker.gearslip.speech.SpeechModels
 
 import androidx.compose.material3.MaterialTheme
 
-import androidx.compose.material3.LinearProgressIndicator
 
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.animation.core.LinearEasing
@@ -93,7 +91,6 @@ import app.seb3thehacker.gearslip.call.CarCalls
 import app.seb3thehacker.gearslip.car.Prefetch
 import app.seb3thehacker.gearslip.host.AndroidAuto
 import app.seb3thehacker.gearslip.notify.GearslipNotificationListener
-import app.seb3thehacker.gearslip.stats.UsageStats
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -156,22 +153,6 @@ private fun hasNotificationAccess(context: Context): Boolean {
     val component = ComponentName(context, GearslipNotificationListener::class.java)
     return runCatching { manager.isNotificationListenerAccessGranted(component) }.getOrDefault(false)
 }
-
-/**
- * The usage notes question: the setup guide's last page, and on its own the one screen people
- * who set up before the notes existed see once. Leaving it without turning them on is a no.
- */
-private fun usageNotesPage(context: Context) = GuidePage(
-    title = context.getString(R.string.guide_usage_title),
-    explanation = usageStatsIntro(context),
-    icon = { HeartIcon(it) },
-    content = {
-        UsageStatsChoices()
-        DisposableEffect(Unit) {
-            onDispose { if (!UsageStats.asked(context)) UsageStats.set(context, false) }
-        }
-    },
-)
 
 private fun pages(context: Context, onRequestCallScreening: () -> Unit): List<GuidePage> = buildList {
     // --- Safety: always first, and never skipped by an already-granted check ---------
@@ -305,21 +286,6 @@ private fun pages(context: Context, onRequestCallScreening: () -> Unit): List<Gu
         ),
     )
 
-    // --- Voice: both recommended models in one tap, skipped once they're on the phone ---
-    if (!SpeechModels.RECOMMENDED.all { SpeechModels.isReady(context, it) }) {
-        add(
-            GuidePage(
-                title = context.getString(R.string.guide_voice_title),
-                explanation = context.getString(R.string.guide_voice_body, SpeechModels.RECOMMENDED.sumOf { it.downloadMb }),
-                icon = { MicIcon(it) },
-                optional = true,
-                actionLabel = context.getString(R.string.guide_download_voice),
-                onAction = { SpeechModels.downloadRecommended(context) },
-                content = { VoiceDownloadStatus() },
-            ),
-        )
-    }
-
     // --- Optional: each is skipped once its actual effect is already in place --------
     if (!hasProjectMediaOp(context)) {
         add(
@@ -376,31 +342,12 @@ private fun pages(context: Context, onRequestCallScreening: () -> Unit): List<Gu
             content = { ThemePicker(it.c, it.cq, it.cqSp, key = "guide-buttons") },
         ),
     )
-    add(usageNotesPage(context))
 }
 
 /**
  * Bluetooth or USB for the car's music, as two cards. Bluetooth comes first and is picked for a
  * driver who hasn't chosen yet: it never asks for consent, and the map app's voice reaches the car.
  */
-/** How the voice download is going: a bar while it runs, a line once it's done or failed. */
-@Composable
-private fun VoiceDownloadStatus() {
-    val context = LocalContext.current
-    val progress by SpeechModels.progress.collectAsState()
-    val states = SpeechModels.RECOMMENDED.map { SpeechModels.state(it).collectAsState().value }
-    val line = when {
-        progress != null -> stringResource(R.string.guide_voice_downloading, progress ?: 0)
-        states.all { it == SpeechModels.State.Ready } -> stringResource(R.string.guide_voice_ready)
-        states.any { it is SpeechModels.State.Failed } -> stringResource(R.string.guide_voice_failed)
-        else -> null
-    }
-    LaunchedEffect(Unit) { SpeechModels.init(context) }
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        progress?.let { LinearProgressIndicator(progress = { it / 100f }, modifier = Modifier.fillMaxWidth()) }
-        line?.let { Text(it, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) }
-    }
-}
 
 @Composable
 private fun AudioChoice() {
@@ -455,7 +402,7 @@ private fun AudioCard(title: String, tag: String?, body: String, selected: Boole
 @Composable
 fun SetupGuideScreen(onRequestCallScreening: () -> Unit, onDone: () -> Unit, onlyUsageNotes: Boolean = false) {
     val context = LocalContext.current
-    val allPages = remember { if (onlyUsageNotes) listOf(usageNotesPage(context)) else pages(context, onRequestCallScreening) }
+    val allPages = remember { pages(context, onRequestCallScreening) }
     // The USB-only pages all come after the car audio page, so dropping them never moves the
     // page the driver is on.
     val usbAudio by CarSettings.pipeAudio.collectAsState()

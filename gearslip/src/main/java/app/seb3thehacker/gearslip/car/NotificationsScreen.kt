@@ -165,10 +165,6 @@ private fun NotificationRow(n: CarNotification, onReply: (CarNotification) -> Un
             }
             when {
                 n.replied -> Icon(Icons.Filled.Check, contentDescription = stringResource(R.string.notif_replied), tint = MaterialTheme.colorScheme.primary)
-                n.reply != null -> GsButton(onClick = { VoiceReply.reply(n) }, tone = GsTone.Tonal) {
-                    ReplyGlyph(Modifier.size(20.dp))
-                    Text(stringResource(R.string.crumb_reply), Modifier.padding(start = 8.dp))
-                }
             }
         }
     }

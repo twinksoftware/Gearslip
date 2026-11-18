@@ -43,9 +43,6 @@ sealed interface CarScreen {
      */
     data object Browse : CarScreen
 
-    /** A messaging app's recent conversations, read from the notifications it posts. */
-    data class Messages(val packageName: String) : CarScreen
-
     /** [replyTo] is a notification key to open straight into its reply pane. */
     data class Notifications(val replyTo: String? = null) : CarScreen
     data class App(val id: String) : CarScreen
@@ -162,8 +159,6 @@ class CarNavigator(startId: String) {
     fun weather() { push(CarScreen.Weather, "Weather", R.string.crumb_weather) }
 
     fun vehicleData() { push(CarScreen.VehicleData, "Vehicle data") }
-
-    fun messages(packageName: String, label: String) { push(CarScreen.Messages(packageName), label) }
 
     /** The list lives on the dashboard; only a reply gets a screen of its own. */
     fun notifications(replyTo: String? = null) {

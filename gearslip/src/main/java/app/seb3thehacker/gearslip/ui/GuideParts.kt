@@ -47,14 +47,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.CompositionLocalProvider
-import app.seb3thehacker.gearslip.car.CarSettings
 import app.seb3thehacker.gearslip.car.theme.GsButton
 import app.seb3thehacker.gearslip.car.theme.GsIconButton
 import app.seb3thehacker.gearslip.car.theme.GsThemes
@@ -118,39 +115,15 @@ internal fun Modifier.pop(p: Float) = graphicsLayer {
 }
 
 /**
- * The car's button styles side by side, each drawn in its own style, and a row of real car
- * controls below that redraws in whichever is picked. Picking saves it, so the car shows it too.
+ * Nothing is the only look now, so there is no choice to make here: a row of real car controls
+ * drawn in the same skin the car uses.
  */
 @Composable
 internal fun ThemePicker(c: IntroColors, cq: (Float) -> Dp, cqSp: (Float) -> TextUnit, key: Any) {
-    val chosenId by CarSettings.uiTheme.collectAsState()
-    val chosen = GsThemes.byId(chosenId)
-    // Flat first: it's the default.
-    val themes = listOf(GsThemes.Flat) + GsThemes.builtIn.filter { it != GsThemes.Flat }
     Column(
         Modifier.padding(top = cq(7f)).fillMaxWidth().up(entrance(key, 500, 700), cq(7f)),
-        verticalArrangement = Arrangement.spacedBy(cq(6f)),
     ) {
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(cq(3f))) {
-            themes.forEach { theme ->
-                CompositionLocalProvider(LocalGsTheme provides theme) {
-                    GsButton(
-                        onClick = { CarSettings.setUiTheme(theme.id) },
-                        modifier = Modifier.weight(1f),
-                        tone = if (theme == chosen) GsTone.Primary else GsTone.Neutral,
-                        contentPadding = PaddingValues(horizontal = cq(1f), vertical = cq(3f)),
-                    ) {
-                        Text(
-                            if (theme == chosen) "✓ ${theme.name}" else theme.name,
-                            style = TextStyle(fontSize = cqSp(4.2f), fontWeight = FontWeight.Bold),
-                            maxLines = 1,
-                        )
-                    }
-                }
-            }
-        }
-        // What the car shows: the player's controls and a full-width action.
-        CompositionLocalProvider(LocalGsTheme provides chosen) {
+        CompositionLocalProvider(LocalGsTheme provides GsThemes.Nothing) {
             Row(
                 Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(cq(3f)),

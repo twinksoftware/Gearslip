@@ -30,7 +30,6 @@ import app.seb3thehacker.gearslip.car.CarEnvironment
 import app.seb3thehacker.gearslip.car.CarSettings
 import app.seb3thehacker.gearslip.car.CarUi
 import app.seb3thehacker.gearslip.car.Prefetch
-import app.seb3thehacker.gearslip.stats.UsageStats
 import app.seb3thehacker.gearslip.ui.GearslipApp
 import app.seb3thehacker.gearslip.ui.GearslipTheme
 import java.io.FileInputStream
@@ -162,7 +161,6 @@ class GearslipActivity : ComponentActivity(), Projection {
         // Before any car connects: CarServices only starts once the car shows Gearslip's screen,
         // and a car that waits to know the phone before it shows it would never hear (issue #43).
         app.seb3thehacker.gearslip.car.CarBluetooth.init(this)
-        app.seb3thehacker.gearslip.browser.BrowserSettings.init(this)
         AppSettings.applyGearslipEnabled(this)
         // A capture that died without tidying up would leave notifications exposed to every
         // later screen share. Nothing is capturing if the service is not running, so undo it.
@@ -224,8 +222,6 @@ class GearslipActivity : ComponentActivity(), Projection {
     override fun onStart() {
         super.onStart()
         Prefetch.warm(this)
-        UsageStats.onAppOpened(this)
-        app.seb3thehacker.gearslip.update.UpdateChecker.onAppOpened(this)
         // Back from the app's settings with the microphone turned on: try car audio again.
         if (checkSelfPermission(android.Manifest.permission.RECORD_AUDIO) == android.content.pm.PackageManager.PERMISSION_GRANTED) {
             CarAudio.micAllowed()

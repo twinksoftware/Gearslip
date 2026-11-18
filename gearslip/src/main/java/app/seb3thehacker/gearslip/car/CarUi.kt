@@ -153,25 +153,10 @@ fun CarUi() {
     remember(appContext) { Prefetch.warm(appContext, force = true); CarServices.init(appContext) }
     DisposableEffect(Unit) { onDispose { CarServices.shutdown() } }
     // Ask for the phone's sound as soon as the car connects, not only when a media app opens:
-    // a video in the web browser or a map's voice needs it too. Asks once, after the car offers
-    // somewhere to play it.
+    // the map needs it too. Asks once, after the car offers somewhere to play it.
     LaunchedEffect(Unit) { if (CarSettings.pipesNow) app.seb3thehacker.gearslip.audio.CarAudio.request() }
-    // A new version gets one card in the top right, a few seconds in and only while parked.
-    LaunchedEffect(Unit) { app.seb3thehacker.gearslip.update.UpdateChecker.onCarConnected(appContext) }
     // The map follows the light outside, whatever the app's own theme is set to.
     LaunchedEffect(darkOutside) { CarServices.nav.pushConfiguration() }
-
-    // The one place with a navigator and a frame to act a voice command on - CarAssistant itself
-    // only knows how to listen and speak, not what "open Spotify" means.
-    val frameForAssistant by CarEnvironment.frame.collectAsState()
-    LaunchedEffect(navigator) {
-        CarAssistant.pendingCommand.collect { heard ->
-            if (heard != null) {
-                val reply = AssistantCommands.handle(appContext, navigator, frameForAssistant, heard)
-                CarAssistant.reply(reply)
-            }
-        }
-    }
 
     // The car's own back, home, map, media and phone keys.
     LaunchedEffect(navigator) {
@@ -184,7 +169,6 @@ fun CarUi() {
             when (key) {
                 CarKeys.ScreenKey.BACK -> when {
                     navigator.appMenu != null -> navigator.dismissAppMenu()
-                    VoiceReply.state.value.phase != VoiceReply.Phase.IDLE -> VoiceReply.cancel()
                     else -> navigator.back()
                 }
                 // Home is the dashboard, over the map, so Back from it lands on the map.
@@ -373,26 +357,17 @@ fun CarUi() {
                                         CarScreen.Weather -> WeatherScreen()
                                         CarScreen.VehicleData -> VehicleDataScreen()
                                         is CarScreen.Notifications -> NotificationsScreen(shown.replyTo)
-                                        is CarScreen.Messages -> MessagesScreen(shown.packageName)
                                         is CarScreen.App -> CarApps.find(shown.id)?.content?.invoke()
+                                        else -> Unit
                                     }
                                 }
                             }
                         }
                         CarToastOverlay(Modifier.align(Alignment.BottomCenter).padding(bottom = bottomInset))
                         CarAlertOverlay(Modifier.align(Alignment.TopCenter))
-                        CallPromptOverlay()
                         BluetoothPairOverlay()
-                        PopupTimer()
-                        // The dashboard is already listing them, so it needs no popup.
-                        NotificationPopup(
-                            showNew = screen !is CarScreen.Notifications && screen != CarScreen.Dashboard,
-                            modifier = Modifier.align(Alignment.TopEnd),
-                        )
-                        // Above the popup: a call is more urgent than any notification.
-                        VoiceHelpOverlay(Modifier.align(Alignment.Center))
+                        CallPromptOverlay()
                         CallOverlay()
-                        AssistantOverlay(Modifier.align(Alignment.BottomCenter).padding(bottom = bottomInset))
                         val badge by CarSettings.debugBadge.collectAsState()
                         if (app.seb3thehacker.gearslip.BuildConfig.DEBUG && badge) {
                             // Bottom corner, not top: a screen's own header almost always puts
@@ -403,18 +378,9 @@ fun CarUi() {
                         }
                         if (nothingShell && !fullscreen) {
                             NothingBottomPlayer(Modifier.align(Alignment.BottomCenter))
-                        } else {
-                            run {
-                                androidx.compose.animation.AnimatedVisibility(
-                                    if (fullscreen) CarFullscreen.revealed || onCall else barShown,
-                                    Modifier.align(Alignment.BottomCenter),
-                                    enter = androidx.compose.animation.slideInVertically { it },
-                                    exit = androidx.compose.animation.slideOutVertically { it },
-                                ) { CarNavBar(navigator) }
-                            }
                         }
-                        // Last of the resting layer so it covers the nav bar too; a call, alert or
-                        // the assistant draws after it and the tick hides it as soon as one starts.
+                        // Last of the resting layer so it covers the player too; a call or alert
+                        // draws after it and the tick hides it as soon as one starts.
                         CarScreensaverOverlay()
                         if (fullscreen) {
                             androidx.compose.animation.AnimatedVisibility(
@@ -434,7 +400,6 @@ fun CarUi() {
                 }
                 // Over everything, nav bar included: a long press on an app, anywhere.
                 AppMenu(navigator, rememberRunningApps())
-                if (safetyWarningSeen) CarWhatsNew()
                 }
             }
           }

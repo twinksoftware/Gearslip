@@ -229,14 +229,11 @@ internal fun rememberAllEntries(): List<Entry> {
 }
 
 /** The launcher's groups, in the order they're laid out. */
-private enum class AppGroup { PHONE, MAPS, MUSIC, MESSAGING, WEB, SCREEN_SHARING, OTHER, SETTINGS, EXIT }
+private enum class AppGroup { PHONE, MAPS, MUSIC, MESSAGING, OTHER, SETTINGS, EXIT }
 
 private fun groupOf(entry: Entry, mediaPackages: Set<String>): AppGroup {
     entry.builtIn?.let {
         return when (it) {
-            BuiltInApps.Phone -> AppGroup.PHONE
-            BuiltInApps.Web -> AppGroup.WEB
-            BuiltInApps.ScreenSharing -> AppGroup.SCREEN_SHARING
             BuiltInApps.GoogleMaps -> AppGroup.MAPS
             BuiltInApps.Exit -> AppGroup.EXIT
             else -> AppGroup.SETTINGS
@@ -301,10 +298,9 @@ internal fun launchEntry(entry: Entry, navigator: CarNavigator, frame: CarEnviro
         }
     }
     entry.media?.let { CarServices.openMedia(it); navigator.media() }
-    entry.messaging?.let { navigator.messages(it.packageName, it.label) }
 }
 
-/** The app launcher: every app as an icon grid, grouped Phone, Maps, Music, Messaging, Web, Screen sharing, Settings. */
+/** The app launcher: every app as an icon grid, grouped Phone, Maps, Music, Messaging, Other, Settings, Exit. */
 @Composable
 fun CarLauncher() {
     val context = LocalContext.current
