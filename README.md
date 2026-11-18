@@ -1,3 +1,5 @@
+[![Build APK and release](https://github.com/shrijit37/Gearslip/actions/workflows/release.yml/badge.svg)](https://github.com/shrijit37/Gearslip/actions/workflows/release.yml)
+
 <img src="docs/icon/gearslip-icon.png" alt="Gearslip icon" width="96" height="96">
 
 # Gearslip
