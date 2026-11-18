@@ -99,7 +99,7 @@ private fun RailButton(entry: RailEntry, active: Boolean) {
     Box(
         Modifier
             .fillMaxWidth()
-            .height(88.dp)
+            .height(64.dp)
             .background(if (active) accent.copy(alpha = 0.10f) else Color.Transparent)
             .clickable(onClick = entry.onClick),
     ) {
@@ -115,9 +115,9 @@ private fun RailButton(entry: RailEntry, active: Boolean) {
         Column(
             Modifier.align(Alignment.Center),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
-            Icon(entry.icon, contentDescription = null, tint = content, modifier = Modifier.size(24.dp))
+            Icon(entry.icon, contentDescription = null, tint = content, modifier = Modifier.size(20.dp))
             Text(
                 entry.label,
                 style = MaterialTheme.typography.labelSmall,
