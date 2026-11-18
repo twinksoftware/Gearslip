@@ -290,10 +290,17 @@ fun CarUi() {
                 }
                 // Up to the bar's top edge, so the map's cards and the player end above it.
                 val homeInset = if (barShown) NAV_BAR_HEIGHT else 0.dp
+                // The Nothing shell moves navigation to a left rail and keeps a compact player
+                // along the bottom, the way the approved mockup lays the car screen out.
+                val nothingShell = uiThemeId == GsThemes.Nothing.id
+                val railWidth = if (nothingShell) 104.dp else 0.dp
+                val bottomInset = if (nothingShell) 56.dp else homeInset
+                val shellPad = Modifier.padding(start = railWidth)
                 // Only the screen that asked: going Home or anywhere else ends it.
                 val fullscreen = CarFullscreen.active && screen != CarScreen.Home
                 Box(Modifier.fillMaxSize().padding(pad)) {
-                Column(Modifier.fillMaxSize()) {
+                if (nothingShell && safetyWarningSeen) CarNothingRail(navigator)
+                Column(Modifier.fillMaxSize().then(shellPad)) {
                     if (!safetyWarningSeen) {
                         CarSafetyWizard(onDone = CarSettings::markSafetyWarningSeen)
                         return@Column
@@ -304,7 +311,7 @@ fun CarUi() {
                         // Home never leaves the composition; other screens cover it. Dropping it
                         // would tear down the map's surface, and coming back would then show black
                         // while the nav app redrew on a new one.
-                        CompositionLocalProvider(LocalNavBarInset provides homeInset) { CarHome() }
+                        CompositionLocalProvider(LocalNavBarInset provides bottomInset) { CarHome() }
                     }
                     // The keyboard takes the nav bar's row instead of squeezing in above it -
                     // nothing on the nav bar is useful mid-type, and the screen is too small to
@@ -327,7 +334,7 @@ fun CarUi() {
                 val shown = if (screen != CarScreen.Home) screen else lastAway[0]
                 SideEffect { if (screen != CarScreen.Home) lastAway[0] = screen }
                 if (safetyWarningSeen) {
-                    Box(Modifier.fillMaxSize()) {
+                    Box(Modifier.fillMaxSize().then(shellPad)) {
                         androidx.compose.animation.AnimatedVisibility(
                             visible = screen != CarScreen.Home,
                             enter = androidx.compose.animation.EnterTransition.None,
@@ -341,7 +348,7 @@ fun CarUi() {
                                     .background(MaterialTheme.colorScheme.background)
                                     // The bar never hides here, so keep the screen clear of it. The
                                     // player runs on under the see-through bar and keeps clear itself.
-                                    .padding(bottom = if (!keyboardVisible && !fullscreen && shown != CarScreen.Media) NAV_BAR_HEIGHT else 0.dp)
+                                    .padding(bottom = if (!keyboardVisible && !fullscreen && shown != CarScreen.Media) bottomInset else 0.dp)
                                     // Keeps touches that miss this screen's controls off the map.
                                     .pointerInput(Unit) { detectTapGestures { } },
                             ) {
@@ -355,7 +362,7 @@ fun CarUi() {
                                         CarScreen.Home -> Unit
                                         CarScreen.Apps -> CarLauncher()
                                         CarScreen.Media -> CompositionLocalProvider(
-                                            LocalNavBarInset provides if (!keyboardVisible && !fullscreen) NAV_BAR_HEIGHT else 0.dp,
+                                            LocalNavBarInset provides if (!keyboardVisible && !fullscreen) bottomInset else 0.dp,
                                         ) { mediaApp?.let { MediaScreen(it) { navigator.back() } } }
                                         CarScreen.FirstPartyMusic -> FirstPartyMusicScreen()
                                         CarScreen.FirstPartyPlayer -> FirstPartyPlayerScreen(onBack = navigator::back)
@@ -372,7 +379,7 @@ fun CarUi() {
                                 }
                             }
                         }
-                        CarToastOverlay(Modifier.align(Alignment.BottomCenter).padding(bottom = homeInset))
+                        CarToastOverlay(Modifier.align(Alignment.BottomCenter).padding(bottom = bottomInset))
                         CarAlertOverlay(Modifier.align(Alignment.TopCenter))
                         CallPromptOverlay()
                         BluetoothPairOverlay()
@@ -385,22 +392,26 @@ fun CarUi() {
                         // Above the popup: a call is more urgent than any notification.
                         VoiceHelpOverlay(Modifier.align(Alignment.Center))
                         CallOverlay()
-                        AssistantOverlay(Modifier.align(Alignment.BottomCenter).padding(bottom = homeInset))
+                        AssistantOverlay(Modifier.align(Alignment.BottomCenter).padding(bottom = bottomInset))
                         val badge by CarSettings.debugBadge.collectAsState()
                         if (app.seb3thehacker.gearslip.BuildConfig.DEBUG && badge) {
                             // Bottom corner, not top: a screen's own header almost always puts
                             // something in the top-right (settings, search, a Liked Songs
                             // shortcut) and this badge used to sit right on top of it, hiding
                             // whatever the screen drew there.
-                            DebugBuildBadge(Modifier.align(Alignment.BottomEnd).padding(bottom = homeInset))
+                            DebugBuildBadge(Modifier.align(Alignment.BottomEnd).padding(bottom = bottomInset))
                         }
-                        run {
-                            androidx.compose.animation.AnimatedVisibility(
-                                if (fullscreen) CarFullscreen.revealed || onCall else barShown,
-                                Modifier.align(Alignment.BottomCenter),
-                                enter = androidx.compose.animation.slideInVertically { it },
-                                exit = androidx.compose.animation.slideOutVertically { it },
-                            ) { CarNavBar(navigator) }
+                        if (nothingShell && !fullscreen) {
+                            NothingBottomPlayer(Modifier.align(Alignment.BottomCenter))
+                        } else {
+                            run {
+                                androidx.compose.animation.AnimatedVisibility(
+                                    if (fullscreen) CarFullscreen.revealed || onCall else barShown,
+                                    Modifier.align(Alignment.BottomCenter),
+                                    enter = androidx.compose.animation.slideInVertically { it },
+                                    exit = androidx.compose.animation.slideOutVertically { it },
+                                ) { CarNavBar(navigator) }
+                            }
                         }
                         // Last of the resting layer so it covers the nav bar too; a call, alert or
                         // the assistant draws after it and the tick hides it as soon as one starts.

@@ -61,8 +61,9 @@ import app.seb3thehacker.gearslip.host.CarAppConnection
 import app.seb3thehacker.gearslip.mirror.PhoneMirror
 import app.seb3thehacker.gearslip.notify.PhoneNavigation
 
-private enum class Category(val label: String) {
-    FUEL("FUEL"), FOOD("FOOD"), PARKING("PARKING"), CHARGING("CHARGING"), HOTEL("HOTEL"),
+private enum class Category(val label: String, val chipLabel: String) {
+    FUEL("FUEL", "FUEL"), FOOD("FOOD", "FOOD"), PARKING("PARKING", "PARK"),
+    CHARGING("CHARGING", "CHARGE"), HOTEL("HOTEL", "HOTEL"),
 }
 
 private data class DemoPlace(val name: String, val category: Category, val metadata: String, val distance: String)
@@ -247,8 +248,10 @@ private fun SearchField(query: String, onQuery: (String) -> Unit) {
 
 @Composable
 private fun CategoryChips(selected: Category?, onSelect: (Category?) -> Unit) {
-    val chips: List<Pair<Category?, String>> = listOf(null to "ALL") + Category.entries.map { it to it.label }
-    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+    // Short labels keep every chip fully readable on the 800dp head unit; the full label is
+    // still used in result rows and as the icon's content description.
+    val chips: List<Pair<Category?, String>> = listOf(null to "ALL") + Category.entries.map { it to it.chipLabel }
+    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
         chips.forEach { (value, label) ->
             val on = value == selected
             val scheme = MaterialTheme.colorScheme
@@ -257,8 +260,8 @@ private fun CategoryChips(selected: Category?, onSelect: (Category?) -> Unit) {
                 modifier = Modifier.height(52.dp).weight(1f),
                 colors = if (on) GsColors(scheme.primary, scheme.onPrimary)
                 else GsColors(Color.Transparent, scheme.onSurface, scheme.outline),
-                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
-            ) { Text(label, style = MaterialTheme.typography.labelMedium, maxLines = 1) }
+                contentPadding = PaddingValues(horizontal = 2.dp, vertical = 8.dp),
+            ) { Text(label, style = MaterialTheme.typography.labelSmall, maxLines = 1) }
         }
     }
 }

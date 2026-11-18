@@ -100,6 +100,12 @@ object CarScreensaver {
 
     fun dismiss() = poke()
 
+    /** Show the resting screen immediately, for the Nothing rail's SAVE button. */
+    fun show() {
+        lastInput = 0L
+        visible = true
+    }
+
     /**
      * Called on a timer. [allowed] is false off Home and while something needs the screen; that
      * also resets the clock, so coming back to Home starts a fresh wait instead of sleeping at once.

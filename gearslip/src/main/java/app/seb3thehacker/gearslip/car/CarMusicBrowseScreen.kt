@@ -1,7 +1,9 @@
 package app.seb3thehacker.gearslip.car
 
 import android.graphics.Bitmap
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -15,6 +17,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.asImageBitmap
@@ -67,7 +70,13 @@ fun FirstPartyMusicScreen() {
     Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
         Box(Modifier.fillMaxSize()) {
             DotGrid(Modifier.fillMaxSize())
-            Column(Modifier.fillMaxSize().padding(horizontal = 20.dp, vertical = 16.dp)) {
+            Column(
+                Modifier.fillMaxSize().padding(
+                    horizontal = 20.dp,
+                    top = 16.dp,
+                    bottom = 16.dp + LocalNavBarInset.current,
+                ),
+            ) {
                 Row(
                     Modifier.fillMaxWidth().border(1.dp, MaterialTheme.colorScheme.outline).padding(12.dp),
                     verticalAlignment = Alignment.CenterVertically,
@@ -247,11 +256,17 @@ private fun EntryShelves(entries: List<MediaEntry>, media: CarMedia, modifier: M
 private fun CoverTile(entry: MediaEntry, media: CarMedia) {
     val art = rememberEntryArt(entry)
     Column(Modifier.width(152.dp).clickable { playEntry(entry, media) }) {
-        EntryArt(art, entry.browsable, Modifier.fillMaxWidth().aspectRatio(1f).border(1.dp, MaterialTheme.colorScheme.outline))
+        EntryArt(
+            art, entry.browsable,
+            Modifier.fillMaxWidth().aspectRatio(1f)
+                .background(MaterialTheme.colorScheme.surfaceContainerLow)
+                .border(1.dp, MaterialTheme.colorScheme.outline),
+            seed = entry.id,
+        )
         Spacer(Modifier.height(10.dp))
         Text(
             entry.title.uppercase(),
-            style = MaterialTheme.typography.titleSmall,
+            style = MaterialTheme.typography.titleSmall.copy(letterSpacing = 0.08.em),
             fontWeight = FontWeight.Bold,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
@@ -278,7 +293,11 @@ private fun RowTile(entry: MediaEntry, media: CarMedia) {
             .padding(12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        EntryArt(art, entry.browsable, Modifier.size(52.dp).border(1.dp, MaterialTheme.colorScheme.outlineVariant))
+        EntryArt(
+            art, entry.browsable,
+            Modifier.size(52.dp).border(1.dp, MaterialTheme.colorScheme.outlineVariant),
+            seed = entry.id,
+        )
         Spacer(Modifier.width(14.dp))
         Column(Modifier.weight(1f)) {
             Text(entry.title, style = MaterialTheme.typography.titleMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
@@ -300,19 +319,47 @@ private fun RowTile(entry: MediaEntry, media: CarMedia) {
     }
 }
 
-/** Cover art, or a folder/music glyph in a bordered square when the app sends no image. */
+/**
+ * Cover art, or a deterministic monochrome dot-matrix stand-in when the app sends no image.
+ * [seed] fixes the pattern per entry so the same folder always gets the same "cover"; it defaults
+ * so the player screen can keep drawing its own art-less square without passing one.
+ */
 @Composable
-internal fun EntryArt(bitmap: Bitmap?, browsable: Boolean, modifier: Modifier) {
+internal fun EntryArt(bitmap: Bitmap?, browsable: Boolean, modifier: Modifier, seed: String? = null) {
     Box(modifier, contentAlignment = Alignment.Center) {
         if (bitmap != null) {
             Image(bitmap.asImageBitmap(), null, Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
         } else {
-            Icon(
-                if (browsable) MediaIcons.Folder else MediaIcons.MusicNote,
-                null,
-                Modifier.fillMaxSize(0.5f),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
+            DotMatrixCover(seed ?: if (browsable) "folder" else "track", Modifier.fillMaxSize())
+        }
+    }
+}
+
+/**
+ * A mirrored 7x7 dot matrix standing in for missing cover art. Lit cells are drawn from the hash
+ * of [seed] and mirrored across the vertical axis, so the result is a centred, repeatable motif
+ * that reads as artwork rather than a grey Material folder glyph. One colour, no shadow.
+ */
+@Composable
+private fun DotMatrixCover(seed: String, modifier: Modifier) {
+    val color = MaterialTheme.colorScheme.onSurfaceVariant
+    Canvas(modifier) {
+        val cols = 7
+        val rows = 7
+        val step = size.minDimension / cols
+        val radius = step * 0.26f
+        val startX = (size.width - step * cols) / 2f + step / 2f
+        val startY = (size.height - step * rows) / 2f + step / 2f
+        var bits = (seed.hashCode().toLong() and 0x7fffffffL) xor 0x2a2a2a2aL
+        for (r in 0 until rows) {
+            for (c in 0..(cols / 2)) {
+                val lit = bits and 1L == 1L
+                bits = (bits ushr 1) or (bits shl 30)
+                if (!lit) continue
+                drawCircle(color, radius, Offset(startX + c * step, startY + r * step))
+                val mirror = cols - 1 - c
+                if (mirror != c) drawCircle(color, radius, Offset(startX + mirror * step, startY + r * step))
+            }
         }
     }
 }
