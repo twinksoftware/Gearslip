@@ -489,7 +489,7 @@ private fun DotMatrix(
     val rows = pattern.size
     val cols = pattern.maxOf { it.length }
     val gap = cell * 0.22f
-    Canvas(modifier.size(cols * cell + (cols - 1) * gap, rows * cell + (rows - 1) * gap)) {
+    Canvas(modifier.size(cell * cols.toFloat() + gap * (cols - 1).toFloat(), cell * rows.toFloat() + gap * (rows - 1).toFloat())) {
         val cellPx = cell.toPx()
         val gapPx = gap.toPx()
         for (r in 0 until rows) {
