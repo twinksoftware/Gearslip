@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gearslip · Player concept</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Doto:wght@400;700&family=Space+Mono:wght@400;700&display=swap');
+
+  :root{
+    --bg:#000; --surface:#0d0d0d; --surface2:#1a1a1a;
+    --text:#fff; --secondary:#999; --muted:#555; --border:#2e2e2e; --red:#ff3030;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; min-height:100vh; padding:34px 20px 60px;
+    background:#111; color:#cfcfcf;
+    font-family:'Space Mono',ui-monospace,monospace;
+    display:flex; flex-direction:column; align-items:center; gap:22px;
+  }
+  .page-head{width:800px; max-width:100%; display:flex; justify-content:space-between; align-items:end}
+  .page-head h1{font-family:'Doto',monospace; font-size:22px; font-weight:400; letter-spacing:.12em; color:#fff; margin:0}
+  .page-head span{font-size:11px; color:var(--muted); letter-spacing:.12em}
+
+  /* ---- the car display, 800x480 @160dpi ---- */
+  .screen{
+    position:relative; width:800px; height:480px; flex:0 0 auto;
+    background:var(--bg); color:var(--text); overflow:hidden;
+    border:1px solid #222; box-shadow:0 24px 70px rgba(0,0,0,.7);
+    padding:20px 26px 18px; display:flex; flex-direction:column;
+  }
+  /* faint Nothing-style dot texture */
+  .screen::before{
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background-image:radial-gradient(rgba(255,255,255,.05) 1px, transparent 1px);
+    background-size:16px 16px; opacity:.55;
+  }
+  .screen > *{position:relative; z-index:1}
+
+  /* ---- header ---- */
+  .header{height:34px; flex:0 0 auto; display:flex; align-items:center; justify-content:space-between}
+  .header-left{display:flex; align-items:center; gap:14px}
+  .eyebrow{font-family:'Doto',monospace; font-size:14px; letter-spacing:.2em; color:var(--text)}
+  .header-icons{display:flex; align-items:center; gap:11px}
+  .dicon{display:inline-flex; cursor:pointer; transition:opacity .15s, filter .15s}
+  .dicon:hover{opacity:.65}
+  .dicon.on{filter:drop-shadow(0 0 5px rgba(255,48,48,.55))}
+
+  /* ---- stage holds art/info + transport as one centred block ---- */
+  .stage{flex:1; min-height:0; display:flex; flex-direction:column; justify-content:center; gap:30px}
+  .main{min-height:0; display:flex; align-items:center; gap:34px}
+  .art{
+    width:186px; height:186px; flex:0 0 auto; border:1px solid var(--border);
+    background:#050505; position:relative; cursor:pointer;
+  }
+  .art canvas{display:block; width:100%; height:100%}
+  .art .tag{position:absolute; left:8px; bottom:6px; font-size:9px; letter-spacing:.2em;
+            color:rgba(255,255,255,.45); pointer-events:none}
+
+  .info{flex:1; min-width:0; display:flex; flex-direction:column; height:186px}
+  .counter{font-size:10px; letter-spacing:.22em; color:var(--red)}
+  .title{font-family:'Doto',monospace; font-size:40px; line-height:1.05; font-weight:400;
+         text-transform:uppercase; letter-spacing:.01em; margin:6px 0 4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .artist{font-size:11px; letter-spacing:.08em; color:var(--secondary); text-transform:uppercase}
+  .grow{flex:1}
+  .dots{width:100%; display:flex; justify-content:space-between; align-items:center; height:14px}
+  .pdot{width:6px; height:6px; border-radius:50%; background:var(--border); transition:background .2s}
+  .pdot.on{background:var(--red)}
+  .pdot.head{background:var(--red); box-shadow:0 0 8px rgba(255,48,48,.9); transform:scale(1.5)}
+  .times{display:flex; justify-content:space-between; font-size:10px; letter-spacing:.1em; color:var(--secondary); margin-top:7px}
+  .times b{color:var(--text); font-weight:400}
+
+  /* ---- transport: dot-matrix buttons ---- */
+  .transport{height:58px; flex:0 0 auto; display:flex; align-items:center; justify-content:center; gap:54px}
+  .transport .dicon{opacity:.9}
+  .transport .play{opacity:1}
+
+  /* ---- single live lyric line (lyrics panel lives in the top-right icons now) ---- */
+  .lyric{height:20px; flex:0 0 auto; text-align:center; font-family:'Doto',monospace;
+         font-size:15px; letter-spacing:.06em; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .lyric em{font-style:normal; color:var(--red)}
+
+  /* ---- no bottom bar on this screen ---- */
+
+  .legend{width:800px; max-width:100%; font-size:11px; line-height:1.9; color:#8a8a8a}
+  .legend h2{font-family:'Doto',monospace; font-size:14px; color:#fff; letter-spacing:.14em; margin:0 0 6px}
+  .legend b{color:#fff; font-weight:400}
+  .legend .k{color:var(--red)}
+</style>
+</head>
+<body>
+
+  <div class="page-head">
+    <h1>NOW PLAYING · CONCEPT</h1>
+    <span>GEARSLIP CAR UI — 800 × 480 @ 160dpi</span>
+  </div>
+
+  <div class="screen" id="screen">
+    <div class="header">
+      <div class="header-left">
+        <span class="dicon" data-icon="back"></span>
+        <span class="eyebrow">NOW PLAYING</span>
+      </div>
+      <div class="header-icons" id="topIcons">
+        <span class="dicon on" data-icon="shuffle" title="shuffle"></span>
+        <span class="dicon" data-icon="repeat" title="repeat"></span>
+        <span class="dicon" data-icon="queue" title="queue"></span>
+        <span class="dicon" data-icon="lyrics" title="lyrics"></span>
+        <span class="dicon" data-icon="more" title="more"></span>
+      </div>
+    </div>
+
+    <div class="stage">
+      <div class="main">
+        <div class="art" id="artBox" title="click to replay the loading pattern">
+          <canvas id="artCanvas" width="372" height="372"></canvas>
+          <span class="tag">DOT MATRIX · COLOUR</span>
+        </div>
+        <div class="info">
+          <div class="counter">TRACK 01 / 12</div>
+          <div class="title">Tum Se Hi</div>
+          <div class="artist">Jab We Met · Pritam</div>
+          <div class="grow"></div>
+          <div class="dots" id="progress"></div>
+          <div class="times"><b id="cur">0:43</b><span>5:39</span></div>
+        </div>
+      </div>
+
+      <div class="transport">
+        <span class="dicon" data-icon="prev" title="previous"></span>
+        <span class="dicon play" data-icon="play" id="playBtn" title="play / pause"></span>
+        <span class="dicon" data-icon="next" title="next"></span>
+      </div>
+    </div>
+
+    <div class="lyric"><em>Tum se hi</em> tanhai mein…</div>
+  </div>
+
+  <div class="legend">
+    <h2>WHAT CHANGED</h2>
+    <div>
+      <b>Art on the left</b> — album cover moves left, track info and controls sit to its right.<br>
+      <b>Coloured dot album art</b> — cover is drawn as a dot-matrix halftone: each dot keeps the artwork's real colour, dimmed by a gamma curve so midtones stay calm on black. Click it to replay the load.<br>
+      <b>Loading pattern</b> — a radial dot-matrix pulse plays while the art loads, driven per-dot by <span class="k">f(row, col, t) → opacity / scale</span>.<br>
+      <b>Dot-matrix progress</b> — the capsule seek bar becomes a row of dots; played dots are <span class="k">red</span>, the playhead dot glows red.<br>
+      <b>Dot-matrix buttons</b> — prev / play-pause / next are drawn from dots instead of solid glyphs.<br>
+      <b>Controls to top-right</b> — shuffle, repeat, lyrics, queue and more become small dot icons in the header; no tab strip.<br>
+      <b>Bottom bar hidden</b> — the mini-player / nav bar is gone on this screen; a single live lyric line replaces the lyrics tab.
+    </div>
+  </div>
+
+<script>
+  // A dot-matrix icon renderer: each '#' in the 7x7 pattern becomes one circle.
+  const P = {
+    back:['.......','...#...','..##...','.######','.######','..##...','...#...'],
+    play:['#......','##.....','###....','####...','###....','##.....','#......'],
+    pause:['.#...#.','.#...#.','.#...#.','.#...#.','.#...#.','.#...#.','.#...#.'],
+    prev:['#......','#.#....','#.##...','#.###..','#.##...','#.#....','#......'],
+    next:['......#','....#.#','...##.#','..###.#','...##.#','....#.#','......#'],
+    shuffle:['#.....#','.#...#.','..#.#..','...#...','..#.#..','.#...#.','#.....#'],
+    repeat:['.#####.','#.....#','#.....#','#.....#','#.....#','#....##','.###...'],
+    queue:['.#####.','.......','.#####.','.......','.#####.','.......','.......'],
+    lyrics:['.#####.','##...##','##.#.##','##...##','##...##','.#####.','..##...'],
+    more:['.......','.......','.......','.#.#.#.','.......','.......','.......'],
+  };
+
+  function dotIcon(name, color, px, factor = 0.34){
+    const pat = P[name], rows = pat.length, cols = pat[0].length;
+    const r = px * factor;
+    let circles = '';
+    for(let y=0; y<rows; y++) for(let x=0; x<cols; x++){
+      if(pat[y][x] === '#')
+        circles += `<circle cx="${x*px+px/2}" cy="${y*px+px/2}" r="${r}"/>`;
+    }
+    return `<svg width="${cols*px}" height="${rows*px}" viewBox="0 0 ${cols*px} ${rows*px}" fill="${color}">${circles}</svg>`;
+  }
+
+  function paintIcons(){
+    document.querySelectorAll('[data-icon]').forEach(el=>{
+      const name = el.dataset.icon;
+      const top = el.closest('.header-icons');
+      const px = top ? 4 : (el.id === 'playBtn' ? 6 : 5);
+      const color = el.classList.contains('on') ? '#ff3030' : (top ? '#fff' : (el.id === 'playBtn' ? '#fff' : '#999'));
+      el.innerHTML = dotIcon(name, color, px, top ? 0.28 : 0.34);
+    });
+  }
+  paintIcons();
+
+  // Top-right icons toggle their highlighted (red) state.
+  document.querySelectorAll('#topIcons .dicon').forEach(el=>{
+    el.addEventListener('click', ()=>{ el.classList.toggle('on'); paintIcons(); });
+  });
+
+  // Play / pause toggles between the two dot glyphs.
+  let playing = true;
+  const playBtn = document.getElementById('playBtn');
+  playBtn.addEventListener('click', ()=>{
+    playing = !playing;
+    playBtn.dataset.icon = playing ? 'pause' : 'play';
+    paintIcons();
+  });
+
+  // Progress dots: red for played, a glowing red head at the current position.
+  const TOTAL = 46, FRACTION = 0.126; // 0:43 of 5:39
+  const filled = Math.round(TOTAL * FRACTION);
+  const prog = document.getElementById('progress');
+  for(let i=0; i<TOTAL; i++){
+    const d = document.createElement('span');
+    d.className = 'pdot' + (i < filled ? ' on' : '') + (i === filled-1 ? ' head' : '');
+    prog.appendChild(d);
+  }
+
+  /* ------------------------------------------------------------------
+   * Album art -> coloured dot matrix.
+   * Adapted from udaign/matrices "Value Aliasing": the image is drawn into
+   * a small grid, sampled per cell, and each cell becomes a circle whose
+   * radius tracks its luminance. Dots keep the artwork's own colour, dimmed
+   * by that luminance; a gamma curve darkens midtones so pale covers don't
+   * turn into a wall of bright dots.
+   * ------------------------------------------------------------------ */
+
+
+  // A generated stand-in cover (real app would feed the track's artwork bitmap in).
+  function makeCover(){
+    const c=document.createElement('canvas'); c.width=300; c.height=300;
+    const x=c.getContext('2d');
+    const g=x.createLinearGradient(0,0,300,300);
+    g.addColorStop(0,'#16283a'); g.addColorStop(1,'#3a1620');
+    x.fillStyle=g; x.fillRect(0,0,300,300);
+    [[210,80,95,'#FCCA21'],[80,200,120,'#1A5A8A'],[230,235,80,'#BD1721'],[120,60,55,'#E0E0E0']]
+      .forEach(([bx,by,br,col])=>{
+        const rg=x.createRadialGradient(bx,by,0,bx,by,br);
+        rg.addColorStop(0,col); rg.addColorStop(1,'rgba(0,0,0,0)');
+        x.fillStyle=rg; x.beginPath(); x.arc(bx,by,br,0,7); x.fill();
+      });
+    x.fillStyle='#FCCA21'; x.beginPath(); x.arc(150,150,52,0,7); x.fill();
+    return c;
+  }
+
+  function renderHalftone(){
+    const GW=30, GH=30;
+    const tmp=document.createElement('canvas'); tmp.width=GW; tmp.height=GH;
+    const tc=tmp.getContext('2d',{willReadFrequently:true});
+    tc.drawImage(makeCover(),0,0,GW,GH);
+    const d=tc.getImageData(0,0,GW,GH).data;
+    const out=document.getElementById('artCanvas'), ctx=out.getContext('2d'), S=out.width;
+    ctx.clearRect(0,0,S,S); ctx.fillStyle='#050505'; ctx.fillRect(0,0,S,S);
+    const cell=S/GW, base=cell*0.52;
+    for(let y=0;y<GH;y++) for(let x=0;x<GW;x++){
+      const i=(y*GW+x)*4, r=d[i], g=d[i+1], b=d[i+2];
+      const lum=(0.299*r+0.587*g+0.114*b)/255;
+      const v=Math.min(1,Math.pow(lum,1.3));       // gamma darkens midtones
+      if(v<0.05) continue;                          // lower limit
+      const shade=0.30+0.60*v;                      // keep dark pixels dark
+      ctx.fillStyle=`rgb(${Math.round(r*shade)},${Math.round(g*shade)},${Math.round(b*shade)})`;
+      ctx.beginPath(); ctx.arc((x+0.5)*cell,(y+0.5)*cell,base*v,0,7); ctx.fill();
+    }
+  }
+
+  /* ------------------------------------------------------------------
+   * Loading pattern.
+   * Adapted from lportals/dot_matrix_loader CustomDotAnimation:
+   *   state = f(row, col, t) -> {opacity, scale}
+   * A radial pulse drives each dot before the artwork is revealed.
+   * ------------------------------------------------------------------ */
+  let raf=0;
+  function drawLoader(t){
+    const out=document.getElementById('artCanvas'), ctx=out.getContext('2d'), S=out.width;
+    ctx.clearRect(0,0,S,S); ctx.fillStyle='#050505'; ctx.fillRect(0,0,S,S);
+    const N=11, cell=S/N, base=cell*0.34, cx=(N-1)/2, cy=(N-1)/2;
+    for(let row=0;row<N;row++) for(let col=0;col<N;col++){
+      const dist=Math.hypot(col-cx,row-cy);
+      const wave=(Math.sin(dist*1.5 - t*2*Math.PI)+1)/2;
+      const opacity=0.12+0.88*wave, scale=0.25+0.75*wave;
+      ctx.fillStyle=`rgba(255,255,255,${opacity})`;
+      ctx.beginPath(); ctx.arc((col+0.5)*cell,(row+0.5)*cell,base*scale,0,7); ctx.fill();
+    }
+  }
+  function playLoading(){
+    cancelAnimationFrame(raf);
+    const start=performance.now();
+    const step=now=>{
+      const elapsed=(now-start)/1000;
+      drawLoader(elapsed/1.2);
+      if(elapsed<1.2) raf=requestAnimationFrame(step); else renderHalftone();
+    };
+    raf=requestAnimationFrame(step);
+  }
+  document.getElementById('artBox').addEventListener('click', playLoading);
+  if(location.search.includes('static')) renderHalftone(); else playLoading();
+</script>
+</body>
+</html>

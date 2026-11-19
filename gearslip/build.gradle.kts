@@ -160,6 +160,9 @@ tasks.register("renameApk") {
 tasks.matching { it.name.startsWith("assemble") }.configureEach { finalizedBy("renameApk") }
 
 dependencies {
+    // Music is driven entirely by external media apps (see media/CarMedia.kt): no first-party
+    // streamer, so no ExoPlayer/catalog dependencies.
+
     // Only for the XML window theme (Theme.Material3.DynamicColors); every screen is Compose.
     implementation(libs.google.material)
     implementation(platform(libs.androidx.compose.bom))

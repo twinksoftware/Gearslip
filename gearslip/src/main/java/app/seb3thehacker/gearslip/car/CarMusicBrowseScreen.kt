@@ -1,6 +1,7 @@
 package app.seb3thehacker.gearslip.car
 
 import android.graphics.Bitmap
+import android.net.Uri
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -8,8 +9,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
@@ -24,17 +23,17 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.seb3thehacker.gearslip.car.theme.*
-import app.seb3thehacker.gearslip.media.BrowseState
-import app.seb3thehacker.gearslip.media.CarMedia
+import app.seb3thehacker.gearslip.catalog.MusicCatalog
 import app.seb3thehacker.gearslip.media.MediaArt
 import app.seb3thehacker.gearslip.media.MediaEntry
+import app.seb3thehacker.gearslip.music.playback.MusicPlayer
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 private const val TAB_BROWSE = 0
 private const val TAB_SEARCH = 1
@@ -42,30 +41,56 @@ private const val TAB_LIBRARY = 2
 private const val SEARCH_PAUSE_MS = 600L
 
 /**
- * First-party music browse page. Every row comes from the connected media app: there is no
- * local-file library here. Browse shows the app's tree, Search asks the app to name its matches,
- * and Library is the playable part of the same shared tree.
+ * Nothing-style music browse page backed by the connected media app. BROWSE shows that app's
+ * browse tree, SEARCH runs its own library search with the car's keyboard, and LIBRARY is the
+ * current play queue. Playback and transport go through [MusicPlayer], which mirrors the app's
+ * session; Gearslip does not stream anything itself.
  */
 @Composable
-fun FirstPartyMusicScreen() {
-    val media = CarServices.media
-    val phase by media.phase.collectAsStateWithLifecycle()
-    val browse by media.browse.collectAsStateWithLifecycle()
-    val results by media.results.collectAsStateWithLifecycle()
-    var tab by remember { mutableStateOf(TAB_BROWSE) }
+fun FirstPartyMusicScreen(onOpenPlayer: () -> Unit) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    var tab by remember { mutableIntStateOf(TAB_BROWSE) }
     var query by remember { mutableStateOf("") }
+    var typing by remember { mutableStateOf(true) }
+    var shelves by remember { mutableStateOf<List<MusicCatalog.Shelf>>(emptyList()) }
+    var results by remember { mutableStateOf<List<MusicCatalog.Track>>(emptyList()) }
+    var busy by remember { mutableStateOf(true) }
+    var loadError by remember { mutableStateOf<String?>(null) }
     val trimmed = query.trim()
+    val queue by MusicPlayer.queue.collectAsStateWithLifecycle()
+    // Folders descend into the connected app's browse tree; tracks play from its session.
+    val onBrowse: (String) -> Unit = { name ->
+        scope.launch {
+            MusicCatalog.browse(name)
+            shelves = MusicCatalog.home()
+        }
+    }
 
-    // Library search fills the list; submitting (button or IME) plays through CarMedia.search.
+    LaunchedEffect(Unit) {
+        MusicPlayer.init(context.applicationContext)
+        val loaded = runCatching {
+            MusicCatalog.initialize(context.applicationContext)
+            MusicCatalog.home()
+        }
+        shelves = loaded.getOrDefault(emptyList())
+        loadError = loaded.exceptionOrNull()?.message
+        busy = false
+    }
+
+    // Debounced online search; a short query clears the list rather than hammering the service.
     LaunchedEffect(trimmed, tab) {
-        if (tab != TAB_SEARCH || trimmed.isEmpty()) {
-            media.clearResults()
+        if (tab != TAB_SEARCH || trimmed.length < 2) {
+            results = emptyList()
             return@LaunchedEffect
         }
         delay(SEARCH_PAUSE_MS)
-        media.searchLibrary(trimmed)
+        busy = true
+        val found = runCatching { MusicCatalog.search(trimmed) }
+        results = found.getOrDefault(emptyList())
+        loadError = found.exceptionOrNull()?.message
+        busy = false
     }
-    DisposableEffect(Unit) { onDispose { media.clearResults() } }
 
     Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
         Box(Modifier.fillMaxSize()) {
@@ -94,13 +119,26 @@ fun FirstPartyMusicScreen() {
                 }
                 Spacer(Modifier.height(12.dp))
                 when (tab) {
-                    TAB_BROWSE -> BrowseContent(phase, browse, media, Modifier.weight(1f).fillMaxWidth())
-                    TAB_SEARCH -> SearchContent(query, { query = it }, trimmed, results, media, Modifier.weight(1f).fillMaxWidth())
-                    else -> LibraryContent(phase, browse, media, Modifier.weight(1f).fillMaxWidth())
+                    TAB_BROWSE -> BrowseContent(busy, loadError, shelves, Modifier.weight(1f).fillMaxWidth(), onBrowse) { tracks, index ->
+                        play(tracks, index, onOpenPlayer)
+                    }
+                    TAB_SEARCH -> SearchContent(
+                        query, { query = it }, typing, { typing = it },
+                        busy, loadError, results, Modifier.weight(1f).fillMaxWidth(),
+                    ) { tracks, index -> play(tracks, index, onOpenPlayer) }
+                    else -> LibraryContent(queue, Modifier.weight(1f).fillMaxWidth()) { tracks, index ->
+                        play(tracks, index, onOpenPlayer)
+                    }
                 }
             }
         }
     }
+}
+
+private fun play(tracks: List<MusicCatalog.Track>, index: Int, onOpenPlayer: () -> Unit) {
+    if (tracks.isEmpty() || index !in tracks.indices) return
+    MusicPlayer.play(tracks, index)
+    onOpenPlayer()
 }
 
 /** One large, square page tab; shared with the player's LYRICS/QUEUE switch. */
@@ -119,84 +157,114 @@ internal fun MusicTab(label: String, selected: Boolean, modifier: Modifier, onCl
 }
 
 @Composable
-private fun BrowseContent(phase: CarMedia.Phase, browse: BrowseState, media: CarMedia, modifier: Modifier) {
+private fun BrowseContent(
+    busy: Boolean,
+    error: String?,
+    shelves: List<MusicCatalog.Shelf>,
+    modifier: Modifier,
+    onBrowse: (String) -> Unit,
+    onPlay: (List<MusicCatalog.Track>, Int) -> Unit,
+) {
     when {
-        phase == CarMedia.Phase.CONNECTING -> EmptyState("CONNECTING", "Waiting for the music app", modifier)
-        phase == CarMedia.Phase.REJECTED -> EmptyState("NO MUSIC APP", "Open a music app on the phone, then try again", modifier)
-        phase == CarMedia.Phase.IDLE -> EmptyState("NO MUSIC APP", "Choose a music app to see what it shares", modifier)
-        browse.loading -> EmptyState("LOADING", null, modifier)
-        browse.unavailable -> EmptyState("LIBRARY NOT SHARED", "This app keeps its library to itself. Use SEARCH to play by name.", modifier)
-        browse.failed -> EmptyState("COULDN'T LOAD", "Try the folder again", modifier)
-        browse.entries.isEmpty() -> EmptyState("NOTHING HERE", "This folder is empty", modifier)
-        else -> EntryShelves(browse.entries, media, modifier)
+        busy -> EmptyState("LOADING CATALOG", "Asking the music service for its home shelves", modifier)
+        error != null && shelves.isEmpty() -> EmptyState("OFFLINE", error, modifier)
+        shelves.isEmpty() -> EmptyState("NOTHING HERE", "Try SEARCH to find a song by name", modifier)
+        else -> {
+            val tracks = shelves.flatMap { it.tracks }
+            val entries = shelves.flatMap { shelf -> shelf.tracks.map { it.toEntry(shelf.title) } }
+            EntryShelves(entries, modifier) { entry ->
+                if (!entry.playable) {
+                    onBrowse(entry.title)
+                } else {
+                    val index = tracks.indexOfFirst { it.id == entry.id }
+                    if (index >= 0) onPlay(tracks, index)
+                }
+            }
+        }
     }
 }
 
 @Composable
-private fun LibraryContent(phase: CarMedia.Phase, browse: BrowseState, media: CarMedia, modifier: Modifier) {
-    val library = remember(browse.entries) { browse.entries.filter { it.playable || it.grid }.distinctBy { it.id } }
-    when {
-        phase == CarMedia.Phase.CONNECTING -> EmptyState("CONNECTING", "Waiting for the music app", modifier)
-        phase == CarMedia.Phase.REJECTED -> EmptyState("NO MUSIC APP", "Open a music app on the phone", modifier)
-        phase == CarMedia.Phase.IDLE -> EmptyState("NO MUSIC APP", "Choose a music app to see what it shares", modifier)
-        phase == CarMedia.Phase.READY && browse.unavailable ->
-            EmptyState("NO LIBRARY", "The connected app doesn't share a library to browse", modifier)
-        browse.loading -> EmptyState("LOADING", null, modifier)
-        library.isEmpty() -> EmptyState("EMPTY LIBRARY", "Nothing shared to browse yet", modifier)
-        else -> EntryShelves(library, media, modifier)
+private fun LibraryContent(
+    queue: List<MusicCatalog.Track>,
+    modifier: Modifier,
+    onPlay: (List<MusicCatalog.Track>, Int) -> Unit,
+) {
+    if (queue.isEmpty()) {
+        EmptyState("EMPTY LIBRARY", "Play something from BROWSE or SEARCH first", modifier)
+        return
+    }
+    val entries = queue.map { it.toEntry("PLAY QUEUE") }
+    EntryShelves(entries, modifier) { entry ->
+        val index = queue.indexOfFirst { it.id == entry.id }
+        if (index >= 0) onPlay(queue, index)
     }
 }
+
+/** Maps a catalog track onto the car's shared entry tile so browse, search and queue look alike. */
+private fun MusicCatalog.Track.toEntry(group: String?) = MediaEntry(
+    id = id,
+    title = title,
+    subtitle = listOfNotNull(artists.takeIf(String::isNotEmpty), album).joinToString(" · "),
+    iconUri = thumbnailUrl?.let(Uri::parse),
+    iconBitmap = null,
+    browsable = !playable,
+    playable = playable,
+    grid = true,
+    group = group,
+)
 
 @Composable
 private fun SearchContent(
     query: String,
     onQuery: (String) -> Unit,
-    trimmed: String,
-    results: CarMedia.Results?,
-    media: CarMedia,
+    typing: Boolean,
+    onTyping: (Boolean) -> Unit,
+    busy: Boolean,
+    error: String?,
+    results: List<MusicCatalog.Track>,
     modifier: Modifier,
+    onPlay: (List<MusicCatalog.Track>, Int) -> Unit,
 ) {
     Column(modifier) {
         Row(
-            Modifier.fillMaxWidth().padding(bottom = 14.dp),
+            Modifier.fillMaxWidth().padding(bottom = 10.dp).border(1.dp, MaterialTheme.colorScheme.outline),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
         ) {
-            TextField(
-                value = query,
-                onValueChange = onQuery,
-                modifier = Modifier.weight(1f).height(60.dp).border(1.dp, MaterialTheme.colorScheme.outline),
-                placeholder = { Text("SONG, ARTIST OR ALBUM", style = MaterialTheme.typography.labelLarge) },
-                leadingIcon = { Icon(Icons.Filled.Search, null, tint = MaterialTheme.colorScheme.onSurfaceVariant) },
-                singleLine = true,
-                shape = RectangleShape,
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                ),
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                keyboardActions = KeyboardActions(onSearch = { if (trimmed.isNotEmpty()) media.search(trimmed) }),
+            Icon(Icons.Filled.Search, null, Modifier.padding(start = 12.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(
+                if (query.isEmpty()) "SONG, ARTIST OR ALBUM" else query,
+                style = MaterialTheme.typography.labelLarge,
+                color = if (query.isEmpty()) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(1f).clickable { onTyping(true) }.padding(12.dp),
             )
-            GsButton(onClick = { if (trimmed.isNotEmpty()) media.search(trimmed) }, enabled = trimmed.isNotEmpty()) {
-                Text("PLAY")
+            if (query.isNotEmpty()) {
+                GsButton(onClick = { onQuery(""); onTyping(true) }, tone = GsTone.Neutral) { Text("CLEAR") }
             }
-            GsButton(onClick = { onQuery("") }, tone = GsTone.Neutral) { Text("CLEAR") }
         }
-        val current = results?.takeIf { it.query == trimmed }
-        val entries = current?.entries
-        when {
-            trimmed.isEmpty() -> EmptyState("SEARCH", "Type a name, then press PLAY", Modifier.weight(1f).fillMaxWidth())
-            current == null || entries == null ->
-                EmptyState("SEARCHING", "Asking the music app for matches", Modifier.weight(1f).fillMaxWidth())
-            !current.supported -> EmptyState(
-                "NO MATCH LIST",
-                "This app can't list results. Press PLAY to let it choose.",
-                Modifier.weight(1f).fillMaxWidth(),
+        if (typing) {
+            CarKeyboard(
+                text = query,
+                onTextChange = onQuery,
+                onSubmit = { if (query.trim().isNotEmpty()) onTyping(false) },
+                onDismiss = { onTyping(false) },
             )
-            entries.isEmpty() -> EmptyState("NO RESULTS", "Nothing matched $trimmed", Modifier.weight(1f).fillMaxWidth())
-            else -> EntryShelves(entries, media, Modifier.weight(1f).fillMaxWidth())
+            Spacer(Modifier.height(8.dp))
+        }
+        when {
+            query.trim().isEmpty() -> EmptyState("SEARCH", "Type a name with the keys above", Modifier.weight(1f).fillMaxWidth())
+            busy && results.isEmpty() -> EmptyState("SEARCHING", "Asking the music service for matches", Modifier.weight(1f).fillMaxWidth())
+            error != null && results.isEmpty() -> EmptyState("SEARCH FAILED", error, Modifier.weight(1f).fillMaxWidth())
+            results.isEmpty() -> EmptyState("NO RESULTS", "Nothing matched ${query.trim()}", Modifier.weight(1f).fillMaxWidth())
+            else -> {
+                val entries = results.map { it.toEntry("RESULTS") }
+                EntryShelves(entries, Modifier.weight(1f).fillMaxWidth()) { entry ->
+                    val index = results.indexOfFirst { it.id == entry.id }
+                    if (index >= 0) onPlay(results, index)
+                }
+            }
         }
     }
 }
@@ -222,7 +290,11 @@ private fun sectionsOf(entries: List<MediaEntry>): List<MusicSection> {
 }
 
 @Composable
-private fun EntryShelves(entries: List<MediaEntry>, media: CarMedia, modifier: Modifier) {
+private fun EntryShelves(
+    entries: List<MediaEntry>,
+    modifier: Modifier,
+    onPlay: (MediaEntry) -> Unit,
+) {
     val sections = remember(entries) { sectionsOf(entries.distinctBy { it.id }) }
     LazyColumn(
         modifier.fillMaxSize(),
@@ -243,20 +315,20 @@ private fun EntryShelves(entries: List<MediaEntry>, media: CarMedia, modifier: M
             if (section.grid) {
                 item(key = "shelf $i") {
                     LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                        items(section.entries, key = { "cover $i ${it.id}" }) { CoverTile(it, media) }
+                        items(section.entries, key = { "cover $i ${it.id}" }) { CoverTile(it, onPlay) }
                     }
                 }
             } else {
-                items(section.entries, key = { "row $i ${it.id}" }) { RowTile(it, media) }
+                items(section.entries, key = { "row $i ${it.id}" }) { RowTile(it, onPlay) }
             }
         }
     }
 }
 
 @Composable
-private fun CoverTile(entry: MediaEntry, media: CarMedia) {
+private fun CoverTile(entry: MediaEntry, onPlay: (MediaEntry) -> Unit) {
     val art = rememberEntryArt(entry)
-    Column(Modifier.width(152.dp).clickable { playEntry(entry, media) }) {
+    Column(Modifier.width(152.dp).clickable { onPlay(entry) }) {
         EntryArt(
             art, entry.browsable,
             Modifier.fillMaxWidth().aspectRatio(1f)
@@ -285,12 +357,12 @@ private fun CoverTile(entry: MediaEntry, media: CarMedia) {
 }
 
 @Composable
-private fun RowTile(entry: MediaEntry, media: CarMedia) {
+private fun RowTile(entry: MediaEntry, onPlay: (MediaEntry) -> Unit) {
     val art = rememberEntryArt(entry)
     Row(
         Modifier.fillMaxWidth().heightIn(min = 76.dp)
             .border(1.dp, MaterialTheme.colorScheme.outline)
-            .clickable { playEntry(entry, media) }
+            .clickable { onPlay(entry) }
             .padding(12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -321,9 +393,8 @@ private fun RowTile(entry: MediaEntry, media: CarMedia) {
 }
 
 /**
- * Cover art, or a deterministic monochrome dot-matrix stand-in when the app sends no image.
- * [seed] fixes the pattern per entry so the same folder always gets the same "cover"; it defaults
- * so the player screen can keep drawing its own art-less square without passing one.
+ * Cover art, or a deterministic monochrome dot-matrix stand-in when the service sends no image.
+ * [seed] fixes the pattern per entry so the same track always gets the same "cover".
  */
 @Composable
 internal fun EntryArt(bitmap: Bitmap?, browsable: Boolean, modifier: Modifier, seed: String? = null) {
@@ -336,11 +407,7 @@ internal fun EntryArt(bitmap: Bitmap?, browsable: Boolean, modifier: Modifier, s
     }
 }
 
-/**
- * A mirrored 7x7 dot matrix standing in for missing cover art. Lit cells are drawn from the hash
- * of [seed] and mirrored across the vertical axis, so the result is a centred, repeatable motif
- * that reads as artwork rather than a grey Material folder glyph. One colour, no shadow.
- */
+/** A mirrored 7x7 dot matrix standing in for missing cover art. One colour, no shadow. */
 @Composable
 private fun DotMatrixCover(seed: String, modifier: Modifier) {
     val color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -372,10 +439,6 @@ private fun rememberEntryArt(entry: MediaEntry): Bitmap? {
         value = entry.iconBitmap ?: MediaArt.load(context, entry.iconUri)
     }
     return art
-}
-
-private fun playEntry(entry: MediaEntry, media: CarMedia) {
-    if (entry.playable) media.playAll(entry) else media.select(entry)
 }
 
 /** Shared by the player screen's LYRICS/QUEUE empty states. */

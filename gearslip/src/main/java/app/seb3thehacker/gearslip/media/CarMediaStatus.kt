@@ -57,25 +57,31 @@ class CarMediaStatus(
         running = false
     }
 
+    private class TrackInfo(val title: String, val artist: String, val album: String, val art: Bitmap?, val durationMs: Long)
+
     private fun tick() {
-        val now = CarServices.mediaOrNull()?.now?.value
-        val active = now != null && now.isActive
+        // Gearslip no longer streams itself: the connected media app is the only source of truth.
+        val remote = CarServices.mediaOrNull()?.now?.value
+        val active = remote != null && remote.isActive
         val state = when {
             !active -> STATE_STOPPED
-            now!!.state == PlaybackState.STATE_PAUSED -> STATE_PAUSED
+            remote!!.state == PlaybackState.STATE_PAUSED -> STATE_PAUSED
             else -> STATE_PLAYING
         }
-        if (active) sendTrack(now!!)
+        if (active) {
+            val now = remote!!
+            sendTrack(TrackInfo(now.title, now.artist, now.album, now.art, now.durationMs))
+        }
         // Nothing to say while stopped, beyond saying so once.
         if (state == STATE_STOPPED && sentState == STATE_STOPPED) return
         if (state == STATE_PAUSED && sentState == STATE_PAUSED) return
         val source = CarServices.mediaApp.value?.label ?: "Gearslip"
-        val seconds = if (active) (now!!.currentPosition() / 1000).coerceAtLeast(0) else 0
+        val seconds = (remote?.currentPosition() ?: 0L) / 1000
         sendOnChannel(
             MSG_STATUS,
             Protobuf.varintField(1, state.toLong()) +
                 Protobuf.stringField(2, source) +
-                Protobuf.varintField(3, seconds) +
+                Protobuf.varintField(3, seconds.coerceAtLeast(0)) +
                 Protobuf.varintField(4, 0L) +
                 Protobuf.varintField(5, 0L) +
                 Protobuf.varintField(6, 0L),
@@ -84,9 +90,9 @@ class CarMediaStatus(
         sentState = state
     }
 
-    private fun sendTrack(now: NowPlaying) {
-        // Whether there's a cover, not which bitmap: some apps (Metrolist) hand over a fresh copy
-        // of the same cover with every update, and resending it each second wastes the link.
+    private fun sendTrack(now: TrackInfo) {
+        // Whether there's a cover, not which bitmap: a fresh copy of the same cover every second
+        // would waste the link.
         val key = "${now.title}\u0000${now.artist}\u0000${now.album}\u0000${now.durationMs}\u0000${now.art != null}"
         if (key == sentTrack) return
         sentTrack = key

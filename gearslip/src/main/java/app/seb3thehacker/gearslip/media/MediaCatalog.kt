@@ -34,9 +34,17 @@ class MediaApp(
  */
 object MediaCatalog {
 
+    /** Apps driven as external front-ends; included even without a car media descriptor. */
+    private val frontEndPackages = setOf(
+        "com.vivi.vivimusic",
+        "com.vivi.vivimusic.debug",
+        "echo.music.iad1tya",
+        "echo.music.iad1tya.debug",
+    )
+
     fun installed(context: Context): List<MediaApp> {
         val manager = context.packageManager
-        return manager.queryIntentServices(Intent(MediaBrowserService.SERVICE_INTERFACE), PackageManager.GET_META_DATA)
+        val found = manager.queryIntentServices(Intent(MediaBrowserService.SERVICE_INTERFACE), PackageManager.GET_META_DATA)
             .asSequence()
             .filter { it.serviceInfo.packageName != context.packageName }
             .filterNot { AndroidAuto.matches(it.serviceInfo.packageName, it.loadLabel(manager).toString()) }
@@ -51,8 +59,28 @@ object MediaCatalog {
             }
             .distinctBy { it.component.packageName }
             .toList()
-            .let { found -> found + added(context, found.map { it.component.packageName }.toSet()) }
+            .let { it + added(context, it.map { app -> app.component.packageName }.toSet()) }
+        return (found + frontEnds(context, found.map { it.component.packageName }.toSet()))
             .sortedBy { it.label.lowercase() }
+    }
+
+    /**
+     * Vivi and Echo have no car descriptor, so the filter above drops them. Resolve their exported
+     * MediaBrowserService by package instead, skipping any already found through normal discovery.
+     */
+    private fun frontEnds(context: Context, found: Set<String>): List<MediaApp> {
+        val manager = context.packageManager
+        val intent = Intent(MediaBrowserService.SERVICE_INTERFACE)
+        return frontEndPackages.filter { it !in found }.mapNotNull { pkg ->
+            val info = runCatching {
+                manager.queryIntentServices(intent.setPackage(pkg), 0).firstOrNull()?.serviceInfo
+            }.getOrNull() ?: return@mapNotNull null
+            MediaApp(
+                component = ComponentName(info.packageName, info.name),
+                label = info.applicationInfo?.loadLabel(manager)?.toString() ?: info.packageName,
+                uid = info.applicationInfo?.uid ?: -1,
+            )
+        }
     }
 
     /** The music apps the driver added by hand, unless the app has since become a car app itself. */

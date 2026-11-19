@@ -38,6 +38,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import app.seb3thehacker.gearslip.music.playback.MusicPlayer
 
 // The CarPlay-like left rail and its persistent player, in the Nothing OS visual language:
 // black canvas, hairline dividers, blocky monochrome glyphs, tracked uppercase labels and one
@@ -166,9 +167,16 @@ fun NothingBottomPlayer(modifier: Modifier = Modifier) {
     val media = CarServices.media
     val navigator = LocalCarNavigator.current
     val now by media.now.collectAsStateWithLifecycle()
-    val art = rememberArt(now)
+    val first by MusicPlayer.state.collectAsStateWithLifecycle()
+    val remoteArt = rememberArt(now)
+    // The first-party player wins when it has a track; otherwise show the remote app's session.
+    val useFirst = first.track != null
+    val art = if (useFirst) first.art else remoteArt
+    val title = if (useFirst) first.track?.title.orEmpty() else now.title
+    val artist = if (useFirst) first.track?.artists.orEmpty() else now.artist
+    val playing = if (useFirst) first.playing else now.playing
     val scheme = MaterialTheme.colorScheme
-    val hasTrack = now.title.isNotEmpty()
+    val hasTrack = title.isNotEmpty()
     val content = scheme.onSurface
     val muted = scheme.onSurfaceVariant
 
@@ -213,7 +221,7 @@ fun NothingBottomPlayer(modifier: Modifier = Modifier) {
                     verticalArrangement = Arrangement.spacedBy(2.dp),
                 ) {
                     Text(
-                        if (hasTrack) now.title.uppercase() else "NOTHING PLAYING",
+                        if (hasTrack) title.uppercase() else "NOTHING PLAYING",
                         style = MaterialTheme.typography.labelMedium,
                         letterSpacing = 0.12.em,
                         fontWeight = if (hasTrack) FontWeight.SemiBold else FontWeight.Normal,
@@ -223,7 +231,7 @@ fun NothingBottomPlayer(modifier: Modifier = Modifier) {
                     )
                     if (hasTrack) {
                         Text(
-                            now.artist.uppercase(),
+                            artist.uppercase(),
                             style = MaterialTheme.typography.labelSmall,
                             letterSpacing = 0.12.em,
                             color = muted,
@@ -232,15 +240,15 @@ fun NothingBottomPlayer(modifier: Modifier = Modifier) {
                         )
                     }
                 }
-                IconButton(onClick = { media.togglePlay() }, enabled = hasTrack) {
+                IconButton(onClick = { if (useFirst) MusicPlayer.togglePlay() else media.togglePlay() }, enabled = hasTrack) {
                     Icon(
-                        if (now.playing) MediaIcons.Pause else Icons.Filled.PlayArrow,
+                        if (playing) MediaIcons.Pause else Icons.Filled.PlayArrow,
                         contentDescription = null,
                         tint = if (hasTrack) content else muted,
                         modifier = Modifier.size(22.dp),
                     )
                 }
-                IconButton(onClick = { media.next() }, enabled = hasTrack) {
+                IconButton(onClick = { if (useFirst) MusicPlayer.next() else media.next() }, enabled = hasTrack) {
                     Icon(
                         MediaIcons.Next,
                         contentDescription = null,

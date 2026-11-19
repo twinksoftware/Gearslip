@@ -56,6 +56,7 @@ import androidx.compose.ui.unit.dp
 import app.seb3thehacker.gearslip.car.AppTheme
 import app.seb3thehacker.gearslip.car.CarApps
 import app.seb3thehacker.gearslip.car.LauncherMode
+import app.seb3thehacker.gearslip.car.CarSettings.MusicSource
 import app.seb3thehacker.gearslip.car.CarSettings
 import app.seb3thehacker.gearslip.car.LauncherCache
 import app.seb3thehacker.gearslip.car.NavBarMode
@@ -133,6 +134,13 @@ private fun navBarChoices() = listOf(
     NavBarMode.SHOW to stringResource(R.string.choice_nav_show),
     NavBarMode.HIDE_NAVIGATING to stringResource(R.string.choice_nav_hide_navigating),
     NavBarMode.HIDE to stringResource(R.string.choice_nav_hide),
+)
+@Composable
+private fun musicSourceChoices() = listOf(
+    MusicSource.AUTO to "Automatic",
+    MusicSource.VIVI to "Vivi Music",
+    MusicSource.ECHO to "Echo Music",
+    MusicSource.LAST_USED to "Last used",
 )
 @Composable
 private fun openChoices(): List<Pair<String, String>> {
@@ -265,6 +273,7 @@ private fun GroupRows(group: CarGroup) {
     val bluetoothWarning by CarSettings.bluetoothWarning.collectAsState()
     val locationWarning by CarSettings.locationWarning.collectAsState()
     val autoplay by CarSettings.autoplay.collectAsState()
+    val musicSource by CarSettings.musicSource.collectAsState()
     val playerTitle by CarSettings.playerTitle.collectAsState()
     val playerLeft by CarSettings.playerLeft.collectAsState()
     val navMic by CarSettings.navMic.collectAsState()
@@ -316,7 +325,9 @@ private fun GroupRows(group: CarGroup) {
             SettingsDivider()
             Toggle(stringResource(R.string.car_autoplay), autoplay, CarSettings::setAutoplay, note = stringResource(R.string.car_autoplay_note))
         }
-        CarGroup.SOUND -> Unit
+        CarGroup.SOUND -> {
+            Choice("MUSIC SOURCE", musicSourceChoices(), musicSource, CarSettings::setMusicSource)
+        }
         CarGroup.PLACES -> Unit
         CarGroup.WARNINGS -> {
             if (!pipeAudio) {

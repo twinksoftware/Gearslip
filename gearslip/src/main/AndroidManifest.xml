@@ -104,6 +104,12 @@
     <!-- Kept visible for OS detection: GrapheneOS's setup app and /e/OS's app store identify it. -->
     <package android:name="app.grapheneos.setupwizard" />
     <package android:name="foundation.e.apps" />
+    <!-- External music apps driven by the Nothing-styled front-end; declared so packageManager
+         can see their installed packages and exported media browser services. -->
+    <package android:name="com.vivi.vivimusic" />
+    <package android:name="com.vivi.vivimusic.debug" />
+    <package android:name="echo.music.iad1tya" />
+    <package android:name="echo.music.iad1tya.debug" />
     <intent>
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />

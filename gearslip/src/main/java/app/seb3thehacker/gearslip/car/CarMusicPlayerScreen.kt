@@ -1,13 +1,17 @@
 package app.seb3thehacker.gearslip.car
 
+import android.graphics.Bitmap
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,163 +21,217 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.seb3thehacker.gearslip.car.theme.*
-import app.seb3thehacker.gearslip.media.CarMedia
+import app.seb3thehacker.gearslip.catalog.MusicCatalog
 import app.seb3thehacker.gearslip.media.Lyrics
 import app.seb3thehacker.gearslip.media.LyricsResult
-import app.seb3thehacker.gearslip.media.NowPlaying
-import app.seb3thehacker.gearslip.media.QueueTrack
+import app.seb3thehacker.gearslip.media.MediaArt
+import app.seb3thehacker.gearslip.music.playback.MusicPlayer
 import kotlinx.coroutines.delay
 
-private const val TAB_LYRICS = 0
-private const val TAB_QUEUE = 1
+private const val PANEL_LYRICS = 0
+private const val PANEL_QUEUE = 1
 
 /**
- * The full-screen first-party player, laid out for a short car display (800x480 @160dpi with the
- * ~56.dp nav bar still reserved by the caller). A [BoxWithConstraints] reads the real content
- * height so the cover can be capped instead of growing into a full-width square, and a [Column]
- * gives the cover and the lyrics/queue the leftover space through weights. Everything — header,
- * cover, title, progress, transport, tabs and a few lyric/queue lines — is visible without
- * scrolling. All playback still flows through CarMedia.
+ * The full-screen first-party player, laid out for the car display (800x480 @160dpi). Album art
+ * sits on the left as a coloured dot-matrix halftone; the transport is dot-matrix too, and the
+ * secondary actions live as small glyphs in the header. All state comes from [MusicPlayer].
  */
 @Composable
 fun FirstPartyPlayerScreen(onBack: () -> Unit) {
-    val media = CarServices.media
-    val now by media.now.collectAsStateWithLifecycle()
-    val queue by media.queue.collectAsStateWithLifecycle()
-    var tab by remember { mutableStateOf(TAB_LYRICS) }
-    val art = rememberArt(now)
+    val context = LocalContext.current
+    val state by MusicPlayer.state.collectAsStateWithLifecycle()
+    val queue by MusicPlayer.queue.collectAsStateWithLifecycle()
+    var panel by remember { mutableIntStateOf(PANEL_LYRICS) }
+    val track = state.track
+    val art by produceState<Bitmap?>(state.art, state.art, track?.thumbnailUrl) {
+        value = state.art ?: track?.thumbnailUrl?.let { MediaArt.load(context, Uri.parse(it)) }
+    }
+    val scheme = MaterialTheme.colorScheme
 
-    Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+    Surface(Modifier.fillMaxSize(), color = scheme.background) {
         Box(Modifier.fillMaxSize()) {
             DotGrid(Modifier.fillMaxSize())
-            // The nav bar inset is applied by the host, so maxHeight here is the space this screen
-            // really has. Cap the art to a slice of it so it never swallows the controls below.
-            BoxWithConstraints(Modifier.fillMaxSize()) {
-                val coverMax = (maxHeight * 0.40f).coerceIn(120.dp, 180.dp)
-                Column(
-                    Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 4.dp),
-                ) {
-                    // Compact header: back + NOW PLAYING in ~40.dp.
-                    Row(
-                        Modifier.fillMaxWidth().height(40.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        GsIconButton(
-                            Icons.AutoMirrored.Filled.ArrowBack, "BACK", onBack,
-                            size = 40.dp, iconSize = 22.dp, shape = RectangleShape,
-                        )
-                        Spacer(Modifier.width(12.dp))
-                        Text(
-                            "NOW PLAYING",
-                            style = MaterialTheme.typography.titleMedium.copy(letterSpacing = 0.08.em),
-                            fontWeight = FontWeight.Bold,
-                        )
-                    }
+            Column(Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 4.dp)) {
 
-                    // Cover: a weighted slice of the leftover height, drawn as a square and capped
-                    // by BoxWithConstraints. The larger weight keeps it the visual anchor without
-                    // pushing the transport and tabs off a short screen.
+                // ---- header: back, title, then secondary actions as dot glyphs ----
+                Row(
+                    Modifier.fillMaxWidth().height(40.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
                     Box(
-                        Modifier.fillMaxWidth().weight(2f),
+                        Modifier.size(40.dp).clickable(onClick = onBack),
                         contentAlignment = Alignment.Center,
                     ) {
-                        EntryArt(
-                            art, false,
-                            Modifier.fillMaxHeight().heightIn(max = coverMax).aspectRatio(1f)
-                                .border(1.dp, MaterialTheme.colorScheme.outline),
-                        )
+                        DotIcon(DotGlyphs.Back, scheme.onSurface, Modifier.size(26.dp))
                     }
-
-                    // Track identity: one line each, small enough to leave room for everything else.
+                    Spacer(Modifier.width(12.dp))
                     Text(
-                        now.title.ifEmpty { "NOTHING PLAYING" }.uppercase(),
-                        style = MaterialTheme.typography.titleMedium,
+                        "NOW PLAYING",
+                        style = MaterialTheme.typography.titleMedium.copy(letterSpacing = 0.08.em),
                         fontWeight = FontWeight.Bold,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
                     )
-                    Text(
-                        listOf(now.artist, now.album).filter { it.isNotEmpty() }.joinToString(" · "),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
+                    Spacer(Modifier.weight(1f))
+                    DotAction(DotGlyphs.Shuffle, state.shuffle, scheme.error, scheme.onSurfaceVariant, Modifier.size(28.dp)) { MusicPlayer.toggleShuffle() }
+                    Spacer(Modifier.width(8.dp))
+                    DotAction(DotGlyphs.Repeat, state.repeat != 0, scheme.error, scheme.onSurfaceVariant, Modifier.size(28.dp)) { MusicPlayer.cycleRepeat() }
+                    Spacer(Modifier.width(8.dp))
+                    DotAction(DotGlyphs.Lyrics, panel == PANEL_LYRICS, scheme.error, scheme.onSurfaceVariant, Modifier.size(28.dp)) { panel = PANEL_LYRICS }
+                    Spacer(Modifier.width(8.dp))
+                    DotAction(DotGlyphs.Queue, panel == PANEL_QUEUE, scheme.error, scheme.onSurfaceVariant, Modifier.size(28.dp)) { panel = PANEL_QUEUE }
+                    Spacer(Modifier.width(8.dp))
+                    DotAction(
+                        DotGlyphs.More, false, scheme.error, scheme.onSurfaceVariant, Modifier.size(28.dp),
+                    ) { panel = if (panel == PANEL_LYRICS) PANEL_QUEUE else PANEL_LYRICS }
+                }
 
-                    // Progress with times in a small type size.
-                    PlayerProgress(
-                        now, media,
-                        modifier = Modifier.fillMaxWidth(),
-                        showTimes = true,
-                        timeStyle = MaterialTheme.typography.bodySmall,
-                    )
-
-                    // Transport, compact but still comfortably tappable.
-                    TransportRow(
-                        now, media,
-                        skip = 40.dp,
-                        playScale = 1.25f,
-                        modifier = Modifier.fillMaxWidth().padding(vertical = 1.dp),
-                    )
-
-                    // LYRICS / QUEUE switch, sharing the car UI's icon-box treatment at a shorter
-                    // height so it fits above the lyrics on a 480dp-tall display.
+                // ---- art left, track info right, transport below ----
+                Column(
+                    Modifier.fillMaxWidth().weight(1f),
+                    verticalArrangement = Arrangement.Center,
+                ) {
                     Row(
-                        Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        Modifier.fillMaxWidth().height(186.dp),
+                        horizontalArrangement = Arrangement.spacedBy(24.dp),
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        CompactMusicTab("LYRICS", tab == TAB_LYRICS, Modifier.weight(1f)) { tab = TAB_LYRICS }
-                        CompactMusicTab("QUEUE", tab == TAB_QUEUE, Modifier.weight(1f)) { tab = TAB_QUEUE }
+                        DotMatrixArt(
+                            art,
+                            Modifier.size(186.dp).border(1.dp, scheme.outline),
+                        )
+                        Column(Modifier.weight(1f).height(186.dp)) {
+                            Text(
+                                if (queue.isNotEmpty()) {
+                                    val n = (state.activeIndex + 1).coerceAtLeast(1)
+                                    "TRACK ${n.toString().padStart(2, '0')} / ${queue.size.toString().padStart(2, '0')}"
+                                } else "NOW PLAYING",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = scheme.error,
+                            )
+                            Text(
+                                (track?.title ?: "NOTHING PLAYING").uppercase(),
+                                style = MaterialTheme.typography.displaySmall.copy(fontSize = 34.sp),
+                                fontWeight = FontWeight.Bold,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                            Text(
+                                listOfNotNull(track?.artists?.takeIf(String::isNotEmpty), track?.album).joinToString(" · "),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = scheme.onSurfaceVariant,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                            Spacer(Modifier.weight(1f))
+                            val duration = state.durationMs.coerceAtLeast(0)
+                            val position = state.positionMs
+                            DotSeekBar(
+                                fraction = if (duration > 0) position.toFloat() / duration else 0f,
+                                onSeek = { f -> if (duration > 0) MusicPlayer.seek((f * duration).toLong()) },
+                                modifier = Modifier.fillMaxWidth().height(20.dp),
+                                enabled = duration > 0,
+                            )
+                            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                                val style = MaterialTheme.typography.bodySmall.copy(fontFeatureSettings = "tnum")
+                                Text(formatDuration(position), style = style, color = scheme.onSurfaceVariant)
+                                Text(formatDuration(duration), style = style, color = scheme.onSurfaceVariant)
+                            }
+                        }
                     }
 
-                    // Lyrics or queue take whatever height is left — enough for several compact
-                    // lines or a couple of queue rows at 800x480.
-                    when (tab) {
-                        TAB_LYRICS -> LyricsView(now, Modifier.weight(1f).fillMaxWidth())
-                        else -> QueueView(queue, now, media, Modifier.weight(1f).fillMaxWidth())
+                    Spacer(Modifier.height(24.dp))
+
+                    // The seek bar belongs to the info column to the right of the artwork, so the
+                    // transport is centred within that same column rather than the whole screen.
+                    Row(
+                        Modifier.fillMaxWidth().height(58.dp).padding(start = 210.dp), // 186.dp art + 24.dp gap
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Box(Modifier.size(56.dp).clickable { MusicPlayer.previous() }, contentAlignment = Alignment.Center) {
+                            DotIcon(DotGlyphs.Prev, scheme.onSurface, Modifier.size(40.dp))
+                        }
+                        Spacer(Modifier.width(54.dp))
+                        Box(Modifier.size(64.dp).clickable { MusicPlayer.togglePlay() }, contentAlignment = Alignment.Center) {
+                            DotIcon(
+                                if (state.playing) DotGlyphs.Pause else DotGlyphs.Play,
+                                scheme.onSurface,
+                                Modifier.size(56.dp),
+                            )
+                        }
+                        Spacer(Modifier.width(54.dp))
+                        Box(Modifier.size(56.dp).clickable { MusicPlayer.next() }, contentAlignment = Alignment.Center) {
+                            DotIcon(DotGlyphs.Next, scheme.onSurface, Modifier.size(40.dp))
+                        }
                     }
+                }
+
+                // ---- single-line lyrics / queue, toggled from the header ----
+                val panelModifier = Modifier.fillMaxWidth().height(28.dp)
+                when (panel) {
+                    PANEL_LYRICS -> LyricsView(
+                        track?.title.orEmpty(), track?.artists.orEmpty(), track?.album.orEmpty(),
+                        state.durationMs.coerceAtLeast(0), state.playing, panelModifier,
+                    )
+                    else -> QueueView(queue, state.activeIndex, panelModifier)
+                }
+                if (state.error != null) {
+                    Text(
+                        state.error.orEmpty(),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = scheme.error,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.fillMaxWidth().padding(top = 2.dp),
+                    )
                 }
             }
         }
     }
 }
 
-/**
- * A shorter sibling of [MusicTab]: same latched icon-box look, but 38.dp tall with a smaller label
- * so the tab strip fits on a short car screen.
- */
 @Composable
-private fun CompactMusicTab(label: String, selected: Boolean, modifier: Modifier, onClick: () -> Unit) {
-    GsIconBox(
-        onClick = onClick,
-        modifier = modifier.height(38.dp),
-        colors = if (selected) GsColors(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.onPrimary)
-        else GsColors(MaterialTheme.colorScheme.surfaceContainerHigh, MaterialTheme.colorScheme.onSurface),
-        shape = RectangleShape,
-        latched = selected,
-    ) {
-        Text(label, style = MaterialTheme.typography.labelMedium.copy(letterSpacing = 0.08.em), maxLines = 1)
+private fun DotAction(
+    glyph: Array<String>,
+    active: Boolean,
+    activeColor: androidx.compose.ui.graphics.Color,
+    idleColor: androidx.compose.ui.graphics.Color,
+    modifier: Modifier,
+    onClick: () -> Unit,
+) {
+    Box(modifier.clickable(onClick = onClick), contentAlignment = Alignment.Center) {
+        DotIcon(glyph, if (active) activeColor else idleColor, modifier)
     }
 }
 
 /**
- * Lyrics are fetched by [Lyrics.find] through [produceState]; no network code lives here. For
- * synced lyrics the line at [NowPlaying.currentPosition] is highlighted and scrolled to. Lines are
- * deliberately compact so several fit in the player's short lyrics pane.
+ * Lyrics from Gearslip's existing multi-provider lookup. Synced lyrics highlight and scroll the
+ * active line; in this single-line slot that means the current line stays in view.
  */
 @Composable
-private fun LyricsView(now: NowPlaying, modifier: Modifier) {
-    val context = LocalContext.current
-    val result by produceState<LyricsResult?>(null, now.title, now.artist, now.album, now.durationMs) {
-        value = Lyrics.find(context, now.title, now.artist, now.album, now.durationMs)
+private fun LyricsView(
+    title: String,
+    artist: String,
+    album: String,
+    durationMs: Long,
+    playing: Boolean,
+    modifier: Modifier,
+) {
+    if (title.isEmpty()) {
+        EmptyState("NO LYRICS", "Nothing is playing", modifier)
+        return
     }
-    var position by remember { mutableLongStateOf(now.currentPosition()) }
-    LaunchedEffect(now) {
+    val context = LocalContext.current
+    val result by produceState<LyricsResult?>(null, title, artist, album, durationMs) {
+        value = Lyrics.find(context, title, artist, album, durationMs)
+    }
+    var position by remember { mutableLongStateOf(0L) }
+    LaunchedEffect(title, playing) {
         while (true) {
-            position = now.currentPosition()
-            if (!now.playing) break
+            position = MusicPlayer.state.value.positionMs
+            if (!playing) break
             delay(250)
         }
     }
@@ -186,7 +244,7 @@ private fun LyricsView(now: NowPlaying, modifier: Modifier) {
         lyrics == null -> EmptyState("LOADING LYRICS", null, modifier)
         lyrics.lines.isEmpty() -> EmptyState("NO LYRICS", "Nothing found for this track", modifier)
         else -> LazyColumn(
-            modifier.fillMaxSize(),
+            modifier,
             state = list,
             verticalArrangement = Arrangement.spacedBy(4.dp),
             contentPadding = PaddingValues(vertical = 2.dp),
@@ -195,7 +253,6 @@ private fun LyricsView(now: NowPlaying, modifier: Modifier) {
                 val current = index == active
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     if (current) {
-                        // The one sparing red accent: a thin marker on the playing line.
                         Box(Modifier.size(width = 3.dp, height = 16.dp).background(MaterialTheme.colorScheme.error))
                         Spacer(Modifier.width(8.dp))
                     }
@@ -214,23 +271,26 @@ private fun LyricsView(now: NowPlaying, modifier: Modifier) {
 }
 
 @Composable
-private fun QueueView(queue: List<QueueTrack>, now: NowPlaying, media: CarMedia, modifier: Modifier) {
+private fun QueueView(queue: List<MusicCatalog.Track>, activeIndex: Int, modifier: Modifier) {
     if (queue.isEmpty()) {
-        EmptyState("NOTHING QUEUED", "The music app hasn't shared a queue", modifier)
+        EmptyState("NOTHING QUEUED", "Play something from BROWSE or SEARCH", modifier)
         return
     }
+    val list = rememberLazyListState()
+    LaunchedEffect(activeIndex) { if (activeIndex in queue.indices) list.animateScrollToItem(activeIndex) }
     LazyColumn(
-        modifier.fillMaxSize(),
+        modifier,
+        state = list,
         verticalArrangement = Arrangement.spacedBy(4.dp),
         contentPadding = PaddingValues(bottom = 2.dp),
     ) {
-        itemsIndexed(queue, key = { i, track -> "$i-${track.queueId}" }) { index, track ->
-            val active = track.queueId == now.activeQueueItemId
+        itemsIndexed(queue, key = { i, track -> "${i}-${track.id}" }) { index, track ->
+            val active = index == activeIndex
             Row(
-                Modifier.fillMaxWidth().heightIn(min = 40.dp)
-                    .border(1.dp, if (active) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.outline)
-                    .clickable { media.playQueueItem(track) }
-                    .padding(8.dp),
+                Modifier.fillMaxWidth().heightIn(min = 24.dp)
+                    .border(1.dp, if (active) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.outline, RectangleShape)
+                    .clickable { MusicPlayer.playAt(index) }
+                    .padding(4.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
@@ -241,9 +301,9 @@ private fun QueueView(queue: List<QueueTrack>, now: NowPlaying, media: CarMedia,
                 Spacer(Modifier.width(10.dp))
                 Column(Modifier.weight(1f)) {
                     Text(track.title, style = MaterialTheme.typography.bodyMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                    if (track.subtitle.isNotEmpty()) {
+                    if (track.artists.isNotEmpty()) {
                         Text(
-                            track.subtitle,
+                            track.artists,
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             maxLines = 1,

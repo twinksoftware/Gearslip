@@ -8,6 +8,14 @@ You may use, run, and modify Gearslip freely. If you distribute a modified versi
 
 If the AGPL's terms don't work for you, Twink Software LLC, which owns Gearslip, sells a separate commercial license. The usual case is a company that wants to use Gearslip privately without publishing its changes. Terms, including any limits on modification, are set case by case. Contact us on Matrix; the address is on the [Seb3thehacker GitHub profile](https://github.com/Seb3thehacker).
 
+## Music: a front-end for external apps
+
+Gearslip no longer streams music itself. It is a Nothing-styled front-end that browses and controls
+external media apps — Vivi Music and Echo Music — through Android's MediaBrowser/MediaController
+APIs. The first-party InnerTube catalog/search client, metadata cleaner and bounded-range
+`ChunkedDataSource` were ported in and later removed; the attribution history below is kept for
+accuracy.
+
 ## Fonts: Doto (OFL-1.1) © The Doto Project Authors
 
 The Nothing skin's display type is [Doto](https://github.com/oliverlalan/Doto), a variable dot-matrix font by The Doto Project Authors, bundled under the SIL Open Font License 1.1. The font file lives in `gearslip/src/main/res/font/doto.ttf`.
@@ -63,3 +71,13 @@ THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
 ## Nothing icon glyph pipeline (AGPL-3.0)
 
 The Nothing skin's monochrome app-icon pipeline in `gearslip/src/main/java/app/seb3thehacker/gearslip/car/theme/NothingIcons.kt` is ported from [linuxct/nothing-icongen](https://github.com/linuxct/nothing-icongen), "PortableMonochrome.kt" (AGPL-3.0, © linuxct). Gearslip is also AGPL-3.0, so the port is license-compatible and remains under AGPL-3.0; the file header retains the source link and copyright.
+
+## Third-party code
+
+### Dot-matrix player art (MIT / contribution)
+
+`gearslip/.../car/theme/DotMatrixArt.kt` adapts the image-to-dots "Value Aliasing" approach and palette from [udaign/matrices](https://github.com/udaign/matrices) (Matrices for Nothing Community), and the per-dot `f(row, col, t) → {opacity, scale}` loading pulse from [lportals/dot_matrix_loader](https://github.com/lportals/dot_matrix_loader) (MIT). Both are reimplemented for Compose Canvas; no source files were copied. The concept mock is `docs/player-mock.html`.
+
+### Echo Music (GPL-3.0) — ported, then removed
+
+[Echo Music](https://github.com/EchoMusicApp/Echo-Music) — GPL-3.0. Its InnerTube catalog/search client, metadata text cleaner and bounded-range `ChunkedDataSource` were ported into Gearslip (into the `catalog` module and `gearslip/.../music/playback`, with the original source headers retained in the copied files); upstream also credits Metrolist, ViMusic, ArchiveTune, SimpMusic and BravePipe. That code has since been removed: Gearslip is now a Nothing-styled front-end that drives Echo Music and Vivi Music as external apps via MediaBrowser/MediaController, and no Echo-derived source remains in the tree. Gearslip is AGPL-3.0, which is GPL-3.0-compatible, so the ported code was under AGPL-3.0 while it existed.

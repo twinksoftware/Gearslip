@@ -74,12 +74,14 @@ fun GearslipApp(onDisconnect: () -> Unit, onRequestCallScreening: () -> Unit) {
         }
     }
 
-    // Home stays upright; every other screen turns with the phone.
+    // Home stays upright; the car preview fills the screen in landscape; the rest turn with the
+    // phone. A portrait car frame occupies only the top fifth of a tall phone and leaves the rest
+    // blank, so this screen is locked rather than left to the phone's rotation.
     LaunchedEffect(screen) {
-        (context as? Activity)?.requestedOrientation = if (screen == Screen.HOME) {
-            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        } else {
-            ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        (context as? Activity)?.requestedOrientation = when (screen) {
+            Screen.HOME -> ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            Screen.CAR_PREVIEW -> ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+            else -> ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
     }
 

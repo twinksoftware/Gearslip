@@ -332,7 +332,8 @@ fun CarUi() {
                                     .background(MaterialTheme.colorScheme.background)
                                     // The bar never hides here, so keep the screen clear of it. The
                                     // player runs on under the see-through bar and keeps clear itself.
-                                    .padding(bottom = if (!keyboardVisible && !fullscreen && shown != CarScreen.Media) bottomInset else 0.dp)
+                                    // The first-party player is full bleed: it hides the mini player.
+                                    .padding(bottom = if (!keyboardVisible && !fullscreen && shown != CarScreen.Media && shown != CarScreen.FirstPartyPlayer) bottomInset else 0.dp)
                                     // Keeps touches that miss this screen's controls off the map.
                                     .pointerInput(Unit) { detectTapGestures { } },
                             ) {
@@ -348,7 +349,7 @@ fun CarUi() {
                                         CarScreen.Media -> CompositionLocalProvider(
                                             LocalNavBarInset provides if (!keyboardVisible && !fullscreen) bottomInset else 0.dp,
                                         ) { mediaApp?.let { MediaScreen(it) { navigator.back() } } }
-                                        CarScreen.FirstPartyMusic -> FirstPartyMusicScreen()
+                                        CarScreen.FirstPartyMusic -> FirstPartyMusicScreen(onOpenPlayer = navigator::firstPartyPlayer)
                                         CarScreen.FirstPartyPlayer -> FirstPartyPlayerScreen(onBack = navigator::back)
                                         CarScreen.PlaceSearch -> PlaceSearchScreen()
                                         CarScreen.Browse -> BrowseAppScreen(navigator)
@@ -376,7 +377,7 @@ fun CarUi() {
                             // whatever the screen drew there.
                             DebugBuildBadge(Modifier.align(Alignment.BottomEnd).padding(bottom = bottomInset))
                         }
-                        if (nothingShell && !fullscreen) {
+                        if (nothingShell && !fullscreen && shown != CarScreen.FirstPartyPlayer) {
                             NothingBottomPlayer(Modifier.align(Alignment.BottomCenter))
                         }
                         // Last of the resting layer so it covers the player too; a call or alert

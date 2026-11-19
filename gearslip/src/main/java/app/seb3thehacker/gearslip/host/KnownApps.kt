@@ -20,6 +20,7 @@ object KnownApps {
         "in.krosbits.musicolet", // Musicolet: browse, play, seek, lyrics
         "com.kododake.aabrowser", // Aardvark: browser template, starts, draws, takes touches
         "com.vivi.vivimusic", // Vivi Music: browse, play, seek, works well
+        "echo.music.iad1tya", // Echo Music: browse, play, works; driven as an external front-end
         "com.metrolist.music", // Metrolist: browse, play, works
         "nl.flitsmeister", // Flitsmeister: map, routing, alerts - works well
         "com.mapquest.android.ace", // MapQuest: map, routing, navigation
@@ -27,7 +28,9 @@ object KnownApps {
         "app.vela", // Vela Maps: map, search, route options, turn-by-turn with lanes
     )
 
-    fun works(packageName: String): Boolean = packageName in working
+    /** The `.debug` build of a known app is the same app, so it earns the same badge. */
+    fun works(packageName: String): Boolean =
+        packageName in working || packageName.removeSuffix(".debug") in working
 
     /**
      * Apps whose media player works through Gearslip's own player even though their car screen

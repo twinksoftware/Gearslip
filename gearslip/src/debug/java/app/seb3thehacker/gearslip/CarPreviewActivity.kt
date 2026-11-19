@@ -8,6 +8,9 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.MotionEvent
+import android.view.ViewGroup
+import android.widget.FrameLayout
+import android.widget.ImageView
 import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
 import app.seb3thehacker.gearslip.audio.AudioCaptureService
@@ -68,6 +71,17 @@ class CarPreviewActivity : ComponentActivity() {
         val taps = intent.getStringExtra("taps").orEmpty().split(";").filter { it.isNotBlank() }
             .map { it.split(",").let { p -> p[0].toFloat() to p[1].toFloat() } }
 
+        // Mirror the projected display onto the phone window. Without a content view the harness
+        // shows a blank screen while the car UI runs only on the virtual display.
+        val mirror = ImageView(this).apply {
+            scaleType = ImageView.ScaleType.FIT_CENTER
+            setBackgroundColor(android.graphics.Color.BLACK)
+            layoutParams = FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT,
+            )
+        }
+        setContentView(FrameLayout(this).apply { addView(mirror) })
+
         val imageReader = ImageReader.newInstance(w, h, PixelFormat.RGBA_8888, 3)
         reader = imageReader
         imageReader.setOnImageAvailableListener({ r ->
@@ -77,6 +91,7 @@ class CarPreviewActivity : ComponentActivity() {
                 val bmp = Bitmap.createBitmap(padded, h, Bitmap.Config.ARGB_8888)
                 bmp.copyPixelsFromBuffer(plane.buffer)
                 latest = Bitmap.createBitmap(bmp, 0, 0, w, h)
+                main.post { mirror.setImageBitmap(latest) }
             }
         }, main)
 

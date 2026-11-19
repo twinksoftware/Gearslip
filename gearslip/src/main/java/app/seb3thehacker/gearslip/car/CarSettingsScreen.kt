@@ -3,6 +3,7 @@ package app.seb3thehacker.gearslip.car
 import androidx.compose.ui.res.stringResource
 import app.seb3thehacker.gearslip.R
 
+import app.seb3thehacker.gearslip.car.CarSettings.MusicSource
 import app.seb3thehacker.gearslip.car.theme.DarkStyle
 import app.seb3thehacker.gearslip.car.theme.*
 import android.os.Build
@@ -63,6 +64,7 @@ fun CarSettingsScreen() {
     val bluetoothWarning by CarSettings.bluetoothWarning.collectAsState()
     val locationWarning by CarSettings.locationWarning.collectAsState()
     val autoplay by CarSettings.autoplay.collectAsState()
+    val musicSource by CarSettings.musicSource.collectAsState()
     val playerTitle by CarSettings.playerTitle.collectAsState()
     val playerLeft by CarSettings.playerLeft.collectAsState()
     val navMic by CarSettings.navMic.collectAsState()
@@ -213,6 +215,18 @@ fun CarSettingsScreen() {
                         ) { CarSettings.setPipeAudio(it) }
                     }
                     item { Note(stringResource(R.string.carset_audio_note)) }
+                    item {
+                        ChoiceRow(
+                            "MUSIC SOURCE",
+                            listOf(
+                                MusicSource.AUTO to "Automatic",
+                                MusicSource.VIVI to "Vivi Music",
+                                MusicSource.ECHO to "Echo Music",
+                                MusicSource.LAST_USED to "Last used",
+                            ),
+                            musicSource,
+                        ) { CarSettings.setMusicSource(it) }
+                    }
                 }
                 3 -> {
                     item { Group(stringResource(R.string.car_group_warnings)) }
