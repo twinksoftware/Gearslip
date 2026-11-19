@@ -426,7 +426,7 @@ private fun TripRow(estimate: TravelEstimate, showStop: Boolean, modifier: Modif
     val scheme = MaterialTheme.colorScheme
     val time = remainingTime(estimate.remainingTimeSeconds)
     val distance = estimate.remainingDistance.display()
-    val arrival = estimate.arrivalTimeAtDestination.clockTime()
+    val arrival = estimate.arrivalTimeAtDestination.clockTime(LocalContext.current)
     val trip = estimate.tripText.text()
     if (time.isEmpty() && distance.isEmpty() && arrival.isEmpty() && trip.isEmpty()) return
     val dark = scheme.surface.luminanceIsDark()
