@@ -79,7 +79,7 @@ internal fun ClusterScreen(marginX: Int, marginY: Int, densityDpi: Int, clearAre
     // The map app's turn changes a few times a minute: read it once a second.
     val turn by produceState<ClusterTurn?>(null) {
         while (true) {
-            value = ClusterTurn.now()
+            value = ClusterTurn.now(context)
             delay(1_000)
         }
     }
@@ -279,7 +279,7 @@ private class ClusterTurn(
     val rows: Float get() = if (lanes.isEmpty()) 8.5f else 12f
 
     companion object {
-        fun now(): ClusterTurn? {
+        fun now(context: Context): ClusterTurn? {
             val turn = NavTurn.current() ?: return null
             if (turn.rerouting) return null
             val step = turn.step
@@ -290,7 +290,7 @@ private class ClusterTurn(
                 listOf(
                     e.remainingTimeSeconds.takeIf { it >= 0 }?.let { remainingTime(it) }.orEmpty(),
                     e.remainingDistance.display(),
-                    e.arrivalTimeAtDestination.clockTime(),
+                    e.arrivalTimeAtDestination.clockTime(context),
                 ).filter { it.isNotEmpty() }.joinToString(" · ")
             }.orEmpty()
             return ClusterTurn(step.maneuver?.icon, turn.distance.display(), what, trip, step.lanes.orEmpty())

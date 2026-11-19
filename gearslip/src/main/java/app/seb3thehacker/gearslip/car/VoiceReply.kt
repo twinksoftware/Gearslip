@@ -258,7 +258,7 @@ object VoiceReply {
 
     private fun etaReply(): String? {
         val estimate = (CarServices.nav.template.value as? NavigationTemplate)?.destinationTravelEstimate ?: return null
-        val at = estimate.arrivalTimeAtDestination.clockTime()
+        val at = estimate.arrivalTimeAtDestination.clockTime(appContext)
         val left = remainingTime(estimate.remainingTimeSeconds)
         return when {
             at.isNotEmpty() -> "Driving, I'll be there around $at."
