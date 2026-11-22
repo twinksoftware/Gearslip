@@ -74,17 +74,36 @@ fun CarAppStage(
         // The app's own drawing goes underneath; everything else is the host's rendering of
         // the template it described, laid over the top.
         androidx.compose.runtime.CompositionLocalProvider(LocalChromeCover provides cover, LocalCarAppConnection provides connection) {
+            // The docked player floats over one side of the map: the chrome keeps clear of it,
+            // and the app hears that side is covered, so its map centres in the rest.
+            val panel = LocalSidePanelInset.current
+            val panelAtStart = LocalCardsAtEnd.current
             // A place list's map is the host's to draw; any other map is the app's own surface.
             val placeList = template as? androidx.car.app.model.PlaceListMapTemplate
             if (placeList != null) {
                 HostPlaceMap(placeList, Modifier.fillMaxSize())
             } else if (status.surfaceRequested) {
-                AppSurface(connection, frame, template, embedded, Modifier.fillMaxSize())
+                // With Map clearance on, ends above a nav bar that stays up, and beside a docked
+                // player, for an app that ignores the visible area and puts its own map buttons
+                // under them.
+                // Each change of size is a new surface, and the app starts its map over on every
+                // one: a player opening or closing costs that, and a bar that hides would cost it
+                // every few seconds, so that bar is left over the map.
+                val navBarMode by CarSettings.navBarMode.collectAsState()
+                val clear by CarSettings.mapClearance.collectAsState()
+                val clearOfBar = clear && navBarMode == NavBarMode.SHOW
+                val beside = if (clear) panel else 0.dp
+                AppSurface(
+                    connection, frame, template, embedded,
+                    Modifier.fillMaxSize().padding(
+                        // The bar's height, not whether it shows: the keyboard hides the bar, and a
+                        // new size would start the map over while the driver types.
+                        bottom = if (clearOfBar) NAV_BAR_HEIGHT else 0.dp,
+                        start = if (panelAtStart) beside else 0.dp,
+                        end = if (panelAtStart) 0.dp else beside,
+                    ),
+                )
             }
-            // The docked player floats over one side of the map: the chrome keeps clear of it,
-            // and the app hears that side is covered, so its map centres in the rest.
-            val panel = LocalSidePanelInset.current
-            val panelAtStart = LocalCardsAtEnd.current
             TemplateChrome(
                 template,
                 Modifier.fillMaxSize().padding(

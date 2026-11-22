@@ -58,6 +58,7 @@ fun CarSettingsScreen() {
     val night by CarSettings.nightMode.collectAsState()
     val units by CarSettings.units.collectAsState()
     val navBar by CarSettings.navBarMode.collectAsState()
+    val mapClearance by CarSettings.mapClearance.collectAsState()
     val screenSize by CarSettings.screenSize.collectAsState()
     val screenFit by CarSettings.screenFit.collectAsState()
     val whatsNew by CarSettings.whatsNewAfterUpdates.collectAsState()
@@ -205,6 +206,9 @@ fun CarSettingsScreen() {
                         ) { CarSettings.setPlayerLeft(it) }
                     }
                     item { Note(stringResource(R.string.car_player_beside_map_note)) }
+                    item {
+                        SwitchRow(stringResource(R.string.car_map_clearance), stringResource(R.string.car_map_clearance_note), mapClearance) { CarSettings.setMapClearance(it) }
+                    }
                     item {
                         SwitchRow(stringResource(R.string.car_autoplay), stringResource(R.string.car_autoplay_note), autoplay) { CarSettings.setAutoplay(it) }
                     }

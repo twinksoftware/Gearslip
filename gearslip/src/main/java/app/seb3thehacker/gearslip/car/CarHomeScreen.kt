@@ -46,6 +46,8 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shape
 import app.seb3thehacker.gearslip.media.ArtColor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -106,7 +108,8 @@ fun CarHome() {
 
     // The map runs edge to edge underneath; the player floats over one side of it as a card, with
     // a gap all round. The map's surface keeps its size when the card comes and goes, so the app
-    // only re-centres its map instead of drawing onto a new surface.
+    // only re-centres its map instead of drawing onto a new surface. A map kept clear of the player
+    // (Map clearance) is the exception: its map is moved aside, and the player fills the room.
     BoxWithConstraints(Modifier.fillMaxSize()) {
         val column = (maxWidth / PLAYER_SHARE).coerceIn(PLAYER_MIN_WIDTH, PLAYER_MAX_WIDTH)
         androidx.compose.runtime.CompositionLocalProvider(
@@ -123,16 +126,22 @@ fun CarHome() {
             exit = androidx.compose.animation.slideOutHorizontally(tween(180)) { if (playerLeft) -it / 3 else it / 3 } +
                 androidx.compose.animation.fadeOut(tween(140)),
         ) {
+            // With Map clearance on, the app's map ends where the player begins (CarAppStage), so a
+            // card's gaps would only frame bare background: the player fills its column instead.
+            val clearance by CarSettings.mapClearance.collectAsStateWithLifecycle()
+            val fills = navStatus.surfaceRequested && clearance
+            val gap = if (fills) 0.dp else CARD_GAP
             val card = Modifier
                 .width(column)
                 .fillMaxHeight()
                 .padding(
-                    start = if (playerLeft) CARD_GAP else 0.dp,
-                    end = if (playerLeft) 0.dp else CARD_GAP,
-                    top = CARD_GAP,
-                    bottom = LocalNavBarInset.current + CARD_GAP,
+                    start = if (playerLeft) gap else 0.dp,
+                    end = if (playerLeft) 0.dp else gap,
+                    top = gap,
+                    bottom = LocalNavBarInset.current + gap,
                 )
-            if (shown.value == SidePanel.LYRICS) SideLyrics(now, card) else DockedPlayer(now, card)
+            val shape = if (fills) RectangleShape else CARD_SHAPE
+            if (shown.value == SidePanel.LYRICS) SideLyrics(now, card, shape) else DockedPlayer(now, card, shape)
         }
     }
 }
@@ -225,7 +234,7 @@ private fun StatusButton(label: String, tone: GsTone, onClick: () -> Unit) {
  * twice. The X sends it back to the nav bar.
  */
 @Composable
-private fun DockedPlayer(now: NowPlaying, modifier: Modifier) {
+private fun DockedPlayer(now: NowPlaying, modifier: Modifier, shape: Shape) {
     val navigator = LocalCarNavigator.current
     val media = CarServices.media
     val context = LocalContext.current
@@ -234,7 +243,7 @@ private fun DockedPlayer(now: NowPlaying, modifier: Modifier) {
 
     // The theme's surface, with a faint wash of the cover's colours behind the top of it. A solid
     // slab of album colour beside the map fought it for attention; this only hints at the song.
-    Surface(modifier = modifier.gsPanelShadow(CARD_SHAPE), shape = CARD_SHAPE, color = scheme.surfaceContainer) {
+    Surface(modifier = modifier.gsPanelShadow(shape), shape = shape, color = scheme.surfaceContainer) {
         AlbumGlow(art, Modifier.fillMaxSize())
         Box(Modifier.fillMaxSize().padding(12.dp)) {
             Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -297,12 +306,12 @@ private fun DockedPlayer(now: NowPlaying, modifier: Modifier) {
  * lyrics back for the player; the X closes the panel.
  */
 @Composable
-private fun SideLyrics(now: NowPlaying, modifier: Modifier) {
+private fun SideLyrics(now: NowPlaying, modifier: Modifier, shape: Shape) {
     val navigator = LocalCarNavigator.current
     val context = LocalContext.current
     val scheme = MaterialTheme.colorScheme
     val art by produceState(now.art, now.art, now.artUri) { value = now.art ?: MediaArt.load(context, now.artUri) }
-    Surface(modifier = modifier.gsPanelShadow(CARD_SHAPE), shape = CARD_SHAPE, color = scheme.surfaceContainer) {
+    Surface(modifier = modifier.gsPanelShadow(shape), shape = shape, color = scheme.surfaceContainer) {
         Column(Modifier.fillMaxSize().padding(start = 18.dp, end = 12.dp, top = 12.dp, bottom = 8.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Box(Modifier.size(36.dp).clip(RoundedCornerShape(8.dp)).background(scheme.surface)) {
