@@ -74,6 +74,8 @@ object WirelessLink {
     private const val TCP_TRIES = 12 // about a minute: a car's projection listener can start well after its Wi-Fi
     private const val WIFI_WAIT_MS = 60_000
     private const val KNOCK_MS = 8_000L // some cars publish their service only a while after Bluetooth connects
+    private const val FIRST_KNOCK_MS = 2_000L // clear of what the car opens as Bluetooth connects
+    private const val KNOCK_TIMEOUT_MS = 5_000L // a call left hanging keeps the car from calling us
     private const val START_RETRIES = 3
     private const val RETRY_PAUSE_MS = 2_000L
 
@@ -218,7 +220,9 @@ object WirelessLink {
             // A running scan slows the connect, but stopping one needs BLUETOOTH_SCAN on Android
             // 12+, which Gearslip doesn't ask for. Gearslip never scans, so skipping it is fine.
             runCatching { context.getSystemService(BluetoothManager::class.java)?.adapter?.cancelDiscovery() }
-            device.createRfcommSocketToServiceRecord(AA_UUID).also { it.connect() }
+            // Listening from the start, and calling the car's own service only after a moment: a
+            // call the instant Bluetooth connected crossed a SOOEMAKA's own and hung for a minute.
+            waitForCar(context, device, name) ?: return false
         } catch (e: SecurityException) {
             log.e("Bluetooth: permission refused while opening the channel on $name", e)
             SessionStatus.failed(
@@ -227,11 +231,6 @@ object WirelessLink {
                     "settings, then try again.",
             )
             return false
-        } catch (e: IOException) {
-            // Most factory head units publish no service of their own: they look for the phone's
-            // and connect to it, so wait for the car instead.
-            log.i("Bluetooth: $name has no Android Auto service to call (${e.message}); waiting for it to call us")
-            waitForCar(context, device, name) ?: return false
         }
         rfcomm = socket
         log.i("Bluetooth: channel open")
@@ -356,22 +355,55 @@ object WirelessLink {
             return null
         }
         listener = server
-        SessionStatus.connecting("Waiting for $name. If nothing happens, disconnect the phone in the car's Bluetooth menu and connect it again")
         log.i("Bluetooth: Android Auto service published, waiting ${LISTEN_MS / 1000}s for $name")
-        // Meanwhile, keep calling the car's own service: a car that publishes it late answers one
-        // of these instead of calling us. Whichever connects first is the channel.
+        // Meanwhile, keep calling the car's own service: a car that publishes one answers instead
+        // of calling us, and one that publishes it late answers a later call. Whichever connects
+        // first is the channel.
         val done = java.util.concurrent.atomic.AtomicBoolean(false)
         val knocked = java.util.concurrent.atomic.AtomicReference<BluetoothSocket?>(null)
         val knocker = Thread({
+            var wait = FIRST_KNOCK_MS
+            var hinted = false
             while (!done.get()) {
                 try {
-                    Thread.sleep(KNOCK_MS)
+                    Thread.sleep(wait)
+                    wait = KNOCK_MS
                 } catch (_: InterruptedException) {
                     return@Thread
                 }
                 if (done.get()) return@Thread
-                val socket = runCatching { device.createRfcommSocketToServiceRecord(AA_UUID).also { it.connect() } }
-                    .getOrNull() ?: continue
+                // A call that crosses the car's own call to us leaves both hanging, as a SOOEMAKA's
+                // did for a minute: hang up soon, so the car gets through.
+                val socket = runCatching {
+                    val call = device.createRfcommSocketToServiceRecord(AA_UUID)
+                    val hangUp = Thread {
+                        try {
+                            Thread.sleep(KNOCK_TIMEOUT_MS)
+                            runCatching { call.close() }
+                        } catch (_: InterruptedException) {
+                        }
+                    }.apply { isDaemon = true; start() }
+                    try {
+                        call.connect()
+                        hangUp.interrupt()
+                        hangUp.join()
+                    } catch (e: Exception) {
+                        hangUp.interrupt()
+                        runCatching { call.close() }
+                        throw e
+                    }
+                    // Answered just as the hang-up came: closed, so not a channel after all.
+                    call.takeIf { it.isConnected }
+                }.getOrNull()
+                if (socket == null) {
+                    // Once a call has failed too, the car may need its Bluetooth reconnected to
+                    // look for us; until then the hint only worried a driver whose car was fine.
+                    if (!hinted && !done.get()) {
+                        hinted = true
+                        SessionStatus.connecting("Waiting for $name. If nothing happens, disconnect the phone in the car's Bluetooth menu and connect it again")
+                    }
+                    continue
+                }
                 if (done.compareAndSet(false, true)) {
                     log.i("Bluetooth: $name's own Android Auto service answered")
                     knocked.set(socket)
