@@ -977,11 +977,9 @@ class GearslipRunner(
         // 130 margin. Without this every tap landed 120 px too high.
         val shift = config?.let(::marginsFor) ?: Insets.NONE
         val size = config?.pixelSize()
-        // A stretched frame (see [screenShape]): the car's tap is on the frame, the UI is drawn smaller.
+        // A stretched frame (see [squashSize]): the car's tap is on the frame, the UI is drawn smaller.
         val drawn = drawSize
-        val stretched = drawn != null && size != null
-        val (action, actionIndex, raw) =
-            (if (stretched) InputProtocol.touch(touch, size) else InputProtocol.touch(touch, size, shift.left, shift.top)) ?: return
+        val (action, actionIndex, raw) = InputProtocol.touch(touch, size, shift.left, shift.top) ?: return
         val points = if (drawn != null && size != null) {
             raw.map { TouchPoint(it.id, it.x * drawn.first / size.first, it.y * drawn.second / size.second) }
         } else {
@@ -1177,6 +1175,21 @@ class GearslipRunner(
     }
 
     /**
+     * What the car UI draws at when the car squashes the frame: shaped like the screen size set in
+     * Settings once the car's margins are cut off, so the part the car shows comes out the right
+     * shape. A SOOEMAKA cut 88 rows off 800x480 and spread the rest over 1280x480; shaping the whole
+     * frame left circles a third too wide.
+     */
+    private fun squashSize(config: ServiceDiscovery.VideoConfig): Pair<Int, Int>? {
+        val (width, height) = config.pixelSize() ?: return null
+        val (w, h) = config.visibleSize() ?: return null
+        val (shapeW, shapeH) = screenShape(w, h) ?: return null
+        val drawW = (shapeW.toLong() * width / w).toInt() / 2 * 2
+        val drawH = (shapeH.toLong() * height / h).toInt() / 2 * 2
+        return (drawW to drawH).takeIf { it != (width to height) }
+    }
+
+    /**
      * The strips of the frame the car doesn't show: the head unit's own margins, or, when a screen
      * size is set to crop, whatever lies outside [screenShape]. The UI keeps out of them and taps
      * are measured from inside them.
@@ -1213,8 +1226,9 @@ class GearslipRunner(
         stretcher?.release()
         stretcher = null
         drawSize = null
-        val shape = screenShape(width, height)
-        val squash = shape != null && CarSettings.screenFit.value == ScreenFit.SQUASH
+        val squashing = CarSettings.screenFit.value == ScreenFit.SQUASH
+        val shape = if (squashing) squashSize(config) else screenShape(width, height)
+        val squash = shape != null && squashing
         if (shape != null) {
             log.i(
                 "screen size set to ${CarSettings.screenSize.value} in Settings: " +
@@ -1222,7 +1236,15 @@ class GearslipRunner(
             )
         }
         if (squash) {
-            CarEnvironment.setInsets(Insets.NONE)
+            // The car still cuts its margins off the stretched frame: keep the UI out of them.
+            val (drawW, drawH) = shape
+            val margins = config.marginInsets()
+            CarEnvironment.setInsets(
+                Insets(
+                    top = margins.top * drawH / height, bottom = margins.bottom * drawH / height,
+                    left = margins.left * drawW / width, right = margins.right * drawW / width,
+                ),
+            )
         } else if (vehicleProfile?.insets.let { it == null || it == Insets.NONE }) {
             val insets = marginsFor(config)
             CarEnvironment.setInsets(insets)
