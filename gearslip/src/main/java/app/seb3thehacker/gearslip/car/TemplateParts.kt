@@ -277,6 +277,9 @@ internal fun RightEdgeControls(
     )
     Column(
         modifier
+            // Clear of the nav bar's row even while it's hidden, so the buttons don't jump or
+            // wrap differently each time it slides in or out.
+            .padding(bottom = maxOf(0.dp, LocalNavBarRow.current - LocalNavBarInset.current))
             .alpha(alpha)
             .focusRequester(knobFocus)
             .focusGroup()
@@ -317,10 +320,13 @@ internal fun RightEdgeControls(
             }
         }
         if (mapActions.isNotEmpty() && !(folded && open)) {
-            Column(
+            // Wraps into a second column on a short screen: a 1280x480 SOOEMAKA had the last
+            // buttons under the nav bar, out of reach.
+            androidx.compose.foundation.layout.FlowColumn(
                 mapActionsModifier,
-                horizontalAlignment = alignment,
                 verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                itemHorizontalAlignment = alignment,
             ) {
                 mapActions.forEach { ActionButton(it) }
             }
