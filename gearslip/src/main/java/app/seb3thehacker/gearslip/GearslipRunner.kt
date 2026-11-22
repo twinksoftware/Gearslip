@@ -87,6 +87,8 @@ class GearslipRunner(
     private var selectedConfigIndex: Int? = null
     private var vehicleProfile: VehicleProfile? = null
     @Volatile private var videoStarted = false
+    /** The car shows Gearslip's screen: the music asks for its speakers only from here on. */
+    @Volatile private var screenShown = false
     /** The car's screen has been asked for once, so asking again is in order. */
     @Volatile private var focusAsked = false
     private var videoSource: VideoSource? = null
@@ -636,6 +638,7 @@ class GearslipRunner(
             media,
             sendOnChannel = { id, body -> send(id, body, encrypted = true, channel = media.serviceId) },
             sendControl = { id, body -> send(id, body, encrypted = true) },
+            screenUp = { screenShown },
             // The driver picked the radio or another source on the car: pause the phone's music
             // as Android Auto does, instead of letting it play on to no one.
             onTakenBack = { CarServices.pausePhoneMedia("the car switched to another source") },
@@ -647,6 +650,10 @@ class GearslipRunner(
         if (CarSettings.pipesNow) {
             if (!CarSettings.pipeAudio.value) log.i("this car turns Bluetooth music off, so music goes through Gearslip")
             openChannel(media.serviceId)
+            // Asked for here, on every connection. The car screen's own ask runs once per screen,
+            // and a screen kept from the drive before never asked again: a reconnect played
+            // nothing for minutes, until the driver flipped the audio setting.
+            CarAudio.request()
         } else {
             // Many cars switch their source to Android Auto the moment this channel opens, which
             // cut off music the driver chose to play over Bluetooth. Open it only if they switch.
@@ -1269,6 +1276,8 @@ class GearslipRunner(
                         projection.onSurfaceReady(surface, width, height, config.density)
                     }
                     SessionStatus.projecting()
+                    screenShown = true
+                    audioLink?.mayAskForSpeakers()
                     BluetoothAudioCheck.onProjecting()
                     LocationCheck.onProjecting()
                 }
@@ -1422,6 +1431,8 @@ class GearslipRunner(
             // Give the car the channels' open responses before it hears the request again.
             if (open != null || toldBluetooth) Thread.sleep(1_000)
             if (running && !videoStarted) requestProjectedFocus(withDisplay = true)
+            // A car keeping its own screen may still play the music: stop holding it back.
+            if (running && !screenShown) audioLink?.mayAskForSpeakers(screenOrNot = true)
         }, "gearslip-focus-fallback").apply { isDaemon = true }.start()
     }
 
