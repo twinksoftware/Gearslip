@@ -289,7 +289,14 @@ class GearslipActivity : ComponentActivity(), Projection {
 
     private fun askAudioCapture() {
         val manager = getSystemService(MediaProjectionManager::class.java)
-        runCatching { audioConsent.launch(manager.createScreenCaptureIntent()) }
+        // The whole screen, so the dialog offers no app to pick: sharing one app brings that app
+        // in front, which put Gearslip behind it before its capture service could start.
+        val intent = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            manager.createScreenCaptureIntent(android.media.projection.MediaProjectionConfig.createConfigForDefaultDisplay())
+        } else {
+            manager.createScreenCaptureIntent()
+        }
+        runCatching { audioConsent.launch(intent) }
             .onFailure {
                 GearslipLog.e("could not ask for audio capture", it)
                 CarAudio.denied()
