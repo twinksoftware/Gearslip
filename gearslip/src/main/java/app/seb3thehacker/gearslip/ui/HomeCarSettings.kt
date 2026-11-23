@@ -92,6 +92,11 @@ private fun densityChoices(current: Int): List<Pair<Int, String>> {
         (DENSITY_CUSTOM to stringResource(R.string.choice_density_custom))
 }
 
+@Composable
+private fun mapSizeChoices(): List<Pair<Int, String>> =
+    listOf(CarSettings.MAP_SIZE_AUTO to stringResource(R.string.choice_map_size_auto)) +
+        CarSettings.MAP_SIZES.map { it to stringResource(R.string.choice_map_size_percent, it) }
+
 /** Types in any density in [CarSettings.CUSTOM_DENSITIES] (issue #82). */
 @Composable
 private fun CustomDensityDialog(current: Int, onDismiss: () -> Unit, onSave: (Int) -> Unit) {
@@ -270,6 +275,7 @@ internal fun CarGroupScreen(group: CarGroup, onBack: () -> Unit) {
 private fun GroupRows(group: CarGroup) {
     val scale by CarSettings.scale.collectAsState()
     val density by CarSettings.carDensity.collectAsState()
+    val mapSize by CarSettings.mapAppSize.collectAsState()
     val open by CarSettings.openOnConnect.collectAsState()
     val night by CarSettings.nightMode.collectAsState()
     val units by CarSettings.units.collectAsState()
@@ -311,6 +317,11 @@ private fun GroupRows(group: CarGroup) {
                     customDensity = false
                 }
             }
+            SettingsDivider()
+            Choice(
+                stringResource(R.string.car_map_size), mapSizeChoices(), mapSize, CarSettings::setMapAppSize,
+                note = stringResource(R.string.car_map_size_note),
+            )
             SettingsDivider()
             Choice(stringResource(R.string.car_app_theme), themeChoices(), theme, CarSettings::setAppTheme)
             SettingsDivider()
