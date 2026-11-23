@@ -118,13 +118,7 @@ object WirelessAuto {
     /** From [CarPresenceService]: the car is here, so bring Gearslip up to connect to it. */
     fun carAppeared(context: Context, address: String) {
         log.i("auto-connect: a car Gearslip knows connected over Bluetooth")
-        runCatching {
-            context.startActivity(
-                Intent(context, GearslipActivity::class.java)
-                    .setAction(ACTION_CAR_NEARBY)
-                    .putExtra(EXTRA_ADDRESS, address)
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
-            )
-        }.onFailure { log.w("auto-connect: couldn't open Gearslip (${it.message})") }
+        // A see-through screen, not Gearslip's own: the phone shows nothing as the car connects.
+        app.seb3thehacker.gearslip.CarPromptActivity.ask(context, ACTION_CAR_NEARBY) { putExtra(EXTRA_ADDRESS, address) }
     }
 }
