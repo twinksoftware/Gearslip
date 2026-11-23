@@ -132,7 +132,11 @@ fun CarHome() {
                     top = CARD_GAP,
                     bottom = LocalNavBarInset.current + CARD_GAP,
                 )
-            if (shown.value == SidePanel.LYRICS) SideLyrics(now, card) else DockedPlayer(now, card)
+            when {
+                shown.value == SidePanel.LYRICS -> SideLyrics(now, card)
+                LocalShortScreen.current -> CoverPlayer(now, card)
+                else -> DockedPlayer(now, card)
+            }
         }
     }
 }
@@ -287,6 +291,76 @@ private fun DockedPlayer(now: NowPlaying, modifier: Modifier) {
                 }
             }
             // No close button here: the nav bar's dock button closes the player (NavNowPlaying).
+        }
+    }
+}
+
+/**
+ * The player beside the map on a short screen, where a cover above the controls had room for only
+ * a sliver: the cover fills the card, darkened toward the bottom, with the title, seek bar and
+ * transport over it. Tapping the cover opens the full media screen, as on the tall player.
+ */
+@Composable
+private fun CoverPlayer(now: NowPlaying, modifier: Modifier, shape: androidx.compose.ui.graphics.Shape = CARD_SHAPE) {
+    val navigator = LocalCarNavigator.current
+    val media = CarServices.media
+    val art = rememberArt(now)
+    val scheme = MaterialTheme.colorScheme
+    // Light text and buttons over the darkened cover, whatever the theme; the theme's own without one.
+    val over = when {
+        art == null || scheme.surface.luminance() < 0.5f -> scheme
+        else -> androidx.compose.material3.dynamicDarkColorScheme(LocalContext.current)
+    }
+    Surface(modifier = modifier.gsPanelShadow(shape), shape = shape, color = scheme.surfaceContainer) {
+        Box(Modifier.fillMaxSize().clickable { navigator.media() }) {
+            // A new song's cover fades in over the old one instead of cutting to it.
+            androidx.compose.animation.Crossfade(art, animationSpec = tween(350), label = "cover") { shown ->
+                if (shown != null) {
+                    Box(Modifier.fillMaxSize()) {
+                        Image(shown.asImageBitmap(), null, Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
+                        Box(
+                            Modifier.fillMaxSize().background(
+                                androidx.compose.ui.graphics.Brush.verticalGradient(
+                                    0f to Color.Black.copy(alpha = 0.2f),
+                                    0.4f to Color.Black.copy(alpha = 0.45f),
+                                    1f to Color.Black.copy(alpha = 0.78f),
+                                ),
+                            ),
+                        )
+                    }
+                } else {
+                    AlbumGlow(null, Modifier.fillMaxSize())
+                }
+            }
+            MaterialTheme(colorScheme = over) {
+                Column(
+                    Modifier.fillMaxSize().padding(12.dp),
+                    verticalArrangement = Arrangement.Bottom,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Text(
+                        now.title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold,
+                        color = over.onSurface, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                    )
+                    Text(
+                        now.artist, style = MaterialTheme.typography.bodyMedium, color = over.onSurfaceVariant,
+                        maxLines = 1, overflow = TextOverflow.Ellipsis,
+                    )
+                    if (now.durationMs > 0) {
+                        PlayerProgress(
+                            now, media, Modifier.fillMaxWidth().padding(vertical = 2.dp),
+                            timeStyle = MaterialTheme.typography.labelLarge,
+                        )
+                    } else {
+                        Spacer(Modifier.height(10.dp))
+                    }
+                    BoxWithConstraints(Modifier.fillMaxWidth()) {
+                        // As on the tall player: two skips, play at 1.25 times a skip, and two gaps.
+                        val skip = ((maxWidth - 40.dp) / 3.25f).coerceIn(36.dp, 48.dp)
+                        TransportRow(now, media, skip = skip, modifier = Modifier.fillMaxWidth())
+                    }
+                }
+            }
         }
     }
 }
