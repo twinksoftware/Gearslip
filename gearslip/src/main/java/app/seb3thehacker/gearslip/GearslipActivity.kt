@@ -59,6 +59,7 @@ class GearslipActivity : ComponentActivity(), Projection {
     private var frameWidth = 0
     private var frameHeight = 0
     private var frameDensity = 0
+    private var frameRate = 0
 
     /**
      * Screen capture always begins with a consent dialog, which only an activity can show -
@@ -317,7 +318,7 @@ class GearslipActivity : ComponentActivity(), Projection {
         if (screenProjector != null) return
         val projector = ScreenProjector(this).also { screenProjector = it }
         // The frame's density, not frameDensity: that stays the car's own, for the phone mirror.
-        projector.start(target, frameWidth, frameHeight, CarEnvironment.frame.value.densityDpi) { CarUi() }
+        projector.start(target, frameWidth, frameHeight, CarEnvironment.frame.value.densityDpi, frameRate) { CarUi() }
     }
 
     /**
@@ -507,12 +508,13 @@ class GearslipActivity : ComponentActivity(), Projection {
         moveTaskToBack(true)
     }
 
-    override fun onSurfaceReady(surface: Surface, width: Int, height: Int, densityDpi: Int) {
+    override fun onSurfaceReady(surface: Surface, width: Int, height: Int, densityDpi: Int, frameRate: Int) {
         runOnUiThread {
             this.surface = surface
             frameWidth = width
             frameHeight = height
             frameDensity = densityDpi
+            this.frameRate = frameRate
             CarEnvironment.setDisplay(width, height, densityDpi)
             CarEnvironment.start(this)
             showCarUi()
