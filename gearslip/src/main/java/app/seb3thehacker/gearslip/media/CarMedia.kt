@@ -9,6 +9,7 @@ import android.graphics.Bitmap
 import android.media.MediaMetadata
 import android.media.Rating
 import android.support.v4.media.MediaBrowserCompat
+import androidx.media.utils.MediaConstants
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
@@ -43,7 +44,15 @@ class MediaEntry(
     val grid: Boolean = false,
     /** The heading the app files this under, when it splits a list into sections. */
     val group: String? = null,
+    /** Ids of the app's [ItemAction]s that apply to this entry, in the app's order. */
+    val actions: List<String> = emptyList(),
 )
+
+/**
+ * One of the actions an app offers on its songs and albums, such as Symfonium's Play next: Android
+ * Auto's custom browse actions. [iconUri] is the app's own icon for it, or null.
+ */
+class ItemAction(val id: String, val label: String, val iconUri: Uri?, val extras: Bundle?)
 
 /**
  * [icon] is a drawable id inside the media app's own package, not Gearslip's; 0 for none.
@@ -79,6 +88,10 @@ class QueueTrack(
     val subtitle: String,
     val iconUri: Uri?,
     val iconBitmap: Bitmap?,
+    /** The track's id in the app's library, for an [ItemAction] on it; null when the app gives none. */
+    val mediaId: String? = null,
+    /** Ids of the app's [ItemAction]s that apply to this track. */
+    val actions: List<String> = emptyList(),
 )
 
 /** What is playing, as the car's now-playing panel needs it. */
@@ -303,6 +316,8 @@ class CarMedia(private val context: Context) {
         }, Bundle().apply {
             // Tells the app it may ask for grids and section headings, as it would of Android Auto.
             putBoolean(STYLE_SUPPORTED, true)
+            // And that it may put its own actions on items, up to this many each.
+            putInt(MediaConstants.BROWSER_ROOT_HINTS_KEY_CUSTOM_BROWSER_ACTION_LIMIT, ITEM_ACTION_LIMIT)
         })
         browser = mb
         GearslipLog.i("media: connecting to ${app.label}'s library")
@@ -377,6 +392,10 @@ class CarMedia(private val context: Context) {
         rootId = mb.root
         childStyles.clear()
         mb.extras?.let { childStyles[mb.root] = it.getInt(STYLE_BROWSABLE, 0) to it.getInt(STYLE_PLAYABLE, 0) }
+        _itemActions.value = itemActionsOf(mb.extras)
+        if (_itemActions.value.isNotEmpty()) {
+            GearslipLog.i("media: ${app.label} offers actions on its items: ${_itemActions.value.values.joinToString { it.label }}")
+        }
         path.clear()
         _phase.value = Phase.READY
         onReady?.invoke(app)
@@ -399,6 +418,8 @@ class CarMedia(private val context: Context) {
             subtitle = d.subtitle?.toString().orEmpty(),
             iconUri = d.iconUri,
             iconBitmap = d.iconBitmap,
+            mediaId = d.mediaId,
+            actions = actionIdsOf(d.extras),
         )
     }
 
@@ -549,8 +570,63 @@ class CarMedia(private val context: Context) {
             playable = item.isPlayable,
             grid = style == STYLE_GRID || style == STYLE_CATEGORY_GRID,
             group = extras?.getString(STYLE_GROUP_TITLE)?.takeIf { it.isNotBlank() },
+            actions = actionIdsOf(extras),
         )
     }
+
+    // --- the app's own actions on items --------------------------------------------------------
+
+    private val _itemActions = MutableStateFlow<Map<String, ItemAction>>(emptyMap())
+
+    /** The actions the connected app offers on its items, by id: see [ItemAction]. */
+    val itemActions: StateFlow<Map<String, ItemAction>> = _itemActions.asStateFlow()
+
+    /** The actions an app lists in its library's root extras, as it does for Android Auto. */
+    private fun itemActionsOf(extras: Bundle?): Map<String, ItemAction> {
+        @Suppress("DEPRECATION")
+        val list = runCatching {
+            extras?.getParcelableArrayList<Bundle>(MediaConstants.BROWSER_SERVICE_EXTRAS_KEY_CUSTOM_BROWSER_ACTION_ROOT_LIST)
+        }.getOrNull() ?: return emptyMap()
+        return list.mapNotNull { b ->
+            val id = b.getString(MediaConstants.EXTRAS_KEY_CUSTOM_BROWSER_ACTION_ID) ?: return@mapNotNull null
+            val label = b.getString(MediaConstants.EXTRAS_KEY_CUSTOM_BROWSER_ACTION_LABEL) ?: return@mapNotNull null
+            val icon = b.getString(MediaConstants.EXTRAS_KEY_CUSTOM_BROWSER_ACTION_ICON_URI)?.let(Uri::parse)
+            ItemAction(id, label, icon, b.getBundle(MediaConstants.EXTRAS_KEY_CUSTOM_BROWSER_ACTION_EXTRAS))
+        }.associateBy { it.id }
+    }
+
+    private fun actionIdsOf(extras: Bundle?): List<String> = runCatching {
+        extras?.getStringArrayList(MediaConstants.DESCRIPTION_EXTRAS_KEY_CUSTOM_BROWSER_ACTION_ID_LIST)
+    }.getOrNull().orEmpty().take(ITEM_ACTION_LIMIT)
+
+    /**
+     * Runs [action] on the item [mediaId], as Android Auto does: a custom action on the app's
+     * library service with the item's id in its extras. The framework's MediaBrowser can't send
+     * one, so it goes over the support library's connection that search uses. The app may answer
+     * with a message, which is shown, or ask for the folder on screen to be loaded again.
+     */
+    fun runItemAction(action: ItemAction, mediaId: String) {
+        val extras = Bundle(action.extras ?: Bundle()).apply {
+            putString(MediaConstants.EXTRAS_KEY_CUSTOM_BROWSER_ACTION_MEDIA_ITEM_ID, mediaId)
+        }
+        withCompatBrowser { b ->
+            GearslipLog.i("media: running the app's \"${action.label}\" on $mediaId")
+            b.sendCustomAction(action.id, extras, object : MediaBrowserCompat.CustomActionCallback() {
+                override fun onResult(action: String, extras: Bundle?, resultData: Bundle?) {
+                    resultData?.getString(MediaConstants.EXTRAS_KEY_CUSTOM_BROWSER_ACTION_RESULT_MESSAGE)
+                        ?.let { app.seb3thehacker.gearslip.car.CarToasts.show(this@CarMedia, it, androidx.car.app.CarToast.LENGTH_SHORT) }
+                    if (resultData?.getBoolean(MediaConstants.EXTRAS_KEY_CUSTOM_BROWSER_ACTION_RESULT_REFRESH_ITEM) == true) {
+                        open(path.lastOrNull()?.first ?: rootId ?: return)
+                    }
+                }
+
+                override fun onError(action: String, extras: Bundle?, data: Bundle?) {
+                    GearslipLog.w("media: the app refused its own \"$action\"")
+                }
+            })
+        }
+    }
+
 
     /** Folders open; tracks play. Some entries are both (an album you can browse or play whole). */
     fun select(entry: MediaEntry) {
@@ -640,25 +716,51 @@ class CarMedia(private val context: Context) {
             return
         }
         if (sb != null) return // still connecting; it searches for [resultsQuery] once connected
-        // The framework MediaBrowser has no search; the support library's does, over the same
-        // service. Opened on first use only, so apps nobody searches never see a second client.
+        if (!openCompatBrowser(component)) noLibrarySearch(q)
+    }
+
+    /** What waits for [searchBrowser] to connect, besides a search. */
+    private val whenCompatReady = ArrayList<(MediaBrowserCompat) -> Unit>()
+
+    /** Runs [block] on [searchBrowser], opening it first if need be. Dropped if it can't connect. */
+    private fun withCompatBrowser(block: (MediaBrowserCompat) -> Unit) {
+        val component = searchComponent ?: return
+        val sb = searchBrowser
+        if (sb != null && sb.isConnected) {
+            block(sb)
+            return
+        }
+        whenCompatReady += block
+        if (sb == null) openCompatBrowser(component)
+    }
+
+    /**
+     * The framework MediaBrowser has no search and can't run an app's item actions; the support
+     * library's does both, over the same service. Opened on first use only, so apps nobody
+     * searches never see a second client. False if it could not even start connecting.
+     */
+    private fun openCompatBrowser(component: android.content.ComponentName): Boolean {
         lateinit var created: MediaBrowserCompat
         created = MediaBrowserCompat(context, component, object : MediaBrowserCompat.ConnectionCallback() {
             override fun onConnected() {
                 resultsQuery?.let { runSearch(created, it) }
+                val waiting = whenCompatReady.toList()
+                whenCompatReady.clear()
+                waiting.forEach { it(created) }
             }
 
             override fun onConnectionFailed() {
-                GearslipLog.w("media: no library connection for search")
+                GearslipLog.w("media: no support-library connection to the library, for search or item actions")
                 searchBrowser = null
+                whenCompatReady.clear()
                 resultsQuery?.let { noLibrarySearch(it) }
             }
         }, null)
         searchBrowser = created
-        runCatching { created.connect() }.onFailure {
+        return runCatching { created.connect() }.onFailure {
             searchBrowser = null
-            noLibrarySearch(q)
-        }
+            whenCompatReady.clear()
+        }.isSuccess
     }
 
     private fun runSearch(sb: MediaBrowserCompat, q: String) {
@@ -716,6 +818,7 @@ class CarMedia(private val context: Context) {
             iconBitmap = d.iconBitmap,
             browsable = item.isBrowsable,
             playable = item.isPlayable,
+            actions = actionIdsOf(d.extras),
         )
     }
 
@@ -822,6 +925,8 @@ class CarMedia(private val context: Context) {
         runCatching { searchBrowser?.disconnect() }
         searchBrowser = null
         searchComponent = null
+        whenCompatReady.clear()
+        _itemActions.value = emptyMap()
         clearResults()
         main.removeCallbacksAndMessages(null)
         runCatching { compat?.unregisterCallback(compatCallback) }
@@ -914,6 +1019,9 @@ class CarMedia(private val context: Context) {
 private const val ANTENNAPOD = "de.danoeh.antennapod"
 /** The media3 service's name first: that's the one offered as the button's own. */
 private val ANTENNAPOD_NEXT_CHAPTER = listOf("next_chapter", "action.de.danoeh.antennapod.core.service.next_chapter")
+
+/** The most of an app's own actions shown on one item: two rows of the menu on a short screen. */
+private const val ITEM_ACTION_LIMIT = 4
 
 private const val STYLE_SUPPORTED = "android.media.browse.CONTENT_STYLE_SUPPORTED"
 private const val STYLE_BROWSABLE = "android.media.browse.CONTENT_STYLE_BROWSABLE_HINT"

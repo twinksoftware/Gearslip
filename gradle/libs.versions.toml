@@ -18,7 +18,7 @@ okhttp = "5.4.0"
 kotlinxSerializationJson = "1.11.0"
 ossLicenses = "17.5.1"
 webkit = "1.16.0"
-androidxMedia = "1.6.0"
+androidxMedia = "1.7.0"
 
 [libraries]
 maplibre-android = { group = "org.maplibre.gl", name = "android-sdk", version.ref = "maplibre" }

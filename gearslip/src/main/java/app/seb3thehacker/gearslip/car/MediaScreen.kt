@@ -99,6 +99,7 @@ fun MediaScreen(app: MediaApp, onExit: () -> Unit) {
     val search by media.search.collectAsStateWithLifecycle()
     var tab by remember { mutableStateOf(Tab.NOW_PLAYING) }
     var searching by remember { mutableStateOf(false) }
+    var itemMenu by remember { mutableStateOf<ItemMenuTarget?>(null) }
 
     // The connection outlives this screen: the home screen's player is the same one.
     LaunchedEffect(app) { CarServices.openMedia(app) }
@@ -107,6 +108,8 @@ fun MediaScreen(app: MediaApp, onExit: () -> Unit) {
     val art = rememberArt(now)
 
     // The theme's background, with the cover's colours glowing faintly behind the cover on the left.
+    val itemActions by media.itemActions.collectAsStateWithLifecycle()
+    androidx.compose.runtime.CompositionLocalProvider(LocalItemMenu provides { itemMenu = it }, LocalItemActions provides itemActions) {
     Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
         if (phase == CarMedia.Phase.READY && !searching) AlbumGlow(art, Modifier.fillMaxSize(), wide = true)
         if (phase != CarMedia.Phase.READY) {
@@ -162,6 +165,7 @@ fun MediaScreen(app: MediaApp, onExit: () -> Unit) {
                 },
                 onClose = { searching = false },
             ) }
+            itemMenu?.let { ItemMenu(it, media) { itemMenu = null } }
             return@Surface
         }
 
@@ -255,6 +259,8 @@ fun MediaScreen(app: MediaApp, onExit: () -> Unit) {
                 }
             }
         }
+        itemMenu?.let { ItemMenu(it, media) { itemMenu = null } }
+    }
     }
 }
 

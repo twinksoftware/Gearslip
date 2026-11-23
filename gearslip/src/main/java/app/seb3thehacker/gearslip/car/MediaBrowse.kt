@@ -55,6 +55,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.PathFillType
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.addPathNodes
@@ -224,6 +225,7 @@ private fun EntryButton(entry: MediaEntry, media: CarMedia) {
                     Text(entry.subtitle, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
             }
+            rememberItemMenu(entry.title, entry.id, entry.actions)?.let { ItemMenuButton(it, size = 40.dp) }
             if (entry.browsable && entry.playable) {
                 GsIconButton(Icons.Filled.PlayArrow, stringResource(R.string.media_play), { media.playAll(entry) }, size = 40.dp)
             }
@@ -278,6 +280,9 @@ private fun CoverTile(entry: MediaEntry, media: CarMedia, modifier: Modifier) {
                     if (entry.browsable) MediaIcons.Folder else MediaIcons.MusicNote, null,
                     tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.fillMaxSize(0.35f),
                 )
+            rememberItemMenu(entry.title, entry.id, entry.actions)?.let {
+                Box(Modifier.align(Alignment.TopEnd).padding(4.dp)) { ItemMenuButton(it, size = 36.dp) }
+            }
         }
         Text(
             entry.title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold,
@@ -345,7 +350,112 @@ private fun QueueRow(track: QueueTrack, media: CarMedia) {
                     Text(track.subtitle, style = if (short) MaterialTheme.typography.bodySmall else MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
             }
+            rememberItemMenu(track.title, track.mediaId, track.actions)?.let {
+                ItemMenuButton(it)
+                Spacer(Modifier.width(8.dp))
+            }
             Icon(Icons.Filled.PlayArrow, stringResource(R.string.media_play), tint = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+    }
+}
+
+/** An item the app offers its own actions on, as [ItemMenu] shows them. */
+internal class ItemMenuTarget(val title: String, val mediaId: String, val actions: List<app.seb3thehacker.gearslip.media.ItemAction>)
+
+/** Opens [ItemMenu] for an item; the media screen that draws the menu provides it. */
+internal val LocalItemMenu = androidx.compose.runtime.compositionLocalOf<(ItemMenuTarget) -> Unit> { {} }
+
+/** The connected app's [CarMedia.itemActions], read once by the media screen for all its rows. */
+internal val LocalItemActions = androidx.compose.runtime.compositionLocalOf<Map<String, app.seb3thehacker.gearslip.media.ItemAction>> { emptyMap() }
+
+/**
+ * The app's own actions on [mediaId] from [ids], or null when it offers none: what a row's More
+ * button opens.
+ */
+@Composable
+private fun rememberItemMenu(title: String, mediaId: String?, ids: List<String>): ItemMenuTarget? {
+    val offered = LocalItemActions.current
+    if (mediaId.isNullOrEmpty() || ids.isEmpty()) return null
+    val actions = ids.mapNotNull { offered[it] }
+    return if (actions.isEmpty()) null else ItemMenuTarget(title, mediaId, actions)
+}
+
+/** The button that opens an item's [ItemMenu]. */
+@Composable
+private fun ItemMenuButton(target: ItemMenuTarget, size: androidx.compose.ui.unit.Dp = 44.dp) {
+    val open = LocalItemMenu.current
+    GsIconButton(Icons.Filled.MoreVert, stringResource(R.string.media_item_actions, target.title), { open(target) }, size = size)
+}
+
+/**
+ * An item's own actions from the app, such as Play next, over the media screen. Two to a row on a
+ * short screen, so four fit its height. Tapping one runs it and closes the menu.
+ */
+@Composable
+internal fun ItemMenu(target: ItemMenuTarget, media: CarMedia, onDismiss: () -> Unit) {
+    val context = LocalContext.current
+    val short = LocalShortScreen.current
+    Box(
+        Modifier
+            .fillMaxSize()
+            .background(androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.5f))
+            .clickable(
+                interactionSource = remember { androidx.compose.foundation.interaction.MutableInteractionSource() },
+                indication = null,
+                onClick = onDismiss,
+            ),
+        contentAlignment = Alignment.Center,
+    ) {
+        Surface(
+            shape = RoundedCornerShape(24.dp),
+            color = MaterialTheme.colorScheme.surfaceContainerHigh,
+            // Swallows taps on the card itself, so only the scrim around it dismisses.
+            modifier = Modifier
+                .widthIn(max = if (short) 560.dp else 420.dp)
+                .clickable(
+                    interactionSource = remember { androidx.compose.foundation.interaction.MutableInteractionSource() },
+                    indication = null,
+                    onClick = {},
+                ),
+        ) {
+            Column(
+                Modifier.padding(if (short) 14.dp else 20.dp).verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(if (short) 8.dp else 12.dp),
+            ) {
+                Text(
+                    target.title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold,
+                    maxLines = 1, overflow = TextOverflow.Ellipsis,
+                )
+                target.actions.chunked(if (short) 2 else 1).forEach { row ->
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        row.forEach { action ->
+                            val icon by produceState<android.graphics.Bitmap?>(null, action.iconUri) {
+                                value = MediaArt.load(context, action.iconUri)
+                            }
+                            GsButton(
+                                onClick = {
+                                    media.runItemAction(action, target.mediaId)
+                                    onDismiss()
+                                },
+                                tone = GsTone.Tonal,
+                                modifier = Modifier.weight(1f).height(if (short) 52.dp else 56.dp),
+                            ) {
+                                icon?.let {
+                                    Icon(it.asImageBitmap(), null, Modifier.size(22.dp))
+                                    Spacer(Modifier.width(10.dp))
+                                }
+                                Text(action.label, style = MaterialTheme.typography.titleMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                            }
+                        }
+                        if (row.size == 1 && short) Spacer(Modifier.weight(1f))
+                    }
+                }
+                GsButton(
+                    onClick = onDismiss,
+                    tone = GsTone.Neutral,
+                    modifier = Modifier.fillMaxWidth().height(if (short) 52.dp else 56.dp),
+                ) { Text(stringResource(R.string.cancel), style = MaterialTheme.typography.titleMedium) }
+            }
         }
     }
 }
@@ -373,6 +483,7 @@ internal fun EntryRow(entry: MediaEntry, media: CarMedia, onClick: () -> Unit = 
             if (entry.browsable && entry.playable) {
                 GsIconButton(Icons.Filled.PlayArrow, stringResource(R.string.media_play), { media.playAll(entry) })
             }
+            rememberItemMenu(entry.title, entry.id, entry.actions)?.let { ItemMenuButton(it) }
             if (entry.browsable) Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, null)
         }
     }
