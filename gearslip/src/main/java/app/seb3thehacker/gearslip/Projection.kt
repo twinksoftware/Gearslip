@@ -33,6 +33,13 @@ interface Projection {
      * more, so the car gets a fresh frame (see [VideoSource]'s onStill).
      */
     fun onStill() {}
+
+    /**
+     * The car said goodbye and the answer has gone out. Nothing else ends a wireless session: a
+     * SOOEMAKA switched off with the car left the map app bound, the encoder running, and the
+     * location notice up until the next drive.
+     */
+    fun onCarLeft() {}
 }
 
 /** One finger on the car's screen: a stable [id] for as long as it stays down, and where it is. */

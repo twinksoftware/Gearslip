@@ -303,6 +303,11 @@ object CarSession : Projection {
         main.post { screenProjector?.redraw() }
     }
 
+    override fun onCarLeft() {
+        val ending = runner
+        main.post { if (runner === ending) close() }
+    }
+
     override fun onProjectionStopped() {
         // Before the car UI goes, while the media connection is still up.
         app.seb3thehacker.gearslip.car.CarServices.pausePhoneMedia()
