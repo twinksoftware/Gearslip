@@ -123,6 +123,8 @@ class GearslipRunner(
     @Volatile private var acksSeen = 0
     @Volatile private var lastAckAt = 0L
     @Volatile private var splitMessages = 0
+    /** Keyframes sent since the last stats line, to tell its windows with one from those without. */
+    @Volatile private var keyframesInWindow = 0
     @Volatile private var resyncRequested = false
     @Volatile private var resyncAttempts = 0
     @Volatile private var lastKeyframeSentAt = 0L
@@ -1315,6 +1317,7 @@ class GearslipRunner(
             resyncRequested = false
             resyncAttempts = 0
             lastKeyframeSentAt = System.currentTimeMillis()
+            keyframesInWindow++
         }
         // Counted before it's queued: the writer may send it and the ack come back before this
         // thread runs again, and an ack counted ahead of its frame would leave the window full.
@@ -1612,10 +1615,12 @@ class GearslipRunner(
                     // head unit's acks, not the phone, set the frame rate.
                     val waited = ackWaitMs
                     ackWaitMs = 0
+                    val keys = keyframesInWindow
+                    keyframesInWindow = 0
                     SessionReport.stream("${"%.1f".format(fps)} fps, sent=$sent acked=$acksSeen")
                     log.i(
                         "video: ${"%.1f".format(fps)} fps over 5s | sent=$sent waited=${waited}ms " +
-                            "acked=$acksSeen inFlight=$inFlight split=$splitMessages " +
+                            "acked=$acksSeen inFlight=$inFlight split=$splitMessages keys=$keys " +
                             "kbps=${(videoSource?.bitRate ?: 0) / 1000}",
                     )
                     adaptBitRate(fps, waited)
@@ -1755,6 +1760,6 @@ class GearslipRunner(
         const val WITHHELD_SCREEN_MS = 5_000L
         const val AUDIO_TRACE_MESSAGES = 6
         const val GUIDANCE_SESSION_ID = 1
-        const val PERIODIC_KEYFRAME_MS = 5_000L
+        const val PERIODIC_KEYFRAME_MS = 15_000L
     }
 }
