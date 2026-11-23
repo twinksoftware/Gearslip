@@ -1612,6 +1612,11 @@ class GearslipRunner(
                     // head unit's acks, not the phone, set the frame rate.
                     val waited = ackWaitMs
                     ackWaitMs = 0
+                    // A wireless drive stays noted as running, for a restart after a crash.
+                    if (wireless && System.currentTimeMillis() - liveNotedAt >= LIVE_NOTE_MS) {
+                        liveNotedAt = System.currentTimeMillis()
+                        app.seb3thehacker.gearslip.wireless.WirelessAuto.driveStillRunning()
+                    }
                     SessionReport.stream("${"%.1f".format(fps)} fps, sent=$sent acked=$acksSeen")
                     log.i(
                         "video: ${"%.1f".format(fps)} fps over 5s | sent=$sent waited=${waited}ms " +
@@ -1689,7 +1694,11 @@ class GearslipRunner(
         }
     }
 
+    private var liveNotedAt = 0L
+
     internal companion object {
+        /** How often a running wireless drive is noted as still running. */
+        const val LIVE_NOTE_MS = 60_000L
         /** The stats window adaptive bitrate reads, matching the watchdog's sleep. */
         const val ADAPT_WINDOW_MS = 5_000L
 

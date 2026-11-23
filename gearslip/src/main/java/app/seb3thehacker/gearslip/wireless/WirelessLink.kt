@@ -118,6 +118,7 @@ object WirelessLink {
     fun start(context: Context, device: BluetoothDevice) {
         stop(context)
         val app = context.applicationContext
+        WirelessAuto.driveStarted(app, device.address)
         worker = Thread({
             // A test feature: anything unexpected ends the attempt, not the app.
             try {

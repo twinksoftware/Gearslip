@@ -49,6 +49,7 @@ object SessionStatus {
 
     /** Keeps an earlier failure visible: a rejection is followed by a disconnect every time. */
     fun disconnected() {
+        app.seb3thehacker.gearslip.wireless.WirelessAuto.driveEnded()
         if (flow.value.phase == Phase.FAILED) return
         flow.value = Snapshot(Phase.DISCONNECTED, "Disconnected", "The head unit is no longer connected.")
     }
