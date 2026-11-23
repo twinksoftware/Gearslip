@@ -152,6 +152,20 @@ object CarAudio {
         _capture.value = Capture.OFF
     }
 
+    /**
+     * The car has gone for good, not dropped for a moment: it said goodbye, or its Bluetooth went
+     * with it. The capture, and the phone's muted speaker with it, stop now rather than after
+     * [CAR_GONE_MS]: a SOOEMAKA's goodbye left the phone silent and sharing its screen for 30 s.
+     */
+    fun carLeft(why: String) {
+        if (!wanted && _capture.value == Capture.OFF) return
+        GearslipLog.i("audio: $why - stopping the capture now")
+        // The music stops first: giving the speaker back before the pause reached the app
+        // could let a moment of it play from the phone.
+        runCatching { app.seb3thehacker.gearslip.car.CarServices.pausePhoneMedia(why) }
+        main.post { release() }
+    }
+
     fun denied() {
         _capture.value = Capture.DENIED
     }
