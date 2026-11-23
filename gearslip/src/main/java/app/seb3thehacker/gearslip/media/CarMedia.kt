@@ -257,6 +257,32 @@ class CarMedia(private val context: Context) {
             }
         }.onFailure { GearslipLog.w("media: no support-library view of the session: ${it.message}") }.getOrNull()
         refreshModes()
+        // Symfonium handed a controller attaching to it no queue at all, with 26 tracks queued,
+        // and sent them only when the song next changed: Up next stayed empty until then.
+        if (_queue.value.isEmpty()) {
+            QUEUE_RETRY_MS.forEach { wait -> main.postDelayed({ if (controller === c) askForQueue(c) }, wait) }
+        }
+    }
+
+    /** The session's queue again, from the framework's view of it or else the support library's. */
+    private fun askForQueue(c: MediaController) {
+        if (_queue.value.isNotEmpty()) return
+        val framework = queueOf(c.queue)
+        val tracks = framework.ifEmpty {
+            compat?.queue.orEmpty().map { item ->
+                val d = item.description
+                QueueTrack(
+                    queueId = item.queueId,
+                    title = d.title?.toString().orEmpty(),
+                    subtitle = d.subtitle?.toString().orEmpty(),
+                    iconUri = d.iconUri,
+                    iconBitmap = d.iconBitmap,
+                )
+            }
+        }
+        if (tracks.isEmpty()) return
+        GearslipLog.i("media: asked again, the queue has ${tracks.size} tracks (${if (framework.isEmpty()) "support library" else "framework"})")
+        _queue.value = tracks
     }
 
     private fun refreshModes() {
@@ -267,6 +293,9 @@ class CarMedia(private val context: Context) {
         }
         _modes.value = modes
     }
+    /** When to ask an app that attached with no queue for it again. */
+    private val QUEUE_RETRY_MS = listOf(1_000L, 3_000L)
+
     private var subscribed: String? = null
     private var rootId: String? = null
     private val path = ArrayDeque<Pair<String, String>>() // id to title
