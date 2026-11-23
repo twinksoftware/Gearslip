@@ -199,17 +199,23 @@ fun MediaScreen(app: MediaApp, onExit: () -> Unit) {
         }
 
         BoxWithConstraints(Modifier.fillMaxSize().padding(start = 16.dp, end = 16.dp, top = 10.dp)) {
-            // A small screen, or a big one at Extra large size, has no room for two columns: the
-            // app and the tabs share one bar, and a list takes the whole width. The nav bar keeps
-            // the controls, so nothing is lost.
-            if (maxWidth < NARROW_WIDTH || maxHeight - barInset < NARROW_HEIGHT) {
+            // A small or short screen, or a big one at Extra large size, has no room for two
+            // columns: the app and the tabs share one bar, and a list takes the whole width. The
+            // nav bar keeps the controls, so nothing is lost.
+            if (LocalShortScreen.current || maxWidth < NARROW_WIDTH || maxHeight - barInset < NARROW_HEIGHT) {
                 Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Row(
                         Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        AppIdentity(app, onExit, Modifier.widthIn(max = 180.dp))
+                        // On a short screen, a folder's way back up takes the app's place here
+                        // rather than a row of its own over the list.
+                        if (LocalShortScreen.current && tab == Tab.BROWSE && (media.canGoUp || browse.trail.isNotEmpty())) {
+                            BrowseUp(browse, media, Modifier.widthIn(max = 280.dp))
+                        } else {
+                            AppIdentity(app, onExit, Modifier.widthIn(max = 180.dp))
+                        }
                         Row(
                             Modifier.weight(1f).horizontalScroll(rememberScrollState()),
                             horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End),
@@ -644,7 +650,14 @@ internal fun Notice(title: String, detail: String?, action: Pair<String, () -> U
 internal fun NowPlayingPage(now: NowPlaying, media: CarMedia, modifier: Modifier, padded: Boolean = true) {
     BoxWithConstraints(if (padded) modifier.padding(horizontal = 24.dp, vertical = 8.dp) else modifier) {
         val art = rememberArt(now)
-        if (maxWidth >= 520.dp && maxHeight >= 260.dp) {
+        if (LocalShortScreen.current) {
+            // A short screen: the controls on the driver's side, the cover as tall as the page beside them.
+            val cover = minOf(maxHeight, maxWidth * 0.4f)
+            Row(Modifier.fillMaxSize(), horizontalArrangement = Arrangement.spacedBy(20.dp)) {
+                ShortControls(now, media, Modifier.weight(1f).fillMaxHeight())
+                CoverArt(art, Modifier.width(cover).fillMaxHeight())
+            }
+        } else if (maxWidth >= 520.dp && maxHeight >= 260.dp) {
             val artWidth = minOf(maxHeight, (maxWidth - 24.dp) * 0.4f)
             Row(Modifier.fillMaxSize(), horizontalArrangement = Arrangement.spacedBy(24.dp)) {
                 CoverArt(art, Modifier.width(artWidth).fillMaxHeight())
@@ -773,6 +786,35 @@ private fun NowPlayingControls(now: NowPlaying, media: CarMedia, modifier: Modif
             PlayerProgress(now, media, Modifier.fillMaxWidth(), showTimes = showTimes, timeStyle = MaterialTheme.typography.titleLarge)
             TransportRow(now, media, skip = if (compact) 48.dp else 60.dp, modifier = Modifier.fillMaxWidth())
             PlayModeRow(now, media, size = if (compact) 46.dp else 56.dp, modifier = Modifier.fillMaxWidth(), maxOther = 2)
+        }
+    }
+}
+
+/**
+ * [NowPlayingControls] for a short screen, which has width to spare but little height: the title
+ * and seek bar, then the transport and like, shuffle and repeat side by side in one row.
+ */
+@Composable
+private fun ShortControls(now: NowPlaying, media: CarMedia, modifier: Modifier) {
+    Column(modifier, verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically)) {
+        // The title gives up its height first and scrolls, so the controls never leave the screen.
+        Column(Modifier.weight(1f, fill = false).verticalScroll(rememberScrollState())) {
+            Text(
+                now.title.ifEmpty { stringResource(R.string.media_nothing_playing) },
+                style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold,
+                maxLines = 2, overflow = TextOverflow.Ellipsis,
+            )
+            Text(
+                listOf(now.artist, now.album).filter { it.isNotEmpty() }.joinToString(" · "),
+                style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1, overflow = TextOverflow.Ellipsis,
+            )
+            now.error?.let { Text(it, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.error, maxLines = 2) }
+        }
+        PlayerProgress(now, media, Modifier.fillMaxWidth(), timeStyle = MaterialTheme.typography.titleMedium)
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            TransportRow(now, media, skip = 48.dp, modifier = Modifier.weight(1f))
+            PlayModeRow(now, media, size = 44.dp, modifier = Modifier.weight(1f), maxOther = 2)
         }
     }
 }
