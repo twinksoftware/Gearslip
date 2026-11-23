@@ -22,6 +22,8 @@ object ServiceDiscovery {
      * [widthMargin]/[heightMargin] are the head unit's own numbers (VideoConfiguration fields 3
      * and 4): pixels of the frame it crops away, split evenly between the two edges, to fit the
      * frame to a screen of a different shape. A matched vehicle profile's insets override them.
+     * [pixelAspectE4] is field 8: how many times wider than tall the car shows each pixel, times
+     * 10,000, or 0 when it leaves the field out. A SOOEMAKA sends 14000 with an 800x480 frame.
      */
     class VideoConfig(
         val resolution: Int,
@@ -29,6 +31,7 @@ object ServiceDiscovery {
         val density: Int,
         val widthMargin: Int = 0,
         val heightMargin: Int = 0,
+        val pixelAspectE4: Int = 0,
     ) {
         val resolutionName: String get() = RESOLUTIONS[resolution] ?: "unknown($resolution)"
         val frameRateName: String get() = if (frameRate == 1) "60fps" else "30fps"
@@ -41,6 +44,19 @@ object ServiceDiscovery {
         /** What's left on the car's screen once the margins are cropped off. */
         fun visibleSize(): Pair<Int, Int>? = pixelSize()?.let { (w, h) -> (w - widthMargin) to (h - heightMargin) }
 
+        /**
+         * What the car UI draws at when the car shows each pixel wider or narrower than tall: the
+         * frame widened by the car's ratio, then squeezed back into it, so the car's stretch undoes
+         * the squeeze. The height is kept, so the car's density still holds. Null for square
+         * pixels, or a ratio no screen has.
+         */
+        fun pixelShapeSize(): Pair<Int, Int>? {
+            val (width, height) = pixelSize() ?: return null
+            if (pixelAspectE4 !in PIXEL_ASPECT_E4_RANGE) return null
+            val drawW = (width.toLong() * pixelAspectE4 / 10_000).toInt() / 2 * 2
+            return (drawW to height).takeIf { drawW != width }
+        }
+
         /** The margins as the strips of the frame the car UI keeps clear. */
         fun marginInsets(): Insets = Insets(
             top = heightMargin / 2, bottom = heightMargin - heightMargin / 2,
@@ -48,7 +64,8 @@ object ServiceDiscovery {
         )
 
         override fun toString() =
-            "$resolutionName @ $frameRateName, density=$density, margin=${widthMargin}x$heightMargin"
+            "$resolutionName @ $frameRateName, density=$density, margin=${widthMargin}x$heightMargin" +
+                if (pixelAspectE4 != 0) ", pixel aspect=${pixelAspectE4 / 10_000.0}" else ""
     }
 
     /**
@@ -220,6 +237,9 @@ object ServiceDiscovery {
         return null
     }
 
+    /** Pixel aspect ratios, times 10,000, that a real screen could have; others are ignored. */
+    private val PIXEL_ASPECT_E4_RANGE = 5_000..30_000
+
     const val STREAM_GUIDANCE = 1
     const val STREAM_MEDIA = 3
     const val CODEC_PCM = 1
@@ -331,6 +351,7 @@ object ServiceDiscovery {
                     density = Wire.varint(f, 5)?.toInt() ?: 0,
                     widthMargin = Wire.varint(f, 3)?.toInt() ?: 0,
                     heightMargin = Wire.varint(f, 4)?.toInt() ?: 0,
+                    pixelAspectE4 = Wire.varint(f, 8)?.toInt() ?: 0,
                 )
             }
             add(VideoService(id, codecType, configs, Wire.varint(sinkFields, 6)?.toInt() ?: 0, Wire.varint(sinkFields, 7)?.toInt()))

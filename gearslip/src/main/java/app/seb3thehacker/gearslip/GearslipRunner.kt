@@ -1227,9 +1227,16 @@ class GearslipRunner(
         stretcher = null
         drawSize = null
         val squashing = CarSettings.screenFit.value == ScreenFit.SQUASH
-        val shape = if (squashing) squashSize(config) else screenShape(width, height)
-        val squash = shape != null && squashing
-        if (shape != null) {
+        // A screen size set in Settings wins over the car's own pixel shape.
+        val pixelShape = if (CarSettings.screenSize.value == null) config.pixelShapeSize() else null
+        val shape = pixelShape ?: if (squashing) squashSize(config) else screenShape(width, height)
+        val squash = shape != null && (squashing || pixelShape != null)
+        if (pixelShape != null) {
+            log.i(
+                "the car shows each pixel ${config.pixelAspectE4 / 10_000.0} times as wide as it is tall: " +
+                    "drawing ${pixelShape.first}x${pixelShape.second} for the ${width}x$height frame",
+            )
+        } else if (shape != null) {
             log.i(
                 "screen size set to ${CarSettings.screenSize.value} in Settings: " +
                     "${if (squash) "drawing" else "cropping to"} ${shape.first}x${shape.second} of the ${width}x$height frame",
