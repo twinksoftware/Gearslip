@@ -78,7 +78,13 @@ enum class CarGroup(@param:StringRes val title: Int) {
 }
 
 @Composable
-private fun sizeChoices() = listOf(1f to stringResource(R.string.choice_size_normal), 1.25f to stringResource(R.string.choice_size_large), 1.5f to stringResource(R.string.choice_size_xlarge))
+private fun sizeChoices() = listOf(SMALL_SCALE to stringResource(R.string.choice_size_small), 1f to stringResource(R.string.choice_size_normal), 1.25f to stringResource(R.string.choice_size_large), 1.5f to stringResource(R.string.choice_size_xlarge))
+
+/**
+ * Small fits more on a short screen, such as a single-DIN unit's: the nav bar, buttons and text
+ * all shrink together.
+ */
+internal const val SMALL_SCALE = 0.85f
 
 /** Marks the menu's Custom entry, which opens [CustomDensityDialog] instead of choosing. */
 private const val DENSITY_CUSTOM = -1
