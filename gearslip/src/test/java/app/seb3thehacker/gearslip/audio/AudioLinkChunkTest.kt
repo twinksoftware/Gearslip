@@ -71,6 +71,27 @@ class AudioLinkChunkTest {
     }
 
     @Test
+    fun aCarThatAcksHoldsNoMoreThanHalfASecond() {
+        // A SOOEMAKA offers 96 chunks, two seconds of music, and plays all it holds in order: once
+        // a stall filled them, every song played that far behind for the rest of the drive.
+        val (link, sent) = startedLink(window = 96)
+        val read = ByteArray(CAPTURE_BYTES)
+        link.write(read, read.size)
+        ack(link)
+        val capture = Thread {
+            while (!Thread.currentThread().isInterrupted) link.write(read, read.size)
+        }.apply { isDaemon = true; start() }
+        try {
+            Thread.sleep(300)
+        } finally {
+            capture.interrupt()
+            link.stop()
+        }
+        // Half a second of 21 ms chunks is 23, after the one the car acked.
+        assertEquals(1 + 23, sent.size)
+    }
+
+    @Test
     fun aCarThatKeepsUpGetsTheCaptureAsItComes() {
         val (link, sent) = startedLink(window = 16)
         val read = ByteArray(CAPTURE_BYTES)
