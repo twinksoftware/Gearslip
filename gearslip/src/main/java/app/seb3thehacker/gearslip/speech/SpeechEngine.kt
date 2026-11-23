@@ -58,6 +58,8 @@ object SpeechEngine {
     private const val END_SILENCE_S = 1.0f
     private const val CUE_VOLUME = 80
     private const val IDLE_UNLOAD_MS = 5 * 60_000L
+    /** How long after the car's screen comes up the models start loading. */
+    private const val WARM_DELAY_MS = 20_000L
     /** How long the car gets to start sending once asked, before the phone's microphone takes over. */
     private const val CAR_FIRST_AUDIO_MS = 1_500L
     private const val CAR_GAP_MS = 1_000L
@@ -90,10 +92,36 @@ object SpeechEngine {
     fun warm(context: Context) {
         val app = context.applicationContext
         SpeechModels.init(app)
-        // Kroko first, alone: loading both at once slowed it from a fraction of a second to six.
-        worker.execute {
-            ensureLoaded(app)
-            finalWorker.execute { ensureFinalLoaded(app) }
+        // A while after the car's screen comes up, once its picture and music have started: the
+        // loads take a processor core for several seconds. A command before then loads what it
+        // needs itself. Kroko first, alone: loading both at once slowed it from a fraction of a
+        // second to six.
+        main.removeCallbacks(warmLater)
+        warmLater = Runnable {
+            worker.execute {
+                inBackground { ensureLoaded(app) }
+                finalWorker.execute { inBackground { ensureFinalLoaded(app) } }
+            }
+        }
+        main.postDelayed(warmLater, WARM_DELAY_MS)
+    }
+
+    /** The load [warm] has waiting; [unload] calls it off, so a drive that ends early loads nothing. */
+    private var warmLater = Runnable {}
+
+    /**
+     * Runs [load] at background priority. The car connects as this runs, and its video, music
+     * and map app want the processor more: on a Pixel 6 Pro, Kroko took 6 s and Canary 4 s at the
+     * priority the stream had, in the very seconds the car's picture and music started.
+     */
+    private fun inBackground(load: () -> Unit) {
+        val tid = android.os.Process.myTid()
+        val was = android.os.Process.getThreadPriority(tid)
+        android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND)
+        try {
+            load()
+        } finally {
+            android.os.Process.setThreadPriority(was)
         }
     }
 
@@ -112,6 +140,7 @@ object SpeechEngine {
     /** Drops the loaded models: the driver picked another or deleted one, or the car went away. */
     fun unload() {
         main.removeCallbacks(idleUnload)
+        main.removeCallbacks(warmLater)
         run++
         worker.execute {
             recognizer?.release()
