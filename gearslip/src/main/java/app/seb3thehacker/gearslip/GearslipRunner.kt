@@ -101,6 +101,19 @@ class GearslipRunner(
     private val ackLock = Object()
     /** Time the encoder spent waiting for acks since the last stats line. */
     @Volatile private var ackWaitMs = 0L
+    /**
+     * When each frame given to the encoder was drawn, oldest first, until it comes out. They
+     * count against the car's window too (see [hasRoomForFrame]). Guarded by [ackLock].
+     */
+    private val inEncoder = ArrayDeque<Long>()
+    /** A frame out of the encoder is waiting for the car's room. Guarded by [ackLock]. */
+    private var waitingToSend = false
+    /** When each frame in flight was sent, oldest first, to time the car's acks. Guarded by [ackLock]. */
+    private val sentAt = ArrayDeque<Long>()
+    /** The car's acks timed since the last stats line: how many, and their total and longest. */
+    private var acksTimed = 0
+    private var ackTotalMs = 0L
+    private var ackLongestMs = 0L
     @Volatile private var maxUnacked = 4
     @Volatile private var framesSent = 0
     @Volatile private var inputChannelId: Int = -1
@@ -992,7 +1005,8 @@ class GearslipRunner(
         val size = config?.pixelSize()
         // A stretched frame (see [screenShape]): the car's tap is on the frame, the UI is drawn smaller.
         val drawn = drawSize
-        val stretched = drawn != null && size != null
+        // The stretcher is there even at 1:1, and that frame still has the car's margins.
+        val stretched = drawn != null && size != null && drawn != size
         val (action, actionIndex, raw) =
             (if (stretched) InputProtocol.touch(touch, size) else InputProtocol.touch(touch, size, shift.left, shift.top)) ?: return
         val points = if (drawn != null && size != null) {
@@ -1130,8 +1144,16 @@ class GearslipRunner(
                     if (count > late) freedSinceReset = true
                     acksSeen++
                     lastAckAt = System.currentTimeMillis()
+                    repeat(count - late) {
+                        val sent = sentAt.removeFirstOrNull() ?: return@repeat
+                        val took = lastAckAt - sent
+                        acksTimed++
+                        ackTotalMs += took
+                        ackLongestMs = maxOf(ackLongestMs, took)
+                    }
                     ackLock.notifyAll()
                 }
+                stretcher?.wake()
                 if (framesSent <= 3 || framesSent % 60 == 0) {
                     log.i("<- MediaAck(ack=$acked) inFlight=$inFlight after $framesSent frames")
                 }
@@ -1145,6 +1167,8 @@ class GearslipRunner(
                 log.hex("   ui config", body, limit = 64)
                 lastCodecConfig?.let { send(MSG_MEDIA_CODEC_CONFIG, it, encrypted = true, channel = videoChannelId) }
                 videoSource?.requestSyncFrame()
+                // A still screen has no new frame to carry the keyframe; this is one.
+                stretcher?.redraw()
             }
 
             else -> log.i("<- unhandled video message id=$messageId (${body.size} bytes)")
@@ -1256,7 +1280,9 @@ class GearslipRunner(
         decoderBound = false
         adaptiveVideo = CarSettings.experimentalFeaturesEnabled.value && CarSettings.adaptiveVideoEnabled.value
         if (adaptiveVideo) log.i("video: adaptive bitrate on (experimental)")
-        videoSource = VideoSource(
+        // Paced, the FrameStretcher below holds each picture until the car has room and repeats a
+        // still screen's last one, so the encoder does neither. Without a stretcher it must.
+        fun newSource(paced: Boolean) = VideoSource(
             width = width,
             height = height,
             frameRate = videoFrameRate,
@@ -1272,20 +1298,32 @@ class GearslipRunner(
                 sendVideoFrame(data, presentationTimeUs, keyFrame)
             },
             onStill = { projection?.onStill() },
-        ).also { source ->
+            paced = paced,
+        )
+        val source = newSource(paced = true)
+        videoSource = source
+        run {
             runCatching {
                 source.start()
                 val surface = source.inputSurface
                 if (projection != null && surface != null) {
-                    val stretch = shape?.takeIf { squash }?.let { (w, h) ->
-                        FrameStretcher(surface, w, h, width, height).takeIf { it.start() }
-                    }
+                    // Squashed or not, the picture goes through it, which holds it until the car
+                    // has room for another frame.
+                    val (drawW, drawH) = shape?.takeIf { squash } ?: (width to height)
+                    val stretch = FrameStretcher(
+                        surface, drawW, drawH, width, height, videoFrameRate, ::hasRoomForFrame, ::onFrameDrawn,
+                    ).takeIf { it.start() }
                     stretcher = stretch
                     if (stretch != null) {
                         drawSize = stretch.width to stretch.height
                         projection.onSurfaceReady(stretch.input, stretch.width, stretch.height, config.density)
                     } else {
-                        projection.onSurfaceReady(surface, width, height, config.density)
+                        // No stretcher (EGL refused it): an unpaced encoder takes the display.
+                        log.w("stretch: could not start - the encoder paces the frames itself")
+                        source.stop()
+                        val plain = newSource(paced = false).also { it.start() }
+                        videoSource = plain
+                        plain.inputSurface?.let { projection.onSurfaceReady(it, width, height, config.density) }
                     }
                     SessionStatus.projecting()
                     BluetoothAudioCheck.onProjecting()
@@ -1304,28 +1342,27 @@ class GearslipRunner(
      * makes it produce fewer frames, each one whole.
      */
     private fun sendVideoFrame(data: ByteArray, presentationTimeUs: Long, keyFrame: Boolean) {
-        // The car is showing its own screen and would throw these away.
-        if (!videoProjected) return
+        // Out of the encoder, so no longer counted there: while it waits here for room it is
+        // [waitingToSend]. Left in [inEncoder], it aged out after 250 ms of a long stall and let
+        // a fresh frame into the encoder every 250 ms, a backlog of old frames for the car.
         synchronized(ackLock) {
-            val waitStart = System.currentTimeMillis()
-            while (running && inFlight >= maxUnacked) {
-                // A lost ack would otherwise hold the stream forever, which looks like a frozen
-                // picture. After a long silence, assume the window cleared and carry on. A car
-                // that has acked is slow rather than losing them, so it gets a longer wait: each
-                // early reset sent a stalled SOOEMAKA frames it had no room for.
-                val since = System.currentTimeMillis() - lastAckAt
-                val stallMs = if (acksSeen > 0) ACK_LOST_MS else ACK_STALL_MS
-                if (since > stallMs) {
-                    log.w("no ack for ${since}ms with $inFlight in flight - resetting the window")
-                    unackedAtReset = if (freedSinceReset) inFlight else 0
-                    freedSinceReset = false
-                    inFlight = 0
-                    lastAckAt = System.currentTimeMillis() // one warning per stall, not one per frame
-                    break
+            inEncoder.removeFirstOrNull()
+            waitingToSend = true
+        }
+        try {
+            // The car is showing its own screen and would throw these away.
+            if (!videoProjected) return
+            synchronized(ackLock) {
+                val waitStart = System.currentTimeMillis()
+                while (running && inFlight >= maxUnacked) {
+                    val left = ackWaitLeftLocked()
+                    if (left == 0L) break
+                    ackLock.wait(left)
                 }
-                ackLock.wait(stallMs - since + 1)
+                ackWaitMs += System.currentTimeMillis() - waitStart
             }
-            ackWaitMs += System.currentTimeMillis() - waitStart
+        } finally {
+            if (!running || !videoProjected) synchronized(ackLock) { waitingToSend = false }
         }
         if (!running) return
         val timestamp = ByteArray(8)
@@ -1342,7 +1379,12 @@ class GearslipRunner(
         }
         // Counted before it's queued: the writer may send it and the ack come back before this
         // thread runs again, and an ack counted ahead of its frame would leave the window full.
-        synchronized(ackLock) { inFlight++ }
+        synchronized(ackLock) {
+            waitingToSend = false
+            inFlight++
+            val now = System.currentTimeMillis()
+            sentAt.addLast(now)
+        }
         send(MSG_MEDIA_DATA, timestamp + data, encrypted = true, channel = videoChannelId)
         reportTouchLatency(presentationTimeUs)
         framesSent++
@@ -1352,6 +1394,45 @@ class GearslipRunner(
                     "ptsUs=$presentationTimeUs)",
             )
         }
+    }
+
+    /**
+     * A lost ack would otherwise hold the stream forever, which looks like a frozen picture.
+     * After a long silence, assume the window cleared and carry on. A car that has acked is slow
+     * rather than losing them, so it gets a longer wait: each early reset sent a stalled SOOEMAKA
+     * frames it had no room for. Returns how much longer to wait for an ack, or 0 once it has
+     * given up and emptied the window. The caller holds [ackLock].
+     */
+    private fun ackWaitLeftLocked(): Long {
+        val since = System.currentTimeMillis() - lastAckAt
+        val stallMs = if (acksSeen > 0) ACK_LOST_MS else ACK_STALL_MS
+        if (since <= stallMs) return stallMs - since + 1
+        log.w("no ack for ${since}ms with $inFlight in flight - resetting the window")
+        unackedAtReset = if (freedSinceReset) inFlight else 0
+        freedSinceReset = false
+        inFlight = 0
+        sentAt.clear()
+        lastAckAt = System.currentTimeMillis() // one warning per stall, not one per frame
+        return 0
+    }
+
+    /**
+     * Whether another frame may go to the encoder: as many as the car's window holds, and one
+     * more, which waits in the encoder for the next ack so the car never waits on the encoder.
+     * More would wait there through several acks and reach the car stale. A frame the encoder
+     * never hands back would hold its place for good, so one drawn long ago no longer counts.
+     * A [repeat] of a still screen's last frame waits until the car has none at all.
+     */
+    private fun hasRoomForFrame(repeat: Boolean): Boolean = synchronized(ackLock) {
+        val now = System.currentTimeMillis()
+        while (inEncoder.isNotEmpty() && now - inEncoder.first() > ENCODE_LOST_MS) inEncoder.removeFirst()
+        if (inFlight >= maxUnacked) ackWaitLeftLocked() // empties the window after a long silence
+        val held = inFlight + inEncoder.size + (if (waitingToSend) 1 else 0)
+        if (repeat) held == 0 else held <= maxUnacked
+    }
+
+    private fun onFrameDrawn() {
+        synchronized(ackLock) { inEncoder.addLast(System.currentTimeMillis()) }
     }
 
     /** Whether the car is showing Gearslip; false while it shows its own interface. */
@@ -1386,6 +1467,8 @@ class GearslipRunner(
                 inFlight = 0
                 unackedAtReset = 0
                 freedSinceReset = true
+                inEncoder.clear()
+                sentAt.clear()
                 ackLock.notifyAll()
             }
             val start = Protobuf.varintField(1, SESSION_ID.toLong()) +
@@ -1394,6 +1477,8 @@ class GearslipRunner(
             log.i("-> Start(session_id=$SESSION_ID)")
             lastCodecConfig?.let { send(MSG_MEDIA_CODEC_CONFIG, it, encrypted = true, channel = videoChannelId) }
             videoSource?.requestSyncFrame()
+            // A still screen draws nothing new, and the keyframe needs a frame to be made from.
+            stretcher?.redraw()
         } else {
             // A phone ends the stream when the car takes its screen. LIVI switches on the focus
             // answer alone, but the 2018 Uconnect kept showing our last frame until it got Stop.
@@ -1634,14 +1719,24 @@ class GearslipRunner(
                     val sent = framesSent
                     val fps = (sent - lastFrames) / 5.0
                     lastFrames = sent
-                    // Time the encoder spent held back waiting for acks: near 5000ms means the
-                    // head unit's acks, not the phone, set the frame rate.
-                    val waited = ackWaitMs
+                    // Time frames spent held back waiting for acks: near 5000ms means the head
+                    // unit's acks, not the phone, set the frame rate.
+                    // The encoder's wait and the frames held back overlap: the longer of the two.
+                    val waited = maxOf(ackWaitMs, stretcher?.takeHeldMs() ?: 0L)
                     ackWaitMs = 0
+                    // From a frame's send to its ack: the car's own delay, plus the Wi-Fi's.
+                    val ack = synchronized(ackLock) {
+                        val average = if (acksTimed > 0) ackTotalMs / acksTimed else 0L
+                        "$average/$ackLongestMs".also {
+                            acksTimed = 0
+                            ackTotalMs = 0L
+                            ackLongestMs = 0L
+                        }
+                    }
                     SessionReport.stream("${"%.1f".format(fps)} fps, sent=$sent acked=$acksSeen")
                     log.i(
                         "video: ${"%.1f".format(fps)} fps over 5s | sent=$sent waited=${waited}ms " +
-                            "acked=$acksSeen inFlight=$inFlight split=$splitMessages " +
+                            "acked=$acksSeen inFlight=$inFlight ack=${ack}ms split=$splitMessages " +
                             "kbps=${(videoSource?.bitRate ?: 0) / 1000}",
                     )
                     adaptBitRate(fps, waited)
@@ -1779,6 +1874,8 @@ class GearslipRunner(
 
         const val ACK_STALL_MS = 2_000L
         const val ACK_LOST_MS = 10_000L
+        /** A frame given to the encoder that hasn't come out after this long never will. */
+        const val ENCODE_LOST_MS = 250L
         const val WITHHELD_SCREEN_MS = 5_000L
         const val AUDIO_TRACE_MESSAGES = 6
         const val GUIDANCE_SESSION_ID = 1
