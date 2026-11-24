@@ -91,7 +91,25 @@ class AudioCaptureService : Service() {
         val micGranted = checkSelfPermission(android.Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
         val type = ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION or
             (if (micGranted) ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE else 0)
-        startForeground(NOTIFICATION_ID, notification(), type)
+        try {
+            try {
+                startForeground(NOTIFICATION_ID, notification(), type)
+            } catch (e: SecurityException) {
+                // With the permission, Android still lets a service claim the microphone only while
+                // Gearslip is on screen, and a driver who shared one app had that app brought in
+                // front first: Gearslip crashed. The music needs the projection alone.
+                if (type == ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION) throw e
+                GearslipLog.w("audio: couldn't claim the microphone from the background - capturing without it (${e.message})")
+                startForeground(NOTIFICATION_ID, notification(), ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION)
+            }
+        } catch (e: Exception) {
+            // Neither type would start. The car is told there's no music, so it stops waiting
+            // for some; Android may still end the service, since it never became foreground.
+            GearslipLog.e("audio: couldn't start the capture service", e)
+            CarAudio.denied()
+            stopSelf()
+            return START_NOT_STICKY
+        }
         ScreenShareGuard.lift(this)
         projection = try {
             getSystemService(MediaProjectionManager::class.java).getMediaProjection(resultCode, data)
