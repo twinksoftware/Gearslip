@@ -68,6 +68,19 @@ class AudioLink(
     private var slowAckMs = 0L
     private var lastAckFull = false
     private var stalls = 0
+    /** Acks this stream has had: a car that sends any is slow when they stop, not deaf. */
+    private var acksSeen = 0
+    /**
+     * Chunks a reopened window gave up on. Their acks still come, late, and free no room:
+     * counted as fresh room, each reopen could leave a car that plays what it holds a whole
+     * window, two seconds on a SOOEMAKA, further behind for the rest of the drive. Acks come in
+     * order, so by the next reopen any still owed were lost: a reopen forgets the ones before it.
+     * Owed acks that were in fact lost take the acks of the chunks sent after, so a reopen with
+     * no room freed since the one before owes nothing, or the stream would stall every time.
+     */
+    private var unackedAtReset = 0
+    /** Whether an ack has freed room since the last reopen: see [unackedAtReset]. */
+    private var freedSinceReset = true
     private var chunks = 0
     private var bytes = 0L
     private var dropped = 0
@@ -230,13 +243,18 @@ class AudioLink(
                 synchronized(ackLock) {
                     // A full window means the sender is waiting on this ack. When it was waiting on
                     // the one before too, the gap between them is the car's own pace.
-                    val full = inFlight >= maxUnacked
+                    val full = inFlight >= window()
                     if (full && lastAckFull) {
                         slowAcks++
                         slowAckMs += now - lastAckAt
                     }
                     lastAckFull = full
-                    inFlight = maxOf(0, inFlight - maxOf(1, acked))
+                    val count = maxOf(1, acked)
+                    val late = minOf(unackedAtReset, count)
+                    unackedAtReset -= late
+                    inFlight = maxOf(0, inFlight - (count - late))
+                    if (count > late) freedSinceReset = true
+                    acksSeen++
                     lastAckAt = now
                     ackLock.notifyAll()
                 }
@@ -349,6 +367,23 @@ class AudioLink(
         )
     }
 
+    /**
+     * Chunks the car may hold at once: its own window, and for a car that acks, no more than
+     * [MAX_HELD_MS] of audio. A car that acks as it plays holds all that is in flight, so a
+     * stall that filled the window left a SOOEMAKA's music seconds behind for the rest of the
+     * drive. Past this the sender waits, and a long wait overflows the capture buffer behind
+     * it: a short skip, once, instead of lag from then on. Call with [ackLock] held.
+     */
+    private fun window(): Int {
+        // AAC chunks are compressed, so their bytes say nothing of how long they play.
+        if (acksSeen == 0 || aac != null) return maxUnacked
+        // What is in flight, not what is planned: bigger chunks wait for their turn.
+        val chunk = if (lastPayloadBytes > 0) lastPayloadBytes else chunkBytes
+        if (chunk <= 0) return maxUnacked
+        val chunkMs = chunk * 1000.0 / (sampleRate * channels * 2)
+        return (MAX_HELD_MS / chunkMs).toInt().coerceIn(1, maxUnacked)
+    }
+
     /** Silence for [ms], whole frames of this sink's format. */
     private fun silence(ms: Int): ByteArray = ByteArray(sampleRate * ms / 1000 * channels * 2)
 
@@ -392,6 +427,9 @@ class AudioLink(
         lastAckAt = System.currentTimeMillis()
         pendingStale = true
         synchronized(ackLock) {
+            acksSeen = 0
+            unackedAtReset = 0
+            freedSinceReset = true
             slowAcks = 0
             slowAckMs = 0
             lastAckFull = false
@@ -478,19 +516,23 @@ class AudioLink(
         // Wait for the car to catch up rather than throw the chunk away: a dropped chunk is a gap
         // the driver hears, while a short wait is soaked up by the capture buffer behind us.
         synchronized(ackLock) {
-            while (started && inFlight >= maxUnacked) {
+            while (started && inFlight >= window()) {
                 val waited = System.currentTimeMillis() - lastAckAt
-                if (waited > STALL_MS) {
+                // A car that acks gets longer before its acks count as lost; see unackedAtReset.
+                val stallMs = if (acksSeen > 0) LOST_ACK_MS else STALL_MS
+                if (waited > stallMs) {
                     // A lost ack must not silence the stream for good; after a stall assume the window cleared.
                     // A car that never acks (the 2024 VW, the Bolt) hits this every chunk: say so
                     // once, then now and then, so the rest of the log stays readable.
                     if (stalls++ % 500 == 0) {
-                        GearslipLog.w("$tag: no ack for ${STALL_MS}ms with $inFlight in flight - reopening the window ($stalls times)")
+                        GearslipLog.w("$tag: no ack for ${stallMs}ms with $inFlight in flight - reopening the window ($stalls times)")
                     }
+                    unackedAtReset = if (freedSinceReset) inFlight else 0
+                    freedSinceReset = false
                     inFlight = 0
                     break
                 }
-                ackLock.wait(STALL_MS - waited + 1)
+                ackLock.wait(stallMs - waited + 1)
             }
         }
         if (!started) {
@@ -557,6 +599,8 @@ class AudioLink(
         private const val FOCUS_STATE_LOSS_TRANSIENT = 5
         private const val SESSION_ID = 2
         private const val STALL_MS = 2_000L
+        private const val LOST_ACK_MS = 10_000L
+        private const val MAX_HELD_MS = 500
         /** Acks measured with the window full before the chunk size is judged. */
         private const val ADAPT_ACKS = 20
         /** Acks this much further apart than a chunk lasts mean the car is the one holding back. */

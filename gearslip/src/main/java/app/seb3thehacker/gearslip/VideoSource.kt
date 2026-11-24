@@ -33,6 +33,13 @@ class VideoSource(
      * (issue #58). Whoever draws the screen can draw it again, and that is a frame.
      */
     private val onStill: () -> Unit = {},
+    /**
+     * SURFACE mode: a [FrameStretcher] feeds the encoder, choosing when each frame goes and
+     * repeating a still screen's last one, so the encoder does neither itself. Its own repeats
+     * took the car's room like any frame and were timed ahead of a real frame that waited, which
+     * it then threw away as going back in time (239 times in one drive with a SOOEMAKA).
+     */
+    private val paced: Boolean = false,
 ) {
     private val log = GearslipLog.tagged("VIDEO")
 
@@ -87,12 +94,12 @@ class VideoSource(
                 // screen goes still (a menu closing) sat in the car's decoder until something
                 // else moved. Repeating the last frame after a short pause pushes it through;
                 // a repeat of an unchanged screen costs a few bytes. scrcpy does the same.
-                setLong(MediaFormat.KEY_REPEAT_PREVIOUS_FRAME_AFTER, REPEAT_AFTER_US)
+                if (!paced) setLong(MediaFormat.KEY_REPEAT_PREVIOUS_FRAME_AFTER, REPEAT_AFTER_US)
                 // An app that draws nonstop (a moving map) renders at the phone's refresh rate,
                 // faster than the car acks. Every extra frame queued inside the encoder, and the
                 // car's screen fell 25 seconds behind. Capping the input drops the extras before
                 // they're encoded, so the car always gets the newest frame.
-                setFloat(MediaFormat.KEY_MAX_FPS_TO_ENCODER, frameRate.toFloat())
+                if (!paced) setFloat(MediaFormat.KEY_MAX_FPS_TO_ENCODER, frameRate.toFloat())
             }
             setInteger(MediaFormat.KEY_PROFILE, MediaCodecInfo.CodecProfileLevel.AVCProfileBaseline)
             setInteger(MediaFormat.KEY_LEVEL, level.codecLevel)
