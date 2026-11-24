@@ -54,18 +54,32 @@ object BluetoothAudioCheck {
         appContext = context.applicationContext
     }
 
+    /** Whether Bluetooth audio to the car was up when the car first answered, before its screen. */
+    private var connectedEarly: Boolean? = null
+
+    /**
+     * The car answered, a moment before it shows Gearslip. A Citroen drops Bluetooth music 0.4s
+     * after it hands over its screen, before the check in [onProjecting] gets an answer, so the
+     * drop went unseen and its music stayed silent (issue #108). Looking here as well catches it.
+     */
+    fun onCarFound() = main.post {
+        if (armed) return@post
+        audioToCar { connectedEarly = it }
+    }
+
     /** The car shows Gearslip. Called again whenever the video restarts, so it arms once per drive. */
     fun onProjecting() = main.post {
         if (armed) return@post
         armed = true
-        connectedAtStart = null
-        audioToCar { connectedAtStart = it }
+        connectedAtStart = connectedEarly
+        audioToCar { if (it != null) connectedAtStart = it || connectedEarly == true }
         main.postDelayed(::start, WAIT_MS)
     }
 
     fun onCarDisconnected() = main.post {
         armed = false
         connectedAtStart = null
+        connectedEarly = null
         main.removeCallbacksAndMessages(null)
         stopWatching()
         _missing.value = false

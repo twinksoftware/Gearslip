@@ -54,8 +54,23 @@ object VehicleProfiles {
         if (!file.isFile) runCatching { file.writeText(DEFAULT_JSON) }
         return runCatching { parse(file.readText()) }
             .onFailure { GearslipLog.e("could not read $FILE - ignoring vehicle profiles", it) }
-            .getOrDefault(emptyList())
+            .getOrDefault(emptyList()) + BUILT_IN
     }
+
+    /**
+     * Profiles every install gets, after the file's own, so the file can still override them.
+     * The file is only written once, so a profile added to [DEFAULT_JSON] later would never reach
+     * anyone who already has one.
+     */
+    private val BUILT_IN = listOf(
+        // Took every 1080p frame and showed none, while the Mach-E's SYNC 4 shows 1080p fine (issue #112).
+        VehicleProfile(
+            name = "Ford Transit (SYNC 4)",
+            match = mapOf("carModel" to "Ford Transit", "headUnitModel" to "SYNC 4.0"),
+            resolution = "1280x720",
+            insets = Insets.NONE,
+        ),
+    )
 
     /** Writes [insets] into the profile called [name] in the file, leaving everything else as it was. */
     fun saveInsets(context: Context, name: String, insets: Insets): Boolean {

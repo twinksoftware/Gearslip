@@ -178,7 +178,7 @@ class GearslipRunner(
         } finally {
             // The car hung up between our service discovery request and its answer: try the
             // other kind of request with this car next time (see [ServiceDiscoveryQuirks]).
-            if (!stopped && state == State.WAIT_SDR) ServiceDiscoveryQuirks.droppedAfter(tls.headUnitKey, plainDiscovery)
+            if (!stopped && state == State.WAIT_SDR) switchDiscovery("hung up")
             running = false
             // The car is gone, but nothing calls stop() when a wireless session drops: it waits
             // for the next one. Close the music channel now, so the audio capture behind it,
@@ -349,6 +349,7 @@ class GearslipRunner(
         }
         log.w("<- ByeByeRequest: reason=$reason ($name) in state $state")
         log.hex("   byebye raw", body)
+        if (System.currentTimeMillis() - restartSentAt < RESTART_HANGUP_MS) VideoRestartQuirks.hungUpAfterRestart(tls.headUnitKey)
         SessionReport.fail(SessionReport.Category.BYEBYE, "ByeByeRequest reason=$reason ($name)", state.name, "bye $reason")
         send(MSG_BYEBYE_RESPONSE, ByteArray(0), encrypted = state == State.WAIT_SDR || state == State.DONE)
         log.i("-> ByeByeResponse")
@@ -511,7 +512,24 @@ class GearslipRunner(
             Protobuf.stringField(5, Build.MODEL) // device_name
         if (!plainDiscovery) body += Protobuf.bytesField(6, Protobuf.stringField(1, java.util.UUID.randomUUID().toString())) // session ID
         send(MSG_SERVICE_DISCOVERY_REQUEST, body, encrypted = true)
+        discoverySentAt = System.currentTimeMillis()
         log.i("-> ServiceDiscoveryRequest (encrypted, ${if (plainDiscovery) "short, as this car asked" else "${icons.size} icons"}, ${body.size} bytes)")
+    }
+
+    @Volatile private var discoverySentAt = 0L
+    @Volatile private var discoverySwitched = false
+
+    /**
+     * The car didn't answer this session's service discovery request: next time it gets the other
+     * kind. Once a session at most, so a car that goes quiet and then hangs up isn't switched twice,
+     * back to the request it ignored. A Sony XAV-AX6000 kept up its pings for over a minute
+     * without ever answering (issue #107).
+     */
+    private fun switchDiscovery(why: String) {
+        if (discoverySwitched) return
+        discoverySwitched = true
+        log.i("service discovery: the car $why without answering")
+        ServiceDiscoveryQuirks.droppedAfter(tls.headUnitKey, plainDiscovery)
     }
 
     private fun onServiceDiscoveryResponse(body: ByteArray) {
@@ -644,6 +662,7 @@ class GearslipRunner(
         )
         // A car known to switch Bluetooth music off gets it through Gearslip, whatever the setting.
         CarSettings.carConnected(ServiceDiscovery.findBluetoothService(serviceDiscoveryResponse)?.carAddress)
+        BluetoothAudioCheck.onCarFound()
         if (CarSettings.pipesNow) {
             if (!CarSettings.pipeAudio.value) log.i("this car turns Bluetooth music off, so music goes through Gearslip")
             openChannel(media.serviceId)
@@ -1149,7 +1168,7 @@ class GearslipRunner(
      * (touchscreen 0x0) blurred 800x480 across a 1080p screen.
      */
     private fun fitToScreen(offered: List<Int>): Int? {
-        val known = offered.filter { videoConfigs.getOrNull(it)?.pixelSize() != null }
+        val known = sameShape(offered.filter { videoConfigs.getOrNull(it)?.pixelSize() != null })
         fun pixels(idx: Int) = videoConfigs[idx].pixelCount()
         if (touchWidth <= 0) {
             return known.filter { pixels(it) <= 1920 * 1080 }.maxByOrNull(::pixels)
@@ -1157,6 +1176,23 @@ class GearslipRunner(
         }
         val wide = known.filter { (videoConfigs[it].visibleSize()?.first ?: 0) >= touchWidth * 8 / 10 }
         return wide.minByOrNull(::pixels) ?: known.maxByOrNull(::pixels)
+    }
+
+    /**
+     * The offered sizes whose visible part has the same shape as the largest one's. A Peugeot's
+     * Marelli unit shows 3:1 at 1920x1080 and 1280x720, but its 800x480 leaves an 800x320 strip,
+     * 2.5:1, which it stretched to full height with a black bar beside it (issue #127). All of
+     * them, when none match.
+     */
+    private fun sameShape(known: List<Int>): List<Int> {
+        fun shape(idx: Int): Double? = videoConfigs[idx].visibleSize()
+            ?.takeIf { it.first > 0 && it.second > 0 }
+            ?.let { it.first.toDouble() / it.second }
+        val largest = known.maxByOrNull { videoConfigs[it].pixelCount() } ?: return known
+        val want = shape(largest) ?: return known
+        val alike = known.filter { idx -> shape(idx)?.let { kotlin.math.abs(it / want - 1) < 0.05 } ?: false }
+        if (alike.size < known.size) log.i("video: leaving out sizes whose visible part isn't shaped like the largest one's")
+        return alike.ifEmpty { known }
     }
 
     /**
@@ -1332,6 +1368,9 @@ class GearslipRunner(
 
     /** Whether the car is showing Gearslip; false while it shows its own interface. */
     @Volatile private var videoProjected = true
+    /** When the stream was last restarted after the car handed its screen back; 0 for never. */
+    @Volatile private var restartSentAt = 0L
+
     /** The encoder's SPS/PPS, resent when the car hands its screen back. */
     @Volatile private var lastCodecConfig: ByteArray? = null
 
@@ -1362,12 +1401,19 @@ class GearslipRunner(
                 inFlight = 0
                 ackLock.notifyAll()
             }
-            val start = Protobuf.varintField(1, SESSION_ID.toLong()) +
-                Protobuf.varintField(2, (selectedConfigIndex ?: 0).toLong())
-            send(MSG_MEDIA_START, start, encrypted = true, channel = videoChannelId)
-            log.i("-> Start(session_id=$SESSION_ID)")
+            if (VideoRestartQuirks.pausesOnly(tls.headUnitKey)) {
+                log.i("   resuming without a new Start, as this car asked")
+            } else {
+                val index = selectedConfigIndex ?: 0
+                val start = Protobuf.varintField(1, SESSION_ID.toLong()) + Protobuf.varintField(2, index.toLong())
+                send(MSG_MEDIA_START, start, encrypted = true, channel = videoChannelId)
+                restartSentAt = System.currentTimeMillis()
+                log.i("-> Start(session_id=$SESSION_ID, configuration_index=$index)")
+            }
             lastCodecConfig?.let { send(MSG_MEDIA_CODEC_CONFIG, it, encrypted = true, channel = videoChannelId) }
             videoSource?.requestSyncFrame()
+        } else if (VideoRestartQuirks.pausesOnly(tls.headUnitKey)) {
+            log.i("the car is showing its own screen - video paused, audio carries on")
         } else {
             // A phone ends the stream when the car takes its screen. LIVI switches on the focus
             // answer alone, but the 2018 Uconnect kept showing our last frame until it got Stop.
@@ -1596,6 +1642,11 @@ class GearslipRunner(
                     val idle = System.currentTimeMillis() - lastProgress
                     if (idle > 10_000) log.w("stalled in state $state for ${idle / 1000}s")
                 }
+                if (state == State.WAIT_SDR && discoverySentAt > 0 &&
+                    System.currentTimeMillis() - discoverySentAt > DISCOVERY_STALL_MS
+                ) {
+                    switchDiscovery("went ${DISCOVERY_STALL_MS / 1000}s")
+                }
                 if (!videoStarted && !toldStuck && System.currentTimeMillis() - startedAt > STUCK_MS) {
                     toldStuck = true
                     log.w("still not on the car's screen after ${STUCK_MS / 1000}s, in state $state")
@@ -1695,6 +1746,12 @@ class GearslipRunner(
 
         /** A car shows its screen within seconds; this long without one, Home says what to try. */
         const val STUCK_MS = 45_000L
+
+        /** A car answers service discovery within a second; this long silent means it never will. */
+        const val DISCOVERY_STALL_MS = 10_000L
+
+        /** A goodbye this soon after a restarted stream is the car refusing it (issue #115). */
+        const val RESTART_HANGUP_MS = 2_000L
 
         // protobuf/aap_protobuf/service/control/ControlMessageType.proto:7-17
         const val MSG_VERSION_REQUEST = 1
