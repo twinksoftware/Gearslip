@@ -73,6 +73,8 @@ class GearslipRunner(
     @Volatile private var plainDiscovery = false
     private var authenticationFailed = false
     private var drainWriterOnExit = false
+    /** The car ended the session with a ByeBye; see [Projection.onCarLeft]. */
+    private var saidGoodbye = false
     @Volatile private var stopped = false
 
     @Volatile private var state = State.WAIT_VERSION
@@ -187,6 +189,7 @@ class GearslipRunner(
             writer.shutdown()
             if (drainWriterOnExit) writer.awaitTermination(2, TimeUnit.SECONDS)
             writer.shutdownNow()
+            if (saidGoodbye && !stopped) projection?.onCarLeft()
             log.flush()
         }
     }
@@ -353,6 +356,7 @@ class GearslipRunner(
         send(MSG_BYEBYE_RESPONSE, ByteArray(0), encrypted = state == State.WAIT_SDR || state == State.DONE)
         log.i("-> ByeByeResponse")
         drainWriterOnExit = true
+        saidGoodbye = true
         running = false
         SessionStatus.disconnected()
     }
@@ -1264,9 +1268,9 @@ class GearslipRunner(
                     stretcher = stretch
                     if (stretch != null) {
                         drawSize = stretch.width to stretch.height
-                        projection.onSurfaceReady(stretch.input, stretch.width, stretch.height, config.density)
+                        projection.onSurfaceReady(stretch.input, stretch.width, stretch.height, config.density, videoFrameRate)
                     } else {
-                        projection.onSurfaceReady(surface, width, height, config.density)
+                        projection.onSurfaceReady(surface, width, height, config.density, videoFrameRate)
                     }
                     SessionStatus.projecting()
                     BluetoothAudioCheck.onProjecting()

@@ -16,6 +16,9 @@ import android.view.ContextThemeWrapper
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MonotonicFrameClock
+import androidx.compose.runtime.Recomposer
+import androidx.compose.ui.platform.AndroidUiDispatcher
 import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -28,6 +31,10 @@ import androidx.savedstate.SavedStateRegistry
 import androidx.savedstate.SavedStateRegistryController
 import androidx.savedstate.SavedStateRegistryOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 
 /**
  * Renders the car UI into the encoder's input Surface.
@@ -44,6 +51,8 @@ class ScreenProjector(private val context: Context) {
     private var presentation: Presentation? = null
     private var owner: ViewTreeOwner? = null
     private var root: View? = null
+    private var recomposer: Recomposer? = null
+    private var recomposeScope: CoroutineScope? = null
 
     /** Tracks the synthetic gesture so injected MotionEvents have a coherent downTime. */
     private var downTime = 0L
@@ -58,6 +67,8 @@ class ScreenProjector(private val context: Context) {
         width: Int,
         height: Int,
         densityDpi: Int,
+        /** Frames a second the car UI is drawn at; 0 draws it at the display's own rate. */
+        frameRate: Int = 0,
         name: String = "gearslip-projection",
         content: @Composable () -> Unit,
     ) {
@@ -99,7 +110,27 @@ class ScreenProjector(private val context: Context) {
         decor.setViewTreeViewModelStoreOwner(treeOwner)
         decor.setBackgroundColor(Color.BLACK)
 
-        show.setContentView(ComposeView(withAppLanguage(show.context)).apply { setContent(content) })
+        // The car UI is drawn on the main thread, which keeps time with the phone's own screen:
+        // 120 times a second on a Pixel, though the stream carries 30. Every animation (a song's
+        // progress bar, a sliding panel) was worked out and drawn up to four times for each frame
+        // the car got, keeping the main thread busy. Its own clock, ticking at the stream's rate,
+        // has it draw only what the car will show. The display itself keeps its own, faster rate:
+        // run at 30 too, its pickups and these draws drifted in and out of step, and a frame that
+        // finished just after a pickup waited a whole one, so animations stuttered.
+        val fps = if (frameRate > 0) frameRate.toFloat() else display.display.refreshRate
+        val clock = CarFrameClock(AndroidUiDispatcher.Main[MonotonicFrameClock]!!, fps)
+        val recomposeContext = AndroidUiDispatcher.Main + clock
+        val carRecomposer = Recomposer(recomposeContext)
+        val scope = CoroutineScope(recomposeContext)
+        scope.launch(start = CoroutineStart.UNDISPATCHED) { carRecomposer.runRecomposeAndApplyChanges() }
+        recomposer = carRecomposer
+        recomposeScope = scope
+        show.setContentView(
+            ComposeView(withAppLanguage(show.context)).apply {
+                setParentCompositionContext(carRecomposer)
+                setContent(content)
+            },
+        )
         show.show()
 
         presentation = show
@@ -249,6 +280,10 @@ class ScreenProjector(private val context: Context) {
 
     fun stop() {
         runCatching { presentation?.dismiss() }
+        runCatching { recomposer?.cancel() }
+        runCatching { recomposeScope?.cancel() }
+        recomposer = null
+        recomposeScope = null
         runCatching { owner?.destroy() }
         runCatching { virtualDisplay?.release() }
         presentation = null
@@ -276,4 +311,30 @@ class ScreenProjector(private val context: Context) {
             viewModelStore.clear()
         }
     }
+}
+
+/**
+ * Frames from the phone's own clock, but no more than [fps] of them a second: the rest are let
+ * pass, so whatever waits on a frame (animations, recomposition) runs at the car display's rate.
+ */
+private class CarFrameClock(private val phone: MonotonicFrameClock, fps: Float) : MonotonicFrameClock {
+    // A little short of a whole gap, so a 120 Hz phone's every fourth frame still counts at 30.
+    private val gapNs = (1_000_000_000L / fps.coerceIn(1f, 240f)).toLong() - 2_000_000L
+    private var lastNs = 0L
+
+    override suspend fun <R> withFrameNanos(onFrame: (frameTimeNanos: Long) -> R): R {
+        while (true) {
+            val ran = phone.withFrameNanos { now ->
+                if (now - lastNs < gapNs) {
+                    null
+                } else {
+                    lastNs = now
+                    Ran(onFrame(now))
+                }
+            }
+            if (ran != null) return ran.value
+        }
+    }
+
+    private class Ran<R>(val value: R)
 }

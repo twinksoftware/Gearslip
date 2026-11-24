@@ -220,6 +220,15 @@
             android:excludeFromRecents="true"
             android:theme="@style/Theme.Gearslip.Invisible" />
 
+        <!-- What the car needs of the phone without showing Gearslip: see CarPromptActivity. -->
+        <activity
+            android:name=".CarPromptActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|uiMode|density|locale|layoutDirection|fontScale" />
+
         <activity-alias
             android:name=".GearslipUsbAccessory"
             android:targetActivity=".GearslipActivity"
