@@ -165,6 +165,8 @@
     <string name="car_group_sound">Sound and voice</string>
     <string name="car_group_warnings">Warnings</string>
     <string name="car_group_more">More</string>
+    <string name="choice_size_xsmall">Extra small</string>
+    <string name="choice_size_small">Small</string>
     <string name="choice_size_normal">Normal</string>
     <string name="choice_size_large">Large</string>
     <string name="choice_size_xlarge">Extra large</string>
