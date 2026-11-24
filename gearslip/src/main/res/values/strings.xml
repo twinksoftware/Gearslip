@@ -737,6 +737,16 @@
     <string name="web_plain_http_stop">Don\'t warn for this site</string>
     <string name="web_plain_http_hide">Hide warning</string>
     <string name="launcher_phone_apps">Phone apps</string>
+    <string name="car_wallpaper">Apps page background</string>
+    <string name="car_wallpaper_note">Live weather shows the sky outside, with sun, clouds, rain, snow, fog or stars as they happen.</string>
+    <string name="choice_wallpaper_off">Off</string>
+    <string name="choice_wallpaper_photo">Photo</string>
+    <string name="choice_wallpaper_weather">Live weather</string>
+    <string name="car_wallpaper_light">Photo for light mode</string>
+    <string name="car_wallpaper_dark">Photo for dark mode</string>
+    <string name="car_wallpaper_none">None yet. Tap to pick one.</string>
+    <string name="car_wallpaper_chosen">Tap to change it.</string>
+    <string name="car_wallpaper_remove">Remove</string>
     <string name="native_app_failed">This app couldn\'t open on the car screen. Check that Shizuku is running, then try again.</string>
     <string name="shizuku_set_up">Set up with Shizuku</string>
     <string name="shizuku_working">Setting up…</string>

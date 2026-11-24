@@ -323,6 +323,8 @@ private fun GroupRows(group: CarGroup) {
             Choice(stringResource(R.string.car_map_day_night), nightChoices(), night, CarSettings::setNightMode)
             SettingsDivider()
             Choice(stringResource(R.string.car_units), unitChoices(), units, CarSettings::setUnits)
+            SettingsDivider()
+            WallpaperRows()
         }
         CarGroup.NAV_BAR -> {
             Choice(stringResource(R.string.car_nav_bar), navBarChoices(), navBar, CarSettings::setNavBarMode)
@@ -636,4 +638,62 @@ internal fun CarAudioSection() {
             trailing = { androidx.compose.material3.RadioButton(selected = usb, onClick = null) },
         )
     }
+}
+
+/** The Apps page background: off, the driver's photos, or the weather drawn live. */
+@Composable
+private fun WallpaperRows() {
+    val context = androidx.compose.ui.platform.LocalContext.current
+    androidx.compose.runtime.remember(context) { app.seb3thehacker.gearslip.car.CarWallpaper.init(context) }
+    val mode by app.seb3thehacker.gearslip.car.CarWallpaper.mode.collectAsState()
+    Choice(
+        stringResource(R.string.car_wallpaper),
+        listOf(
+            app.seb3thehacker.gearslip.car.CarWallpaper.Mode.OFF to stringResource(R.string.choice_wallpaper_off),
+            app.seb3thehacker.gearslip.car.CarWallpaper.Mode.PHOTO to stringResource(R.string.choice_wallpaper_photo),
+            app.seb3thehacker.gearslip.car.CarWallpaper.Mode.WEATHER to stringResource(R.string.choice_wallpaper_weather),
+        ),
+        mode,
+        { app.seb3thehacker.gearslip.car.CarWallpaper.setMode(context, it) },
+        note = stringResource(R.string.car_wallpaper_note),
+    )
+    if (mode == app.seb3thehacker.gearslip.car.CarWallpaper.Mode.PHOTO) {
+        SettingsDivider()
+        WallpaperPhotoRow(dark = false)
+        SettingsDivider()
+        WallpaperPhotoRow(dark = true)
+    }
+}
+
+@Composable
+private fun WallpaperPhotoRow(dark: Boolean) {
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val scope = androidx.compose.runtime.rememberCoroutineScope()
+    val version by app.seb3thehacker.gearslip.car.CarWallpaper.photos.collectAsState()
+    val chosen = androidx.compose.runtime.remember(version, dark) { app.seb3thehacker.gearslip.car.CarWallpaper.hasPhoto(context, dark) }
+    val pick = androidx.activity.compose.rememberLauncherForActivityResult(
+        androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia(),
+    ) { uri ->
+        if (uri != null) scope.launch(kotlinx.coroutines.Dispatchers.IO) {
+            app.seb3thehacker.gearslip.car.CarWallpaper.savePhoto(context, uri, dark)
+        }
+    }
+    SettingsRow(
+        stringResource(if (dark) R.string.car_wallpaper_dark else R.string.car_wallpaper_light),
+        Modifier.clickable {
+            pick.launch(
+                androidx.activity.result.PickVisualMediaRequest(
+                    androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia.ImageOnly,
+                ),
+            )
+        },
+        subtitle = stringResource(if (chosen) R.string.car_wallpaper_chosen else R.string.car_wallpaper_none),
+        trailing = if (chosen) {
+            {
+                androidx.compose.material3.TextButton(onClick = { app.seb3thehacker.gearslip.car.CarWallpaper.removePhoto(context, dark) }) {
+                    Text(stringResource(R.string.car_wallpaper_remove))
+                }
+            }
+        } else null,
+    )
 }

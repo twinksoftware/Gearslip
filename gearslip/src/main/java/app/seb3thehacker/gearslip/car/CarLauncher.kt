@@ -45,6 +45,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -344,6 +345,8 @@ fun CarLauncher() {
         onDispose { if (CarKeys.knobTaker === taker) CarKeys.knobTaker = null }
     }
 
+    Box(Modifier.fillMaxSize()) {
+    AppsWallpaper()
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 108.dp),
         state = gridState,
@@ -365,6 +368,50 @@ fun CarLauncher() {
             items(phoneApps, key = { "native:" + it.packageName }) { app ->
                 AppTile(Tile(app.label, app.icon) { navigator.open(NATIVE_APP_PREFIX + app.packageName) })
             }
+        }
+    }
+    }
+}
+
+/**
+ * Behind the Apps page's icons: the driver's photo for the car's light or dark mode, or the
+ * weather outside, drawn live. Nothing when the setting is off. A photo gets a light veil in the
+ * screen's own background colour, so section headings stay readable on a busy picture.
+ */
+@Composable
+private fun AppsWallpaper() {
+    val context = LocalContext.current
+    remember(context) { CarWallpaper.init(context) }
+    val mode by CarWallpaper.mode.collectAsState()
+    val background = MaterialTheme.colorScheme.background
+    val dark = background.luminance() < 0.5f
+    when (mode) {
+        CarWallpaper.Mode.OFF -> Unit
+        CarWallpaper.Mode.PHOTO -> {
+            val version by CarWallpaper.photos.collectAsState()
+            val photo by androidx.compose.runtime.produceState<ImageBitmap?>(null, dark, version) {
+                value = withContext(Dispatchers.IO) {
+                    // The other mode's photo stands in when only one has been picked.
+                    val file = CarWallpaper.file(context, dark).takeIf { it.isFile } ?: CarWallpaper.file(context, !dark)
+                    if (file.isFile) android.graphics.BitmapFactory.decodeFile(file.path)?.asImageBitmap() else null
+                }
+            }
+            photo?.let {
+                Image(it, contentDescription = null, modifier = Modifier.fillMaxSize(), contentScale = androidx.compose.ui.layout.ContentScale.Crop)
+                Box(Modifier.fillMaxSize().background(background.copy(alpha = 0.3f)))
+            }
+        }
+        CarWallpaper.Mode.WEATHER -> {
+            val weather by Weather.state.collectAsState()
+            LaunchedEffect(Unit) { Weather.refresh(context) }
+            val data = (weather as? WeatherState.Ready)?.data
+            val hour = remember { java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY) }
+            WeatherScene(
+                scene = data?.let { skySceneOf(it.code) } ?: SkyScene.CLEAR,
+                isDay = data?.isDay ?: (hour in 6..18),
+                dark = dark,
+                modifier = Modifier.fillMaxSize(),
+            )
         }
     }
 }
