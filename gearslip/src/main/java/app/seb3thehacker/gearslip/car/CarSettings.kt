@@ -85,6 +85,7 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
     private const val KEY_SEEN_SAFETY_WARNING = "car_seen_safety_warning"
     private const val KEY_UNITS = "car_units"
     private const val KEY_NAV_BAR = "car_nav_bar"
+    private const val KEY_MAP_CLEARANCE = "car_map_clearance"
     private const val KEY_SCREEN_SIZE = "car_screen_size"
     private const val KEY_SCREEN_FIT = "car_screen_fit"
     private const val KEY_PREVIEW_SIZE = "preview_size"
@@ -175,6 +176,18 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
     fun setNavBarMode(mode: NavBarMode) {
         navBarFlow.value = mode
         AppSettings.putString(app, KEY_NAV_BAR, mode.name)
+    }
+
+    /**
+     * A map app's surface ends above a nav bar set to show and beside the docked player, for a map
+     * app that puts its own buttons under them instead of inside the visible area. Off by default.
+     */
+    private val mapClearanceFlow = MutableStateFlow(false)
+    val mapClearance: StateFlow<Boolean> = mapClearanceFlow
+
+    fun setMapClearance(on: Boolean) {
+        mapClearanceFlow.value = on
+        AppSettings.putString(app, KEY_MAP_CLEARANCE, on.toString())
     }
 
 
@@ -441,6 +454,7 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
         navBarFlow.value = runCatching {
             NavBarMode.valueOf(AppSettings.getString(app, KEY_NAV_BAR, NavBarMode.SHOW.name))
         }.getOrDefault(NavBarMode.SHOW)
+        mapClearanceFlow.value = AppSettings.getString(app, KEY_MAP_CLEARANCE, "false") == "true"
         whatsNewFlow.value = AppSettings.getString(app, KEY_WHATS_NEW, "true") == "true"
         whatsNewSeenFlow.value = AppSettings.getString(app, KEY_WHATS_NEW_SEEN, "0").toIntOrNull() ?: 0
     }

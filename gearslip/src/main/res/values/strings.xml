@@ -217,6 +217,8 @@
     <string name="car_song_title">Song title</string>
     <string name="car_player_beside_map">Player beside the map</string>
     <string name="car_player_beside_map_note">The side of the map the player docks to when you tap its dock button.</string>
+    <string name="car_map_clearance">Keep maps clear of the nav bar and player</string>
+    <string name="car_map_clearance_note">Shrinks a map app\'s screen to the space the nav bar and player leave, for maps that put their own buttons under them.</string>
     <string name="car_right">Right</string>
     <string name="car_left">Left</string>
     <string name="car_autoplay">Autoplay on connect</string>

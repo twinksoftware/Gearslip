@@ -274,6 +274,7 @@ private fun GroupRows(group: CarGroup) {
     val night by CarSettings.nightMode.collectAsState()
     val units by CarSettings.units.collectAsState()
     val navBar by CarSettings.navBarMode.collectAsState()
+    val mapClearance by CarSettings.mapClearance.collectAsState()
     val pipeAudio by CarSettings.pipeAudio.collectAsState()
     val directionsOverMusic by CarSettings.directionsOverMusic.collectAsState()
     val speakDirections by CarSettings.speakDirections.collectAsState()
@@ -332,6 +333,8 @@ private fun GroupRows(group: CarGroup) {
             Choice(stringResource(R.string.car_player_nav_bar), listOf(false to stringResource(R.string.car_skip_buttons), true to stringResource(R.string.car_song_title)), playerTitle, CarSettings::setPlayerTitle)
             SettingsDivider()
             Choice(stringResource(R.string.car_player_beside_map), listOf(false to stringResource(R.string.car_right), true to stringResource(R.string.car_left)), playerLeft, CarSettings::setPlayerLeft, note = stringResource(R.string.car_player_beside_map_note))
+            SettingsDivider()
+            Toggle(stringResource(R.string.car_map_clearance), mapClearance, CarSettings::setMapClearance, note = stringResource(R.string.car_map_clearance_note))
             SettingsDivider()
             Toggle(stringResource(R.string.car_autoplay), autoplay, CarSettings::setAutoplay, note = stringResource(R.string.car_autoplay_note))
         }
