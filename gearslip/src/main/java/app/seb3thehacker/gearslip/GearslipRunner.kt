@@ -1264,9 +1264,9 @@ class GearslipRunner(
                     stretcher = stretch
                     if (stretch != null) {
                         drawSize = stretch.width to stretch.height
-                        projection.onSurfaceReady(stretch.input, stretch.width, stretch.height, config.density)
+                        projection.onSurfaceReady(stretch.input, stretch.width, stretch.height, config.density, videoFrameRate)
                     } else {
-                        projection.onSurfaceReady(surface, width, height, config.density)
+                        projection.onSurfaceReady(surface, width, height, config.density, videoFrameRate)
                     }
                     SessionStatus.projecting()
                     BluetoothAudioCheck.onProjecting()

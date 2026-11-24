@@ -234,7 +234,7 @@ class ConnectionLifecycleTest {
     @Test fun `touchpad reports are not injected as touchscreen taps`() {
         var touches = 0
         val projection = object : Projection {
-            override fun onSurfaceReady(surface: Surface, width: Int, height: Int, densityDpi: Int) = Unit
+            override fun onSurfaceReady(surface: Surface, width: Int, height: Int, densityDpi: Int, frameRate: Int) = Unit
             override fun onTouch(action: Int, actionIndex: Int, points: List<TouchPoint>) { touches++ }
             override fun onProjectionStopped() = Unit
         }
