@@ -153,6 +153,7 @@ fun SettingsScreen(
                 footer = stringResource(R.string.settings_support_footer),
             ) { DonateRows() }
             if (ready(2)) ConnectionSection()
+            if (ready(2)) ShizukuSection()
             if (SHOW_RECOMMENDED_APPS && ready(6)) AppsSection(onOpenRecommendedApps)
             if (ready(7)) SettingsSection(
                 stringResource(R.string.settings_usage_notes),

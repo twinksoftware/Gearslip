@@ -652,7 +652,10 @@ private fun WallpaperRows() {
             app.seb3thehacker.gearslip.car.CarWallpaper.Mode.OFF to stringResource(R.string.choice_wallpaper_off),
             app.seb3thehacker.gearslip.car.CarWallpaper.Mode.PHOTO to stringResource(R.string.choice_wallpaper_photo),
             app.seb3thehacker.gearslip.car.CarWallpaper.Mode.WEATHER to stringResource(R.string.choice_wallpaper_weather),
-        ),
+        ) + if (app.seb3thehacker.gearslip.BuildConfig.DEBUG) {
+            // Not translated: debug builds only, for checking every scene.
+            listOf(app.seb3thehacker.gearslip.car.CarWallpaper.Mode.DEMO to "Weather demo")
+        } else emptyList(),
         mode,
         { app.seb3thehacker.gearslip.car.CarWallpaper.setMode(context, it) },
         note = stringResource(R.string.car_wallpaper_note),

@@ -401,6 +401,26 @@ private fun AppsWallpaper() {
                 Box(Modifier.fillMaxSize().background(background.copy(alpha = 0.3f)))
             }
         }
+        CarWallpaper.Mode.DEMO -> {
+            // Every scene by day, then by night, two seconds each, named in the corner.
+            val steps = remember { listOf(true, false).flatMap { day -> SkyScene.entries.map { it to day } } }
+            var step by remember { mutableStateOf(0) }
+            LaunchedEffect(Unit) {
+                while (true) {
+                    kotlinx.coroutines.delay(2_000)
+                    step = (step + 1) % steps.size
+                }
+            }
+            val (scene, day) = steps[step]
+            WeatherScene(scene, day, dark, Modifier.fillMaxSize())
+            Text(
+                "${scene.name.lowercase().replace('_', ' ')} · ${if (day) "day" else "night"} · ${if (dark) "dark" else "light"} mode",
+                Modifier.fillMaxSize().padding(8.dp),
+                color = Color.White,
+                style = MaterialTheme.typography.labelLarge,
+                textAlign = TextAlign.End,
+            )
+        }
         CarWallpaper.Mode.WEATHER -> {
             val weather by Weather.state.collectAsState()
             LaunchedEffect(Unit) { Weather.refresh(context) }

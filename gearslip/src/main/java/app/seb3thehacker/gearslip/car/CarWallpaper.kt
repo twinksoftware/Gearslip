@@ -19,7 +19,8 @@ import kotlinx.coroutines.flow.StateFlow
  */
 object CarWallpaper {
 
-    enum class Mode { OFF, PHOTO, WEATHER }
+    /** [DEMO] steps through every weather scene, for checking them; debug builds only. */
+    enum class Mode { OFF, PHOTO, WEATHER, DEMO }
 
     private const val KEY_MODE = "car_wallpaper"
     private const val LIGHT = "wallpaper-light.jpg"
