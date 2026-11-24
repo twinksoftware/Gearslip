@@ -88,10 +88,19 @@ class AudioCaptureService : Service() {
         // Android silences the microphone for apps in the background unless a running service
         // claims it. Claiming it here lets voice replies hear the driver with the phone locked.
         // Without the permission, claiming it would crash, so it's left off.
+        // Android also refuses the claim while Gearslip is in the background, as when the car
+        // connects with the phone in a pocket, and that refusal crashed the app (issue #104).
+        // Then the capture starts without it, and only voice replies lose the microphone.
         val micGranted = checkSelfPermission(android.Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
-        val type = ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION or
-            (if (micGranted) ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE else 0)
-        startForeground(NOTIFICATION_ID, notification(), type)
+        val projectionOnly = ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION
+        val withMic = projectionOnly or ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE
+        try {
+            startForeground(NOTIFICATION_ID, notification(), if (micGranted) withMic else projectionOnly)
+        } catch (e: SecurityException) {
+            if (!micGranted) throw e
+            GearslipLog.w("audio: Android won't let Gearslip claim the microphone from the background, so voice replies can't hear the driver with the phone locked this drive")
+            startForeground(NOTIFICATION_ID, notification(), projectionOnly)
+        }
         ScreenShareGuard.lift(this)
         projection = try {
             getSystemService(MediaProjectionManager::class.java).getMediaProjection(resultCode, data)
