@@ -53,6 +53,10 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Warning
+import androidx.compose.foundation.layout.fillMaxWidth
+import app.seb3thehacker.gearslip.car.theme.GsButton
 
 /**
  * A browser inside the car UI. [content] is a URL, or raw HTML when it does not look like one;
@@ -178,6 +182,7 @@ fun WebApp(content: String) {
                 }
             }
         }
+        if (!fullscreen && !atStart) PlainHttpBanner(pageUrl)
         Box(Modifier.weight(1f).fillMaxSize()) {
         AndroidView(
             modifier = Modifier.fillMaxSize(),
@@ -309,6 +314,47 @@ fun WebApp(content: String) {
                     web?.evaluateJavascript(BLUR_FIELD_JS, null)
                 },
             )
+        }
+    }
+}
+
+/** Sites whose warning was hidden since Gearslip started, so it doesn't return on every page of them. */
+private val hiddenForNow = mutableStateOf(emptySet<String>())
+
+/**
+ * A strip under the header while the page came over plain http, which Gearslip opens so a home
+ * server like Jellyfin works on its local address (issue #121). Close hides it for that site until
+ * Gearslip next starts; the other button stops it for that site for good.
+ */
+@Composable
+private fun PlainHttpBanner(url: String?) {
+    val site = BrowserSettings.plainHttpSite(url) ?: return
+    val ok by BrowserSettings.plainHttpOk.collectAsState()
+    var hidden by hiddenForNow
+    if (site in ok || site in hidden) return
+    // The same yellow as the debug build's header, which reads as "careful" in both themes.
+    val ink = app.seb3thehacker.gearslip.ui.OnDebugYellow
+    val buttons = app.seb3thehacker.gearslip.car.theme.GsColors(ink.copy(alpha = 0.12f), ink)
+    androidx.compose.material3.Surface(
+        color = app.seb3thehacker.gearslip.ui.DebugYellow,
+        contentColor = ink,
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        androidx.compose.foundation.layout.Row(
+            Modifier.padding(start = 16.dp, end = 8.dp, top = 6.dp, bottom = 6.dp),
+            verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
+            horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(12.dp),
+        ) {
+            androidx.compose.material3.Icon(androidx.compose.material.icons.Icons.Filled.Warning, null, Modifier.size(24.dp))
+            androidx.compose.material3.Text(
+                stringResource(R.string.web_plain_http),
+                Modifier.weight(1f),
+                style = MaterialTheme.typography.bodyMedium,
+            )
+            GsButton({ BrowserSettings.stopPlainHttpWarning(site) }, colors = buttons) {
+                androidx.compose.material3.Text(stringResource(R.string.web_plain_http_stop))
+            }
+            GsIconButton(androidx.compose.material.icons.Icons.Filled.Close, stringResource(R.string.web_plain_http_hide), { hidden = hidden + site }, colors = buttons)
         }
     }
 }

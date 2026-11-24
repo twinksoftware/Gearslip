@@ -733,6 +733,9 @@
     <string name="web_search">Search or type an address</string>
     <string name="web_forward">Forward</string>
     <string name="web_reload">Reload</string>
+    <string name="web_plain_http">This page isn\'t encrypted. Anyone on the same network can see what you send it.</string>
+    <string name="web_plain_http_stop">Don\'t warn for this site</string>
+    <string name="web_plain_http_hide">Hide warning</string>
     <string name="web_start_page">Start page</string>
     <string name="web_fullscreen">Full screen</string>
 

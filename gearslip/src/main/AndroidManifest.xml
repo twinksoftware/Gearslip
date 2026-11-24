@@ -130,8 +130,13 @@
     </intent>
 </queries>
 
+<!--
+  Plain http is allowed so the car browser can open a home server on its local address, such as
+  Jellyfin (issue #121). The browser warns on those pages; Gearslip's own requests use https.
+-->
 <application
         android:allowBackup="false"
+        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher"
         android:label="${appLabel}"

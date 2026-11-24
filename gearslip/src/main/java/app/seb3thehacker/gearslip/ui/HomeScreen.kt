@@ -153,7 +153,7 @@ fun HomeScreen(
 
 /** Debug builds wear a yellow header, behind the status bar too, so they're never mistaken for a release install. */
 internal val DebugYellow = Color(0xFFF5C518)
-private val OnDebugYellow = Color(0xFF2A2200)
+internal val OnDebugYellow = Color(0xFF2A2200)
 
 /** The app's name, version and Settings, fixed above Home's scrolling cards. */
 @Composable

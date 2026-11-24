@@ -48,6 +48,7 @@ object BrowserSettings {
     private const val KEY_LISTS_OFF = "adblock_lists_off"
     private const val KEY_CUSTOM_LISTS = "adblock_custom_lists"
     private const val KEY_LAST_CHECK = "adblock_last_check"
+    private const val KEY_PLAIN_HTTP_OK = "plain_http_ok"
 
     /** The lists Gearslip ships a snapshot of, on unless turned off. */
     val BUILT_IN_LISTS = listOf(
@@ -66,12 +67,16 @@ object BrowserSettings {
     private val adBlockFlow = MutableStateFlow(true)
     private val youTubeFlow = MutableStateFlow(true)
     private val listsFlow = MutableStateFlow(BUILT_IN_LISTS)
+    private val plainHttpOkFlow = MutableStateFlow<Set<String>>(emptySet())
 
     val bookmarks: StateFlow<List<Bookmark>> = bookmarksFlow
     val searchEngine: StateFlow<SearchEngine> = searchFlow
     val adBlock: StateFlow<Boolean> = adBlockFlow
     val youTubeAdBlock: StateFlow<Boolean> = youTubeFlow
     val filterLists: StateFlow<List<FilterList>> = listsFlow
+
+    /** Sites the driver opened over plain http and asked not to be warned about again. */
+    val plainHttpOk: StateFlow<Set<String>> = plainHttpOkFlow
 
     @Volatile private var prefs: SharedPreferences? = null
 
@@ -86,6 +91,7 @@ object BrowserSettings {
             adBlockFlow.value = p.getBoolean(KEY_ADBLOCK, true)
             youTubeFlow.value = p.getBoolean(KEY_YOUTUBE, true)
             listsFlow.value = readLists(p)
+            plainHttpOkFlow.value = p.getStringSet(KEY_PLAIN_HTTP_OK, emptySet()).orEmpty().toSet()
             prefs = p
         }
     }
@@ -133,6 +139,25 @@ object BrowserSettings {
         (0 until array.length()).map { array.getJSONObject(it) }.map { Bookmark(it.optString("title"), it.optString("url")) }
             .filter { it.url.isNotEmpty() }
     }.getOrDefault(emptyList())
+
+    // Plain http
+
+    /**
+     * The site a plain http page belongs to, as the warning remembers it: host and port, since a
+     * home server often runs several apps on one address. Null for anything not plain http.
+     */
+    fun plainHttpSite(url: String?): String? {
+        if (url == null || !url.startsWith("http://")) return null
+        val uri = runCatching { android.net.Uri.parse(url) }.getOrNull() ?: return null
+        val host = uri.host?.lowercase()?.takeIf { it.isNotEmpty() } ?: return null
+        return if (uri.port > 0) "$host:${uri.port}" else host
+    }
+
+    fun stopPlainHttpWarning(site: String) {
+        val set = plainHttpOkFlow.value + site
+        plainHttpOkFlow.value = set
+        prefs?.edit()?.putStringSet(KEY_PLAIN_HTTP_OK, set)?.apply()
+    }
 
     // Search
 
