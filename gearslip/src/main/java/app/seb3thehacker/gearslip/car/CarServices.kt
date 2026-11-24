@@ -2,6 +2,7 @@ package app.seb3thehacker.gearslip.car
 
 import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import android.media.session.MediaController
 import android.media.session.MediaSessionManager
 import android.media.session.PlaybackState
@@ -9,6 +10,7 @@ import app.seb3thehacker.gearslip.audio.CarAudio
 import app.seb3thehacker.gearslip.host.CarAppCatalog
 import app.seb3thehacker.gearslip.host.CarAppConnection
 import app.seb3thehacker.gearslip.host.KnownApps
+import app.seb3thehacker.gearslip.host.LocationKeepAlive
 import app.seb3thehacker.gearslip.host.TemplateApp
 import app.seb3thehacker.gearslip.media.CarMedia
 import app.seb3thehacker.gearslip.media.MediaApp
@@ -341,6 +343,12 @@ object CarServices {
     fun shutdown() {
         context?.let { app.seb3thehacker.gearslip.notify.CarMotion.stop(it) }
         app.seb3thehacker.gearslip.call.CarCalls.stop()
+        // Force-stop the location keep-alive: the car is gone, so no nav app can hold it.
+        try {
+            context?.stopService(Intent(context, LocationKeepAlive::class.java))
+        } catch (t: Throwable) {
+            app.seb3thehacker.gearslip.GearslipLog.w("shutdown: could not stop location keep-alive", "")
+        }
         runCatching { nav.disconnect() }
         runCatching { media.disconnect() }
         runCatching { browse.disconnect() }
