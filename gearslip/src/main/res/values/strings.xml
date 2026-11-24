@@ -342,6 +342,7 @@
     <string name="about_open_wallet">Open in wallet</string>
     <string name="about_copy_address">Copy address</string>
     <string name="close">Close</string>
+    <string name="media_item_actions">More for %1$s</string>
     <string name="about_matrix">Join the chat on Matrix</string>
     <string name="about_matrix_sub">Talk with other drivers about cars, apps, and Gearslip</string>
     <string name="about_translate">Help translate Gearslip</string>

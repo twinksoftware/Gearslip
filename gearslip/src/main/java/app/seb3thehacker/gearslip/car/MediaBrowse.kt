@@ -55,6 +55,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.PathFillType
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.addPathNodes
@@ -85,20 +86,9 @@ internal fun BrowsePanel(browse: app.seb3thehacker.gearslip.media.BrowseState, m
         // At the library root there's no trail and nowhere to go up to, so there's nothing this
         // row could say that the app's name in the top-left corner hasn't already - showing it
         // again here (as "Browse", or as the app's own name) was just the same label twice.
-        if (media.canGoUp || browse.trail.isNotEmpty()) {
-            Row(Modifier.padding(bottom = 12.dp), verticalAlignment = Alignment.CenterVertically) {
-                if (media.canGoUp) {
-                    GsIconButton(Icons.Filled.ArrowBack, stringResource(R.string.media_up), media::up, size = 44.dp, shape = CircleShape)
-                    Spacer(Modifier.width(14.dp))
-                }
-                browse.trail.lastOrNull()?.let {
-                    Text(
-                        it,
-                        style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold,
-                        maxLines = 1, overflow = TextOverflow.Ellipsis,
-                    )
-                }
-            }
+        // A short screen has it in the media screen's own header instead.
+        if (!LocalShortScreen.current && (media.canGoUp || browse.trail.isNotEmpty())) {
+            BrowseUp(browse, media, Modifier.padding(bottom = 12.dp))
         }
         when {
             browse.loading -> Notice(stringResource(R.string.media_loading), null)
@@ -113,6 +103,24 @@ internal fun BrowsePanel(browse: app.seb3thehacker.gearslip.media.BrowseState, m
     }
 }
 
+/** The way back up out of a folder, and the folder's name. */
+@Composable
+internal fun BrowseUp(browse: app.seb3thehacker.gearslip.media.BrowseState, media: CarMedia, modifier: Modifier = Modifier) {
+    Row(modifier, verticalAlignment = Alignment.CenterVertically) {
+        if (media.canGoUp) {
+            GsIconButton(Icons.Filled.ArrowBack, stringResource(R.string.media_up), media::up, size = 44.dp, shape = CircleShape)
+            Spacer(Modifier.width(14.dp))
+        }
+        browse.trail.lastOrNull()?.let {
+            Text(
+                it,
+                style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold,
+                maxLines = 1, overflow = TextOverflow.Ellipsis,
+            )
+        }
+    }
+}
+
 /**
  * A list laid out the way the app asked: under its section headings, covers where it asked for a
  * grid and rows everywhere else. A grid section among others is a shelf that scrolls sideways; a
@@ -123,6 +131,10 @@ private fun BrowseList(entries: List<MediaEntry>, media: CarMedia) {
     // A list's keys must be unique, and some apps list the same item twice (Music Assistant's
     // playlists, issue #90): the repeat would do the same thing anyway, so it's dropped.
     val sections = remember(entries) { browseSections(entries.distinctBy { it.id }) }
+    if (LocalShortScreen.current) {
+        BrowseGrid(sections, media)
+        return
+    }
     BoxWithConstraints(Modifier.fillMaxSize()) {
         val onlyGrid = sections.size == 1 && sections[0].grid && sections[0].heading == null
         val columns = ((maxWidth + SHELF_GAP) / (SHELF_COVER + SHELF_GAP)).toInt().coerceAtLeast(2)
@@ -161,6 +173,68 @@ private fun BrowseList(entries: List<MediaEntry>, media: CarMedia) {
         }
     }
 }
+
+/**
+ * The browse list for a short screen, where a list showed three rows and a shelf of covers one:
+ * every entry is a button with a small cover, as many across as fit, under the app's headings.
+ */
+@Composable
+private fun BrowseGrid(sections: List<BrowseSection>, media: CarMedia) {
+    androidx.compose.foundation.lazy.grid.LazyVerticalGrid(
+        columns = androidx.compose.foundation.lazy.grid.GridCells.Adaptive(GRID_BUTTON_WIDTH),
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(bottom = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        sections.forEachIndexed { i, section ->
+            val heading = section.heading
+            if (heading != null && sections.getOrNull(i - 1)?.heading != heading) {
+                item(key = "heading $i", span = { androidx.compose.foundation.lazy.grid.GridItemSpan(maxLineSpan) }) {
+                    Text(
+                        heading,
+                        style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold,
+                        maxLines = 1, overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.padding(top = if (i == 0) 0.dp else 4.dp),
+                    )
+                }
+            }
+            items(section.entries.size, key = { section.entries[it].id }) { EntryButton(section.entries[it], media) }
+        }
+    }
+}
+
+/** One entry as a button in [BrowseGrid]: its cover, its name, and play for a folder that plays. */
+@Composable
+private fun EntryButton(entry: MediaEntry, media: CarMedia) {
+    val context = LocalContext.current
+    val icon by produceState(entry.iconBitmap, entry.iconUri) {
+        value = entry.iconBitmap ?: MediaArt.load(context, entry.iconUri)
+    }
+    Surface(
+        onClick = { media.select(entry) },
+        shape = MaterialTheme.shapes.large,
+        color = MaterialTheme.colorScheme.surfaceContainer,
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Row(Modifier.padding(6.dp), verticalAlignment = Alignment.CenterVertically) {
+            RowArt(icon, if (entry.browsable) MediaIcons.Folder else MediaIcons.MusicNote, size = 44.dp)
+            Column(Modifier.weight(1f).padding(horizontal = 10.dp)) {
+                Text(entry.title, style = MaterialTheme.typography.titleSmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                if (entry.subtitle.isNotEmpty()) {
+                    Text(entry.subtitle, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                }
+            }
+            rememberItemMenu(entry.title, entry.id, entry.actions)?.let { ItemMenuButton(it, size = 40.dp) }
+            if (entry.browsable && entry.playable) {
+                GsIconButton(Icons.Filled.PlayArrow, stringResource(R.string.media_play), { media.playAll(entry) }, size = 40.dp)
+            }
+        }
+    }
+}
+
+/** The narrowest a button in [BrowseGrid] gets before it gives up a column. */
+private val GRID_BUTTON_WIDTH = 220.dp
 
 private val SHELF_COVER = 132.dp
 private val SHELF_GAP = 14.dp
@@ -206,6 +280,9 @@ private fun CoverTile(entry: MediaEntry, media: CarMedia, modifier: Modifier) {
                     if (entry.browsable) MediaIcons.Folder else MediaIcons.MusicNote, null,
                     tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.fillMaxSize(0.35f),
                 )
+            rememberItemMenu(entry.title, entry.id, entry.actions)?.let {
+                Box(Modifier.align(Alignment.TopEnd).padding(4.dp)) { ItemMenuButton(it, size = 36.dp) }
+            }
         }
         Text(
             entry.title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold,
@@ -243,7 +320,7 @@ internal fun QueuePanel(queue: List<QueueTrack>, now: NowPlaying, media: CarMedi
             LazyColumn(
                 Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(bottom = 8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(if (LocalShortScreen.current) 4.dp else 8.dp),
             ) {
                 items(upNext.distinctBy { it.queueId }, key = { it.queueId }) { track -> QueueRow(track, media) }
             }
@@ -257,21 +334,128 @@ private fun QueueRow(track: QueueTrack, media: CarMedia) {
     val icon by produceState(track.iconBitmap, track.iconUri) {
         value = track.iconBitmap ?: MediaArt.load(context, track.iconUri)
     }
+    // A short screen showed two and a half rows; slimmer ones show four or five.
+    val short = LocalShortScreen.current
     Surface(
         onClick = { media.playQueueItem(track) },
         shape = MaterialTheme.shapes.large,
         color = MaterialTheme.colorScheme.surfaceContainer,
         modifier = Modifier.fillMaxWidth(),
     ) {
-        Row(Modifier.padding(8.dp), verticalAlignment = Alignment.CenterVertically) {
-            RowArt(icon, MediaIcons.MusicNote)
-            Column(Modifier.weight(1f).padding(horizontal = 14.dp)) {
-                Text(track.title, style = MaterialTheme.typography.titleMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
+        Row(Modifier.padding(if (short) 4.dp else 8.dp), verticalAlignment = Alignment.CenterVertically) {
+            RowArt(icon, MediaIcons.MusicNote, size = if (short) 40.dp else 56.dp)
+            Column(Modifier.weight(1f).padding(horizontal = if (short) 10.dp else 14.dp)) {
+                Text(track.title, style = if (short) MaterialTheme.typography.titleSmall else MaterialTheme.typography.titleMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 if (track.subtitle.isNotEmpty()) {
-                    Text(track.subtitle, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Text(track.subtitle, style = if (short) MaterialTheme.typography.bodySmall else MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
             }
+            rememberItemMenu(track.title, track.mediaId, track.actions)?.let {
+                ItemMenuButton(it)
+                Spacer(Modifier.width(8.dp))
+            }
             Icon(Icons.Filled.PlayArrow, stringResource(R.string.media_play), tint = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+    }
+}
+
+/** An item the app offers its own actions on, as [ItemMenu] shows them. */
+internal class ItemMenuTarget(val title: String, val mediaId: String, val actions: List<app.seb3thehacker.gearslip.media.ItemAction>)
+
+/** Opens [ItemMenu] for an item; the media screen that draws the menu provides it. */
+internal val LocalItemMenu = androidx.compose.runtime.compositionLocalOf<(ItemMenuTarget) -> Unit> { {} }
+
+/** The connected app's [CarMedia.itemActions], read once by the media screen for all its rows. */
+internal val LocalItemActions = androidx.compose.runtime.compositionLocalOf<Map<String, app.seb3thehacker.gearslip.media.ItemAction>> { emptyMap() }
+
+/**
+ * The app's own actions on [mediaId] from [ids], or null when it offers none: what a row's More
+ * button opens.
+ */
+@Composable
+private fun rememberItemMenu(title: String, mediaId: String?, ids: List<String>): ItemMenuTarget? {
+    val offered = LocalItemActions.current
+    if (mediaId.isNullOrEmpty() || ids.isEmpty()) return null
+    val actions = ids.mapNotNull { offered[it] }
+    return if (actions.isEmpty()) null else ItemMenuTarget(title, mediaId, actions)
+}
+
+/** The button that opens an item's [ItemMenu]. */
+@Composable
+private fun ItemMenuButton(target: ItemMenuTarget, size: androidx.compose.ui.unit.Dp = 44.dp) {
+    val open = LocalItemMenu.current
+    GsIconButton(Icons.Filled.MoreVert, stringResource(R.string.media_item_actions, target.title), { open(target) }, size = size)
+}
+
+/**
+ * An item's own actions from the app, such as Play next, over the media screen. Two to a row on a
+ * short screen, so four fit its height. Tapping one runs it and closes the menu.
+ */
+@Composable
+internal fun ItemMenu(target: ItemMenuTarget, media: CarMedia, onDismiss: () -> Unit) {
+    val context = LocalContext.current
+    val short = LocalShortScreen.current
+    Box(
+        Modifier
+            .fillMaxSize()
+            .background(androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.5f))
+            .clickable(
+                interactionSource = remember { androidx.compose.foundation.interaction.MutableInteractionSource() },
+                indication = null,
+                onClick = onDismiss,
+            ),
+        contentAlignment = Alignment.Center,
+    ) {
+        Surface(
+            shape = RoundedCornerShape(24.dp),
+            color = MaterialTheme.colorScheme.surfaceContainerHigh,
+            // Swallows taps on the card itself, so only the scrim around it dismisses.
+            modifier = Modifier
+                .widthIn(max = if (short) 560.dp else 420.dp)
+                .clickable(
+                    interactionSource = remember { androidx.compose.foundation.interaction.MutableInteractionSource() },
+                    indication = null,
+                    onClick = {},
+                ),
+        ) {
+            Column(
+                Modifier.padding(if (short) 14.dp else 20.dp).verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(if (short) 8.dp else 12.dp),
+            ) {
+                Text(
+                    target.title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold,
+                    maxLines = 1, overflow = TextOverflow.Ellipsis,
+                )
+                target.actions.chunked(if (short) 2 else 1).forEach { row ->
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        row.forEach { action ->
+                            val icon by produceState<android.graphics.Bitmap?>(null, action.iconUri) {
+                                value = MediaArt.load(context, action.iconUri)
+                            }
+                            GsButton(
+                                onClick = {
+                                    media.runItemAction(action, target.mediaId)
+                                    onDismiss()
+                                },
+                                tone = GsTone.Tonal,
+                                modifier = Modifier.weight(1f).height(if (short) 52.dp else 56.dp),
+                            ) {
+                                icon?.let {
+                                    Icon(it.asImageBitmap(), null, Modifier.size(22.dp))
+                                    Spacer(Modifier.width(10.dp))
+                                }
+                                Text(action.label, style = MaterialTheme.typography.titleMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                            }
+                        }
+                        if (row.size == 1 && short) Spacer(Modifier.weight(1f))
+                    }
+                }
+                GsButton(
+                    onClick = onDismiss,
+                    tone = GsTone.Neutral,
+                    modifier = Modifier.fillMaxWidth().height(if (short) 52.dp else 56.dp),
+                ) { Text(stringResource(R.string.cancel), style = MaterialTheme.typography.titleMedium) }
+            }
         }
     }
 }
@@ -299,6 +483,7 @@ internal fun EntryRow(entry: MediaEntry, media: CarMedia, onClick: () -> Unit = 
             if (entry.browsable && entry.playable) {
                 GsIconButton(Icons.Filled.PlayArrow, stringResource(R.string.media_play), { media.playAll(entry) })
             }
+            rememberItemMenu(entry.title, entry.id, entry.actions)?.let { ItemMenuButton(it) }
             if (entry.browsable) Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, null)
         }
     }
@@ -306,13 +491,13 @@ internal fun EntryRow(entry: MediaEntry, media: CarMedia, onClick: () -> Unit = 
 
 /** A row's artwork, or a folder or note in its place when the app sends none. */
 @Composable
-private fun RowArt(icon: android.graphics.Bitmap?, fallback: ImageVector) {
+private fun RowArt(icon: android.graphics.Bitmap?, fallback: ImageVector, size: androidx.compose.ui.unit.Dp = 56.dp) {
     Box(
-        Modifier.size(56.dp).clip(RoundedCornerShape(12.dp)).background(MaterialTheme.colorScheme.surfaceContainerHigh),
+        Modifier.size(size).clip(RoundedCornerShape(size * 12 / 56)).background(MaterialTheme.colorScheme.surfaceContainerHigh),
         contentAlignment = Alignment.Center,
     ) {
         if (icon != null) Image(icon.asImageBitmap(), null, Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
-        else Icon(fallback, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(30.dp))
+        else Icon(fallback, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(size * 30 / 56))
     }
 }
 
