@@ -413,26 +413,40 @@ private fun AppsWallpaper() {
             }
             val (scene, day) = steps[step]
             WeatherScene(scene, day, dark, Modifier.fillMaxSize())
-            Text(
-                "${scene.name.lowercase().replace('_', ' ')} · ${if (day) "day" else "night"} · ${if (dark) "dark" else "light"} mode",
-                Modifier.fillMaxSize().padding(8.dp),
-                color = Color.White,
-                style = MaterialTheme.typography.labelLarge,
-                textAlign = TextAlign.End,
-            )
+            SkyIcon(codeOf(scene), day)
+            Box(Modifier.fillMaxSize().padding(8.dp), contentAlignment = Alignment.BottomStart) {
+                Text(
+                    "${scene.name.lowercase().replace('_', ' ')} · ${if (day) "day" else "night"} · ${if (dark) "dark" else "light"} mode",
+                    color = Color.White,
+                    style = MaterialTheme.typography.titleMedium,
+                )
+            }
         }
         CarWallpaper.Mode.WEATHER -> {
             val weather by Weather.state.collectAsState()
             LaunchedEffect(Unit) { Weather.refresh(context) }
             val data = (weather as? WeatherState.Ready)?.data
             val hour = remember { java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY) }
+            val isDay = data?.isDay ?: (hour in 6..18)
             WeatherScene(
                 scene = data?.let { skySceneOf(it.code) } ?: SkyScene.CLEAR,
-                isDay = data?.isDay ?: (hour in 6..18),
+                isDay = isDay,
                 dark = dark,
                 modifier = Modifier.fillMaxSize(),
             )
+            data?.let { SkyIcon(it.code, isDay) }
         }
+    }
+}
+
+/**
+ * The conditions' animated icon, large, in the bottom corner: the grid fills from the top, so
+ * that's the corner most often left clear.
+ */
+@Composable
+private fun SkyIcon(code: Int, isDay: Boolean) {
+    Box(Modifier.fillMaxSize().padding(bottom = 8.dp, end = 24.dp), contentAlignment = Alignment.BottomEnd) {
+        WeatherIcon(code, isDay, size = 150.dp, animate = true)
     }
 }
 

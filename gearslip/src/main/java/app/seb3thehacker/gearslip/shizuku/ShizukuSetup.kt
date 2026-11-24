@@ -77,13 +77,15 @@ object ShizukuSetup {
     fun refresh() {
         val context = appContext ?: return
         _granted.value = hasProjectMedia(context) && hasSecureSettings(context)
-        _state.value = when {
+        val now = when {
             !installed(context) -> State.MISSING
             !runCatching { Shizuku.pingBinder() }.getOrDefault(false) -> State.STOPPED
             runCatching { Shizuku.checkSelfPermission() }.getOrDefault(PackageManager.PERMISSION_DENIED) !=
                 PackageManager.PERMISSION_GRANTED -> State.NEEDS_PERMISSION
             else -> State.READY
         }
+        if (now != _state.value) log.i("Shizuku is now ${now.name.lowercase().replace('_', ' ')}")
+        _state.value = now
     }
 
     /** The button: asks Shizuku for permission if needed, then does both steps. */

@@ -41,7 +41,9 @@ internal const val NATIVE_APP_PREFIX = "native:"
 fun NativePhoneAppScreen(packageName: String) {
     val context = LocalContext.current
     val navigator = LocalCarNavigator.current
-    val density = CarEnvironment.frame.value.densityDpi
+    // The car UI's own pixel density, so a phone app comes out the same size as Gearslip's own
+    // screens. The frame's density alone read far too small in the phone's larger preview.
+    val density = (androidx.compose.ui.platform.LocalDensity.current.density * 160).toInt()
     var displayId by remember { mutableStateOf(-1) }
     var failed by remember { mutableStateOf(false) }
     val log = remember { GearslipLog.tagged("phone-app") }

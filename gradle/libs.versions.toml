@@ -20,6 +20,7 @@ ossLicenses = "17.5.1"
 webkit = "1.16.0"
 androidxMedia = "1.6.0"
 shizuku = "13.1.5"
+lottie = "6.7.1"
 
 [libraries]
 maplibre-android = { group = "org.maplibre.gl", name = "android-sdk", version.ref = "maplibre" }
@@ -57,6 +58,8 @@ google-oss-licenses = { group = "com.google.android.gms", name = "play-services-
 androidx-webkit = { group = "androidx.webkit", name = "webkit", version.ref = "webkit" }
 # Optional extras for drivers who run Shizuku: adb-level setup steps done from the phone.
 shizuku-api = { group = "dev.rikka.shizuku", name = "api", version.ref = "shizuku" }
+# Plays the Meteocons weather icons (MIT), which ship as Lottie files.
+lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie" }
 shizuku-provider = { group = "dev.rikka.shizuku", name = "provider", version.ref = "shizuku" }
 
 [plugins]

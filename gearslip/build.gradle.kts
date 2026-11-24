@@ -205,6 +205,8 @@ dependencies {
     // Shizuku, Apache 2.0. Optional: everything works without it, it only skips setup steps.
     implementation(libs.shizuku.api)
     implementation(libs.shizuku.provider)
+    // Lottie, Apache 2.0: plays the animated Meteocons weather icons in assets/meteocons (MIT).
+    implementation(libs.lottie.compose)
     testImplementation(libs.junit)
 }
 

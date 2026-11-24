@@ -65,7 +65,7 @@ private fun Forecast(w: WeatherData) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(24.dp),
         ) {
-            WeatherIcon(w.code, w.isDay, size = 88.dp)
+            WeatherIcon(w.code, w.isDay, size = 88.dp, animate = true)
             Column {
                 Text("${w.temp}${w.tempUnit}", fontSize = 56.sp, fontWeight = FontWeight.Bold)
                 Text(Weather.condition(w.code), style = MaterialTheme.typography.titleLarge)

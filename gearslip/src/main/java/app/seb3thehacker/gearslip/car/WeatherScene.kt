@@ -44,6 +44,25 @@ fun skySceneOf(code: Int): SkyScene = when (code) {
  */
 @Composable
 fun WeatherScene(scene: SkyScene, isDay: Boolean, dark: Boolean, modifier: Modifier = Modifier) {
+    if (shaderSkyAvailable) ShaderWeatherScene(scene, isDay, dark, modifier)
+    else CanvasWeatherScene(scene, isDay, dark, modifier)
+}
+
+/** A WMO code that stands for [scene], for the demo's weather icon. */
+fun codeOf(scene: SkyScene): Int = when (scene) {
+    SkyScene.CLEAR -> 0
+    SkyScene.PARTLY_CLOUDY -> 2
+    SkyScene.OVERCAST -> 3
+    SkyScene.FOG -> 45
+    SkyScene.DRIZZLE -> 53
+    SkyScene.RAIN -> 63
+    SkyScene.SNOW -> 73
+    SkyScene.STORM -> 95
+}
+
+/** Android 12's version: the same scenes drawn shape by shape, without the graphics chip's help. */
+@Composable
+private fun CanvasWeatherScene(scene: SkyScene, isDay: Boolean, dark: Boolean, modifier: Modifier = Modifier) {
     val time = remember { mutableFloatStateOf(0f) }
     LaunchedEffect(Unit) {
         val start = withFrameNanos { it }

@@ -3,6 +3,7 @@ package app.seb3thehacker.gearslip.car
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -23,9 +24,55 @@ private val RAIN = Color(0xFF29B6F6)
 private val SNOW = Color(0xFF81D4FA)
 private val BOLT = Color(0xFFFFD54F)
 
-/** Sun, moon, cloud, rain, snow, storm or fog for a WMO weather code. Drawn, so it needs no icon pack. */
+/**
+ * The weather for a WMO code, as a Meteocons icon (MIT, by Bas Milius, in assets/meteocons).
+ * [animate] plays it on a loop; otherwise it holds one frame. Keep animation to one big icon per
+ * screen: a moving picture makes Gearslip send the car new video frames nonstop.
+ */
 @Composable
-fun WeatherIcon(code: Int, isDay: Boolean, size: Dp = 28.dp, modifier: Modifier = Modifier) {
+fun WeatherIcon(code: Int, isDay: Boolean, size: Dp = 28.dp, modifier: Modifier = Modifier, animate: Boolean = false) {
+    val composition by com.airbnb.lottie.compose.rememberLottieComposition(
+        com.airbnb.lottie.compose.LottieCompositionSpec.Asset("meteocons/${meteocon(code, isDay)}.json"),
+    )
+    val loaded = composition
+    if (loaded == null) {
+        DrawnWeatherIcon(code, isDay, size, modifier)
+        return
+    }
+    if (animate) {
+        com.airbnb.lottie.compose.LottieAnimation(
+            loaded, modifier.size(size), iterations = com.airbnb.lottie.compose.LottieConstants.IterateForever,
+        )
+    } else {
+        // A frame from the middle, where every part of the icon is on screen.
+        com.airbnb.lottie.compose.LottieAnimation(loaded, { 0.5f }, modifier.size(size))
+    }
+}
+
+/** The Meteocons icon for a WMO weather code, by day or by night. */
+internal fun meteocon(code: Int, isDay: Boolean): String {
+    val time = if (isDay) "day" else "night"
+    return when (code) {
+        0, 1 -> "clear-$time"
+        2 -> "partly-cloudy-$time"
+        3 -> "overcast-$time"
+        45, 48 -> "fog-$time"
+        51, 53, 55 -> "drizzle"
+        56, 57, 66, 67 -> "sleet"
+        61, 63 -> "overcast-$time-rain"
+        65 -> "rain"
+        71, 73, 75, 77 -> "snow"
+        80, 81, 82 -> "partly-cloudy-$time-rain"
+        85, 86 -> "partly-cloudy-$time-snow"
+        95 -> "thunderstorms-$time"
+        96, 99 -> "thunderstorms-$time-hail"
+        else -> "overcast-$time"
+    }
+}
+
+/** Gearslip's own drawn icons, for the moment before the Meteocons file has loaded. */
+@Composable
+private fun DrawnWeatherIcon(code: Int, isDay: Boolean, size: Dp, modifier: Modifier) {
     Canvas(modifier.size(size)) {
         when (code) {
             0 -> if (isDay) sun(center, this.size.minDimension * 0.5f) else moon(center, this.size.minDimension * 0.5f)
