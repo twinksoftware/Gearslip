@@ -313,6 +313,9 @@ fun CarLauncher() {
     val appOrder by CarSettings.appOrder.collectAsState()
     val hidden by CarSettings.hiddenApps.collectAsState()
     val tiles = launcherOrder(all, showVehicleData, appOrder, hidden).map(::tileOf)
+    val shizukuReady = app.seb3thehacker.gearslip.shizuku.ShizukuSetup.state.collectAsState().value ==
+        app.seb3thehacker.gearslip.shizuku.ShizukuSetup.State.READY
+    val phoneApps = rememberPhoneApps(shizukuReady)
 
     // With the knob, the first move on this screen lands on the app opened last rather than on
     // the first button anywhere on screen (issue #74). After that the knob moves as usual, out to
@@ -350,7 +353,37 @@ fun CarLauncher() {
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         itemsIndexed(tiles) { i, tile -> AppTile(tile, if (i == lastIndex) Modifier.focusRequester(lastFocus) else Modifier) }
+        if (shizukuReady && phoneApps.isNotEmpty()) {
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                Text(
+                    stringResource(R.string.launcher_phone_apps),
+                    Modifier.padding(top = 12.dp, start = 4.dp),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                )
+            }
+            items(phoneApps, key = { "native:" + it.packageName }) { app ->
+                AppTile(Tile(app.label, app.icon) { navigator.open(NATIVE_APP_PREFIX + app.packageName) })
+            }
+        }
     }
+}
+
+/**
+ * Every phone app, for the launcher's Phone apps section (issue #124). Empty until Shizuku is
+ * running and allowed, since only Shizuku can put them on the car screen.
+ */
+@Composable
+private fun rememberPhoneApps(ready: Boolean): List<app.seb3thehacker.gearslip.mirror.PhoneApp> {
+    val context = LocalContext.current
+    val apps by androidx.compose.runtime.produceState(app.seb3thehacker.gearslip.mirror.PhoneApps.cached().orEmpty(), ready) {
+        if (ready && value.isEmpty()) {
+            value = withContext(Dispatchers.IO) {
+                app.seb3thehacker.gearslip.mirror.PhoneApps.installed(context).also { app.seb3thehacker.gearslip.mirror.PhoneApps.warm(context) }
+            }
+        }
+    }
+    return if (ready) apps else emptyList()
 }
 
 /** A red disc with a white X: marks a tile known not to work with Gearslip yet. */

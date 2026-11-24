@@ -44,7 +44,14 @@ object CarApps {
         },
     )
 
-    fun find(id: String): CarApp? = all.firstOrNull { it.id == id }
+    fun find(id: String): CarApp? = all.firstOrNull { it.id == id } ?: nativeApp(id)
+
+    /** A phone app shown through Shizuku, known by [NATIVE_APP_PREFIX] and its package (issue #124). */
+    private fun nativeApp(id: String): CarApp? {
+        val pkg = id.removePrefix(NATIVE_APP_PREFIX).takeIf { id.startsWith(NATIVE_APP_PREFIX) && it.isNotEmpty() } ?: return null
+        val label = app.seb3thehacker.gearslip.mirror.PhoneApps.cached()?.firstOrNull { it.packageName == pkg }?.label ?: pkg
+        return CarApp(id, label, 0, Icons.Filled.Share) { NativePhoneAppScreen(pkg) }
+    }
 
     /** The screens [BuiltInApps.entries] offers here, so a choice list never names a hidden one. */
     fun shown(launcher: Boolean, canCall: Boolean): List<CarApp> {
