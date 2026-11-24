@@ -128,6 +128,8 @@
     <intent>
         <action android:name="android.intent.action.TTS_SERVICE" />
     </intent>
+    <!-- Whether Shizuku is installed, so its setup button shows only for those who have it. -->
+    <package android:name="moe.shizuku.privileged.api" />
 </queries>
 
 <!--
@@ -143,6 +145,15 @@
         android:supportsRtl="true"
         android:manageSpaceActivity="app.seb3thehacker.gearslip.ui.ManageSpaceActivity"
         android:theme="@style/Theme.Gearslip">
+
+        <!-- How Shizuku hands Gearslip its binder. Only Shizuku, running as the system, can call it. -->
+        <provider
+            android:name="rikka.shizuku.ShizukuProvider"
+            android:authorities="${applicationId}.shizuku"
+            android:multiprocess="false"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.INTERACT_ACROSS_USERS_FULL" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

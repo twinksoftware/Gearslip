@@ -43,6 +43,7 @@ fun AudioChoiceDialog(onUseBluetooth: () -> Unit, onKeepAsking: () -> Unit) {
                         style = MaterialTheme.typography.bodyMedium,
                     )
                     CopyableCommand("adb shell appops set ${BuildConfig.APPLICATION_ID} PROJECT_MEDIA allow")
+                    ShizukuGrantButton()
                 }
                 // Stacked full width: three labels this long never fit the dialog's one button row.
                 Column(Modifier.fillMaxWidth().padding(top = 4.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {

@@ -19,6 +19,7 @@ kotlinxSerializationJson = "1.11.0"
 ossLicenses = "17.5.1"
 webkit = "1.16.0"
 androidxMedia = "1.6.0"
+shizuku = "13.1.5"
 
 [libraries]
 maplibre-android = { group = "org.maplibre.gl", name = "android-sdk", version.ref = "maplibre" }
@@ -54,6 +55,9 @@ okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhtt
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 google-oss-licenses = { group = "com.google.android.gms", name = "play-services-oss-licenses", version.ref = "ossLicenses" }
 androidx-webkit = { group = "androidx.webkit", name = "webkit", version.ref = "webkit" }
+# Optional extras for drivers who run Shizuku: adb-level setup steps done from the phone.
+shizuku-api = { group = "dev.rikka.shizuku", name = "api", version.ref = "shizuku" }
+shizuku-provider = { group = "dev.rikka.shizuku", name = "provider", version.ref = "shizuku" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

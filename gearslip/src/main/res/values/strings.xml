@@ -736,6 +736,10 @@
     <string name="web_plain_http">This page isn\'t encrypted. Anyone on the same network can see what you send it.</string>
     <string name="web_plain_http_stop">Don\'t warn for this site</string>
     <string name="web_plain_http_hide">Hide warning</string>
+    <string name="shizuku_set_up">Set up with Shizuku</string>
+    <string name="shizuku_working">Setting up…</string>
+    <string name="shizuku_done">Set up through Shizuku. Nothing more to do here.</string>
+    <string name="shizuku_stopped">Shizuku is installed but not running. Start it in the Shizuku app, then come back here.</string>
     <string name="web_start_page">Start page</string>
     <string name="web_fullscreen">Full screen</string>
 

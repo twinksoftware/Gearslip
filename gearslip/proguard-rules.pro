@@ -11,3 +11,6 @@
 
 # Speech-to-text: the native library calls back into these classes by name.
 -keep class com.k2fsa.sherpa.onnx.** { *; }
+
+# Shizuku starts the shell service in its own process by class name, with no caller R8 can see.
+-keep class app.seb3thehacker.gearslip.shizuku.ShellService { <init>(...); *; }

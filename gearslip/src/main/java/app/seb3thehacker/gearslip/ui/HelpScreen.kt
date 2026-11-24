@@ -166,6 +166,8 @@ private fun Steps(title: String, steps: List<Step>) {
                         Text(stringResource(it), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                     step.command?.let { CopyableCommand(it) }
+                    // One button does both steps, so it sits under the first only.
+                    if (step === USB_AUDIO.first()) ShizukuGrantButton(Modifier.padding(top = 4.dp))
                     if (step.onClick != null) {
                         FilledTonalButton(onClick = step.onClick, modifier = Modifier.padding(top = 4.dp)) {
                             Text(stringResource(step.buttonLabel ?: R.string.guide_open))

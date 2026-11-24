@@ -547,7 +547,10 @@ fun SetupGuideScreen(onRequestCallScreening: () -> Unit, onDone: () -> Unit, onl
                                 color = c.onVariant,
                                 style = TextStyle(fontSize = cqSp(4.5f), lineHeight = cqSp(6.5f)),
                             )
-                            page.command?.let { CopyableCommand(it) }
+                            page.command?.let {
+                                CopyableCommand(it)
+                                ShizukuGrantButton()
+                            }
                             page.content?.invoke(GuideScale(c, ::cq, ::cqSp))
                             if (page.permissions != null && alreadyGranted) {
                                 Text(

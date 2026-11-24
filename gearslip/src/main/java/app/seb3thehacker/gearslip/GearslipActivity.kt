@@ -148,6 +148,7 @@ class GearslipActivity : ComponentActivity(), Projection {
         GearslipLog.init(this)
         GearslipLog.installCrashHandler()
         GearslipLog.i("Gearslip ready")
+        app.seb3thehacker.gearslip.shizuku.ShizukuSetup.init(this)
         app.seb3thehacker.gearslip.wireless.WirelessLink.onConnected = { socket ->
             runOnUiThread { startWireless(socket) }
         }

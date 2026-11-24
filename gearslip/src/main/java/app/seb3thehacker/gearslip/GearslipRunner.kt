@@ -663,6 +663,7 @@ class GearslipRunner(
         // A car known to switch Bluetooth music off gets it through Gearslip, whatever the setting.
         CarSettings.carConnected(ServiceDiscovery.findBluetoothService(serviceDiscoveryResponse)?.carAddress)
         BluetoothAudioCheck.onCarFound()
+        app.seb3thehacker.gearslip.car.CarEnvironment.appContext?.let { app.seb3thehacker.gearslip.shizuku.ShizukuSetup.recheckOnConnect(it) }
         if (CarSettings.pipesNow) {
             if (!CarSettings.pipeAudio.value) log.i("this car turns Bluetooth music off, so music goes through Gearslip")
             openChannel(media.serviceId)

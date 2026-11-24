@@ -119,6 +119,8 @@ android {
 
     buildFeatures {
         buildConfig = true
+        // IShellService, the part of Gearslip that Shizuku runs with adb's powers.
+        aidl = true
     }
 
     // Lists each language that has a translation in the app's locale config, so Android 13+
@@ -200,6 +202,9 @@ dependencies {
     implementation(libs.androidx.webkit)
     // The map behind a place list (PlaceListMapTemplate), which the host draws, not the app.
     implementation(libs.maplibre.android)
+    // Shizuku, Apache 2.0. Optional: everything works without it, it only skips setup steps.
+    implementation(libs.shizuku.api)
+    implementation(libs.shizuku.provider)
     testImplementation(libs.junit)
 }
 
