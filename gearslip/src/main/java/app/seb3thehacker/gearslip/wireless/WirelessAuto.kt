@@ -115,6 +115,52 @@ object WirelessAuto {
     private fun isCompanion(manager: CompanionDeviceManager, address: String): Boolean =
         runCatching { manager.associations.any { it.equals(address, ignoreCase = true) } }.getOrDefault(false)
 
+    private const val KEY_LIVE_CAR = "live_car"
+    private const val KEY_LIVE_SINCE = "live_car_seen"
+    /** A drive noted longer ago than this is a day-old one whose process died with the car gone. */
+    private const val LIVE_FOR_MS = 10 * 60_000L
+
+    @Volatile private var appContext: Context? = null
+
+    /**
+     * A wireless drive with [address] is starting. Noted until it ends, so a process that dies
+     * mid-drive can tell, when it comes back, that the car wants it.
+     */
+    fun driveStarted(context: Context, address: String) {
+        appContext = context.applicationContext
+        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit()
+            .putString(KEY_LIVE_CAR, address).putLong(KEY_LIVE_SINCE, System.currentTimeMillis()).apply()
+    }
+
+    /** Keeps a running drive noted as fresh: see [restartedMidDrive]. */
+    fun driveStillRunning() {
+        val context = appContext ?: return
+        val prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        if (prefs.contains(KEY_LIVE_CAR)) prefs.edit().putLong(KEY_LIVE_SINCE, System.currentTimeMillis()).apply()
+    }
+
+    /** The drive ended while Gearslip was there to see it: nothing to come back to. */
+    fun driveEnded() {
+        val context = appContext ?: return
+        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().remove(KEY_LIVE_CAR).remove(KEY_LIVE_SINCE).apply()
+    }
+
+    /**
+     * [CarPresenceService] came up. Android restarts it after Gearslip's process dies while the
+     * car is still here, but says the car appeared only when its Bluetooth connects, so a crash
+     * or an update mid-drive left the car waiting until its Bluetooth came and went. A drive
+     * still noted as running means the last process died in it: connect again now.
+     */
+    fun restartedMidDrive(context: Context) {
+        val prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        val address = prefs.getString(KEY_LIVE_CAR, null) ?: return
+        val since = System.currentTimeMillis() - prefs.getLong(KEY_LIVE_SINCE, 0L)
+        prefs.edit().remove(KEY_LIVE_CAR).remove(KEY_LIVE_SINCE).apply()
+        if (since !in 0..LIVE_FOR_MS) return
+        log.i("auto-connect: Gearslip ended in the middle of a drive and the car is still here - connecting again")
+        carAppeared(context, address)
+    }
+
     /** From [CarPresenceService]: the car is here, so bring Gearslip up to connect to it. */
     fun carAppeared(context: Context, address: String) {
         log.i("auto-connect: a car Gearslip knows connected over Bluetooth")
