@@ -77,7 +77,7 @@ object CarAssistant {
     fun init(context: Context) {
         appContext = context.applicationContext
         if (tts != null) return
-        tts = TextToSpeech(appContext) { status -> ttsReady = status == TextToSpeech.SUCCESS }
+        tts = app.seb3thehacker.gearslip.speech.Voices.create(context.applicationContext) { status -> ttsReady = status == TextToSpeech.SUCCESS }
     }
 
     private val mainHandler = Handler(Looper.getMainLooper())

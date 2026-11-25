@@ -69,9 +69,10 @@ object DirectionsVoice {
     }
 
     private fun start() {
+        val context = appContext ?: return
         ttsReady = false
         ttsStartedAt = SystemClock.elapsedRealtime()
-        tts = TextToSpeech(appContext) { status ->
+        tts = app.seb3thehacker.gearslip.speech.Voices.create(context) { status ->
             ttsReady = status == TextToSpeech.SUCCESS
             if (!ttsReady) GearslipLog.w("guidance: text-to-speech didn't start (status $status)")
             // The turns are worded in Gearslip's language; the engine's default voice may be

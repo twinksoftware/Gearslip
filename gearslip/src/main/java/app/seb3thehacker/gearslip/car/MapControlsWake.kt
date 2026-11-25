@@ -30,11 +30,20 @@ class MapControlsWake {
         if (!navBarAwake) navBarAwake = true
     }
 
-    /** Called on a timer; hides the buttons once nothing has touched the screen for [IDLE_MS]. */
+    /** Hides the buttons once nothing has touched the screen for [IDLE_MS]. */
     fun tick() {
         val idle = SystemClock.uptimeMillis() - lastTouch
         if (awake && idle >= IDLE_MS) awake = false
         if (navBarAwake && idle >= NAV_BAR_IDLE_MS) navBarAwake = false
+    }
+
+    /** How long until [tick] would hide something; null when everything's already hidden. */
+    fun msUntilChange(): Long? {
+        val idle = SystemClock.uptimeMillis() - lastTouch
+        return listOfNotNull(
+            (IDLE_MS - idle).takeIf { awake },
+            (NAV_BAR_IDLE_MS - idle).takeIf { navBarAwake },
+        ).minOrNull()?.coerceAtLeast(0)
     }
 
     companion object {

@@ -1,11 +1,5 @@
 package app.seb3thehacker.gearslip.car.theme
 
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
@@ -101,14 +95,15 @@ fun GsProgressBar(
 
 /**
  * Material 3's wavy progress bar, drawn here because the stable library doesn't offer it yet: the
- * filled part is a sine wave that drifts along, then a gap, then a straight track and a stop dot
- * at the end.
+ * filled part is a sine wave, then a gap, then a straight track and a stop dot at the end.
+ *
+ * The wave holds still. Drifting, it changed the car screen every frame for as long as music
+ * played, so the phone drew, encoded, encrypted and sent 30 to 60 frames a second where a still
+ * screen needs about 10 small ones, and phones ran warm.
  */
 @Composable
 private fun WavyBar(fraction: Float, color: Color, track: Color, modifier: Modifier) {
-    val phase by rememberInfiniteTransition(label = "wave").animateFloat(
-        0f, 1f, infiniteRepeatable(tween(1_000, easing = LinearEasing), RepeatMode.Restart), label = "phase",
-    )
+    val phase = 0f
     Canvas(modifier) {
         val stroke = 4.dp.toPx()
         val amplitude = (size.height / 2 - stroke).coerceIn(0f, 3.dp.toPx())

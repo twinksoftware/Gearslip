@@ -97,6 +97,7 @@ import app.seb3thehacker.gearslip.notify.CarNotifications
 import androidx.core.graphics.drawable.toBitmap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import java.text.DateFormat
 import java.util.Date
@@ -133,10 +134,19 @@ fun CarUi() {
     }
     val controlsWake = remember { MapControlsWake() }
     LaunchedEffect(controlsWake) {
+        // Sleeps until the next thing is due to hide, rather than waking four times a second all
+        // drive; with everything hidden, until a touch shows something again. A touch in the
+        // meantime only pushes the deadline back, which the next pass picks up.
         while (true) {
-            delay(250)
             controlsWake.tick()
             CarFullscreen.tick()
+            val wait = listOfNotNull(controlsWake.msUntilChange(), CarFullscreen.msUntilChange()).minOrNull()
+            if (wait == null) {
+                androidx.compose.runtime.snapshotFlow { controlsWake.awake || controlsWake.navBarAwake || CarFullscreen.revealed }
+                    .first { it }
+            } else {
+                delay(wait + 20)
+            }
         }
     }
     // The knob counts as a touch: the map's buttons can't be found while they're faded out.

@@ -74,10 +74,12 @@ internal fun PlayerProgress(
     if (now.durationMs <= 0) return
     var position by remember { mutableLongStateOf(now.currentPosition()) }
     LaunchedEffect(now) {
+        // Once a second, on the second, so the time shown ticks over when it should; the bar
+        // moves a pixel or two a second anyway, and each change is a frame the car is sent.
         while (true) {
             position = now.currentPosition()
             if (!now.playing) break
-            delay(500)
+            delay(1_000 - position % 1_000)
         }
     }
     Column(modifier) {

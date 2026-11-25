@@ -42,10 +42,14 @@ object CarFullscreen {
         if (revealed) lastTouch = SystemClock.uptimeMillis()
     }
 
-    /** Called on a timer; hides the bar again after [REVEAL_MS] without a touch. */
+    /** Hides the bar again after [REVEAL_MS] without a touch. */
     fun tick() {
         if (revealed && SystemClock.uptimeMillis() - lastTouch >= REVEAL_MS) revealed = false
     }
+
+    /** How long until [tick] would hide the bar; null when it isn't showing. */
+    fun msUntilChange(): Long? =
+        if (revealed) (REVEAL_MS - (SystemClock.uptimeMillis() - lastTouch)).coerceAtLeast(0) else null
 
     private const val REVEAL_MS = 4_000L
 }

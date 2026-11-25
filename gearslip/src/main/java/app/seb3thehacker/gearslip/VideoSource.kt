@@ -65,8 +65,8 @@ class VideoSource(
     fun start() {
         val level = levelFor(width, height, frameRate)
         val bitRate = defaultBitRate(width, height, frameRate, level).let {
-            if (wireless) (it * WIRELESS_SHARE).toInt().coerceAtMost(WIRELESS_MAX_BIT_RATE) else it
-        }.let { (it * bitRateShare).toInt() }
+            if (wireless) it.coerceAtMost(WIRELESS_MAX_BIT_RATE) else it
+        }.let { (it * bitRateShare).toInt().coerceAtLeast(LIGHT_MIN_BIT_RATE) }
         fullBitRate = bitRate
         this.bitRate = bitRate
         fun format(tuned: Boolean) = MediaFormat.createVideoFormat(MIME, width, height).apply {
@@ -277,15 +277,22 @@ class VideoSource(
         private const val STILL_MS = 1_000L
 
         /**
-         * 800x480 at 30fps gets 8 Mbps: about the most that size can show, enough that a moving
-         * video in the browser stays sharp. Bigger screens get more, but less than in proportion,
-         * since large frames compress better: bitrate grows with pixels^0.75. 60fps gets 1.5x,
-         * because frames that close together are mostly alike.
+         * About 0.12 bits per pixel per frame, between [MIN_BIT_RATE] and a cap set by the screen's
+         * short side: 720p30 comes out near 3.3 Mbps and 1080p30 near 7.5 Mbps. A car's screen is
+         * mostly flat colour and text, which stays sharp at that. Gearslip used to send two to
+         * three times as much (20 Mbps at 1080p30), and every byte is encrypted on the phone before
+         * it goes out, so the extra only made the phone hotter.
          */
-        const val BASE_BIT_RATE = 8_000_000.0
-        const val BASE_PIXELS = 800.0 * 480
-        /** No car's decoder is asked for more than this, whatever its level allows. */
-        const val MAX_BIT_RATE = 25_000_000
+        const val BITS_PER_PIXEL = 0.12
+        /** The least Light video quality goes to: below this, text smears whenever the screen moves. */
+        const val LIGHT_MIN_BIT_RATE = 1_500_000
+        const val MIN_BIT_RATE = 2_000_000
+
+        fun capFor(width: Int, height: Int): Int = when {
+            minOf(width, height) <= 480 -> 4_000_000
+            minOf(width, height) <= 720 -> 6_000_000
+            else -> 8_000_000
+        }
 
         /**
          * The H.264 levels a car screen can need, smallest first: macroblocks a second each
@@ -305,18 +312,17 @@ class VideoSource(
             return Level.entries.firstOrNull { perSecond <= it.macroblocksPerSecond } ?: Level.L42
         }
 
-        fun defaultBitRate(width: Int, height: Int, frameRate: Int, level: Level): Int {
-            val size = Math.pow(width.toDouble() * height / BASE_PIXELS, 0.75)
-            val rate = if (frameRate > 30) 1.5 else 1.0
-            return (BASE_BIT_RATE * size * rate).toInt().coerceAtMost(minOf(level.maxBitRate, MAX_BIT_RATE))
-        }
+        fun defaultBitRate(width: Int, height: Int, frameRate: Int, level: Level): Int =
+            (width.toDouble() * height * frameRate * BITS_PER_PIXEL).toInt()
+                .coerceIn(MIN_BIT_RATE, capFor(width, height))
+                .coerceAtMost(level.maxBitRate)
+
         /**
          * A car's Wi-Fi is shared, noisy and far slower than its nominal rate, and the sound rides
-         * the same link behind the video. Real Android Auto sends a few Mbps wirelessly; at the
-         * cable rate (15-20 Mbps for 720p) a laptop hotspot fell seconds behind and the music
-         * cut in and out. 720p30 comes out near 5.4 Mbps.
+         * the same link behind the video. At the old cable rate (15-20 Mbps for 720p) a laptop
+         * hotspot fell seconds behind and the music cut in and out. The rates above already sit
+         * where real Android Auto's wireless ones do, so Wi-Fi only gets this cap.
          */
-        const val WIRELESS_SHARE = 0.35
         const val WIRELESS_MAX_BIT_RATE = 8_000_000
         const val I_FRAME_INTERVAL_S = 5
         private const val REPEAT_AFTER_US = 100_000L
