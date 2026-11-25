@@ -49,4 +49,18 @@ class InputProtocolTest {
         assertEquals(49f, touch.points.single().x)
         assertEquals(59f, touch.points.single().y)
     }
+
+    @Test fun `a tap in touch panel size is scaled onto the picture before the margin shift`() {
+        // 1920x1080 panel over a 1280x720 picture: the panel's 100,200 is the picture's 67,133.
+        val touch = requireNotNull(InputProtocol.touch(pointer(0), 1280 to 720, shiftX = 10, scaleX = 2f / 3, scaleY = 2f / 3))
+        assertEquals(77f, touch.points.single().x)
+        assertEquals(133f, touch.points.single().y)
+    }
+
+    @Test fun `extent is the furthest point the car sent, before any clamping`() {
+        val far = Protobuf.bytesField(1,
+            Protobuf.varintField(1, 1900) + Protobuf.varintField(2, 50) + Protobuf.varintField(3, 1))
+        assertEquals(1900 to 200, InputProtocol.extent(pointer(0) + far))
+        assertNull(InputProtocol.extent(Protobuf.varintField(3, 0)))
+    }
 }

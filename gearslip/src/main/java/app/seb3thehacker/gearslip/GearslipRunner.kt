@@ -14,6 +14,8 @@ import app.seb3thehacker.gearslip.car.CarAssistant
 import app.seb3thehacker.gearslip.car.CarEnvironment
 import app.seb3thehacker.gearslip.car.CarKeys
 import app.seb3thehacker.gearslip.car.ScreenFit
+import app.seb3thehacker.gearslip.car.TouchScale
+import app.seb3thehacker.gearslip.car.VideoQuality
 import app.seb3thehacker.gearslip.car.CarSensors
 import app.seb3thehacker.gearslip.car.CarServices
 import app.seb3thehacker.gearslip.car.CarSettings
@@ -617,6 +619,7 @@ class GearslipRunner(
             inputChannelId = input.serviceId
             inputKeycodes = input.keycodesSupported
             touchWidth = input.touchWidth
+            touchPanelCoordinates = false
             touchHeight = input.touchHeight
             log.i(
                 "input service: channel=${input.serviceId} touchscreen=" +
@@ -1000,8 +1003,10 @@ class GearslipRunner(
         // A stretched frame (see [screenShape]): the car's tap is on the frame, the UI is drawn smaller.
         val drawn = drawSize
         val stretched = drawn != null && size != null
+        val (scaleX, scaleY) = touchScaleFor(config, touch)
         val (action, actionIndex, raw) =
-            (if (stretched) InputProtocol.touch(touch, size) else InputProtocol.touch(touch, size, shift.left, shift.top)) ?: return
+            (if (stretched) InputProtocol.touch(touch, size, scaleX = scaleX, scaleY = scaleY)
+            else InputProtocol.touch(touch, size, shift.left, shift.top, scaleX, scaleY)) ?: return
         val points = if (drawn != null && size != null) {
             raw.map { TouchPoint(it.id, it.x * drawn.first / size.first, it.y * drawn.second / size.second) }
         } else {
@@ -1019,6 +1024,39 @@ class GearslipRunner(
         // Time the next frame against this tap: see [reportTouchLatency].
         if (action == ACTION_DOWN || action == ACTION_UP) touchAtUs = System.nanoTime() / 1000
         projection?.onTouch(action, actionIndex, points)
+    }
+
+    /** This drive's taps came in past the edge of the picture, so the car reports in its panel's size. */
+    @Volatile private var touchPanelCoordinates = false
+
+    /**
+     * How much to scale the car's taps by. Most cars map their panel onto our picture before
+     * reporting (the 2018 Uconnect does, and scaling broke it), but some report in the panel's own
+     * size; on those a 1920-wide panel over a 1280-wide picture put every tap on the right third
+     * against the edge. In Auto, the first tap past the picture's edge gives that away, and the
+     * rest of the drive is scaled. Only a panel bigger than the picture can be told apart this way;
+     * Scaled in Settings covers the other kind.
+     */
+    private fun touchScaleFor(config: ServiceDiscovery.VideoConfig?, touch: ByteArray): Pair<Float, Float> {
+        val visible = config?.visibleSize() ?: return 1f to 1f
+        if (touchWidth <= 0 || touchHeight <= 0 || visible.first <= 0 || visible.second <= 0) return 1f to 1f
+        val scale = visible.first.toFloat() / touchWidth to visible.second.toFloat() / touchHeight
+        when (CarSettings.touchScale.value) {
+            TouchScale.AS_SENT -> return 1f to 1f
+            TouchScale.SCALED -> return scale
+            TouchScale.AUTO -> Unit
+        }
+        if (!touchPanelCoordinates && (touchWidth > visible.first || touchHeight > visible.second)) {
+            val (x, y) = InputProtocol.extent(touch) ?: return 1f to 1f
+            if (x >= visible.first || y >= visible.second) {
+                touchPanelCoordinates = true
+                log.i(
+                    "touch: a tap at $x,$y is past the ${visible.first}x${visible.second} picture, so the car " +
+                        "reports in its ${touchWidth}x$touchHeight panel's size - scaling taps from now on",
+                )
+            }
+        }
+        return if (touchPanelCoordinates) scale else 1f to 1f
     }
 
     /**
@@ -1162,21 +1200,25 @@ class GearslipRunner(
     //   <- Ack { session_id, ack }   - at most max_unacked frames may be outstanding
 
     /**
-     * The offered config that best fills the car's screen: the smallest whose visible width
-     * reaches most of the touchscreen's, else the largest there is. Always taking the smallest
-     * put 800x480 on a 1540x720 Audi screen and stretched it. A car that gives no touchscreen
-     * size gets the largest up to 1080p: a car only offers sizes it can show, and the 2024 VW
-     * (touchscreen 0x0) blurred 800x480 across a 1080p screen.
+     * The largest offered size within the driver's video quality (up to 1080p by default), of the
+     * screen's own shape. A car only offers sizes it can show, so the biggest one is the sharpest.
+     * An earlier choice, the smallest whose width reached most of the touch panel's, could send
+     * 720p where the car offered 1080p, and a driver found the picture softer than another app's
+     * on the same car.
+     * A car that offers nothing small enough gets its smallest.
      */
     private fun fitToScreen(offered: List<Int>): Int? {
         val known = sameShape(offered.filter { videoConfigs.getOrNull(it)?.pixelSize() != null })
         fun pixels(idx: Int) = videoConfigs[idx].pixelCount()
-        if (touchWidth <= 0) {
-            return known.filter { pixels(it) <= 1920 * 1080 }.maxByOrNull(::pixels)
-                ?: known.minByOrNull(::pixels)
-        }
-        val wide = known.filter { (videoConfigs[it].visibleSize()?.first ?: 0) >= touchWidth * 8 / 10 }
-        return wide.minByOrNull(::pixels) ?: known.maxByOrNull(::pixels)
+        fun shortSide(idx: Int) = videoConfigs[idx].pixelSize()?.let { minOf(it.first, it.second) } ?: Int.MAX_VALUE
+        val quality = CarSettings.videoQuality.value
+        val fits = known.filter { shortSide(it) <= quality.maxShortSide }
+        // Of two the same size, the 60 fps one when it'd be used.
+        fun fps60(idx: Int) = videoConfigs[idx].frameRate == 1
+        val wants60 = quality == VideoQuality.HIGH || (quality == VideoQuality.STANDARD && !wireless)
+        val best = fits.maxWithOrNull(compareBy<Int>(::pixels).thenBy { if (fps60(it) == wants60) 1 else 0 })
+        if (best != null) log.i("video: ${quality.name.lowercase()} quality takes ${videoConfigs[best].resolutionName}")
+        return best ?: known.minByOrNull(::pixels)
     }
 
     /**
@@ -1267,8 +1309,15 @@ class GearslipRunner(
         }
 
         val useProjection = projection != null
-        // 60fps only over a cable: over Wi-Fi it doubles the data for little the driver sees.
-        videoFrameRate = if (config.frameRate == 1 && !wireless) 60 else 30
+        // 60fps only over a cable: over Wi-Fi it doubles the data for little the driver sees. Light
+        // quality never, High always when the car offers it.
+        val quality = CarSettings.videoQuality.value
+        videoFrameRate = when {
+            config.frameRate != 1 || quality == VideoQuality.LIGHT -> 30
+            quality == VideoQuality.HIGH -> 60
+            wireless -> 30
+            else -> 60
+        }
         smoothWindows = 0
         lastCut = null
         decoderBound = false
@@ -1280,6 +1329,7 @@ class GearslipRunner(
             frameRate = videoFrameRate,
             mode = if (useProjection) VideoSource.Mode.SURFACE else VideoSource.Mode.TEST_CARD,
             wireless = wireless,
+            bitRateShare = if (quality == VideoQuality.LIGHT) LIGHT_BIT_RATE_SHARE else 1f,
             onCodecConfig = { csd ->
                 lastCodecConfig = csd
                 send(MSG_MEDIA_CODEC_CONFIG, csd, encrypted = true, channel = videoChannelId)
@@ -1742,6 +1792,9 @@ class GearslipRunner(
     }
 
     internal companion object {
+        /** Light video quality's share of the usual bitrate: still sharp for text, far less work. */
+        const val LIGHT_BIT_RATE_SHARE = 0.6f
+
         /** The stats window adaptive bitrate reads, matching the watchdog's sleep. */
         const val ADAPT_WINDOW_MS = 5_000L
 

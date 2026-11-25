@@ -45,9 +45,29 @@ object CarAssistant {
     private val _state = MutableStateFlow(State())
     val state: StateFlow<State> = _state
 
+    /** A command to act on; [fromApp] when another app sent it rather than the driver saying it. */
+    data class Pending(val text: String, val fromApp: Boolean = false)
+
     /** Set once a recognition result comes in; [reply] clears it once handled. */
-    private val _pendingCommand = MutableStateFlow<String?>(null)
-    val pendingCommand: StateFlow<String?> = _pendingCommand
+    private val _pendingCommand = MutableStateFlow<Pending?>(null)
+    val pendingCommand: StateFlow<Pending?> = _pendingCommand
+
+    /** How many car screens are acting on [pendingCommand]: none means no car to do anything on. */
+    @Volatile var carScreens = 0
+
+    /**
+     * A command another app sent ([AssistantLink]), run as if the driver had said it, answer and
+     * all. False when there's no car screen up to act on it.
+     */
+    fun runCommand(text: String): Boolean {
+        if (carScreens <= 0 || text.isBlank()) return false
+        mainHandler.post {
+            tts?.stop()
+            _state.value = State(Phase.THINKING, heard = text.trim(), ready = true)
+            _pendingCommand.value = Pending(text.trim(), fromApp = true)
+        }
+        return true
+    }
 
     private var appContext: Context? = null
     private var recognizer: SpeechRecognizer? = null
@@ -96,7 +116,7 @@ object CarAssistant {
             onHeard = { _state.value = _state.value.copy(phase = Phase.THINKING) },
             onResult = { text ->
                 _state.value = _state.value.copy(phase = Phase.THINKING, heard = text)
-                _pendingCommand.value = text
+                _pendingCommand.value = Pending(text)
             },
             onError = { message -> _state.value = State(Phase.ERROR, reply = message) },
         )

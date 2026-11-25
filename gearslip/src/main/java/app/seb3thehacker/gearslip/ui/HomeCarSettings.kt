@@ -61,6 +61,8 @@ import app.seb3thehacker.gearslip.car.LauncherCache
 import app.seb3thehacker.gearslip.car.NavBarMode
 import app.seb3thehacker.gearslip.car.NightMode
 import app.seb3thehacker.gearslip.car.Units
+import app.seb3thehacker.gearslip.car.TouchScale
+import app.seb3thehacker.gearslip.car.VideoQuality
 import app.seb3thehacker.gearslip.car.theme.GsThemes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -117,6 +119,88 @@ private fun CustomDensityDialog(current: Int, onDismiss: () -> Unit, onSave: (In
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } },
     )
 }
+@Composable
+private fun videoQualityChoices() = listOf(
+    VideoQuality.LIGHT to stringResource(R.string.choice_video_light),
+    VideoQuality.STANDARD to stringResource(R.string.choice_video_standard),
+    VideoQuality.HIGH to stringResource(R.string.choice_video_high),
+)
+@Composable
+private fun touchChoices() = listOf(
+    TouchScale.AUTO to stringResource(R.string.choice_touch_auto),
+    TouchScale.AS_SENT to stringResource(R.string.choice_touch_as_sent),
+    TouchScale.SCALED to stringResource(R.string.choice_touch_scaled),
+)
+
+/** A server the driver runs: its address, or Off, with a dialog to change it. */
+@Composable
+private fun ServerRow(
+    title: String,
+    note: String,
+    hint: String,
+    example: String,
+    server: CarSettings.Server,
+    onSave: (CarSettings.Server) -> Unit,
+) {
+    var editing by remember { mutableStateOf(false) }
+    SettingsRow(
+        title,
+        Modifier.clickable { editing = true },
+        subtitle = note,
+        trailing = {
+            Text(
+                if (server.on) server.url.removePrefix("http://").removePrefix("https://") else stringResource(R.string.server_off),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.primary,
+                maxLines = 1,
+            )
+        },
+    )
+    if (!editing) return
+    var url by remember { mutableStateOf(server.url) }
+    var model by remember { mutableStateOf(server.model) }
+    var key by remember { mutableStateOf(server.key) }
+    AlertDialog(
+        onDismissRequest = { editing = false },
+        title = { Text(title) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Text(hint, style = MaterialTheme.typography.bodyMedium)
+                OutlinedTextField(
+                    url, { url = it.trim() },
+                    label = { Text(stringResource(R.string.server_address)) },
+                    placeholder = { Text(example) },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri),
+                )
+                OutlinedTextField(model, { model = it }, label = { Text(stringResource(R.string.server_model)) }, singleLine = true)
+                OutlinedTextField(
+                    key, { key = it.trim() },
+                    label = { Text(stringResource(R.string.server_key)) },
+                    singleLine = true,
+                    visualTransformation = androidx.compose.ui.text.input.PasswordVisualTransformation(),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                )
+            }
+        },
+        confirmButton = {
+            TextButton({
+                onSave(CarSettings.Server(url, model, key))
+                editing = false
+            }) { Text(stringResource(R.string.save)) }
+        },
+        dismissButton = {
+            Row {
+                if (server.on) TextButton({
+                    onSave(CarSettings.Server("", "", ""))
+                    editing = false
+                }) { Text(stringResource(R.string.server_clear)) }
+                TextButton({ editing = false }) { Text(stringResource(R.string.cancel)) }
+            }
+        },
+    )
+}
+
 @Composable
 private fun themeChoices() = listOf(AppTheme.PHONE to stringResource(R.string.choice_theme_phone), AppTheme.LIGHT to stringResource(R.string.choice_theme_light), AppTheme.DARK to stringResource(R.string.choice_theme_dark))
 @Composable
@@ -291,6 +375,13 @@ private fun GroupRows(group: CarGroup) {
     val carSensors by CarSettings.carSensorsEnabled.collectAsState()
     val adaptiveVideo by CarSettings.adaptiveVideoEnabled.collectAsState()
     val clusterVideo by CarSettings.clusterVideoEnabled.collectAsState()
+    val videoQuality by CarSettings.videoQuality.collectAsState()
+    val touchScale by CarSettings.touchScale.collectAsState()
+    val speechServer by CarSettings.speechServer.collectAsState()
+    val aiServer by CarSettings.aiServer.collectAsState()
+    val appCommands by CarSettings.appCommands.collectAsState()
+    val shizukuAudio by CarSettings.shizukuAudio.collectAsState()
+    val shizuku by app.seb3thehacker.gearslip.shizuku.ShizukuSetup.state.collectAsState()
 
     when (group) {
         CarGroup.APPS -> AppRows()
@@ -323,6 +414,10 @@ private fun GroupRows(group: CarGroup) {
             Choice(stringResource(R.string.car_map_day_night), nightChoices(), night, CarSettings::setNightMode)
             SettingsDivider()
             Choice(stringResource(R.string.car_units), unitChoices(), units, CarSettings::setUnits)
+            SettingsDivider()
+            Choice(stringResource(R.string.car_video_quality), videoQualityChoices(), videoQuality, CarSettings::setVideoQuality, note = stringResource(R.string.car_video_quality_note))
+            SettingsDivider()
+            Choice(stringResource(R.string.car_touch_scale), touchChoices(), touchScale, CarSettings::setTouchScale, note = stringResource(R.string.car_touch_scale_note))
             SettingsDivider()
             WallpaperRows()
         }
@@ -360,6 +455,16 @@ private fun GroupRows(group: CarGroup) {
                 CarSettings::setSystemSpeech,
                 note = stringResource(R.string.car_phone_speech_note),
             )
+            SettingsDivider()
+            ServerRow(stringResource(R.string.car_speech_server), stringResource(R.string.car_speech_server_note), stringResource(R.string.speech_server_hint), "http://192.168.1.20:8080", speechServer, CarSettings::setSpeechServer)
+            SettingsDivider()
+            ServerRow(stringResource(R.string.car_ai_server), stringResource(R.string.car_ai_server_note), stringResource(R.string.ai_server_hint), "http://192.168.1.20:11434", aiServer, CarSettings::setAiServer)
+            SettingsDivider()
+            Toggle(stringResource(R.string.car_app_commands), appCommands, CarSettings::setAppCommands, note = stringResource(R.string.car_app_commands_note))
+            if (shizuku != app.seb3thehacker.gearslip.shizuku.ShizukuSetup.State.MISSING) {
+                SettingsDivider()
+                Toggle(stringResource(R.string.car_shizuku_audio), shizukuAudio, CarSettings::setShizukuAudio, note = stringResource(R.string.car_shizuku_audio_note))
+            }
         }
         CarGroup.PLACES -> Unit
         CarGroup.WARNINGS -> {

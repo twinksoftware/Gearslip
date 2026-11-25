@@ -84,14 +84,21 @@ object CarServices {
         app.seb3thehacker.gearslip.notify.CarMotion.start(appContext)
         app.seb3thehacker.gearslip.call.CarCalls.start(appContext)
         CarAssistant.init(appContext)
+        // Lets music start through Shizuku with no phone screen up to ask for consent.
+        app.seb3thehacker.gearslip.audio.CarAudio.appContext = appContext
         DirectionsVoice.init(appContext)
         CarBluetooth.init(appContext)
         BluetoothAudioCheck.init(appContext)
         LocationCheck.init(appContext)
         CarKeys.init(appContext)
         VoiceReply.init(appContext)
-        // Loaded now, while nothing's waiting on it, so the first reply isn't slower than the rest.
-        app.seb3thehacker.gearslip.speech.SpeechEngine.warm(appContext)
+        // Only the small live model, so the first command still starts at once. The big one that
+        // rereads each phrase took hundreds of megabytes from the moment the car connected, on
+        // drives where nobody spoke; it loads when the driver first does. Nothing at all when
+        // listening goes to the driver's own server or the phone's speech service.
+        if (!CarSettings.speechServer.value.on && !CarSettings.systemSpeech.value) {
+            app.seb3thehacker.gearslip.speech.SpeechEngine.warm(appContext, final = false)
+        }
     }
 
     // --- map -----------------------------------------------------------------------------

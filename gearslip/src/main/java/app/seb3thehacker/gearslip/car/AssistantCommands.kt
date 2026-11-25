@@ -20,7 +20,26 @@ import kotlinx.coroutines.withTimeoutOrNull
  */
 object AssistantCommands {
 
-    suspend fun handle(context: Context, navigator: CarNavigator, frame: CarEnvironment.Frame, heardRaw: String): String {
+    /**
+     * [fromApp] is a command another app sent ([AssistantLink]): those never place a call, since
+     * that would let any app on the phone dial out without the phone permission.
+     */
+    suspend fun handle(
+        context: Context,
+        navigator: CarNavigator,
+        frame: CarEnvironment.Frame,
+        heardRaw: String,
+        fromApp: Boolean = false,
+    ): String = handle(context, navigator, frame, heardRaw, fromApp, askServer = true)
+
+    private suspend fun handle(
+        context: Context,
+        navigator: CarNavigator,
+        frame: CarEnvironment.Frame,
+        heardRaw: String,
+        fromApp: Boolean,
+        askServer: Boolean,
+    ): String {
         val heard = natural(heardRaw)
         VoiceHelp.hide()
         if (heard in HELP_WORDS || heard.startsWith("what can i say") || heard.startsWith("what can you do")) {
@@ -34,9 +53,24 @@ object AssistantCommands {
         mediaCommand(heard)?.let { return it }
         navCommand(navigator, heard)?.let { return it }
         infoCommand(heard)?.let { return it }
+        if (fromApp && (after(heard, CALL_TRIGGERS) != null || GIVE_A_CALL.matches(heard))) {
+            return "Calls can't be started from another app."
+        }
         callCommand(context, heard)?.let { return it }
         openAppCommand(context, navigator, frame, heard)?.let { return it }
 
+        // Not one of ours: the driver's own AI server, when there is one, gets a go. A command it
+        // hands back runs once, and isn't sent back to it, so the two can't bounce forever.
+        if (askServer && ServerAssistant.enabled) {
+            return try {
+                when (val answer = ServerAssistant.ask(heardRaw)) {
+                    is ServerAssistant.Answer.Say -> answer.text
+                    is ServerAssistant.Answer.Run -> handle(context, navigator, frame, answer.command, fromApp, askServer = false)
+                }
+            } catch (e: app.seb3thehacker.gearslip.OwnServer.Failed) {
+                e.message ?: app.seb3thehacker.gearslip.OwnServer.UNREACHABLE
+            }
+        }
         return "I don't know how to do that yet."
     }
 
@@ -317,7 +351,7 @@ object AssistantCommands {
     private suspend fun callCommand(context: Context, heard: String): String? {
         val name = (
             after(heard, CALL_TRIGGERS)
-                ?: Regex("^give (.+) a (?:call|ring)$").find(heard)?.groupValues?.get(1)
+                ?: GIVE_A_CALL.find(heard)?.groupValues?.get(1)
                 ?: return null
             ).replace(Regex(" (?:on|at) (?:their |his |her )?(?:mobile|cell|phone|home|work)$"), "").trim()
         if (name.isBlank()) return "Who should I call?"
@@ -376,6 +410,8 @@ object AssistantCommands {
     private val PLACE_TAILS = listOf(" near me", " nearby", " near here", " around here", " close by", " closest to me")
 
     private val PLAY_TRIGGERS = listOf("play me ", "play ", "put on ", "listen to ", "i want to hear ", "shuffle ")
+
+    private val GIVE_A_CALL = Regex("^give (.+) a (?:call|ring)$")
 
     private val CALL_TRIGGERS = listOf("call ", "phone ", "dial ", "ring ", "make a call to ", "place a call to ", "start a call with ")
 

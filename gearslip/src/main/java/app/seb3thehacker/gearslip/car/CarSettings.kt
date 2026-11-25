@@ -43,6 +43,20 @@ enum class ScreenFit { CROP, SQUASH }
 /** What size the phone's car preview draws: the last car's, this device's whole screen, or one typed in. */
 enum class PreviewSize { LAST_CAR, FILL, CUSTOM }
 
+/**
+ * How much the phone puts into the car's video. [LIGHT] caps it at 720p, 30 fps and a lower
+ * bitrate, for a phone that runs hot or kills apps; [STANDARD] takes up to 1080p; [HIGH] takes
+ * the biggest size the car offers and 60 fps over Wi-Fi too.
+ */
+enum class VideoQuality(val maxShortSide: Int) { LIGHT(720), STANDARD(1080), HIGH(2160) }
+
+/**
+ * How the car's taps map onto the screen. [AUTO] sends them as the car reports them, the way the
+ * 2018 Uconnect needs, until one lands outside the picture, which shows the car is reporting in
+ * its touch panel's own size; from then on they're scaled. [AS_SENT] and [SCALED] fix the choice.
+ */
+enum class TouchScale { AUTO, AS_SENT, SCALED }
+
 /** When the nav bar gets out of the way: never, during a route, or whenever the map is up. */
 enum class NavBarMode { SHOW, HIDE_NAVIGATING, HIDE }
 
@@ -89,6 +103,16 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
     private const val KEY_SCREEN_FIT = "car_screen_fit"
     private const val KEY_PREVIEW_SIZE = "preview_size"
     private const val KEY_PREVIEW_CUSTOM = "preview_custom_size"
+    private const val KEY_VIDEO_QUALITY = "car_video_quality"
+    private const val KEY_TOUCH_SCALE = "car_touch_scale"
+    private const val KEY_SPEECH_SERVER = "speech_server_url"
+    private const val KEY_SPEECH_SERVER_MODEL = "speech_server_model"
+    private const val KEY_SPEECH_SERVER_KEY = "speech_server_key"
+    private const val KEY_AI_SERVER = "ai_server_url"
+    private const val KEY_AI_SERVER_MODEL = "ai_server_model"
+    private const val KEY_AI_SERVER_KEY = "ai_server_key"
+    private const val KEY_SHIZUKU_AUDIO = "car_shizuku_audio"
+    private const val KEY_APP_COMMANDS = "car_app_commands"
     private const val KEY_WHATS_NEW = "car_whats_new_after_updates"
     private const val KEY_WHATS_NEW_SEEN = "car_whats_new_seen_code"
 
@@ -167,6 +191,81 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
         previewCustomFlow.value = custom
         AppSettings.putString(app, KEY_PREVIEW_SIZE, size.name)
         AppSettings.putString(app, KEY_PREVIEW_CUSTOM, custom?.toString().orEmpty())
+    }
+
+    private val videoQualityFlow = MutableStateFlow(VideoQuality.STANDARD)
+    private val touchScaleFlow = MutableStateFlow(TouchScale.AUTO)
+
+    /** Takes effect the next time the car connects: the video size is agreed at the start. */
+    val videoQuality: StateFlow<VideoQuality> = videoQualityFlow
+    val touchScale: StateFlow<TouchScale> = touchScaleFlow
+
+    fun setVideoQuality(quality: VideoQuality) {
+        videoQualityFlow.value = quality
+        AppSettings.putString(app, KEY_VIDEO_QUALITY, quality.name)
+    }
+
+    fun setTouchScale(scale: TouchScale) {
+        touchScaleFlow.value = scale
+        AppSettings.putString(app, KEY_TOUCH_SCALE, scale.name)
+    }
+
+    /**
+     * A speech-to-text server the driver runs themselves (whisper.cpp, faster-whisper, LocalAI and
+     * the like all answer OpenAI's transcription call). Set, it replaces the on-device models, so
+     * the phone loads none of them. Empty means off.
+     */
+    data class Server(val url: String, val model: String, val key: String) {
+        val on: Boolean get() = url.isNotBlank()
+    }
+
+    private val speechServerFlow = MutableStateFlow(Server("", "", ""))
+    private val aiServerFlow = MutableStateFlow(Server("", "", ""))
+    val speechServer: StateFlow<Server> = speechServerFlow
+
+    /**
+     * A chat model the driver runs themselves (Ollama, llama.cpp, LocalAI, or any OpenAI-style
+     * server). Asked only when a command isn't one Gearslip knows: it may answer, or turn what
+     * was said into a command. Empty means off.
+     */
+    val aiServer: StateFlow<Server> = aiServerFlow
+
+    fun setSpeechServer(server: Server) {
+        speechServerFlow.value = server
+        AppSettings.putString(app, KEY_SPEECH_SERVER, server.url.trim())
+        AppSettings.putString(app, KEY_SPEECH_SERVER_MODEL, server.model.trim())
+        AppSettings.putString(app, KEY_SPEECH_SERVER_KEY, server.key.trim())
+    }
+
+    fun setAiServer(server: Server) {
+        aiServerFlow.value = server
+        AppSettings.putString(app, KEY_AI_SERVER, server.url.trim())
+        AppSettings.putString(app, KEY_AI_SERVER_MODEL, server.model.trim())
+        AppSettings.putString(app, KEY_AI_SERVER_KEY, server.key.trim())
+    }
+
+    private val appCommandsFlow = MutableStateFlow(false)
+
+    /** Other apps may send the assistant commands (see [AssistantLink]). Off until the driver allows it. */
+    val appCommands: StateFlow<Boolean> = appCommandsFlow
+
+    fun setAppCommands(on: Boolean) {
+        appCommandsFlow.value = on
+        AppSettings.putString(app, KEY_APP_COMMANDS, on.toString())
+    }
+
+    private val shizukuAudioFlow = MutableStateFlow(false)
+
+    /**
+     * With Shizuku running, music is recorded the way adb would (the phone's whole output), not
+     * through Android's playback capture: no consent dialog, and apps that block capture, such as
+     * Spotify, still reach the car.
+     */
+    val shizukuAudio: StateFlow<Boolean> = shizukuAudioFlow
+
+    fun setShizukuAudio(on: Boolean) {
+        shizukuAudioFlow.value = on
+        AppSettings.putString(app, KEY_SHIZUKU_AUDIO, on.toString())
     }
 
     private val navBarFlow = MutableStateFlow(NavBarMode.SHOW)
@@ -441,6 +540,24 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
         navBarFlow.value = runCatching {
             NavBarMode.valueOf(AppSettings.getString(app, KEY_NAV_BAR, NavBarMode.SHOW.name))
         }.getOrDefault(NavBarMode.SHOW)
+        videoQualityFlow.value = runCatching {
+            VideoQuality.valueOf(AppSettings.getString(app, KEY_VIDEO_QUALITY, VideoQuality.STANDARD.name))
+        }.getOrDefault(VideoQuality.STANDARD)
+        touchScaleFlow.value = runCatching {
+            TouchScale.valueOf(AppSettings.getString(app, KEY_TOUCH_SCALE, TouchScale.AUTO.name))
+        }.getOrDefault(TouchScale.AUTO)
+        speechServerFlow.value = Server(
+            AppSettings.getString(app, KEY_SPEECH_SERVER, ""),
+            AppSettings.getString(app, KEY_SPEECH_SERVER_MODEL, ""),
+            AppSettings.getString(app, KEY_SPEECH_SERVER_KEY, ""),
+        )
+        aiServerFlow.value = Server(
+            AppSettings.getString(app, KEY_AI_SERVER, ""),
+            AppSettings.getString(app, KEY_AI_SERVER_MODEL, ""),
+            AppSettings.getString(app, KEY_AI_SERVER_KEY, ""),
+        )
+        shizukuAudioFlow.value = AppSettings.getString(app, KEY_SHIZUKU_AUDIO, "false") == "true"
+        appCommandsFlow.value = AppSettings.getString(app, KEY_APP_COMMANDS, "false") == "true"
         whatsNewFlow.value = AppSettings.getString(app, KEY_WHATS_NEW, "true") == "true"
         whatsNewSeenFlow.value = AppSettings.getString(app, KEY_WHATS_NEW_SEEN, "0").toIntOrNull() ?: 0
     }

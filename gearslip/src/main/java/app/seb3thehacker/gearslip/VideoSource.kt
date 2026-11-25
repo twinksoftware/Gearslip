@@ -25,6 +25,8 @@ class VideoSource(
     private val mode: Mode = Mode.TEST_CARD,
     /** Over Wi-Fi: a fraction of the cable bitrate, so the link keeps up and sound isn't starved. */
     private val wireless: Boolean = false,
+    /** A fraction of the usual bitrate, for the driver's Light video quality. */
+    private val bitRateShare: Float = 1f,
     private val onCodecConfig: (ByteArray) -> Unit,
     private val onFrame: (data: ByteArray, presentationTimeUs: Long, keyFrame: Boolean) -> Unit,
     /**
@@ -64,7 +66,7 @@ class VideoSource(
         val level = levelFor(width, height, frameRate)
         val bitRate = defaultBitRate(width, height, frameRate, level).let {
             if (wireless) (it * WIRELESS_SHARE).toInt().coerceAtMost(WIRELESS_MAX_BIT_RATE) else it
-        }
+        }.let { (it * bitRateShare).toInt() }
         fullBitRate = bitRate
         this.bitRate = bitRate
         fun format(tuned: Boolean) = MediaFormat.createVideoFormat(MIME, width, height).apply {

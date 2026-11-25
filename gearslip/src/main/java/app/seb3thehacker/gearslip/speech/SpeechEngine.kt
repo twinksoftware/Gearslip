@@ -14,6 +14,7 @@ import android.os.Looper
 import android.os.SystemClock
 import app.seb3thehacker.gearslip.GearslipLog
 import app.seb3thehacker.gearslip.audio.CarMic
+import app.seb3thehacker.gearslip.car.CarSettings
 import com.k2fsa.sherpa.onnx.EndpointConfig
 import com.k2fsa.sherpa.onnx.EndpointRule
 import com.k2fsa.sherpa.onnx.FeatureConfig
@@ -86,14 +87,17 @@ object SpeechEngine {
     private val idleUnload = Runnable { unloadFinal("after ${IDLE_UNLOAD_MS / 60_000} minutes without use") }
     @Volatile private var run = 0
 
-    /** Loads the model ahead of time, so the first command doesn't wait for it. */
-    fun warm(context: Context) {
+    /**
+     * Loads the live model ahead of time, so the first command doesn't wait for it, and the final
+     * one too when [final] is set.
+     */
+    fun warm(context: Context, final: Boolean = true) {
         val app = context.applicationContext
         SpeechModels.init(app)
         // Kroko first, alone: loading both at once slowed it from a fraction of a second to six.
         worker.execute {
             ensureLoaded(app)
-            finalWorker.execute { ensureFinalLoaded(app) }
+            if (final) finalWorker.execute { ensureFinalLoaded(app) }
         }
     }
 
@@ -150,6 +154,31 @@ object SpeechEngine {
         }
         val id = ++run
         fun post(block: () -> Unit) { main.post { if (id == run) block() } }
+        val server = CarSettings.speechServer.value
+        if (server.on) {
+            worker.execute {
+                if (id != run) return@execute
+                VoiceFocus.acquire(app)
+                try {
+                    if (cue) cue()
+                    if (id != run) return@execute
+                    post(onListening)
+                    val wav = record(id, onSpeaking = { post(onSpeaking) }) ?: return@execute post { onError("Didn't catch that.") }
+                    if (id != run) return@execute
+                    post(onHeard)
+                    val text = ServerSpeech.transcribe(server, wav).let(::clean)
+                    post { if (text.isEmpty()) onError("Didn't catch that.") else onResult(text) }
+                } catch (e: ServerSpeech.Failed) {
+                    post { onError(e.message ?: ServerSpeech.UNREACHABLE) }
+                } catch (t: Throwable) {
+                    GearslipLog.e("speech: listening failed", t)
+                    post { onError("The microphone isn't available right now.") }
+                } finally {
+                    VoiceFocus.release()
+                }
+            }
+            return
+        }
         // Brings Parakeet back if it was unloaded, while the driver talks.
         main.removeCallbacks(idleUnload)
         finalWorker.execute { ensureFinalLoaded(app) }
@@ -270,6 +299,58 @@ object SpeechEngine {
         if (reread != last) onPartial(reread)
         return reread
     }
+
+    /**
+     * One phrase for the driver's own server, as 16 kHz mono WAV. With no model on the phone to
+     * say when the driver has finished, loudness does: speech is anything well above the first
+     * moments' background noise, and a second under it ends the phrase. Null when nobody spoke.
+     */
+    private fun record(id: Int, onSpeaking: () -> Unit): ByteArray? {
+        val mic = carMic() ?: phoneMic()
+        val frame = ShortArray(CHUNK)
+        val pcm = java.io.ByteArrayOutputStream()
+        var floor = -1.0
+        var spoke = false
+        var quietMs = 0L
+        var heardMs = 0L
+        try {
+            while (id == run) {
+                val n = mic.read(frame)
+                if (n < 0) break
+                if (n == 0) continue
+                var sum = 0.0
+                for (i in 0 until n) {
+                    sum += frame[i].toDouble() * frame[i]
+                    pcm.write(frame[i].toInt() and 0xFF)
+                    pcm.write(frame[i].toInt() shr 8 and 0xFF)
+                }
+                val rms = Math.sqrt(sum / n)
+                val ms = n * 1000L / RATE
+                heardMs += ms
+                // The quietest moment so far is the car's own hum.
+                floor = if (floor < 0) rms else minOf(floor, rms)
+                val loud = rms > maxOf(floor * SPEECH_OVER_NOISE, MIN_SPEECH_RMS)
+                if (loud) {
+                    quietMs = 0
+                    if (!spoke) { spoke = true; onSpeaking() }
+                } else {
+                    quietMs += ms
+                }
+                if (spoke && quietMs >= (END_SILENCE_S * 1000).toLong()) break
+                if (!spoke && heardMs >= (NO_SPEECH_S * 1000).toLong()) break
+                if (heardMs >= (MAX_S * 1000).toLong()) break
+            }
+        } finally {
+            mic.close()
+        }
+        if (!spoke || id != run) return null
+        return ServerSpeech.wav(pcm.toByteArray(), RATE)
+    }
+
+    /** Loudness, as RMS of 16-bit samples, that counts as speech: this many times the background... */
+    private const val SPEECH_OVER_NOISE = 2.5
+    /** ...and never less than this, so a silent car doesn't make every breath a word. */
+    private const val MIN_SPEECH_RMS = 400.0
 
     /** The model that rereads the phrase, when one is chosen and downloaded; null otherwise. */
     private fun ensureFinalLoaded(context: Context): OfflineRecognizer? = synchronized(finalLock) {

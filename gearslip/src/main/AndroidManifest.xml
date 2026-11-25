@@ -250,6 +250,38 @@
                 android:resource="@xml/accessory_filter" />
         </activity-alias>
 
+        <!--
+          Commands from other apps, run as if the driver said them (see AssistantLink). Off until
+          the driver allows it in Settings, and never a phone call. The broadcast is for automation
+          apps such as Tasker; the gearslip:// link is for assistants that open links.
+        -->
+        <receiver
+            android:name=".car.AssistantLinkReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="app.seb3thehacker.gearslip.action.COMMAND" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".car.AssistantLinkActivity"
+            android:exported="true"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="gearslip" android:host="command" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="app.seb3thehacker.gearslip.action.COMMAND" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <!-- Dev builds' test message: its Reply and Mark as read actions land here. -->
         <receiver
             android:name=".notify.TestMessageReceiver"

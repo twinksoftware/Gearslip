@@ -4,6 +4,9 @@ import android.annotation.SuppressLint
 import android.content.AttributionSource
 import android.content.Context
 import android.content.ContextWrapper
+import android.media.AudioFormat
+import android.media.AudioRecord
+import android.os.ParcelFileDescriptor
 import android.hardware.display.DisplayManager
 import android.hardware.display.VirtualDisplay
 import android.view.InputEvent
@@ -36,7 +39,10 @@ class ShellService() : IShellService.Stub() {
 
     private val displays = mutableMapOf<Int, VirtualDisplay>()
 
+    @Volatile private var record: AudioRecord? = null
+
     override fun destroy() {
+        stopAudio()
         displays.values.forEach { runCatching { it.release() } }
         exitProcess(0)
     }
@@ -93,6 +99,65 @@ class ShellService() : IShellService.Stub() {
         synchronized(displays) { displays.remove(displayId) }?.let { runCatching { it.release() } }
     }
 
+    /**
+     * The phone's whole output, through the "remote submix" source that only the shell and the
+     * system may record, the way scrcpy captures sound. Android stops playing it on the phone
+     * while it's recorded, as it does for Android Auto. Unlike playback capture, no app can opt
+     * out of it, so music from Spotify reaches the car too.
+     */
+    @SuppressLint("MissingPermission", "WrongConstant")
+    override fun startAudio(sampleRate: Int, channels: Int): ParcelFileDescriptor? {
+        stopAudio()
+        val base = context ?: return null
+        return runCatching {
+            val mask = if (channels == 1) AudioFormat.CHANNEL_IN_MONO else AudioFormat.CHANNEL_IN_STEREO
+            val format = AudioFormat.Builder()
+                .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
+                .setSampleRate(sampleRate)
+                .setChannelMask(mask)
+                .build()
+            val chunk = sampleRate / 50 * channels * 2
+            val minimum = AudioRecord.getMinBufferSize(sampleRate, mask, AudioFormat.ENCODING_PCM_16BIT)
+            val r = AudioRecord.Builder()
+                // Recorded as the shell, whose uid holds the right to record the phone's output.
+                .setContext(ShellContext(base))
+                .setAudioSource(REMOTE_SUBMIX)
+                .setAudioFormat(format)
+                .setBufferSizeInBytes(maxOf(minimum, chunk * 8))
+                .build()
+            check(r.state == AudioRecord.STATE_INITIALIZED) { "AudioRecord didn't initialize" }
+            r.startRecording()
+            record = r
+            val (read, write) = ParcelFileDescriptor.createPipe()
+            Thread({
+                android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_AUDIO)
+                val buffer = ByteArray(chunk)
+                ParcelFileDescriptor.AutoCloseOutputStream(write).use { out ->
+                    runCatching {
+                        while (record === r) {
+                            val n = r.read(buffer, 0, buffer.size)
+                            if (n < 0) break
+                            if (n > 0) out.write(buffer, 0, n)
+                        }
+                    }
+                }
+                if (record === r) stopAudio()
+            }, "gearslip-shell-audio").apply { isDaemon = true; start() }
+            read
+        }.getOrElse {
+            System.err.println("gearslip shell: startAudio failed: $it")
+            stopAudio()
+            null
+        }
+    }
+
+    override fun stopAudio() {
+        val r = record ?: return
+        record = null
+        runCatching { r.stop() }
+        r.release()
+    }
+
     private fun inject(event: InputEvent, displayId: Int) {
         runCatching {
             InputEvent::class.java.getMethod("setDisplayId", Int::class.javaPrimitiveType).invoke(event, displayId)
@@ -129,6 +194,9 @@ class ShellService() : IShellService.Stub() {
         const val SHELL = "com.android.shell"
         const val SHELL_UID = 2000
         const val INJECT_ASYNC = 0
+
+        /** MediaRecorder.AudioSource.REMOTE_SUBMIX, a system-only source. */
+        const val REMOTE_SUBMIX = 8
 
         // DisplayManager's flags, several of them hidden: public, own content only, supports
         // touch, rotates with content, destroys its apps when released, trusted, its own display

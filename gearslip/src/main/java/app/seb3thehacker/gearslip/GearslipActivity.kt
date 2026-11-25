@@ -208,6 +208,7 @@ class GearslipActivity : ComponentActivity(), Projection {
         PhoneMirror.onStartRequested = { runOnUiThread { requestCapture() } }
         PhoneMirror.onTokenReady = { token -> runOnUiThread { showMirror(token) } }
         PhoneMirror.onEnded = { runOnUiThread { showCarUi() } }
+        CarAudio.appContext = applicationContext
         CarAudio.onConsentRequested = { runOnUiThread { requestAudioCapture() } }
 
         registerReceiver(detachReceiver, IntentFilter(UsbManager.ACTION_USB_ACCESSORY_DETACHED), RECEIVER_NOT_EXPORTED)

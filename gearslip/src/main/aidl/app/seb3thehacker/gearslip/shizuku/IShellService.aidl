@@ -1,5 +1,6 @@
 package app.seb3thehacker.gearslip.shizuku;
 
+import android.os.ParcelFileDescriptor;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.Surface;
@@ -26,4 +27,10 @@ interface IShellService {
     oneway void injectKey(in KeyEvent event, int displayId) = 6;
 
     void releaseDisplay(int displayId) = 7;
+
+    // Records everything the phone plays, as adb can, and hands back the read end of a pipe of
+    // 16-bit PCM. Null when the recording can't start.
+    ParcelFileDescriptor startAudio(int sampleRate, int channels) = 8;
+
+    void stopAudio() = 9;
 }

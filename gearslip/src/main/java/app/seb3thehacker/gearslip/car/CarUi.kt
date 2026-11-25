@@ -156,11 +156,16 @@ fun CarUi() {
     // only knows how to listen and speak, not what "open Spotify" means.
     val frameForAssistant by CarEnvironment.frame.collectAsState()
     LaunchedEffect(navigator) {
-        CarAssistant.pendingCommand.collect { heard ->
-            if (heard != null) {
-                val reply = AssistantCommands.handle(appContext, navigator, frameForAssistant, heard)
-                CarAssistant.reply(reply)
+        CarAssistant.carScreens++
+        try {
+            CarAssistant.pendingCommand.collect { pending ->
+                if (pending != null) {
+                    val reply = AssistantCommands.handle(appContext, navigator, frameForAssistant, pending.text, pending.fromApp)
+                    CarAssistant.reply(reply)
+                }
             }
+        } finally {
+            CarAssistant.carScreens--
         }
     }
 

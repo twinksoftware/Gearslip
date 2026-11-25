@@ -113,7 +113,21 @@ object CarAudio {
         }
     }
 
+    /** Set by the activity, like [onConsentRequested]: what [ShellAudio] needs to start. */
+    var appContext: android.content.Context? = null
+
     private fun ask() {
+        _capture.value = Capture.ASKING
+        // Shizuku, when the driver chose it, records without a dialog.
+        val context = appContext
+        if (context != null && ShellAudio.available(context)) {
+            ShellAudio.start(context, onFailed = ::askForConsent)
+            return
+        }
+        askForConsent()
+    }
+
+    private fun askForConsent() {
         _capture.value = Capture.ASKING
         val request = onConsentRequested
         if (request == null) {
@@ -148,6 +162,7 @@ object CarAudio {
         main.removeCallbacks(releaseWhenGone)
         wanted = false
         toldBlocked = false
+        ShellAudio.stop()
         AudioCaptureService.stop()
         _capture.value = Capture.OFF
     }
