@@ -21,6 +21,7 @@ import java.io.IOException
 import app.seb3thehacker.gearslip.protocol.InputProtocol
 import java.io.InputStream
 import java.io.OutputStream
+import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 import java.util.concurrent.FutureTask
 import java.util.concurrent.RejectedExecutionException
@@ -193,7 +194,18 @@ class GearslipRunner(
         }
     }
 
-    fun stop() {
+    /**
+     * Ends the session from the phone's side, for [why]. With [goodbye], a car in the middle of a
+     * session is told first, as Android Auto does: a head unit that wasn't kept on sending into
+     * the next connection, which then never got its VersionRequest until the cable was pulled.
+     * No goodbye when the cable is already gone: there is nobody to tell.
+     */
+    fun stop(why: String = "Gearslip ended it", goodbye: Boolean = true) {
+        if (goodbye && running && !stopped && (state == State.DONE || state == State.WAIT_SDR)) {
+            sayGoodbye(why)
+        } else {
+            log.i("ending the session: $why")
+        }
         stopped = true
         running = false
         writer.shutdownNow()
@@ -230,12 +242,49 @@ class GearslipRunner(
         SessionStatus.disconnected()
     }
 
+    /** Set while [sayGoodbye] waits for the car's ByeByeResponse. */
+    @Volatile private var goodbyeAnswer: CountDownLatch? = null
+
+    /** ByeByeRequest(USER_SELECTION), then a short wait for the car to close its side. */
+    private fun sayGoodbye(why: String) {
+        val answer = CountDownLatch(1)
+        goodbyeAnswer = answer
+        log.i("-> ByeByeRequest(USER_SELECTION): $why")
+        send(MSG_BYEBYE_REQUEST, Protobuf.varintField(1, BYEBYE_USER_SELECTION), encrypted = true)
+        val answered = answer.await(GOODBYE_WAIT_MS, TimeUnit.MILLISECONDS)
+        goodbyeAnswer = null
+        log.i(if (answered) "<- ByeByeResponse: the car closed its side" else "no ByeByeResponse after ${GOODBYE_WAIT_MS}ms - closing anyway")
+    }
+
+    /** Frames from a connection before this one, and the goodbyes sent to end it. */
+    private var staleFrames = 0
+    private var staleGoodbyes = 0
+    private var lastStaleGoodbyeAt = 0L
+
+    /**
+     * Encrypted frames before this connection has said hello: the car is still in an older one,
+     * closed on the phone without telling it. Its keys are gone, so the car is told in the clear
+     * that it's over, a few times at most, and this connection waits for the VersionRequest the
+     * car sends when it starts again. Unplugging did the same, and an app can't unplug the cable.
+     */
+    private fun onStaleFrame() {
+        staleFrames++
+        if (staleFrames == 1) log.w("the car is still talking in an earlier connection - telling it that one is over")
+        val now = System.currentTimeMillis()
+        if (staleGoodbyes >= MAX_STALE_GOODBYES || now - lastStaleGoodbyeAt < STALE_GOODBYE_GAP_MS) return
+        staleGoodbyes++
+        lastStaleGoodbyeAt = now
+        send(MSG_BYEBYE_REQUEST, Protobuf.varintField(1, BYEBYE_USER_SELECTION), encrypted = false)
+        log.i("-> ByeByeRequest(USER_SELECTION) in the clear, for the earlier connection ($staleGoodbyes of $MAX_STALE_GOODBYES, $staleFrames old frames so far)")
+    }
+
     private fun handleFrame(frame: Frames.Frame) {
         // A rejected handshake cannot consume later messages as if authentication succeeded.
         if (authenticationFailed || stopped || !running) return
         val payload = if (frame.encrypted) {
             if (!tls.handshakeComplete) {
-                log.w("encrypted frame arrived before the handshake finished - ignoring")
+                if (state == State.WAIT_VERSION) onStaleFrame()
+                else log.w("encrypted frame arrived before the handshake finished - ignoring")
                 return
             }
             tls.decrypt(frame.payload)
@@ -301,7 +350,7 @@ class GearslipRunner(
             return
         }
         if (messageId !in setOf(MSG_VERSION_REQUEST, MSG_ENCAPSULATED_SSL, MSG_AUTH_COMPLETE,
-                MSG_BYEBYE_REQUEST, MSG_UNEXPECTED_MESSAGE, MSG_FRAMING_ERROR) &&
+                MSG_BYEBYE_REQUEST, MSG_BYEBYE_RESPONSE, MSG_UNEXPECTED_MESSAGE, MSG_FRAMING_ERROR) &&
             (!frame.encrypted || state != State.DONE && state != State.WAIT_SDR)) return
 
         when (messageId) {
@@ -312,6 +361,7 @@ class GearslipRunner(
             MSG_PING_REQUEST -> onPingRequest(body)
             MSG_PING_RESPONSE -> onPingResponse()
             MSG_BYEBYE_REQUEST -> onByeByeRequest(body)
+            MSG_BYEBYE_RESPONSE -> goodbyeAnswer?.countDown() ?: log.i("<- ByeByeResponse")
             MSG_UNEXPECTED_MESSAGE, MSG_FRAMING_ERROR -> onProtocolError(messageId)
             AudioLink.MSG_FOCUS_RESPONSE -> {
                 // One answer for both sinks: it is the directions' while they wait on one.
@@ -1720,6 +1770,12 @@ class GearslipRunner(
         private const val PING_LOG_EVERY = 60
         const val MSG_BYEBYE_REQUEST = 15
         const val MSG_BYEBYE_RESPONSE = 16
+        const val BYEBYE_USER_SELECTION = 1L
+        /** How long a goodbye waits for the car's answer; the phone's screen waits with it. */
+        const val GOODBYE_WAIT_MS = 400L
+        /** Goodbyes to a car stuck in an earlier connection, and the gap between them. */
+        const val MAX_STALE_GOODBYES = 3
+        const val STALE_GOODBYE_GAP_MS = 3_000L
         const val MSG_VOICE_SESSION_NOTIFICATION = 17
         const val MSG_UNEXPECTED_MESSAGE = 255
         const val MSG_FRAMING_ERROR = 65535

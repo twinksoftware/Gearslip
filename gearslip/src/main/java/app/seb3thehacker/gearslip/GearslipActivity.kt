@@ -118,7 +118,7 @@ class GearslipActivity : ComponentActivity(), Projection {
                 GearslipLog.w("accessory detached")
                 deferredAccessory = null
                 // A wireless session has no accessory to lose; leave it running.
-                if (wirelessSocket == null) closeAccessory()
+                if (wirelessSocket == null) closeAccessory("the cable was unplugged", goodbye = false)
             }
         }
     }
@@ -206,7 +206,7 @@ class GearslipActivity : ComponentActivity(), Projection {
 
         setContent {
             GearslipTheme {
-                GearslipApp(onDisconnect = { closeAccessory() }, onRequestCallScreening = ::requestCallScreeningRole)
+                GearslipApp(onDisconnect = { closeAccessory("Disconnect was pressed on the phone") }, onRequestCallScreening = ::requestCallScreeningRole)
                 val offer by offerBluetooth.collectAsState()
                 if (offer) {
                     fun close() {
@@ -297,7 +297,7 @@ class GearslipActivity : ComponentActivity(), Projection {
         CarAudio.onConsentRequested = null
         CarAudio.release()
         PhoneMirror.requestStop()
-        closeAccessory()
+        closeAccessory("Gearslip's screen on the phone closed")
         GearslipLog.flush()
     }
 
@@ -506,7 +506,7 @@ class GearslipActivity : ComponentActivity(), Projection {
             GearslipLog.i("auto-connect: a session is already running")
             return
         }
-        if (runner != null) closeAccessory(stopWireless = false)
+        if (runner != null) closeAccessory("a wireless connection takes over", stopWireless = false)
         if (checkSelfPermission(android.Manifest.permission.BLUETOOTH_CONNECT) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
             GearslipLog.w("auto-connect: needs the Nearby devices permission")
             return
@@ -531,7 +531,7 @@ class GearslipActivity : ComponentActivity(), Projection {
         // The cable is here, so a cable-first wait for it is over.
         cableWait?.let(mainHandler::removeCallbacks)
         cableWait = null
-        closeAccessory()
+        closeAccessory("a new cable connection replaces it")
         describe(accessory)
 
         val manager = getSystemService(UsbManager::class.java)
@@ -563,7 +563,7 @@ class GearslipActivity : ComponentActivity(), Projection {
 
     /** A wireless session: the same runner, on the socket [WirelessLink] opened to the car. */
     private fun startWireless(socket: java.net.Socket) {
-        closeAccessory(stopWireless = false)
+        closeAccessory("a wireless connection replaces it", stopWireless = false)
         if (!AppSettings.gearslipEnabled(this)) {
             GearslipLog.i("wireless: Gearslip is switched off - not connecting")
             runCatching { socket.close() }
@@ -604,11 +604,13 @@ class GearslipActivity : ComponentActivity(), Projection {
         GearslipLog.i("           version=${accessory.version} description=${accessory.description}")
     }
 
-    private fun closeAccessory() = closeAccessory(stopWireless = true)
-
-    /** Ends the session, wired or wireless. [stopWireless] also drops the car's Bluetooth and Wi-Fi. */
-    private fun closeAccessory(stopWireless: Boolean) {
-        runner?.stop()
+    /**
+     * Ends the session, wired or wireless, for [why], which goes to the log. [goodbye] tells a car
+     * still in the session first (see [GearslipRunner.stop]); [stopWireless] also drops the car's
+     * Bluetooth and Wi-Fi.
+     */
+    private fun closeAccessory(why: String, goodbye: Boolean = true, stopWireless: Boolean = true) {
+        runner?.stop(why, goodbye)
         SessionReport.print()
         runCatching { descriptor?.close() }
         descriptor = null
