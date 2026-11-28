@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import android.support.v4.media.session.PlaybackStateCompat
 import app.seb3thehacker.gearslip.R
+import app.seb3thehacker.gearslip.audio.CarAudio
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -82,9 +83,10 @@ fun CarHome() {
     val navStatus by CarServices.nav.status.collectAsStateWithLifecycle()
     val phase by CarServices.media.phase.collectAsStateWithLifecycle()
     val now by CarServices.media.now.collectAsStateWithLifecycle()
+    val capture by CarAudio.capture.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) { CarServices.autostart(frame) }
-    LaunchedEffect(phase) { if (phase == CarMedia.Phase.READY) CarServices.autoplayIfDue() }
+    LaunchedEffect(phase, capture) { if (phase == CarMedia.Phase.READY) CarServices.autoplayIfDue() }
 
     val navigator = LocalCarNavigator.current
     val panel = navigator.sidePanel

@@ -202,9 +202,18 @@ object CarServices {
         stillPlaying = null
     }
 
-    /** Called once the media app is connected: starts playback if that was asked for. */
+    /**
+     * Called once the media app is connected, and again once the music can reach the car: starts
+     * playback if that was asked for. Not before the capture is on, when the music goes through
+     * Gearslip: a song started while the consent dialog was still up lost its first seconds.
+     */
     fun autoplayIfDue() {
         if (!autoplayPending) return
+        if (CarSettings.pipesNow && CarAudio.capture.value != CarAudio.Capture.ON) {
+            // Refused: no music for this drive, and none later from a capture the driver starts.
+            if (CarAudio.capture.value == CarAudio.Capture.DENIED) autoplayPending = false
+            return
+        }
         autoplayPending = false
         if (!media.now.value.playing) media.togglePlay()
     }
