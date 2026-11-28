@@ -68,6 +68,7 @@ object CarSettings {
 
     private const val KEY_SCALE = "car_scale"
     private const val KEY_DENSITY = "car_density"
+    private const val KEY_MAP_SIZE = "car_map_size"
     private const val KEY_OPEN = "car_open_on_connect"
     private const val KEY_NIGHT = "car_night_mode"
     private const val KEY_PIPE_AUDIO = "car_pipe_audio"
@@ -127,6 +128,7 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
 
     private val scaleFlow = MutableStateFlow(1f)
     private val carDensityFlow = MutableStateFlow(DENSITY_FROM_CAR)
+    private val mapSizeFlow = MutableStateFlow(MAP_SIZE_AUTO)
     private val openFlow = MutableStateFlow(HOME)
     private val nightFlow = MutableStateFlow(NightMode.AUTO)
     private val pipeAudioFlow = MutableStateFlow(true)
@@ -362,6 +364,26 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
 
     /** The density to draw at, for a car or preview that would otherwise use [carDpi]. */
     fun effectiveDensity(carDpi: Int) = carDensityFlow.value.takeIf { it != DENSITY_FROM_CAR } ?: carDpi
+
+    /** [mapAppSize] when Gearslip picks: smaller on a short screen, as drawn elsewhere. */
+    const val MAP_SIZE_AUTO = 0
+    val MAP_SIZES = listOf(100, 90, 80, 70, 60)
+    private const val MAP_MIN_HEIGHT_DP = 320
+
+    /** How big map apps draw their own buttons and text: a percent of the car UI's density, or [MAP_SIZE_AUTO]. */
+    val mapAppSize: StateFlow<Int> = mapSizeFlow
+
+    /**
+     * The density to lend a map app a [heightPx]-tall surface at, when the car UI draws at [dpi].
+     * Automatic shrinks it only until the map is [MAP_MIN_HEIGHT_DP] tall, and no further than
+     * the smallest size: a single-DIN SOOEMAKA left Google Maps 226dp, and its own buttons and
+     * search bar filled most of it while Gearslip's nav bar looked right.
+     */
+    fun mapAppDensity(dpi: Int, heightPx: Int): Int {
+        val percent = mapSizeFlow.value
+        if (percent != MAP_SIZE_AUTO) return dpi * percent / 100
+        return (heightPx * 160 / MAP_MIN_HEIGHT_DP).coerceIn(dpi * MAP_SIZES.last() / 100, dpi)
+    }
     val openOnConnect: StateFlow<String> = openFlow
     val nightMode: StateFlow<NightMode> = nightFlow
 
@@ -489,6 +511,7 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
         app = context.applicationContext
         scaleFlow.value = AppSettings.getString(app, KEY_SCALE, "1.0").toFloatOrNull() ?: 1f
         carDensityFlow.value = AppSettings.getString(app, KEY_DENSITY, "").toIntOrNull()?.takeIf { it in DENSITIES || it in CUSTOM_DENSITIES } ?: DENSITY_FROM_CAR
+        mapSizeFlow.value = AppSettings.getString(app, KEY_MAP_SIZE, "").toIntOrNull()?.takeIf { it in MAP_SIZES } ?: MAP_SIZE_AUTO
         openFlow.value = AppSettings.getString(app, KEY_OPEN, HOME)
         lastNavFlow.value = AppSettings.getString(app, KEY_LAST_NAV, "").ifEmpty { null }
         lastMediaFlow.value = AppSettings.getString(app, KEY_LAST_MEDIA, "").ifEmpty { null }
@@ -570,6 +593,11 @@ private const val KEY_CLUSTER_VIDEO = "cluster_video_enabled"
     fun setCarDensity(dpi: Int) {
         carDensityFlow.value = dpi
         AppSettings.putString(app, KEY_DENSITY, dpi.toString())
+    }
+
+    fun setMapAppSize(percent: Int) {
+        mapSizeFlow.value = percent
+        AppSettings.putString(app, KEY_MAP_SIZE, percent.toString())
     }
 
     fun setOpenOnConnect(id: String) {

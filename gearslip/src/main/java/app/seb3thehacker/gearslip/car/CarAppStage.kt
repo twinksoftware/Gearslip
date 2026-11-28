@@ -178,7 +178,9 @@ private fun AppSurface(
         modifier.onGloballyPositioned { bounds = it.boundsInWindow() },
     ) {
         val epoch by connection.surfaceEpoch.collectAsState()
-        androidx.compose.runtime.key(constraints.maxWidth, constraints.maxHeight, epoch) {
+        // A new size for map apps takes a new surface, as a new size of screen does.
+        val mapSize by CarSettings.mapAppSize.collectAsState()
+        androidx.compose.runtime.key(constraints.maxWidth, constraints.maxHeight, epoch, mapSize) {
             SurfaceHost(connection, frame, onSize = { size = it }, Modifier.fillMaxSize())
         }
     }
@@ -243,7 +245,7 @@ private fun SurfaceHost(
                     ) {
                         GearslipLog.i("stage: surface ready at ${width}x$height")
                         onSize(width to height)
-                        connection.attachSurface(holder.surface, width, height, frame.densityDpi)
+                        connection.attachSurface(holder.surface, width, height, CarSettings.mapAppDensity(frame.densityDpi, height))
                     }
 
                     override fun surfaceDestroyed(holder: SurfaceHolder) {

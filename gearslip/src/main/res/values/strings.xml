@@ -206,6 +206,10 @@
     <string name="choice_density_car">From car</string>
     <string name="choice_density_dpi">%1$d DPI</string>
     <string name="choice_density_custom">Custom…</string>
+    <string name="car_map_size">Map app size</string>
+    <string name="car_map_size_note">The buttons and text that map apps draw themselves. Automatic shrinks them on a short screen and leaves others alone.</string>
+    <string name="choice_map_size_auto">Automatic</string>
+    <string name="choice_map_size_percent">%1$d%%</string>
     <string name="car_app_theme">App theme</string>
     <string name="car_dark_mode">Dark mode</string>
     <string name="car_buttons">Buttons</string>
