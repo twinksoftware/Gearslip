@@ -32,6 +32,11 @@ class AudioLink(
      * through [askForSpeakers], and only when the music isn't already ours.
      */
     private val asksFocus: Boolean = true,
+    /**
+     * Whether the car shows Gearslip's screen. A head unit answered LOSS within 2 ms to every ask
+     * that came before it did, and GAIN to every one after, so the ask waits; see [mayAskForSpeakers].
+     */
+    private val screenUp: () -> Boolean = { true },
     private val onReady: (AudioLink) -> Unit = { CarAudio.attach(it) },
     private val onClose: (AudioLink) -> Unit = { CarAudio.detach(it) },
     /** The car took the sound back after giving it, as when the driver switches to the radio. */
@@ -352,7 +357,33 @@ class AudioLink(
     /** Silence for [ms], whole frames of this sink's format. */
     private fun silence(ms: Int): ByteArray = ByteArray(sampleRate * ms / 1000 * channels * 2)
 
+    /** The capture wants to play, but the car isn't showing Gearslip yet; the ask waits for it. */
+    @Volatile private var waitingForScreen = false
+
+    /**
+     * The car shows Gearslip's screen now ([screenOrNot] false), or has kept its own for so long
+     * that the music shouldn't wait any more (true): a music start that was held goes ahead.
+     */
+    fun mayAskForSpeakers(screenOrNot: Boolean = false) {
+        if (!waitingForScreen) return
+        if (!screenOrNot && !screenUp()) return
+        waitingForScreen = false
+        GearslipLog.i("$tag: ${if (screenOrNot) "the car is keeping its own screen" else "the car shows Gearslip"} - asking for the speakers now")
+        askAndStart()
+    }
+
     override fun start() {
+        if (!ready || started) return
+        if (asksFocus && !focusRequested && !screenUp()) {
+            // Asked now, the car says LOSS at once and the music never plays: wait for the screen.
+            if (!waitingForScreen) GearslipLog.i("$tag: the car isn't showing Gearslip yet - holding the music until it does")
+            waitingForScreen = true
+            return
+        }
+        askAndStart()
+    }
+
+    private fun askAndStart() {
         if (!ready || started) return
         if (asksFocus && !focusRequested) {
             focusRequested = true
@@ -407,6 +438,8 @@ class AudioLink(
     }
 
     override fun stop() {
+        // A held start is dropped too: the capture stopped before the screen came.
+        waitingForScreen = false
         synchronized(startLock) { stopLocked() }
     }
 

@@ -388,6 +388,7 @@ private fun StatusCard(status: SessionStatus.Snapshot) {
         if (!live) {
             Spacer(Modifier.height(20.dp))
             WirelessButton()
+            CableButton()
         }
       }
     }
