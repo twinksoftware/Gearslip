@@ -289,7 +289,7 @@ fun CarUi() {
                         // Home never leaves the composition; other screens cover it. Dropping it
                         // would tear down the map's surface, and coming back would then show black
                         // while the nav app redrew on a new one.
-                        CompositionLocalProvider(LocalNavBarInset provides homeInset) { CarHome() }
+                        CompositionLocalProvider(LocalNavBarInset provides homeInset, LocalNavBarRow provides NAV_BAR_HEIGHT) { CarHome() }
                     }
                     // The keyboard takes the nav bar's row instead of squeezing in above it -
                     // nothing on the nav bar is useful mid-type, and the screen is too small to
@@ -417,6 +417,12 @@ internal val NAV_BAR_HEIGHT = 56.dp
  * zero while it's hidden or when it has a row of its own.
  */
 internal val LocalNavBarInset = androidx.compose.runtime.compositionLocalOf { 0.dp }
+
+/**
+ * The floating nav bar's row over Home, whether it shows right now or not: what stays clear so
+ * nothing jumps as it slides in and out. Zero on screens that keep a row for the bar themselves.
+ */
+internal val LocalNavBarRow = androidx.compose.runtime.compositionLocalOf { 0.dp }
 
 /**
  * A single blocking screen, shown once per install before anything else the car screen can show -
