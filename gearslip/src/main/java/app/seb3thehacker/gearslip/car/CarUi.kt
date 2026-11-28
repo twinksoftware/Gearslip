@@ -277,7 +277,8 @@ fun CarUi() {
                 val homeInset = if (barShown) NAV_BAR_HEIGHT else 0.dp
                 // Only the screen that asked: going Home or anywhere else ends it.
                 val fullscreen = CarFullscreen.active && screen != CarScreen.Home
-                Box(Modifier.fillMaxSize().padding(pad)) {
+                BoxWithConstraints(Modifier.fillMaxSize().padding(pad)) {
+                CompositionLocalProvider(LocalShortScreen provides (maxHeight < SHORT_SCREEN_HEIGHT)) {
                 Column(Modifier.fillMaxSize()) {
                     if (!safetyWarningSeen) {
                         CarSafetyWizard(onDone = CarSettings::markSafetyWarningSeen)
@@ -404,6 +405,7 @@ fun CarUi() {
                 AppMenu(navigator, rememberRunningApps())
                 if (safetyWarningSeen) CarWhatsNew()
                 }
+                }
             }
           }
         }
@@ -411,6 +413,16 @@ fun CarUi() {
 }
 
 internal val NAV_BAR_HEIGHT = 56.dp
+
+/**
+ * Whether the car's screen is short: under [SHORT_SCREEN_HEIGHT] tall inside the car's margins, as a
+ * single-DIN unit's is. Screens laid out for the usual height switch to a compact layout of their
+ * own on it; on any taller screen nothing changes.
+ */
+internal val LocalShortScreen = androidx.compose.runtime.compositionLocalOf { false }
+
+/** A SOOEMAKA single-DIN unit's screen is 369 dp tall; most head units' are 480 dp or more. */
+internal val SHORT_SCREEN_HEIGHT = 420.dp
 
 /**
  * How much of the bottom of Home the floating nav bar covers right now: its height while it shows,
