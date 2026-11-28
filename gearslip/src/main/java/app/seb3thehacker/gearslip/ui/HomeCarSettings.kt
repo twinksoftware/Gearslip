@@ -80,7 +80,7 @@ enum class CarGroup(@param:StringRes val title: Int) {
 }
 
 @Composable
-private fun sizeChoices() = listOf(1f to stringResource(R.string.choice_size_normal), 1.25f to stringResource(R.string.choice_size_large), 1.5f to stringResource(R.string.choice_size_xlarge))
+private fun sizeChoices() = listOf(0.65f to stringResource(R.string.choice_size_xsmall), 0.8f to stringResource(R.string.choice_size_small), 1f to stringResource(R.string.choice_size_normal), 1.25f to stringResource(R.string.choice_size_large), 1.5f to stringResource(R.string.choice_size_xlarge))
 
 /** Marks the menu's Custom entry, which opens [CustomDensityDialog] instead of choosing. */
 private const val DENSITY_CUSTOM = -1

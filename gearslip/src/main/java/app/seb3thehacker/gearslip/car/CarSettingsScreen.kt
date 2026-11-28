@@ -110,7 +110,7 @@ fun CarSettingsScreen() {
                     item {
                         ChoiceRow(
                             stringResource(R.string.car_size),
-                            listOf(1f to stringResource(R.string.choice_size_normal), 1.25f to stringResource(R.string.choice_size_large), 1.5f to stringResource(R.string.choice_size_xlarge)),
+                            listOf(0.65f to stringResource(R.string.choice_size_xsmall), 0.8f to stringResource(R.string.choice_size_small), 1f to stringResource(R.string.choice_size_normal), 1.25f to stringResource(R.string.choice_size_large), 1.5f to stringResource(R.string.choice_size_xlarge)),
                             scale,
                         ) { CarSettings.setScale(it) }
                     }
