@@ -11,8 +11,11 @@ import android.view.Surface
  */
 interface Projection {
 
-    /** Called once the encoder's input Surface exists and content should start rendering. */
-    fun onSurfaceReady(surface: Surface, width: Int, height: Int, densityDpi: Int)
+    /**
+     * Called once the encoder's input Surface exists and content should start rendering, at
+     * no more than [frameRate] frames a second: the encoder takes no more.
+     */
+    fun onSurfaceReady(surface: Surface, width: Int, height: Int, densityDpi: Int, frameRate: Int)
 
     /**
      * A touch from the head unit, already scaled into projected-video coordinates.
