@@ -11,5 +11,8 @@ class CarPresenceService : CompanionDeviceService() {
     }
 
     @Deprecated("Deprecated in Java")
-    override fun onDeviceDisappeared(address: String) {}
+    override fun onDeviceDisappeared(address: String) {
+        // The car's Bluetooth went with it, so it isn't coming back in a moment: see CarAudio.carLeft.
+        app.seb3thehacker.gearslip.audio.CarAudio.carLeft("the car's Bluetooth went")
+    }
 }

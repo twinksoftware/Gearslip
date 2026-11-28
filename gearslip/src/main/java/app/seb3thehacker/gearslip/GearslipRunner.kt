@@ -358,6 +358,8 @@ class GearslipRunner(
         drainWriterOnExit = true
         running = false
         SessionStatus.disconnected()
+        // The car said goodbye, so it isn't coming back in a moment: see CarAudio.carLeft.
+        app.seb3thehacker.gearslip.audio.CarAudio.carLeft("the car said goodbye")
     }
 
     private fun onVersionRequest(body: ByteArray) {
