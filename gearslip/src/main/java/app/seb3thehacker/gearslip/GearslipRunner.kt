@@ -123,6 +123,19 @@ class GearslipRunner(
     private var touchHeight = 0
     private var touchesSeen = 0
     @Volatile private var acksSeen = 0
+    /**
+     * Frames a window reset gave up on. Their acks still come, late, and free no room: counted
+     * as fresh room, they let the car's queue grow by a window on every reset. A SOOEMAKA that
+     * stalled often ran its picture up to half a minute behind. Acks come in order, so by the
+     * next reset any still owed were lost with the frames: a reset forgets the ones before it.
+     * Acks carry no number, so owed acks that were in fact lost take the acks of the frames
+     * sent after the reset, and with no room freed the window fills and resets again, owing as
+     * many again: four frames every ten seconds for good. So a reset with no room freed since
+     * the one before owes nothing.
+     */
+    private var unackedAtReset = 0
+    /** Whether an ack has freed room since the last window reset: see [unackedAtReset]. */
+    private var freedSinceReset = true
     @Volatile private var lastAckAt = 0L
     @Volatile private var splitMessages = 0
     @Volatile private var resyncRequested = false
@@ -1168,7 +1181,11 @@ class GearslipRunner(
                 val fields = Wire.fields(body)
                 val acked = Wire.varint(fields, 2)?.toInt() ?: 1
                 synchronized(ackLock) {
-                    inFlight = maxOf(0, inFlight - maxOf(1, acked))
+                    val count = maxOf(1, acked)
+                    val late = minOf(unackedAtReset, count)
+                    unackedAtReset -= late
+                    inFlight = maxOf(0, inFlight - (count - late))
+                    if (count > late) freedSinceReset = true
                     acksSeen++
                     lastAckAt = System.currentTimeMillis()
                     ackLock.notifyAll()
@@ -1271,6 +1288,8 @@ class GearslipRunner(
 
     private fun startVideoSource() {
         lastKeyframeSentAt = System.currentTimeMillis() // frame #1 is always a keyframe
+        // From the start of the stream, not 1970: the first full window reset at once.
+        synchronized(ackLock) { lastAckAt = System.currentTimeMillis() }
         val index = selectedConfigIndex ?: 0
         val config = videoConfigs.getOrNull(index)
         if (config == null) {
@@ -1378,15 +1397,20 @@ class GearslipRunner(
             val waitStart = System.currentTimeMillis()
             while (running && inFlight >= maxUnacked) {
                 // A lost ack would otherwise hold the stream forever, which looks like a frozen
-                // picture. After a long silence, assume the window cleared and carry on.
+                // picture. After a long silence, assume the window cleared and carry on. A car
+                // that has acked is slow rather than losing them, so it gets a longer wait: each
+                // early reset sent a stalled SOOEMAKA frames it had no room for.
                 val since = System.currentTimeMillis() - lastAckAt
-                if (since > ACK_STALL_MS) {
+                val stallMs = if (acksSeen > 0) ACK_LOST_MS else ACK_STALL_MS
+                if (since > stallMs) {
                     log.w("no ack for ${since}ms with $inFlight in flight - resetting the window")
+                    unackedAtReset = if (freedSinceReset) inFlight else 0
+                    freedSinceReset = false
                     inFlight = 0
                     lastAckAt = System.currentTimeMillis() // one warning per stall, not one per frame
                     break
                 }
-                ackLock.wait(ACK_STALL_MS - since + 1)
+                ackLock.wait(stallMs - since + 1)
             }
             ackWaitMs += System.currentTimeMillis() - waitStart
         }
@@ -1450,6 +1474,8 @@ class GearslipRunner(
             // Frames sent just before the car took over may never be acked.
             synchronized(ackLock) {
                 inFlight = 0
+                unackedAtReset = 0
+                freedSinceReset = true
                 ackLock.notifyAll()
             }
             if (VideoRestartQuirks.pausesOnly(tls.headUnitKey)) {
@@ -1863,6 +1889,7 @@ class GearslipRunner(
         const val ACTION_UP = 1
 
         const val ACK_STALL_MS = 2_000L
+        const val ACK_LOST_MS = 10_000L
         const val WITHHELD_SCREEN_MS = 5_000L
         const val AUDIO_TRACE_MESSAGES = 6
         const val GUIDANCE_SESSION_ID = 1
