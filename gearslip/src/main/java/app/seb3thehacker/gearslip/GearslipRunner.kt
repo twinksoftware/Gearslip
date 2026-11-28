@@ -185,6 +185,9 @@ class GearslipRunner(
             // The car is gone, but nothing calls stop() when a wireless session drops: it waits
             // for the next one. Close the music channel now, so the audio capture behind it,
             // and the screen sharing Android shows for it, stop too (issue #43).
+            // Pause the music first, as stop() does: a SOOEMAKA switched off with the car, and
+            // the song played on, out of the phone's speaker once Gearslip gave it back.
+            if (!stopped && state == State.DONE) CarServices.pausePhoneMedia()
             if (!stopped) audioLink?.close()
             writer.shutdown()
             if (drainWriterOnExit) writer.awaitTermination(2, TimeUnit.SECONDS)
