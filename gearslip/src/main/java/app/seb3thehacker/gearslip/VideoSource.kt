@@ -81,7 +81,8 @@ class VideoSource(
             setInteger(MediaFormat.KEY_BIT_RATE, bitRate)
             setInteger(MediaFormat.KEY_FRAME_RATE, frameRate)
             // Drops already ask for a fresh keyframe, so a long interval costs nothing in recovery
-            // and spares the link a big frame every second.
+            // and spares the link a big frame: a SOOEMAKA's came to 87-99 KB, against about 14 KB
+            // for the frames between.
             setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, I_FRAME_INTERVAL_S)
             if (mode == Mode.SURFACE) {
                 // A surface encoder only makes a frame when the screen changes, and many decoders
@@ -324,7 +325,7 @@ class VideoSource(
          * where real Android Auto's wireless ones do, so Wi-Fi only gets this cap.
          */
         const val WIRELESS_MAX_BIT_RATE = 8_000_000
-        const val I_FRAME_INTERVAL_S = 5
+        const val I_FRAME_INTERVAL_S = 60
         private const val REPEAT_AFTER_US = 100_000L
 
         /** (Y, Cb, Cr) - white, yellow, cyan, green, magenta, red, blue. */
