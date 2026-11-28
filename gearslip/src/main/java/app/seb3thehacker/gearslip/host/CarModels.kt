@@ -217,12 +217,18 @@ fun remainingTime(seconds: Long): String {
     return if (hours > 0) "$hours hr $minutes min" else "$minutes min"
 }
 
-/** "1:10 AM" - the clock at the destination, not the phone's own, in case a route crosses a zone. */
-fun androidx.car.app.model.DateTimeWithZone?.clockTime(): String {
+/**
+ * "1:10 AM" or "13:10", following the phone's 24-hour setting when [context] is known - the clock
+ * at the destination, not the phone's own, in case a route crosses a zone.
+ */
+fun androidx.car.app.model.DateTimeWithZone?.clockTime(context: Context?): String {
     val at = this ?: return ""
     val shifted = java.util.Date(at.timeSinceEpochMillis + at.zoneOffsetSeconds * 1000L)
+    val locale = java.util.Locale.getDefault()
+    val is24Hour = context?.let { android.text.format.DateFormat.is24HourFormat(it) } ?: false
     return runCatching {
-        java.text.SimpleDateFormat("h:mm a", java.util.Locale.getDefault()).apply {
+        val pattern = android.text.format.DateFormat.getBestDateTimePattern(locale, if (is24Hour) "Hm" else "hm")
+        java.text.SimpleDateFormat(pattern, locale).apply {
             timeZone = java.util.TimeZone.getTimeZone("UTC")
         }.format(shifted)
     }.getOrDefault("")
